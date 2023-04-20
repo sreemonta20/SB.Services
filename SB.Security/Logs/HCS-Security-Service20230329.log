@@ -1,0 +1,126 @@
+[2023-03-29 03:18:28.489] [Information] () <> Application is starting
+[2023-03-29 03:18:28.681] [Information] () <> 
+**********************************************************************
+**                      HCS Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-03-29 03:21:27.004] [Information] () <HCS.Security.Service.SecurityLogService> Login api method started.
+
+[2023-03-29 03:21:27.215] [Information] () <HCS.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-03-29 03:21:27.276] [Information] () <HCS.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-03-29 03:21:32.721] [Information] () <HCS.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIzMmI4ZTg0Yy0wM2RlLTQxNjEtODdhMy1hZWQwOWY1YTQyN2YiLCJpYXQiOjE2ODAwNDU2OTIsIlVzZXJJZCI6IjgzZDMyMWExLWU1ZTEtNGY3Yy05ZWRlLTczODJiMWVjMjkxNyIsIkZ1bGxOYW1lIjoiQW5hbm55YSBSb2hpbmUxIiwiVXNlck5hbWUiOiJyb2hpbmUiLCJFbWFpbCI6InJvaGluZTIwMDhAZ21haWwuY29tIiwibmJmIjoxNjgwMDQ1NjkyLCJleHAiOjE2ODAwODE2OTJ9.JtIHxVfkJEve8KAk1i7Ji9EczwEO1N2OMiHNV7eiKLA",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "83d321a1-e5e1-4f7c-9ede-7382b1ec2917",
+      "FullName": "rohine",
+      "UserName": "rohine",
+      "Email": "rohine2008@gmail.com",
+      "UserRole": "User"
+    }
+  }
+}
+
+[2023-03-29 03:21:32.724] [Information] () <HCS.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIzMmI4ZTg0Yy0wM2RlLTQxNjEtODdhMy1hZWQwOWY1YTQyN2YiLCJpYXQiOjE2ODAwNDU2OTIsIlVzZXJJZCI6IjgzZDMyMWExLWU1ZTEtNGY3Yy05ZWRlLTczODJiMWVjMjkxNyIsIkZ1bGxOYW1lIjoiQW5hbm55YSBSb2hpbmUxIiwiVXNlck5hbWUiOiJyb2hpbmUiLCJFbWFpbCI6InJvaGluZTIwMDhAZ21haWwuY29tIiwibmJmIjoxNjgwMDQ1NjkyLCJleHAiOjE2ODAwODE2OTJ9.JtIHxVfkJEve8KAk1i7Ji9EczwEO1N2OMiHNV7eiKLA",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "83d321a1-e5e1-4f7c-9ede-7382b1ec2917",
+      "FullName": "rohine",
+      "UserName": "rohine",
+      "Email": "rohine2008@gmail.com",
+      "UserRole": "User"
+    }
+  }
+}
+
+[2023-03-29 03:21:32.818] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 7059.4149 ms
+[2023-03-29 03:24:33.877] [Information] () <HCS.Security.Service.SecurityLogService> Login api method started.
+
+[2023-03-29 03:24:33.884] [Information] () <HCS.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-03-29 03:24:33.886] [Information] () <HCS.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-03-29 03:24:35.020] [Information] () <HCS.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIyOTQ1MmFkNi0yNGE5LTRkYjMtOTMwYi05MzkyOWMyYWZiNjkiLCJpYXQiOjE2ODAwNDU4NzUsIlVzZXJJZCI6IjgzZDMyMWExLWU1ZTEtNGY3Yy05ZWRlLTczODJiMWVjMjkxNyIsIkZ1bGxOYW1lIjoiQW5hbm55YSBSb2hpbmUxIiwiVXNlck5hbWUiOiJyb2hpbmUiLCJFbWFpbCI6InJvaGluZTIwMDhAZ21haWwuY29tIiwibmJmIjoxNjgwMDQ1ODc1LCJleHAiOjE2ODAwODE4NzV9.l4kYAg-zRaB9OU5GdkFhqEqW3jErUOLsOG9jqhhW9xY",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "83d321a1-e5e1-4f7c-9ede-7382b1ec2917",
+      "FullName": "rohine",
+      "UserName": "rohine",
+      "Email": "rohine2008@gmail.com",
+      "UserRole": "User"
+    }
+  }
+}
+
+[2023-03-29 03:24:35.023] [Information] () <HCS.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIyOTQ1MmFkNi0yNGE5LTRkYjMtOTMwYi05MzkyOWMyYWZiNjkiLCJpYXQiOjE2ODAwNDU4NzUsIlVzZXJJZCI6IjgzZDMyMWExLWU1ZTEtNGY3Yy05ZWRlLTczODJiMWVjMjkxNyIsIkZ1bGxOYW1lIjoiQW5hbm55YSBSb2hpbmUxIiwiVXNlck5hbWUiOiJyb2hpbmUiLCJFbWFpbCI6InJvaGluZTIwMDhAZ21haWwuY29tIiwibmJmIjoxNjgwMDQ1ODc1LCJleHAiOjE2ODAwODE4NzV9.l4kYAg-zRaB9OU5GdkFhqEqW3jErUOLsOG9jqhhW9xY",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "83d321a1-e5e1-4f7c-9ede-7382b1ec2917",
+      "FullName": "rohine",
+      "UserName": "rohine",
+      "Email": "rohine2008@gmail.com",
+      "UserRole": "User"
+    }
+  }
+}
+
+[2023-03-29 03:24:35.025] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 1150.6176 ms

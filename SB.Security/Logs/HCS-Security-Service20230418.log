@@ -1,0 +1,18 @@
+[2023-04-18 23:24:51.428] [Information] () <> Application is starting
+[2023-04-18 23:24:51.543] [Information] () <> 
+**********************************************************************
+**                      HCS Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-18 23:28:59.470] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 400 in 1458.6927 ms
+[2023-04-18 23:36:35.290] [Information] () <> Application is starting
+[2023-04-18 23:36:35.487] [Information] () <> 
+**********************************************************************
+**                      HCS Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-18 23:37:34.420] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 400 in 1543.7208 ms
