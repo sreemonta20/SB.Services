@@ -22,6 +22,22 @@ namespace SB.Security.Middlewares
             _appSettings = appSettings.Value;
         }
 
+        public async Task InvokeAsync(HttpContext httpContext)
+        {
+            List<string> excludeURL = GetExcludeURLList();
+            if (!excludeURL.Contains(httpContext.Request.Path.Value))
+            {
+                httpContext.Request.Body = DecryptStream(httpContext.Request.Body);
+                if (httpContext.Request.QueryString.HasValue)
+                {
+                    string decryptedString = DecryptString(httpContext.Request.QueryString.Value.Substring(1));
+                    httpContext.Request.QueryString = new QueryString($"?{decryptedString}");
+                }
+            }
+            await _next(httpContext);
+        }
+
+
         //public async Task InvokeAsync(HttpContext httpContext)
         //{
         //    httpContext.Request.EnableBuffering();
@@ -33,8 +49,9 @@ namespace SB.Security.Middlewares
         //            encryptedRequest = await reader.ReadToEndAsync();//.ReadToEndAsync() //reader.ReadToEnd()
         //        }
 
-        //        string decryptedRequest = await Decrypt(encryptedRequest);
+        //        string decryptedRequest = await DecryptObj(encryptedRequest);
         //        httpContext.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(decryptedRequest));
+
         //        httpContext.Request.ContentLength = decryptedRequest.Length;
         //        httpContext.Request.ContentType = "application/json; charset=utf-8";
 
@@ -51,22 +68,10 @@ namespace SB.Security.Middlewares
         //        var originalReader = new StreamReader(stream);
         //        var originalContent = await originalReader.ReadToEndAsync(); // Reading first request
 
-        //        var decryptedRequest = await Decrypt(originalContent);
-
-        //        //var decryptedRequest = DecryptStringFromBytes_Aes(Encoding.UTF8.GetBytes(originalContent),
-        //        //    Encoding.UTF8.GetBytes(_appSettings.EncryptKey), Encoding.UTF8.GetBytes(_appSettings.EncryptIV));
-
-        //        //My Custom Response Class
+        //        var decryptedRequest = await DecryptObj(originalContent);
         //        var readingRequestBody = new RequstBodyReaderModel();
-        //        //readingRequestBody.HttpVerb = request.Method;
-        //        //readingRequestBody.RequestPath = request.Path;
-        //        //readingRequestBody.RequestRawData = originalContent;
         //        readingRequestBody.RequestRawData = decryptedRequest;
-        //        //readingRequestBody.Message = "Here I am Reading the request body";
-
-        //        //converting my custom response class to jsontype
         //        var json = JsonConvert.SerializeObject(readingRequestBody);
-        //        //Modifying existing stream
         //        var requestData = Encoding.UTF8.GetBytes(json);
         //        stream = new MemoryStream(requestData);
         //        request.Body = stream;
@@ -75,25 +80,24 @@ namespace SB.Security.Middlewares
         //    await _next(context);
         //}
 
-        public async Task InvokeAsync(HttpContext context)
+        private Stream DecryptStream(Stream cipherStream)
         {
-            if (context.Request.Path.StartsWithSegments("/api/User/login") && context.Request.Method == "POST")
-            {
-                var request = context.Request;
-                var stream = request.Body;// At the begining it holding original request stream                    
-                var originalReader = new StreamReader(stream);
-                var originalContent = await originalReader.ReadToEndAsync(); // Reading first request
-
-                var decryptedRequest = await DecryptObj(originalContent);
-                var readingRequestBody = new RequstBodyReaderModel();
-                readingRequestBody.RequestRawData = decryptedRequest;
-                var json = JsonConvert.SerializeObject(readingRequestBody);
-                var requestData =  Encoding.UTF8.GetBytes(json);
-                stream = new MemoryStream(requestData);
-                request.Body = stream;
-            }
-
-            await _next(context);
+            Aes aes = GetEncryptionAlgorithm();
+            FromBase64Transform base64Transform = new FromBase64Transform(FromBase64TransformMode.IgnoreWhiteSpaces);
+            CryptoStream base64DecodedStream = new CryptoStream(cipherStream, base64Transform, CryptoStreamMode.Read);
+            ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+            CryptoStream decryptedStream = new CryptoStream(base64DecodedStream, decryptor, CryptoStreamMode.Read);
+            return decryptedStream;
+        }
+        private string DecryptString(string cipherText)
+        {
+            Aes aes = GetEncryptionAlgorithm();
+            byte[] buffer = Convert.FromBase64String(cipherText);
+            MemoryStream memoryStream = new MemoryStream(buffer);
+            ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+            CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
+            StreamReader streamReader = new StreamReader(cryptoStream);
+            return streamReader.ReadToEnd();
         }
 
         public async Task<string> DecryptObj(string decStr)
@@ -106,22 +110,35 @@ namespace SB.Security.Middlewares
             ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
             CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
             StreamReader streamReader = new StreamReader(cryptoStream);
-            return await streamReader.ReadToEndAsync() ;
+            return await streamReader.ReadToEndAsync();
         }
 
-        public string Decrypt1(string value)
+
+
+        public async Task<string> DecryptNew(string cipherText)
         {
-            Aes aes = GetEncryptionAlgorithm();
-            //ICryptoTransform decryptor = desSprovider.CreateDecryptor(key, iv);
-            ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+            string result;
+            string encryptionKey = "1203199320052021";
+            byte[] cipherBytes = Convert.FromBase64String(cipherText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(encryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(16);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        await cs.WriteAsync(cipherBytes, 0, cipherBytes.Length);
+                        cs.Close();
+                    }
+                    result = Encoding.Unicode.GetString(ms.ToArray());
+                }
+            }
 
-            Encoding utf = new UTF8Encoding();
-            value = value.Replace(" ", "+").Replace("'", "");
-
-            byte[] bEncrypt = Convert.FromBase64String(value);
-            byte[] bDecrupt = decryptor.TransformFinalBlock(bEncrypt, 0, bEncrypt.Length);
-            return utf.GetString(bDecrupt);
+            return result;
         }
+
 
         public string Decryptword(string DecryptText)
         {
@@ -133,6 +150,7 @@ namespace SB.Security.Middlewares
             SrctArray = objmdcript.ComputeHash(UTF8Encoding.UTF8.GetBytes("1203199320052021"));
             objmdcript.Clear();
             objt.Key = SrctArray;
+            //objt.KeySize = 128 / 8;
             objt.Mode = CipherMode.CBC;
             objt.Padding = PaddingMode.PKCS7;
             ICryptoTransform crptotrns = objt.CreateDecryptor();
@@ -167,166 +185,6 @@ namespace SB.Security.Middlewares
             return plaintext;
         }
 
-
-        //public async Task InvokeAsync(HttpContext httpContext)
-        //{
-        //    httpContext.Response.Body = EncryptStream(httpContext.Response.Body);
-        //    httpContext.Request.Body = DecryptStream(httpContext.Request.Body);
-        //    if (httpContext.Request.QueryString.HasValue)
-        //    {
-        //        string decryptedString = DecryptString(httpContext.Request.QueryString.Value.Substring(1));
-        //        httpContext.Request.QueryString = new QueryString($"?{decryptedString}");
-        //    }
-        //    await _next(httpContext);
-        //    await httpContext.Request.Body.DisposeAsync();
-        //    await httpContext.Response.Body.DisposeAsync();
-        //}
-
-        //public async Task InvokeAsync(HttpContext context)
-        //{
-        //    context.Request.EnableBuffering();
-        //    var api = new ApiRequest
-        //    {
-        //        HttpType = context.Request.Method,
-        //        Query = context.Request.QueryString.Value,
-        //        RequestUrl = context.Request.Path,
-        //        RequestName = "",
-        //        RequestIP = context.Request.Host.Value
-        //    };
-
-        //    var request = context.Request.Body;
-        //    var response = context.Response.Body;
-
-        //    try
-        //    {
-        //        //using (var newRequest = new MemoryStream())
-        //        //{
-        //        //    context.Request.Body = newRequest;
-        //        //    using (var newResponse = new MemoryStream())
-        //        //    {
-        //        //        context.Response.Body = newResponse;
-        //        //        using (var reader = new StreamReader(request))
-        //        //        {
-        //        //            api.Body = await reader.ReadToEndAsync();
-        //        //            if (string.IsNullOrEmpty(api.Body))
-        //        //                await _next.Invoke(context);
-        //        //            api.Body = await Decrypt(api.Body);
-        //        //        }
-        //        //        using (var writer = new StreamWriter(newRequest))
-        //        //        {
-        //        //            await writer.WriteAsync(api.Body);
-        //        //            await writer.FlushAsync();
-        //        //            newRequest.Position = 0;
-        //        //            context.Request.Body = newRequest;
-        //        //            await _next(context);
-        //        //        }
-
-        //        //        using (var reader = new StreamReader(newResponse))
-        //        //        {
-        //        //            newResponse.Position = 0;
-        //        //            api.ResponseBody = await reader.ReadToEndAsync();
-        //        //            if (!string.IsNullOrWhiteSpace(api.ResponseBody))
-        //        //            {
-        //        //                api.ResponseBody = await EncryptResponse(api.ResponseBody);
-        //        //            }
-        //        //        }
-        //        //        using (var writer = new StreamWriter(response))
-        //        //        {
-        //        //            await writer.WriteAsync(api.ResponseBody);
-        //        //            await writer.FlushAsync();
-        //        //        }
-        //        //    }
-        //        //}
-
-        //        if (context.Request.Path.StartsWithSegments("/api/User/login") && context.Request.Method == "POST")
-        //        {
-        //            using (var newRequest = new MemoryStream())
-        //            {
-        //                context.Request.Body = newRequest;
-        //                using (var newResponse = new MemoryStream())
-        //                {
-        //                    context.Response.Body = newResponse;
-        //                    using (var reader = new StreamReader(request, Encoding.UTF8, true, 1024, true))
-        //                    {
-        //                        api.Body = await reader.ReadToEndAsync();
-        //                        if (string.IsNullOrEmpty(api.Body))
-        //                            await _next.Invoke(context);
-        //                        api.Body = await Decrypt(api.Body);
-        //                    }
-        //                    using (var writer = new StreamWriter(newRequest))
-        //                    {
-        //                        await writer.WriteAsync(api.Body);
-        //                        await writer.FlushAsync();
-        //                        newRequest.Position = 0;
-        //                        context.Request.Body = newRequest;
-        //                        await _next(context);
-        //                    }
-
-        //                    using (var reader = new StreamReader(newResponse))
-        //                    {
-        //                        newResponse.Position = 0;
-        //                        api.ResponseBody = await reader.ReadToEndAsync();
-        //                        if (!string.IsNullOrWhiteSpace(api.ResponseBody))
-        //                        {
-        //                            api.ResponseBody = await EncryptResponse(api.ResponseBody);
-        //                        }
-        //                    }
-        //                    using (var writer = new StreamWriter(response))
-        //                    {
-        //                        await writer.WriteAsync(api.ResponseBody);
-        //                        await writer.FlushAsync();
-        //                    }
-        //                }
-        //            }
-
-        //        }
-        //        await _next.Invoke(context);
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //    }
-        //    finally
-        //    {
-        //        context.Request.Body = request;
-        //        context.Response.Body = response;
-        //    }
-        //    context.Response.OnCompleted(() =>
-        //    {
-        //        return Task.CompletedTask;
-        //    });
-        //}
-
-        private CryptoStream EncryptStream(Stream responseStream)
-        {
-            Aes aes = GetEncryptionAlgorithm();
-            ToBase64Transform base64Transform = new ToBase64Transform();
-            CryptoStream base64EncodedStream = new CryptoStream(responseStream, base64Transform, CryptoStreamMode.Write);
-            ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-            CryptoStream cryptoStream = new CryptoStream(base64EncodedStream, encryptor, CryptoStreamMode.Write);
-            return cryptoStream;
-        }
-        static byte[] Encrypt(string plainText)
-        {
-            byte[] encrypted;
-            using (AesManaged aes = new AesManaged())
-            {
-                ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
-                    {
-                        using (StreamWriter sw = new StreamWriter(cs))
-                            sw.Write(plainText);
-                        encrypted = ms.ToArray();
-                    }
-                }
-            }
-            return encrypted;
-        }
-
-
-
         static string DecryptStringFromBytes_Aes(byte[] cipherText, byte[] Key, byte[] IV)
         {
             if (cipherText == null || cipherText.Length <= 0)
@@ -355,6 +213,62 @@ namespace SB.Security.Middlewares
 
             return plaintext;
         }
+
+        private async Task<string> Decrypt(string cipherText)
+        {
+            byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
+
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Encoding.UTF8.GetBytes(_appSettings.EncryptKey);
+                aesAlg.IV = Encoding.UTF8.GetBytes(_appSettings.EncryptIV);
+
+                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+                using (MemoryStream msDecrypt = new MemoryStream(cipherTextBytes))
+                {
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        {
+                            return await srDecrypt.ReadToEndAsync();
+                        }
+                    }
+                }
+            }
+        }
+
+
+        static byte[] Encrypt(string plainText)
+        {
+            byte[] encrypted;
+            using (AesManaged aes = new AesManaged())
+            {
+                ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter sw = new StreamWriter(cs))
+                            sw.Write(plainText);
+                        encrypted = ms.ToArray();
+                    }
+                }
+            }
+            return encrypted;
+        }
+
+        private CryptoStream EncryptStream(Stream responseStream)
+        {
+            Aes aes = GetEncryptionAlgorithm();
+            ToBase64Transform base64Transform = new ToBase64Transform();
+            CryptoStream base64EncodedStream = new CryptoStream(responseStream, base64Transform, CryptoStreamMode.Write);
+            ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+            CryptoStream cryptoStream = new CryptoStream(base64EncodedStream, encryptor, CryptoStreamMode.Write);
+            return cryptoStream;
+        }
+
+
 
         static byte[] EncryptStringToBytes_Aes(string plainText, byte[] Key, byte[] IV)
         {
@@ -387,25 +301,7 @@ namespace SB.Security.Middlewares
 
             return encrypted;
         }
-        private Stream DecryptStream(Stream cipherStream)
-        {
-            Aes aes = GetEncryptionAlgorithm();
-            FromBase64Transform base64Transform = new FromBase64Transform(FromBase64TransformMode.IgnoreWhiteSpaces);
-            CryptoStream base64DecodedStream = new CryptoStream(cipherStream, base64Transform, CryptoStreamMode.Read);
-            ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-            CryptoStream decryptedStream = new CryptoStream(base64DecodedStream, decryptor, CryptoStreamMode.Read);
-            return decryptedStream;
-        }
-        private string DecryptString(string cipherText)
-        {
-            Aes aes = GetEncryptionAlgorithm();
-            byte[] buffer = Convert.FromBase64String(cipherText);
-            MemoryStream memoryStream = new MemoryStream(buffer);
-            ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-            CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
-            StreamReader streamReader = new StreamReader(cryptoStream);
-            return streamReader.ReadToEnd();
-        }
+
 
         private Aes GetEncryptionAlgorithm()
         {
@@ -417,29 +313,7 @@ namespace SB.Security.Middlewares
             return aes;
         }
 
-        private async Task<string> Decrypt(string cipherText)
-        {
-            byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
 
-            using (Aes aesAlg = Aes.Create())
-            {
-                aesAlg.Key = Encoding.UTF8.GetBytes(_appSettings.EncryptKey);
-                aesAlg.IV = Encoding.UTF8.GetBytes(_appSettings.EncryptIV);
-
-                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-
-                using (MemoryStream msDecrypt = new MemoryStream(cipherTextBytes))
-                {
-                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                    {
-                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
-                        {
-                            return await srDecrypt.ReadToEndAsync();
-                        }
-                    }
-                }
-            }
-        }
 
         private async Task<string> EncryptResponse(string plainText)
         {
@@ -469,7 +343,7 @@ namespace SB.Security.Middlewares
         private List<string> GetExcludeURLList()
         {
             List<string> excludeURL = new();
-            //excludeURL.Add("/api/User/login");
+            excludeURL.Add("/api/User/login");
             return excludeURL;
         }
     }

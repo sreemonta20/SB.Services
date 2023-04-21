@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "HCS.Security": {
+    "SB.Security": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

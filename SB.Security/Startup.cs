@@ -87,16 +87,16 @@ namespace SB.Security
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc(ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_VERSION_NAME, new OpenApiInfo
+                c.SwaggerDoc(ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_VERSION_NAME, new OpenApiInfo
                 {
-                    Title = ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_TITLE,
-                    Version = ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_VERSION_NAME,
-                    Description = ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_DESCRIPTION,
+                    Title = ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_TITLE,
+                    Version = ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_VERSION_NAME,
+                    Description = ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_DESCRIPTION,
                     Contact = new OpenApiContact
                     {
-                        Name = ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_CONTACT_NAME,
-                        Email = ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_CONTACT_EMAIL,
-                        Url = new Uri(ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_CONTACT_URL)
+                        Name = ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_CONTACT_NAME,
+                        Email = ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_CONTACT_EMAIL,
+                        Url = new Uri(ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_CONTACT_URL)
                     }
                 });
                 c.ResolveConflictingActions(apiDescription => apiDescription.First());
@@ -105,21 +105,21 @@ namespace SB.Security
 
                 var securitySchema = new OpenApiSecurityScheme
                 {
-                    Description = ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_SCHEME_DESC,
-                    Name = ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_SCHEME_NAME,
+                    Description = ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_SCHEME_DESC,
+                    Name = ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_SCHEME_NAME,
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
-                    Scheme = ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_SCHEME_SCHEME,
+                    Scheme = ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_SCHEME_SCHEME,
                     Reference = new OpenApiReference
                     {
                         Type = ReferenceType.SecurityScheme,
-                        Id = ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_SCHEME_REF_ID
+                        Id = ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_SCHEME_REF_ID
                     }
                 };
 
-                c.AddSecurityDefinition(ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_SCHEME_REF_ID, securitySchema);
+                c.AddSecurityDefinition(ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_SCHEME_REF_ID, securitySchema);
                 var securityRequirement = new OpenApiSecurityRequirement();
-                securityRequirement.Add(securitySchema, new[] { ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_SCHEME_REF_ID });
+                securityRequirement.Add(securitySchema, new[] { ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_SCHEME_REF_ID });
                 c.AddSecurityRequirement(securityRequirement);
             });
 
@@ -182,7 +182,7 @@ namespace SB.Security
 
 
             #region Configuring authorization middleware into the service
-            //If HCS hosted on-premise and customer want to use default Identity 
+            //If SB hosted on-premise and customer want to use default Identity 
             var key = Encoding.ASCII.GetBytes(appSettings.JWT.Key);
             services.AddAuthentication(x =>
             {
@@ -236,8 +236,8 @@ namespace SB.Security
                 #region Inject or enable Swagger middleware into the request pipeline to serve generated swagger as a JSON endpoint in case of development env.
                 app.UseSwagger();
                
-                app.UseSwaggerUI(c => c.SwaggerEndpoint(ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_END_POINT,
-                    ConstantSupplier.SWAGGER_HCS_API_SERVICE_DOC_END_POINT_NAME));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint(ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_END_POINT,
+                    ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_END_POINT_NAME));
                 #endregion
             }
             app.UseHttpsRedirection();

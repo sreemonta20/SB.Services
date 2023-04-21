@@ -15,26 +15,26 @@
         public const string AUTHORIZATION_TOKEN_HEADER_ADD_VALUE_01 = "true";
         public const string EMAIL_CONFIG_CLASS_KEY = "EmailConfiguration";
 
-        public const string SWAGGER_HCS_API_SERVICE_DOC_VERSION_NAME = "v1";
-        public const string SWAGGER_HCS_API_SERVICE_DOC_TITLE = "HCS Services API";
-        public const string SWAGGER_HCS_API_SERVICE_DOC_DESCRIPTION = "HCS Services API";
-        public const string SWAGGER_HCS_API_SERVICE_DOC_CONTACT_NAME = "Healthcare Solutions ";
-        public const string SWAGGER_HCS_API_SERVICE_DOC_CONTACT_EMAIL = "info@hcs.com";
-        public const string SWAGGER_HCS_API_SERVICE_DOC_CONTACT_URL = "https://www.hcs.ae/";
-        public const string SWAGGER_HCS_API_SERVICE_DOC_SCHEME_DESC = "Authorization header using the Bearer scheme. Example: {token}";
-        public const string SWAGGER_HCS_API_SERVICE_DOC_SCHEME_NAME = "Authorization";
-        public const string SWAGGER_HCS_API_SERVICE_DOC_SCHEME_SCHEME = "bearer";
-        public const string SWAGGER_HCS_API_SERVICE_DOC_SCHEME_REF_ID = "Bearer";
+        public const string SWAGGER_SB_API_SERVICE_DOC_VERSION_NAME = "v1";
+        public const string SWAGGER_SB_API_SERVICE_DOC_TITLE = "SB Services API";
+        public const string SWAGGER_SB_API_SERVICE_DOC_DESCRIPTION = "SB Services API";
+        public const string SWAGGER_SB_API_SERVICE_DOC_CONTACT_NAME = "Healthcare Solutions ";
+        public const string SWAGGER_SB_API_SERVICE_DOC_CONTACT_EMAIL = "info@sb.com";
+        public const string SWAGGER_SB_API_SERVICE_DOC_CONTACT_URL = "https://www.sb.ae/";
+        public const string SWAGGER_SB_API_SERVICE_DOC_SCHEME_DESC = "Authorization header using the Bearer scheme. Example: {token}";
+        public const string SWAGGER_SB_API_SERVICE_DOC_SCHEME_NAME = "Authorization";
+        public const string SWAGGER_SB_API_SERVICE_DOC_SCHEME_SCHEME = "bearer";
+        public const string SWAGGER_SB_API_SERVICE_DOC_SCHEME_REF_ID = "Bearer";
 
-        public const string SWAGGER_HCS_API_SERVICE_DOC_END_POINT = "/swagger/v1/swagger.json";
-        public const string SWAGGER_HCS_API_SERVICE_DOC_END_POINT_NAME = "HCS Services API v1";
+        public const string SWAGGER_SB_API_SERVICE_DOC_END_POINT = "/swagger/v1/swagger.json";
+        public const string SWAGGER_SB_API_SERVICE_DOC_END_POINT_NAME = "SB Services API v1";
         #endregion
 
         #region Serilog Related
         public const string LOG_INFO_APP_START_MSG = "Application is starting";
         public const string LOG_FATAL_APP_FAILED_MSG = "Fatal: Application error";
         public const string LOG_INFO_APPEND_LINE_FIRST = "**********************************************************************";
-        public const string LOG_INFO_APPEND_LINE_SECOND_GATEWAY = "**                      HCS Services                                **";
+        public const string LOG_INFO_APPEND_LINE_SECOND_GATEWAY = "**                      SB Services                                **";
         public const string LOG_INFO_APPEND_LINE_THIRD_VERSION = "**                    [Version 1.0.0]                               **";
         public const string LOG_INFO_APPEND_LINE_FOURTH_COPYRIGHT = "**  ©2022-2023 Health Care Solutions. All rights reserved           **";
         public const string LOG_INFO_APPEND_LINE_END = "**********************************************************************";

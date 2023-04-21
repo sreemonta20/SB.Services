@@ -8,6 +8,7 @@ namespace SB.Security.Models.Configuration
     public class AppSettings
     {
         public ConnectionStrings? ConnectionStrings { get; set; }
+        public string? ConnectionProvider { get; set; }
         public double AccessTokenExpireTime { get; set; }
         public JWT? JWT { get; set; }
         public int MaxNumberOfFailedAttempts { get; set; }

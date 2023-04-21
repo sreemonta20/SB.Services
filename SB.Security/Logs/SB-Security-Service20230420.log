@@ -1,0 +1,83 @@
+[2023-04-20 11:10:36.464] [Information] () <> Application is starting
+[2023-04-20 11:10:36.545] [Information] () <> 
+**********************************************************************
+**                      HCS Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-20 11:11:50.026] [Information] () <> Application is starting
+[2023-04-20 11:11:50.101] [Information] () <> 
+**********************************************************************
+**                      HCS Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-20 11:22:05.790] [Information] () <> Application is starting
+[2023-04-20 11:22:05.890] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-20 11:23:25.982] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-04-20 11:23:26.034] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-04-20 11:23:26.080] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-04-20 11:23:28.845] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJkYjk1YjY3Yi1mZDcxLTQ2ZDYtOWE4NS1kYTgyMzE5NzMxYTAiLCJpYXQiOjE2ODE5NzU0MDgsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjgxOTc1NDA4LCJleHAiOjE2ODIwMTE0MDh9.UlTqDdeObPzgQDG2hSY0cPL5gKtC7gLpN39dHBvBg80",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-04-20 11:23:28.847] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJkYjk1YjY3Yi1mZDcxLTQ2ZDYtOWE4NS1kYTgyMzE5NzMxYTAiLCJpYXQiOjE2ODE5NzU0MDgsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjgxOTc1NDA4LCJleHAiOjE2ODIwMTE0MDh9.UlTqDdeObPzgQDG2hSY0cPL5gKtC7gLpN39dHBvBg80",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-04-20 11:23:28.899] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 3680.1657 ms
