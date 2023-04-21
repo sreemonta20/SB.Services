@@ -21,6 +21,7 @@ using System.Configuration;
 using System.Security;
 using System.Text;
 using System.Text.Json.Serialization;
+using SB.DataAccessLayer;
 
 namespace SB.Security
 {
@@ -150,21 +151,17 @@ namespace SB.Security
             services.AddHttpContextAccessor();
 
             #region Dependency Injection added into service
-            //services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
-            //services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
-            //services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
-            //services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
-            //services.AddInMemoryRateLimiting();
-            //services.Add(new EncryptDecryptMiddleware(appSettings.EncryptKey, appSettings.EncryptIV));
-            //services.Add(new DelegatingHandlerProxy<EncryptDecryptMiddleware>(appSettings.EncryptKey, appSettings.EncryptIV));
-            //services.AddSingleton<IEncryptDecryptService, EncryptDecryptService>();
-            //services.AddSingleton(new EncryptDecryptService(appSettings.EncryptKey, appSettings.EncryptIV));
-            //services.Add(new EncryptDecryptMiddleware(new EncryptDecryptService(appSettings.EncryptKey, appSettings.EncryptIV)));
             services.AddTransient<ISecurityLogService, SecurityLogService>();
             services.AddTransient<IUserService, UserService>();
+            ///--------ADO.NET object dependencies start
+            services.AddTransient<IDatabaseManager, DatabaseManager>();
+            services.AddTransient<IDatabaseHandlerFactory, DatabaseHandlerFactory>();
+            services.AddTransient<IDatabaseHandler, SqlServerDataHandler>();
+            services.AddTransient<IDatabaseHandler, OracleDataHandler>();
+            services.AddTransient<IDatabaseHandler, OleDataHandler>();
+            services.AddTransient<IDatabaseHandler, OdbcDataHandler>();
+            ///--------ADO.NET object dependencies end
             services.AddScoped<ValidateModelAttribute>();
-            //services.AddTransient<EncryptDecryptMiddleware>();
-            //services.AddHttpClient("myclient").AddHttpMessageHandler<EncryptDecryptMiddleware>();
             #endregion
 
 

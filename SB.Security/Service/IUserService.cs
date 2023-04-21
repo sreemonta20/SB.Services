@@ -12,6 +12,7 @@ namespace SB.Security.Service
     public interface IUserService
     {
         Task<DataResponse> GetUserAsync(string id);
+        Task<DataResponse> GetUserTestAsync(string id);
         Task<PageResult<UserInfo>> GetAllUserAsync(PaginationFilter paramRequest);
         Task<DataResponse> AuthenticateUserAsync(LoginRequest request);
         Task<DataResponse> RegisterUserAsync(UserRegisterRequest request);

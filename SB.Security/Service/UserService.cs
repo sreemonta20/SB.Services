@@ -25,6 +25,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using BCryptNet = BCrypt.Net.BCrypt;
+using SB.DataAccessLayer;
 
 namespace SB.Security.Service
 {
@@ -39,13 +40,23 @@ namespace SB.Security.Service
         private readonly IEmailService _emailService;
         private readonly AppSettings _appSettings;
         private readonly ISecurityLogService _securityLogService;
-        public UserService(IConfiguration config, SBSecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options, ISecurityLogService securityLogService)
+        private readonly IDatabaseManager _dbmanager;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="context"></param>
+        /// <param name="emailService"></param>
+        /// <param name="options"></param>
+        /// <param name="securityLogService"></param>
+        public UserService(IConfiguration config, SBSecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options, ISecurityLogService securityLogService, IDatabaseManager dbManager)
         {
             this._configuration = config;
             this._context = context;
             this._emailService = emailService;
             this._appSettings = options.Value;
             this._securityLogService = securityLogService;
+            this._dbmanager = dbManager;
         }
         #endregion
 
@@ -57,6 +68,21 @@ namespace SB.Security.Service
         /// <param name="id"></param>
         /// <returns>DataResponse</returns>
         public async Task<DataResponse> GetUserAsync(string id)
+        {
+            var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.Id == new Guid(id));
+            if (user != null)
+            {
+                return new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user };
+            }
+            return new DataResponse { Success = false, Message = ConstantSupplier.GET_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+        }
+
+        /// <summary>
+        /// This service method used to get a specific user details by supplying user id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>DataResponse</returns>
+        public async Task<DataResponse> GetUserTestAsync(string id)
         {
             var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.Id == new Guid(id));
             if (user != null)
