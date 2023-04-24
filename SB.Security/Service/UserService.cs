@@ -26,6 +26,7 @@ using System.Security.Claims;
 using System.Text;
 using BCryptNet = BCrypt.Net.BCrypt;
 using SB.DataAccessLayer;
+using System.Data;
 
 namespace SB.Security.Service
 {
@@ -57,6 +58,7 @@ namespace SB.Security.Service
             this._appSettings = options.Value;
             this._securityLogService = securityLogService;
             this._dbmanager = dbManager;
+            this._dbmanager.InitializeDatabase(_appSettings.ConnectionStrings.SecurityConectionString, _appSettings.ConnectionProvider);
         }
         #endregion
 
@@ -84,11 +86,21 @@ namespace SB.Security.Service
         /// <returns>DataResponse</returns>
         public async Task<DataResponse> GetUserTestAsync(string id)
         {
-            var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.Id == new Guid(id));
-            if (user != null)
+            UserInfo user;
+            List<IDbDataParameter> parameters = new()
             {
-                return new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user };
-            }
+                _dbmanager.CreateParameter("@Id", id, DbType.Guid)
+            };
+            DataTable oDT = await _dbmanager.GetDataTableAsync("SP_GetUserById", CommandType.StoredProcedure, parameters.ToArray());
+            //if(oDT !=null && oDT.Rows.Count > 0)
+            //{
+                
+            //}
+            
+            //if (user != null)
+            //{
+            //    return new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user };
+            //}
             return new DataResponse { Success = false, Message = ConstantSupplier.GET_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
         }
 
