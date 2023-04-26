@@ -27,6 +27,7 @@ using System.Text;
 using BCryptNet = BCrypt.Net.BCrypt;
 using SB.DataAccessLayer;
 using System.Data;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace SB.Security.Service
 {
@@ -69,38 +70,33 @@ namespace SB.Security.Service
         /// </summary>
         /// <param name="id"></param>
         /// <returns>DataResponse</returns>
-        public async Task<DataResponse> GetUserAsync(string id)
+        public async Task<DataResponse> GetUserByIdAsync(string id)
         {
-            var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.Id == new Guid(id));
-            if (user != null)
-            {
-                return new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user };
-            }
-            return new DataResponse { Success = false, Message = ConstantSupplier.GET_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+            UserInfo? user = await _context.UserInfos.FirstOrDefaultAsync(u => u.Id == new Guid(id));
+            return user != null
+                ? new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user }
+                : new DataResponse { Success = false, Message = ConstantSupplier.GET_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
         }
 
         /// <summary>
-        /// This service method used to get a specific user details by supplying user id.
+        /// <para>ADO.NET Codeblock: GetUserByIdAdoAsync</para> 
+        /// <para>This service method used to get a specific user details by supplying user id.</para> 
         /// </summary>
         /// <param name="id"></param>
         /// <returns>DataResponse</returns>
-        public async Task<DataResponse> GetUserTestAsync(string id)
+        public async Task<DataResponse> GetUserByIdAdoAsync(string id)
         {
-            UserInfo user;
+            UserInfo? user;
             List<IDbDataParameter> parameters = new()
             {
-                _dbmanager.CreateParameter("@Id", id, DbType.Guid)
+                _dbmanager.CreateParameter("@Id", new Guid(id), DbType.Guid)
             };
-            DataTable oDT = await _dbmanager.GetDataTableAsync("SP_GetUserById", CommandType.StoredProcedure, parameters.ToArray());
-            //if(oDT !=null && oDT.Rows.Count > 0)
-            //{
-                
-            //}
-            
-            //if (user != null)
-            //{
-            //    return new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user };
-            //}
+            DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GET_USER_BY_ID_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+            if (oDT != null && oDT.Rows.Count > 0)
+            {
+                user = JArray.FromObject(oDT)[0].ToObject<UserInfo>();
+                return new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user };
+            }
             return new DataResponse { Success = false, Message = ConstantSupplier.GET_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
         }
 
@@ -111,17 +107,56 @@ namespace SB.Security.Service
         /// <returns>PageResult<![CDATA[<T>]]></returns>
         public async Task<PageResult<UserInfo>> GetAllUserAsync(PaginationFilter paramRequest)
         {
-            var count = await this._context.UserInfos.CountAsync();
-            var Items = await this._context.UserInfos.OrderByDescending(x => x.CreatedDate).Skip(((int)paramRequest.PageNumber - 1) * (int)paramRequest.PageSize).Take((int)paramRequest.PageSize).ToListAsync();
-            var result = new PageResult<UserInfo>
+            int count = await _context.UserInfos.CountAsync();
+            List<UserInfo> Items = await _context.UserInfos.OrderByDescending(x => x.CreatedDate).Skip((paramRequest.PageNumber - 1) * paramRequest.PageSize).Take(paramRequest.PageSize).ToListAsync();
+            PageResult<UserInfo> result = new PageResult<UserInfo>
             {
                 Count = count,
-                PageIndex = paramRequest.PageNumber >0 ? paramRequest.PageNumber: 1,
+                PageIndex = paramRequest.PageNumber > 0 ? paramRequest.PageNumber : 1,
                 PageSize = 10,
                 Items = Items
             };
             return result;
 
+
+        }
+
+        /// <summary>
+        /// This service method used to get a list users based on the supplied page number and page size.
+        /// </summary>
+        /// <param name="paramRequest"></param>
+        /// <returns>PagingResult<![CDATA[<T>]]></returns>
+        public async Task<PagingResult<UserInfo>> GetAllUserExtnAsync(PaginationFilter paramRequest)
+        {
+            //var source = _context.UserInfos.OrderBy(a=>a.CreatedDate).AsQueryable();
+            IQueryable<UserInfo> source = (from user in _context?.UserInfos?.OrderBy(a => a.CreatedDate) select user).AsQueryable();
+            PagingResult<UserInfo> result = await Utilities.GetPagingResult(source, paramRequest.PageNumber, paramRequest.PageSize);
+            return result;
+        }
+
+        /// <summary>
+        /// <para>ADO.NET Codeblock: GetAllUserAdoAsync</para> 
+        /// <para>This service method used to get a list users based on the supplied page number and page size.</para>
+        /// </summary>
+        /// <param name="paramRequest"></param>
+        /// <returns>PageResult<![CDATA[<T>]]></returns>
+        public async Task<PagingResult<UserInfo>?> GetAllUserAdoAsync(PaginationFilter paramRequest)
+        {
+
+            List<UserInfo> oUserList;
+            List<IDbDataParameter> parameters = new()
+            {
+                _dbmanager.CreateParameter("@PageIndex", paramRequest.PageNumber, DbType.Int32),
+                _dbmanager.CreateParameter("@PageSize", paramRequest.PageSize, DbType.Int32)
+            };
+            DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GET_ALL_USER_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+
+            if (oDT != null && oDT.Rows.Count > 0)
+            {
+                oUserList = Utilities.ConvertDataTable<UserInfo>(oDT);
+                return Utilities.GetPagingResult(oUserList, paramRequest.PageNumber, paramRequest.PageSize);
+            }
+            return null;
 
         }
 
@@ -142,11 +177,11 @@ namespace SB.Security.Service
                 var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.UserName == request.UserName);
                 if (user != null)
                 {
-                    if (user.LoginFailedAttemptsCount > Convert.ToInt32(this._configuration["AppSettings:MaxNumberOfFailedAttempts"]) 
+                    if (user.LoginFailedAttemptsCount > Convert.ToInt32(this._configuration["AppSettings:MaxNumberOfFailedAttempts"])
                         && user.LastLoginAttemptAt.HasValue
                         && DateTime.Now < user.LastLoginAttemptAt.Value.AddMinutes(Convert.ToInt32(this._configuration["AppSettings:BlockMinutes"])))
                     {
-                        
+
                         SendResponse emailResponse = await SendEmail(request, user);
                         if (!emailResponse.Successful)
                         {
@@ -161,7 +196,7 @@ namespace SB.Security.Service
                             ResponseCode = (int)HttpStatusCode.BadRequest,
                             Result = null
                         };
-                        _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG,  JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                        _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
 
                         return oDataResponse;
                         //return new DataResponse
@@ -192,7 +227,7 @@ namespace SB.Security.Service
                     }
                     else
                     {
-                        user.LastLoginAttemptAt = DateTime.Now; 
+                        user.LastLoginAttemptAt = DateTime.Now;
                         user.LoginFailedAttemptsCount++;
                         await TrackAndUpdateLoginAttempts(user);
 
@@ -221,7 +256,6 @@ namespace SB.Security.Service
             return oDataResponse4;
         }
 
-
         /// <summary>
         /// This method saves and update the user details. It tracks the action name (save or update). Based on this it send the request for saving or
         /// updating the user credential. In Update method, no user password can be updated by Admin due to data protection policy in general. Password 
@@ -233,7 +267,7 @@ namespace SB.Security.Service
         {
             if (request != null)
             {
-                
+
                 switch (request.ActionName)
                 {
                     case ConstantSupplier.SAVE_KEY:
@@ -244,7 +278,6 @@ namespace SB.Security.Service
                             FullName = request.FullName,
                             UserName = request.UserName,
                             Password = BCryptNet.HashPassword(request.Password, saltKey),
-                            //Password = BCryptNet.HashPassword(request.Password),
                             SaltKey = saltKey,
                             Email = request.Email,
                             UserRole = request.UserRole,
@@ -264,8 +297,33 @@ namespace SB.Security.Service
                         request.Id = Convert.ToString(oSaveUserInfo.Id);
                         return new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
 
+                    #region ADO.NET Codeblock
+                    //List<IDbDataParameter> parameters = new()
+                    //{
+                    //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.SAVE_KEY, DbType.String),
+                    //    _dbmanager.CreateParameter("@Id", oSaveUserInfo.Id, DbType.Guid),
+                    //    _dbmanager.CreateParameter("@FullName", oSaveUserInfo.FullName, DbType.String),
+                    //    _dbmanager.CreateParameter("@UserName", oSaveUserInfo.UserName, DbType.String),
+                    //    _dbmanager.CreateParameter("@Password", oSaveUserInfo.Password, DbType.String),
+                    //    _dbmanager.CreateParameter("@SaltKey", oSaveUserInfo.SaltKey, DbType.String),
+                    //    _dbmanager.CreateParameter("@Email", oSaveUserInfo.Email, DbType.String),
+                    //    _dbmanager.CreateParameter("@UserRole", oSaveUserInfo.UserRole, DbType.String),
+                    //    _dbmanager.CreateParameter("@CreatedBy", oSaveUserInfo.CreatedBy, DbType.String),
+                    //    _dbmanager.CreateParameter("@CreatedDate", oSaveUserInfo.CreatedDate, DbType.DateTime),
+                    //    _dbmanager.CreateParameter("@UpdatedBy", DBNull.Value, DbType.String),
+                    //    _dbmanager.CreateParameter("@UpdatedDate", DBNull.Value, DbType.DateTime)
+                    //};
+
+                    //int isSave = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
+
+                    //request.Id = Convert.ToString(oSaveUserInfo.Id);
+                    //return isSave > 0
+                    //? new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request }
+                    //: new DataResponse { Success = false, Message = ConstantSupplier.REG_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                    #endregion
+
                     case ConstantSupplier.UPDATE_KEY:
-                        
+
                         var oldUser = await this._context.UserInfos.FirstOrDefaultAsync(u => u.UserName == (request.UserName));
 
                         if ((oldUser != null) && (oldUser.Id != new Guid(request.Id)))
@@ -281,6 +339,7 @@ namespace SB.Security.Service
                         dbUserInfo.UserRole = request.UserRole;
                         dbUserInfo.UpdatedBy = Convert.ToString(this._context.UserInfos.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id);
                         dbUserInfo.UpdatedDate = DateTime.UtcNow;
+
                         var isFullNameModified = this._context.Entry(dbUserInfo).Property("FullName").IsModified;
                         var isUserNameModified = this._context.Entry(dbUserInfo).Property("UserName").IsModified;
                         var isEmailModified = this._context.Entry(dbUserInfo).Property("Email").IsModified;
@@ -291,6 +350,30 @@ namespace SB.Security.Service
 
                         return new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
 
+                        #region ADO.NET Codeblock
+                        //List<IDbDataParameter> upParameters = new()
+                        //{
+                        //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.UPDATE_KEY, DbType.String),
+                        //    _dbmanager.CreateParameter("@Id", dbUserInfo.Id, DbType.Guid),
+                        //    _dbmanager.CreateParameter("@FullName", dbUserInfo.FullName, DbType.String),
+                        //    _dbmanager.CreateParameter("@UserName", dbUserInfo.UserName, DbType.String),
+                        //    _dbmanager.CreateParameter("@Password", DBNull.Value, DbType.String),
+                        //    _dbmanager.CreateParameter("@SaltKey", DBNull.Value, DbType.String),
+                        //    _dbmanager.CreateParameter("@Email", dbUserInfo.Email, DbType.String),
+                        //    _dbmanager.CreateParameter("@UserRole", dbUserInfo.UserRole, DbType.String),
+                        //    _dbmanager.CreateParameter("@CreatedBy", DBNull.Value, DbType.String),
+                        //    _dbmanager.CreateParameter("@CreatedDate", DBNull.Value, DbType.DateTime),
+                        //    _dbmanager.CreateParameter("@UpdatedBy", dbUserInfo.UpdatedBy, DbType.String),
+                        //    _dbmanager.CreateParameter("@UpdatedDate", dbUserInfo.UpdatedDate, DbType.DateTime)
+                        //};
+
+                        //int isUpdate = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, upParameters.ToArray());
+
+
+                        //return isUpdate > 0
+                        //? new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request }
+                        //: new DataResponse { Success = false, Message = ConstantSupplier.REG_USER_UPDATE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                        #endregion
                 }
 
             }
@@ -312,6 +395,20 @@ namespace SB.Security.Service
                 this._context.UserInfos.Remove(oUserInfo);
                 await this._context.SaveChangesAsync();
                 return new DataResponse { Success = true, Message = ConstantSupplier.DELETE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oUserInfo };
+
+                #region ADO.NET Codeblock
+                //List<IDbDataParameter> parameters = new()
+                //        {
+                //            _dbmanager.CreateParameter("@Id", oUserInfo.Id, DbType.Guid)
+                //        };
+
+                //object isDelete = await _dbmanager.DeleteAsync(ConstantSupplier.DELETE_USER_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+
+
+                //return Convert.ToInt32(isDelete) > 0
+                //? new DataResponse { Success = true, Message = ConstantSupplier.DELETE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oUserInfo }
+                //: new DataResponse { Success = false, Message = ConstantSupplier.DELETE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                #endregion
             }
             return new DataResponse { Success = false, Message = ConstantSupplier.DELETE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = id };
         }
@@ -323,7 +420,7 @@ namespace SB.Security.Service
         /// <returns>Token</returns>
         private Token? GetToken(UserInfo user)
         {
-            
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(this._configuration["AppSettings:JWT:Key"]);
 
@@ -344,11 +441,11 @@ namespace SB.Security.Service
                 Expires = expiryTime,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
-           
+
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            if( tokenString != null)
+            if (tokenString != null)
             {
                 return new Token()
                 {
@@ -357,8 +454,8 @@ namespace SB.Security.Service
                     token_type = ConstantSupplier.AUTHORIZATION_TOKEN_TYPE,
                     error = string.Empty,
                     error_description = string.Empty,
-                    user = new User() { Id= Convert.ToString(user.Id), FullName = user.UserName, UserName = user.UserName, Email = user.Email, UserRole= user.UserRole }
-                    
+                    user = new User() { Id = Convert.ToString(user.Id), FullName = user.UserName, UserName = user.UserName, Email = user.Email, UserRole = user.UserRole }
+
                 };
             }
             return null;

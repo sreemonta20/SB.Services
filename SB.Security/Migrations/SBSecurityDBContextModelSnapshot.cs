@@ -72,15 +72,15 @@ namespace SB.Security.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d670a7ba-f10d-4241-8230-6cd8e0a2b7c0"),
-                            CreatedDate = new DateTime(2023, 4, 20, 6, 54, 10, 983, DateTimeKind.Utc).AddTicks(5120),
+                            Id = new Guid("3b3ac0ec-ebaa-4e3d-8bec-8910814b6559"),
+                            CreatedDate = new DateTime(2023, 4, 26, 15, 47, 15, 634, DateTimeKind.Utc).AddTicks(1330),
                             Email = "sbhowmikcse08@gmail.com",
                             FullName = "Sreemonta Bhowmik",
-                            LastLoginAttemptAt = new DateTime(2023, 4, 20, 10, 54, 10, 983, DateTimeKind.Local).AddTicks(5075),
+                            LastLoginAttemptAt = new DateTime(2023, 4, 26, 19, 47, 15, 634, DateTimeKind.Local).AddTicks(1197),
                             LoginFailedAttemptsCount = 0,
                             Password = "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa",
                             SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
-                            UpdatedDate = new DateTime(2023, 4, 20, 6, 54, 10, 983, DateTimeKind.Utc).AddTicks(5121),
+                            UpdatedDate = new DateTime(2023, 4, 26, 15, 47, 15, 634, DateTimeKind.Utc).AddTicks(1334),
                             UserName = "sree",
                             UserRole = "Admin"
                         });

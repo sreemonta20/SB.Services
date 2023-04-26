@@ -11,9 +11,21 @@ namespace SB.Security.Service
     /// </summary>
     public interface IUserService
     {
-        Task<DataResponse> GetUserAsync(string id);
-        Task<DataResponse> GetUserTestAsync(string id);
+        Task<DataResponse> GetUserByIdAsync(string id);
+        /// <summary>
+        /// ADO.NET Codeblock: GetUserByIdAdoAsync
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<DataResponse> GetUserByIdAdoAsync(string id);
         Task<PageResult<UserInfo>> GetAllUserAsync(PaginationFilter paramRequest);
+        Task<PagingResult<UserInfo>> GetAllUserExtnAsync(PaginationFilter paramRequest);
+        /// <summary>
+        /// ADO.NET Codeblock: GetAllUserAdoAsync
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<PagingResult<UserInfo>?> GetAllUserAdoAsync(PaginationFilter paramRequest);
         Task<DataResponse> AuthenticateUserAsync(LoginRequest request);
         Task<DataResponse> RegisterUserAsync(UserRegisterRequest request);
         Task<DataResponse> DeleteUserAsync(string id);

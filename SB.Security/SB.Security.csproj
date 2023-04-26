@@ -39,6 +39,7 @@
     <PackageReference Include="StackExchange.Redis.Extensions.Core" Version="9.1.0" />
     <PackageReference Include="StackExchange.Redis.Extensions.Newtonsoft" Version="9.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.2" />
   </ItemGroup>
 
   <ItemGroup>

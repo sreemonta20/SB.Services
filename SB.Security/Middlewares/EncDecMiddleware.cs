@@ -340,10 +340,16 @@ namespace SB.Security.Middlewares
             return Convert.ToBase64String(encrypted);
         }
 
-        private List<string> GetExcludeURLList()
+        private static List<string> GetExcludeURLList()
         {
-            List<string> excludeURL = new();
-            excludeURL.Add("/api/User/login");
+            List<string> excludeURL = new()
+            {
+                "/api/User/login",
+                "/api/User/getUserbyId",
+                "/api/User/getAllUsers",
+                "/api/User/registerUser",
+                "/api/User/deleteUser"
+            };
             return excludeURL;
         }
     }

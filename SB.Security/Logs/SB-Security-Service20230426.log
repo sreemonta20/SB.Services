@@ -1,0 +1,597 @@
+[2023-04-26 10:41:13.721] [Information] () <> Application is starting
+[2023-04-26 10:41:13.779] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 10:41:42.330] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-04-26 10:41:42.359] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-04-26 10:41:42.395] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-04-26 10:41:44.112] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJmYTdkZjNiNC03MGE4LTQzMjEtODczOS0yZTQ0MTMyZWFjNWUiLCJpYXQiOjE2ODI0OTEzMDQsIlVzZXJJZCI6IjliOTQ5YzMxLTEzZGQtNGM4YS1iNzU4LTM4ZGZlOWVlNzlhYyIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjgyNDkxMzA0LCJleHAiOjE2ODI1MjczMDN9.yMFKf0eVjhXf4LS2rkEXUsrLk-QMjj4OpkaQTlb9fdU",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "9b949c31-13dd-4c8a-b758-38dfe9ee79ac",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-04-26 10:41:44.117] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJmYTdkZjNiNC03MGE4LTQzMjEtODczOS0yZTQ0MTMyZWFjNWUiLCJpYXQiOjE2ODI0OTEzMDQsIlVzZXJJZCI6IjliOTQ5YzMxLTEzZGQtNGM4YS1iNzU4LTM4ZGZlOWVlNzlhYyIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjgyNDkxMzA0LCJleHAiOjE2ODI1MjczMDN9.yMFKf0eVjhXf4LS2rkEXUsrLk-QMjj4OpkaQTlb9fdU",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "9b949c31-13dd-4c8a-b758-38dfe9ee79ac",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-04-26 10:41:44.150] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 2263.3072 ms
+[2023-04-26 10:42:32.602] [Error] () <SB.Security.Service.SecurityLogService> Object of type 'System.DBNull' cannot be converted to type 'System.String'.
+[2023-04-26 10:42:32.603] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/User/getAllUsers" responded 200 in 20772.0967 ms
+[2023-04-26 10:45:56.341] [Information] () <> Application is starting
+[2023-04-26 10:45:56.418] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 10:47:04.597] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-04-26 10:47:04.625] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-04-26 10:47:04.633] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-04-26 10:47:06.146] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI4OTMyNDgxMi0wMjdhLTQxNmMtYjgzYy1jMTg5OTgwNjlmN2UiLCJpYXQiOjE2ODI0OTE2MjYsIlVzZXJJZCI6IjliOTQ5YzMxLTEzZGQtNGM4YS1iNzU4LTM4ZGZlOWVlNzlhYyIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjgyNDkxNjI2LCJleHAiOjE2ODI1Mjc2MjZ9.asCukqm5KIKIZk06A2_9mRw51TaZM2ZF37WCnrKrzqA",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "9b949c31-13dd-4c8a-b758-38dfe9ee79ac",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-04-26 10:47:06.147] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI4OTMyNDgxMi0wMjdhLTQxNmMtYjgzYy1jMTg5OTgwNjlmN2UiLCJpYXQiOjE2ODI0OTE2MjYsIlVzZXJJZCI6IjliOTQ5YzMxLTEzZGQtNGM4YS1iNzU4LTM4ZGZlOWVlNzlhYyIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjgyNDkxNjI2LCJleHAiOjE2ODI1Mjc2MjZ9.asCukqm5KIKIZk06A2_9mRw51TaZM2ZF37WCnrKrzqA",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "9b949c31-13dd-4c8a-b758-38dfe9ee79ac",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-04-26 10:47:06.176] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 1869.4041 ms
+[2023-04-26 10:51:18.822] [Error] () <SB.Security.Service.SecurityLogService> Object of type 'System.DBNull' cannot be converted to type 'System.String'.
+[2023-04-26 10:51:18.824] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/User/getAllUsers" responded 200 in 233877.9054 ms
+[2023-04-26 10:52:42.474] [Error] () <SB.Security.Service.SecurityLogService> Object of type 'System.DBNull' cannot be converted to type 'System.String'.
+[2023-04-26 10:52:42.474] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/User/getAllUsers" responded 200 in 68984.2199 ms
+[2023-04-26 11:01:12.880] [Information] () <> Application is starting
+[2023-04-26 11:01:12.979] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 11:01:49.793] [Error] () <SB.Security.Service.SecurityLogService> Object of type 'System.String' cannot be converted to type 'System.Nullable`1[System.DateTime]'.
+[2023-04-26 11:01:49.904] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/User/getAllUsers" responded 200 in 10343.7121 ms
+[2023-04-26 11:10:49.543] [Information] () <> Application is starting
+[2023-04-26 11:10:49.604] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 11:37:59.839] [Error] () <SB.Security.Service.SecurityLogService> Object of type 'System.String' cannot be converted to type 'System.Nullable`1[System.DateTime]'.
+[2023-04-26 11:37:59.946] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/User/getAllUsers" responded 200 in 1618133.4428 ms
+[2023-04-26 11:38:51.802] [Error] () <SB.Security.Service.SecurityLogService> Object of type 'System.String' cannot be converted to type 'System.Nullable`1[System.DateTime]'.
+[2023-04-26 11:38:51.803] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/User/getAllUsers" responded 200 in 30139.8458 ms
+[2023-04-26 11:39:16.332] [Error] () <SB.Security.Service.SecurityLogService> Object of type 'System.String' cannot be converted to type 'System.Nullable`1[System.DateTime]'.
+[2023-04-26 11:39:16.333] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/User/getAllUsers" responded 200 in 12036.4138 ms
+[2023-04-26 11:39:41.614] [Error] () <SB.Security.Service.SecurityLogService> Object of type 'System.String' cannot be converted to type 'System.Nullable`1[System.DateTime]'.
+[2023-04-26 11:39:41.615] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/User/getAllUsers" responded 200 in 22840.4792 ms
+[2023-04-26 12:13:10.212] [Information] () <> Application is starting
+[2023-04-26 12:13:10.316] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 12:19:38.984] [Information] () <> Application is starting
+[2023-04-26 12:19:39.075] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 12:22:39.073] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/User/getAllUsers" responded 200 in 152268.2016 ms
+[2023-04-26 16:31:50.625] [Information] () <> Application is starting
+[2023-04-26 16:31:50.710] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 16:32:04.385] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/User/getAllUsers" responded 200 in 2160.6301 ms
+[2023-04-26 16:33:29.166] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 34073.8652 ms
+[2023-04-26 16:36:41.586] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 6979.5875 ms
+[2023-04-26 16:47:28.822] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 17880.8253 ms
+[2023-04-26 16:48:01.872] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 5424.3946 ms
+[2023-04-26 16:51:45.781] [Information] () <> Application is starting
+[2023-04-26 16:51:45.838] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 16:53:14.597] [Information] () <> Application is starting
+[2023-04-26 16:53:14.658] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 16:54:16.792] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 2255.8958 ms
+[2023-04-26 16:55:02.351] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-04-26 16:55:02.353] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "amanisha",
+  "Password": "password"
+}
+
+[2023-04-26 16:55:02.355] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "amanisha",
+  "Password": "password"
+}
+
+[2023-04-26 16:55:03.450] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI5NzUxNzUzNi02MzY0LTQxMGEtYjVjNy0wNDMwMzJjNTNjMDYiLCJpYXQiOjE2ODI1MTM3MDMsIlVzZXJJZCI6IjA2ODBjYmY0LTRlNTQtNDg4Yi1iNmY4LTVhMjcyYTdmOGI2OSIsIkZ1bGxOYW1lIjoiQW1hbmlzaGEgQ2hvd2RodXJ5IiwiVXNlck5hbWUiOiJhbWFuaXNoYSIsIkVtYWlsIjoiYW1hbmlzaGFAZ21haWwuY29tIiwibmJmIjoxNjgyNTEzNzAzLCJleHAiOjE2ODI1NDk3MDN9.ceFlrfGpXVLO8MKzTgk-Ad_dQYnIRvCpfHr0gPLTni8",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "0680cbf4-4e54-488b-b6f8-5a272a7f8b69",
+      "FullName": "amanisha",
+      "UserName": "amanisha",
+      "Email": "amanisha@gmail.com",
+      "UserRole": "User"
+    }
+  }
+}
+
+[2023-04-26 16:55:03.452] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI5NzUxNzUzNi02MzY0LTQxMGEtYjVjNy0wNDMwMzJjNTNjMDYiLCJpYXQiOjE2ODI1MTM3MDMsIlVzZXJJZCI6IjA2ODBjYmY0LTRlNTQtNDg4Yi1iNmY4LTVhMjcyYTdmOGI2OSIsIkZ1bGxOYW1lIjoiQW1hbmlzaGEgQ2hvd2RodXJ5IiwiVXNlck5hbWUiOiJhbWFuaXNoYSIsIkVtYWlsIjoiYW1hbmlzaGFAZ21haWwuY29tIiwibmJmIjoxNjgyNTEzNzAzLCJleHAiOjE2ODI1NDk3MDN9.ceFlrfGpXVLO8MKzTgk-Ad_dQYnIRvCpfHr0gPLTni8",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "0680cbf4-4e54-488b-b6f8-5a272a7f8b69",
+      "FullName": "amanisha",
+      "UserName": "amanisha",
+      "Email": "amanisha@gmail.com",
+      "UserRole": "User"
+    }
+  }
+}
+
+[2023-04-26 16:55:03.457] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 1118.2084 ms
+[2023-04-26 19:34:28.428] [Information] () <> Application is starting
+[2023-04-26 19:34:28.502] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 19:36:07.453] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-04-26 19:36:07.497] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-04-26 19:36:07.562] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-04-26 19:36:10.524] [Error] () <SB.Security.Service.SecurityLogService> Exception is: 			Index (zero based) must be greater than or equal to zero and less than the size of the argument list.
+Response is: 
+{
+  "Success": false,
+  "Message": "Index (zero based) must be greater than or equal to zero and less than the size of the argument list.",
+  "MessageType": 3,
+  "ResponseCode": 500,
+  "Result": null
+}
+
+[2023-04-26 19:36:10.573] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 4407.9893 ms
+[2023-04-26 20:38:36.591] [Information] () <> Application is starting
+[2023-04-26 20:38:36.682] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 20:39:35.893] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-04-26 20:39:35.947] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-04-26 20:39:35.962] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-04-26 20:39:39.056] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJmZTU5M2QyNS05M2FiLTRhYTEtYWI1ZS02OTFlYmYwMTAzOGIiLCJpYXQiOjE2ODI1MjcxNzgsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjgyNTI3MTc4LCJleHAiOjE2ODI1NjMxNzh9.3sXsV2erDzrfASpUnsFpixlmEM06MKh3bsxYDO0jPQc",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-04-26 20:39:39.058] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJmZTU5M2QyNS05M2FiLTRhYTEtYWI1ZS02OTFlYmYwMTAzOGIiLCJpYXQiOjE2ODI1MjcxNzgsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjgyNTI3MTc4LCJleHAiOjE2ODI1NjMxNzh9.3sXsV2erDzrfASpUnsFpixlmEM06MKh3bsxYDO0jPQc",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-04-26 20:39:39.114] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 3753.1362 ms
+[2023-04-26 20:40:23.153] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-04-26 20:40:23.167] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-04-26 20:40:23.171] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-04-26 20:40:23.331] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI1ZWI1NzQxOC1jYzNiLTQ2ODgtOTI3OS0wYTAzMTI0NTM5ZmYiLCJpYXQiOjE2ODI1MjcyMjMsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjgyNTI3MjIzLCJleHAiOjE2ODI1NjMyMjN9.VIj-yqx63nSfGDgehWy_9knRgbH3mKSOvrD0fo874is",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-04-26 20:40:23.334] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI1ZWI1NzQxOC1jYzNiLTQ2ODgtOTI3OS0wYTAzMTI0NTM5ZmYiLCJpYXQiOjE2ODI1MjcyMjMsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjgyNTI3MjIzLCJleHAiOjE2ODI1NjMyMjN9.VIj-yqx63nSfGDgehWy_9knRgbH3mKSOvrD0fo874is",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-04-26 20:40:23.339] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 200.6980 ms
+[2023-04-26 20:41:16.621] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-04-26 20:41:16.622] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-04-26 20:41:16.623] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-04-26 20:41:17.383] [Error] () <SB.Security.Service.SecurityLogService> Exception is: 			Index (zero based) must be greater than or equal to zero and less than the size of the argument list.
+Response is: 
+{
+  "Success": false,
+  "Message": "Index (zero based) must be greater than or equal to zero and less than the size of the argument list.",
+  "MessageType": 3,
+  "ResponseCode": 500,
+  "Result": null
+}
+
+[2023-04-26 20:41:17.385] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 770.3996 ms
+[2023-04-26 20:43:00.139] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-04-26 20:43:01.335] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-04-26 20:43:05.344] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-04-26 20:44:22.613] [Error] () <SB.Security.Service.SecurityLogService> Exception is: 			Index (zero based) must be greater than or equal to zero and less than the size of the argument list.
+Response is: 
+{
+  "Success": false,
+  "Message": "Index (zero based) must be greater than or equal to zero and less than the size of the argument list.",
+  "MessageType": 3,
+  "ResponseCode": 500,
+  "Result": null
+}
+
+[2023-04-26 20:44:22.630] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 87535.3506 ms
+[2023-04-26 20:44:28.313] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-04-26 20:44:28.323] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-04-26 20:44:29.832] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-04-26 20:44:46.611] [Error] () <SB.Security.Service.SecurityLogService> Exception is: 			Index (zero based) must be greater than or equal to zero and less than the size of the argument list.
+Response is: 
+{
+  "Success": false,
+  "Message": "Index (zero based) must be greater than or equal to zero and less than the size of the argument list.",
+  "MessageType": 3,
+  "ResponseCode": 500,
+  "Result": null
+}
+
+[2023-04-26 20:44:46.614] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 20935.6000 ms
+[2023-04-26 20:44:53.415] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-04-26 20:44:53.416] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-04-26 20:44:55.134] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-04-26 20:47:14.409] [Information] () <> Application is starting
+[2023-04-26 20:47:14.532] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 20:47:27.120] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-04-26 20:47:27.178] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-04-26 20:47:28.635] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-04-26 20:47:38.899] [Error] () <SB.Security.Service.SecurityLogService> Response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-04-26 20:47:47.973] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-04-26 20:47:48.034] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 25750.7774 ms
+[2023-04-26 20:49:22.833] [Information] () <> Application is starting
+[2023-04-26 20:49:22.942] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 20:50:39.485] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 4690.3539 ms
+[2023-04-26 20:52:28.889] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 666.2636 ms
+[2023-04-26 20:52:49.442] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 99.4926 ms
+[2023-04-26 20:54:11.655] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 846.5460 ms
+[2023-04-26 20:55:35.266] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 11.9015 ms
+[2023-04-26 20:55:57.028] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 13.6960 ms
+[2023-04-26 20:56:42.972] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/User/getAllUsers" responded 200 in 148.1191 ms
+[2023-04-26 20:58:20.036] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/User/getUserbyId" responded 200 in 20.3395 ms
+[2023-04-26 20:58:33.252] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/User/getUserbyId" responded 200 in 5.1758 ms
+[2023-04-26 21:46:39.229] [Information] () <> Application is starting
+[2023-04-26 21:46:39.308] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 21:47:57.932] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "DELETE" "/api/User/deleteUser" responded 200 in 13599.7021 ms
+[2023-04-26 21:51:39.015] [Information] () <> Application is starting
+[2023-04-26 21:51:39.308] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-26 21:52:08.405] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 4826.5922 ms
+[2023-04-26 21:52:17.599] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 28.9501 ms

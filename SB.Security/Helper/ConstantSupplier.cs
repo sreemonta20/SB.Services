@@ -44,7 +44,7 @@
         public const string LOGIN_REQ_MSG = "Login api method request is: \n{0}\n";
         public const string LOGIN_EXCEPTION_MSG = "Exception is: \t\t\t{0}\nResponse is: \n{1}\n";
         public const string SERVICE_LOGIN_REQ_MSG = "Authenticate (User service) method request is: \n{0}\n";
-        public const string SERVICE_LOGIN_FAILED_MSG = "Response is: \n{1}\n";
+        public const string SERVICE_LOGIN_FAILED_MSG = "Response is: \n{0}\n";
         public const string SERVICE_LOGIN_RES_MSG = "Authenticate (User service) method response is: \n{0}\n";
         public const string LOGIN_RES_MSG = "Login api method response is: \n{0}\n";
         #endregion
@@ -78,6 +78,12 @@
 
         public const string DELETE_FAILED = "Deletion of user failed!. Please try again later";
         public const string DELETE_SUCCESS = "User deleted successfully";
+
+        //SP
+        public const string GET_USER_BY_ID_SP_NAME = "SP_GetUserById";
+        public const string GET_ALL_USER_SP_NAME = "SP_GetAllUser";
+        public const string POST_SAVE_UPDATE_USER_SP_NAME = "SP_SaveUpdateUser";
+        public const string DELETE_USER_SP_NAME = "SP_DeleteUser";
         #endregion
 
         #region User Controller

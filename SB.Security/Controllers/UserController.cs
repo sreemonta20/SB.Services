@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text.Json.Nodes;
+using SB.Security.Models.Base;
 
 namespace SB.Security.Controllers
 {
@@ -50,7 +51,10 @@ namespace SB.Security.Controllers
             DataResponse response;
             try
             {
-                response = await _userService.GetUserAsync(id);
+                response = await _userService.GetUserByIdAsync(id);
+                #region ADO.NET Codeblock
+                //response = await _userService.GetUserByIdAdoAsync(id);
+                #endregion
             }
             catch (Exception Ex)
             {
@@ -83,7 +87,7 @@ namespace SB.Security.Controllers
             try
             {
                 PaginationFilter oPaginationFilter = new() { PageNumber = pageNumber, PageSize = pageSize };
-                var result = await _userService.GetAllUserAsync(oPaginationFilter);
+                PageResult<UserInfo>? result = await _userService.GetAllUserAsync(oPaginationFilter);
                 if ((result != null) && (result.Count > 0))
                 {
                     return response = new()
@@ -95,6 +99,20 @@ namespace SB.Security.Controllers
                         Result = result
                     };
                 }
+                #region ADO.NET Codeblock
+                //PagingResult<UserInfo>? result = await _userService.GetAllUserAdoAsync(oPaginationFilter);
+                //if ((result != null) && (result.RowCount > 0))
+                //{
+                //    return response = new()
+                //    {
+                //        Success = true,
+                //        Message = ConstantSupplier.GET_USER_LIST_SUCCESS,
+                //        MessageType = Enum.EnumResponseType.Success,
+                //        ResponseCode = (int)HttpStatusCode.OK,
+                //        Result = result
+                //    };
+                //}
+                #endregion
 
                 response = new()
                 {
@@ -157,14 +175,6 @@ namespace SB.Security.Controllers
                 };
                 _securityLogService.LogError(String.Format(ConstantSupplier.LOGIN_EXCEPTION_MSG,Ex.Message, JsonConvert.SerializeObject(oDataResponse,Formatting.Indented)));
                 return oDataResponse;
-                //return new DataResponse
-                //{
-                //    Message = Ex.Message,
-                //    Success = false,
-                //    MessageType = Enum.EnumResponseType.Error,
-                //    ResponseCode = (int)HttpStatusCode.InternalServerError,
-                //    Result = null
-                //};
             }
             _securityLogService.LogInfo(String.Format(ConstantSupplier.LOGIN_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
