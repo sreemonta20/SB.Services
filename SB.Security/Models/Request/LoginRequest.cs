@@ -12,10 +12,10 @@ namespace SB.Security.Models.Request
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         //[Required]
         //[JsonPropertyName("UserName")]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         //[JsonPropertyName("Password")]
         //[Required]
-        public string Password { get; set; }
+        public string? Password { get; set; }
     }
 }

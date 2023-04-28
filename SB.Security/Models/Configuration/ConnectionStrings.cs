@@ -5,6 +5,6 @@
     /// </summary>
     public class ConnectionStrings
     {
-        public string SecurityConectionString { get; set; }
+        public string? SecurityConectionString { get; set; }
     }
 }

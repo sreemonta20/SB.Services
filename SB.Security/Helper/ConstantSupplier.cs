@@ -7,6 +7,7 @@
     {
         #region Common Constants
         public const string REQUIRED_PARAMETER_NOT_EMPTY = "Required Parameters Should Not Empty Or Null";
+        public const string REQ_OR_DATA_NULL = "Request is found null or data not found";
         public const string CORSS_POLICY_NAME = "AllowRedirectOrigin";
         public const string APP_SETTINGS_FILE_NAME = "appsettings.json";
         public const string SECURITY_SQL_DB_CONNECTION_STRING_NAME = "SecurityConectionString";
@@ -47,6 +48,42 @@
         public const string SERVICE_LOGIN_FAILED_MSG = "Response is: \n{0}\n";
         public const string SERVICE_LOGIN_RES_MSG = "Authenticate (User service) method response is: \n{0}\n";
         public const string LOGIN_RES_MSG = "Login api method response is: \n{0}\n";
+
+        //api/User/getUserbyId
+        public const string GETBYID_STARTED_INFO_MSG = "GetUserbyId api method started.\n";
+        public const string GETBYID_REQ_MSG = "GetUserbyId api method request is: \n{0}\n";
+        public const string GETBYID_EXCEPTION_MSG = "GetUserbyId Exception below:: \n{0}\n";
+        public const string SERVICE_GETBYID_REQ_MSG = "GetUserbyId (User service) method request is: \n{0}\n";
+        public const string SERVICE_GETBYID_RES_MSG = "GetUserbyId (User service) method response is: \n{0}\n";
+        public const string GETBYID_RES_MSG = "GetUserbyId api method response is: \n{0}\n";
+
+        //api/User/getAllUsers
+        public const string GETALL_STARTED_INFO_MSG = "GetAllUsers api method started.\n";
+        public const string GETALL_REQ_MSG = "GetAllUsers api method request is: \n{0}\n";
+        public const string GETALL_EXCEPTION_MSG = "GetAllUsers Exception below:: \n{0}\n";
+        public const string SERVICE_GETALL_REQ_MSG = "GetAllUsers (User service) method request is: \n{0}\n";
+        public const string SERVICE_GETALL_RES_MSG = "GetAllUsers (User service) method response is: \n{0}\n";
+        public const string GETALL_RES_MSG = "GetAllUsers api method response is: \n{0}\n";
+
+
+        //api/User/registerUser
+        public const string SAVEUP_STARTED_INFO_MSG = "RegisterUser api method started.\n";
+        public const string SAVEUP_REQ_MSG = "RegisterUser api method request is: \n{0}\n";
+        public const string SAVEUP_EXCEPTION_MSG = "RegisterUser Exception below:: \n{0}\n";
+        public const string SERVICE_SAVEUP_REQ_MSG = "RegisterUser (User service) method request is: \n{0}\n";
+        public const string SERVICE_SAVEUP_RES_MSG = "RegisterUser (User service) method response is: \n{0}\n";
+        public const string SAVEUP_RES_MSG = "RegisterUser api method response is: \n{0}\n";
+        public const string SAVEUP_FAILED_RES_MSG = "RegisterUser Failed (User service) : api method response is: \n{0}\n";
+
+        //api/User/deleteUser
+        public const string DELUSER_STARTED_INFO_MSG = "DeleteUser api method started.\n";
+        public const string DELUSER_REQ_MSG = "DeleteUser api method request is: \n{0}\n";
+        public const string DELUSER_EXCEPTION_MSG = "DeleteUser Exception below:: \n{0}\n";
+        public const string SERVICE_DELUSER_REQ_MSG = "DeleteUser (User service) method request is: \n{0}\n";
+        public const string SERVICE_DELUSER_RES_MSG = "DeleteUser (User service) method response is: \n{0}\n";
+        public const string DELUSER_RES_MSG = "DeleteUser api method response is: \n{0}\n";
+        public const string DELUSER_FAILED_RES_MSG = "DeleteUser Failed (User service) : api method response is: \n{0}\n";
+
         #endregion
 
 

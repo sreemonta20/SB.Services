@@ -2,28 +2,19 @@
 using FluentEmail.Core.Models;
 using FluentEmail.Smtp;
 using SB.EmailService.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.Web;
-using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Hosting;
 
 namespace SB.EmailService.Service
 {
     public class EmailSender : IEmailService
     {
-        private readonly IHostingEnvironment _environment;
-        public EmailSender(IHostingEnvironment environment)
+        private readonly IHostEnvironment _environment;
+        public EmailSender(IHostEnvironment environment)
         {
-            this._environment = environment;
+            _environment = environment;
         }
-        
 
         // smtp.mail.yahoo.com	25, 587	TLS
         // smtp.mail.yahoo.com	465	SSL
@@ -37,7 +28,7 @@ namespace SB.EmailService.Service
         //////}
         public async Task<SendResponse> TestSendEmailAsync(EmailConfiguration emailConfig, Message message)
         {
-            var sender = new SmtpSender(() => new SmtpClient(host: emailConfig.Host)
+            SmtpSender sender = new(() => new SmtpClient(host: emailConfig.Host)
             {
                 EnableSsl = false,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
@@ -45,7 +36,7 @@ namespace SB.EmailService.Service
             });
             Email.DefaultSender = sender;
 
-            var email = await Email
+            SendResponse email = await Email
                 .From(emailAddress: emailConfig.From)
                 .To(emailAddress: message.To, name: message.Name)
                 .Subject(subject: message.Subject)
@@ -57,7 +48,7 @@ namespace SB.EmailService.Service
 
         public async Task<SendResponse> SendEmailAsync(EmailConfiguration emailConfig, Message message)
         {
-            var sender = new SmtpSender(() => new SmtpClient(emailConfig.Host)
+            SmtpSender sender = new(() => new SmtpClient(emailConfig.Host)
             {
                 UseDefaultCredentials = false,
                 Port = 587,
@@ -66,21 +57,21 @@ namespace SB.EmailService.Service
             });
 
             Email.DefaultSender = sender;
-            var email = Email
+            IFluentEmail email = Email
                 .From(emailConfig.From, emailConfig.Name)
                 .To(message.To, message.Name)
                 .Subject(message.Subject)
                 .Body(message.Body, true);
 
 
-            var response = await email.SendAsync();
+            SendResponse response = await email.SendAsync();
             return response;
         }
 
         public string PopulateBody(string path, string userName, string title, string url, string description)
         {
             string body = string.Empty;
-            var combinePath = Path.Combine(_environment.ContentRootPath, "EmailTemplates/emailblocknotice.html");
+            string combinePath = Path.Combine(_environment.ContentRootPath, "EmailTemplates/emailblocknotice.html");
             using (StreamReader reader = new(combinePath))
             {
                 body = reader.ReadToEnd();

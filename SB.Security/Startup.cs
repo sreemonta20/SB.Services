@@ -49,12 +49,12 @@ namespace SB.Security
             services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
 
             #region Reading AppSettings from appsettings.json
-            var appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
+            AppSettings? appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
             #endregion
 
             #region Registers the given security db context as a service into the services
             services.AddDbContext<SBSecurityDBContext>(options =>
-            options.UseSqlServer(appSettings.ConnectionStrings.SecurityConectionString));
+            options.UseSqlServer(appSettings?.ConnectionStrings?.SecurityConectionString));
             #endregion
 
             #region Email Configuration

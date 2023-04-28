@@ -353,35 +353,33 @@ namespace SB.DataAccessLayer
             object result = 0;
             return await Task.Run(() =>
             {
-                IDbTransaction transactionScope = null;
-                using (var connection = database.CreateConnection())
+                IDbTransaction? transactionScope = null;
+                using (IDbConnection connection = database.CreateConnection())
                 {
                     connection.Open();
                     transactionScope = connection.BeginTransaction(isolationLevel);
 
-                    using (var command = database.CreateCommand(commandText, commandType, connection))
+                    using IDbCommand command = database.CreateCommand(commandText, commandType, connection);
+                    if (parameters != null)
                     {
-                        if (parameters != null)
+                        foreach (IDbDataParameter parameter in parameters)
                         {
-                            foreach (var parameter in parameters)
-                            {
-                                command.Parameters.Add(parameter);
-                            }
+                            command.Parameters.Add(parameter);
                         }
+                    }
 
-                        try
-                        {
-                            result = command.ExecuteNonQuery();
-                            transactionScope.Commit();
-                        }
-                        catch (Exception)
-                        {
-                            transactionScope.Rollback();
-                        }
-                        finally
-                        {
-                            connection.Close();
-                        }
+                    try
+                    {
+                        result = command.ExecuteNonQuery();
+                        transactionScope.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        transactionScope.Rollback();
+                    }
+                    finally
+                    {
+                        connection.Close();
                     }
                 }
                 return result;
@@ -440,14 +438,14 @@ namespace SB.DataAccessLayer
             return dataset;
         }
 
-        public object Insert(string commandText, CommandType commandType, IDbDataParameter[] parameters, out object result)
+        public object Insert(string commandText, CommandType commandType, IDbDataParameter[] parameters, out object? result)
         {
             result = 0;
-            using (IDbConnection connection = database.CreateConnection())
+            using (IDbConnection? connection = database.CreateConnection())
             {
                 connection.Open();
 
-                using IDbCommand command = database.CreateCommand(commandText, commandType, connection);
+                using IDbCommand? command = database.CreateCommand(commandText, commandType, connection);
                 if (parameters != null)
                 {
                     foreach (IDbDataParameter parameter in parameters)

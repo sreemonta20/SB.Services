@@ -22,7 +22,7 @@ namespace SB.Security.Middlewares
             _appSettings = appSettings.Value;
         }
 
-        public async Task InvokeAsync(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext? httpContext)
         {
             List<string> excludeURL = GetExcludeURLList();
             if (!excludeURL.Contains(httpContext.Request.Path.Value))

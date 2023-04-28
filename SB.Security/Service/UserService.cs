@@ -66,13 +66,16 @@ namespace SB.Security.Service
         #region All service methods
 
         /// <summary>
+        /// <para>EF Codeblock: GetUserByIdAsync</para> 
         /// This service method used to get a specific user details by supplying user id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns>DataResponse</returns>
         public async Task<DataResponse> GetUserByIdAsync(string id)
         {
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
             UserInfo? user = await _context.UserInfos.FirstOrDefaultAsync(u => u.Id == new Guid(id));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(user, Formatting.Indented)));
             return user != null
                 ? new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user }
                 : new DataResponse { Success = false, Message = ConstantSupplier.GET_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
@@ -86,12 +89,14 @@ namespace SB.Security.Service
         /// <returns>DataResponse</returns>
         public async Task<DataResponse> GetUserByIdAdoAsync(string id)
         {
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
             UserInfo? user;
             List<IDbDataParameter> parameters = new()
             {
                 _dbmanager.CreateParameter("@Id", new Guid(id), DbType.Guid)
             };
             DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GET_USER_BY_ID_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(oDT, Formatting.Indented)));
             if (oDT != null && oDT.Rows.Count > 0)
             {
                 user = JArray.FromObject(oDT)[0].ToObject<UserInfo>();
@@ -101,12 +106,15 @@ namespace SB.Security.Service
         }
 
         /// <summary>
+        /// <para>EF Codeblock: GetAllUserAsync</para> 
         /// This service method used to get a list users based on the supplied page number and page size.
+        /// <br/> And retriving result as PageResult<![CDATA[<T>]]>.
         /// </summary>
         /// <param name="paramRequest"></param>
         /// <returns>PageResult<![CDATA[<T>]]></returns>
         public async Task<PageResult<UserInfo>> GetAllUserAsync(PaginationFilter paramRequest)
         {
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
             int count = await _context.UserInfos.CountAsync();
             List<UserInfo> Items = await _context.UserInfos.OrderByDescending(x => x.CreatedDate).Skip((paramRequest.PageNumber - 1) * paramRequest.PageSize).Take(paramRequest.PageSize).ToListAsync();
             PageResult<UserInfo> result = new PageResult<UserInfo>
@@ -116,33 +124,39 @@ namespace SB.Security.Service
                 PageSize = 10,
                 Items = Items
             };
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
             return result;
 
 
         }
 
         /// <summary>
+        /// <para>EF Codeblock: GetAllUserExtnAsync</para> 
         /// This service method used to get a list users based on the supplied page number and page size.
+        /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
         /// </summary>
         /// <param name="paramRequest"></param>
         /// <returns>PagingResult<![CDATA[<T>]]></returns>
         public async Task<PagingResult<UserInfo>> GetAllUserExtnAsync(PaginationFilter paramRequest)
         {
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
             //var source = _context.UserInfos.OrderBy(a=>a.CreatedDate).AsQueryable();
             IQueryable<UserInfo> source = (from user in _context?.UserInfos?.OrderBy(a => a.CreatedDate) select user).AsQueryable();
             PagingResult<UserInfo> result = await Utilities.GetPagingResult(source, paramRequest.PageNumber, paramRequest.PageSize);
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
             return result;
         }
 
         /// <summary>
         /// <para>ADO.NET Codeblock: GetAllUserAdoAsync</para> 
-        /// <para>This service method used to get a list users based on the supplied page number and page size.</para>
+        /// This service method used to get a list users based on the supplied page number and page size.
+        /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
         /// </summary>
         /// <param name="paramRequest"></param>
         /// <returns>PageResult<![CDATA[<T>]]></returns>
         public async Task<PagingResult<UserInfo>?> GetAllUserAdoAsync(PaginationFilter paramRequest)
         {
-
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
             List<UserInfo> oUserList;
             List<IDbDataParameter> parameters = new()
             {
@@ -154,13 +168,18 @@ namespace SB.Security.Service
             if (oDT != null && oDT.Rows.Count > 0)
             {
                 oUserList = Utilities.ConvertDataTable<UserInfo>(oDT);
-                return Utilities.GetPagingResult(oUserList, paramRequest.PageNumber, paramRequest.PageSize);
+
+                //return Utilities.GetPagingResult(oUserList, paramRequest.PageNumber, paramRequest.PageSize);
+                PagingResult<UserInfo> result = Utilities.GetPagingResult(oUserList, paramRequest.PageNumber, paramRequest.PageSize);
+                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
+                return result;
             }
             return null;
 
         }
 
         /// <summary>
+        /// <para>EF Codeblock: AuthenticateUserAsync</para> 
         /// This method authenticate user credential. It checks user name and then password. In between the checking, if client attempts consecutive 
         /// 3 failed request then this method will block the any further request for authentication of the user. Where, It update the datetime
         /// of the failed attempts and count of failed attempts. So threshold(appsettings.json) says after 3 failed attempts, user get blocked for the 
@@ -199,14 +218,6 @@ namespace SB.Security.Service
                         _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
 
                         return oDataResponse;
-                        //return new DataResponse
-                        //{
-                        //    Success = false,
-                        //    Message = String.Format(ConstantSupplier.AUTH_FAILED_ATTEMPT, Convert.ToInt32(this._configuration["AppSettings:BlockMinutes"])),
-                        //    MessageType = Enum.EnumResponseType.Error,
-                        //    ResponseCode = (int)HttpStatusCode.BadRequest,
-                        //    Result = null
-                        //};
                     }
 
                     bool verified = BCryptNet.Verify(request.Password, user.Password);
@@ -257,6 +268,7 @@ namespace SB.Security.Service
         }
 
         /// <summary>
+        /// <para>EF & ADO.NET Codeblocks: RegisterUserAsync</para>
         /// This method saves and update the user details. It tracks the action name (save or update). Based on this it send the request for saving or
         /// updating the user credential. In Update method, no user password can be updated by Admin due to data protection policy in general. Password 
         /// is being encrypted using the Bcrypt during the registration.
@@ -265,6 +277,7 @@ namespace SB.Security.Service
         /// <returns>DataResponse</returns>
         public async Task<DataResponse> RegisterUserAsync(UserRegisterRequest request)
         {
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
             if (request != null)
             {
 
@@ -288,16 +301,20 @@ namespace SB.Security.Service
                         var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.UserName == request.UserName);
                         if (user != null && !String.IsNullOrEmpty(Convert.ToString(user.Id)))
                         {
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(user, Formatting.Indented)));
                             return new DataResponse { Success = false, Message = ConstantSupplier.EXIST_USER, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
                         }
 
+                        #region EF Codeblock of saving data
                         await this._context.UserInfos.AddAsync(oSaveUserInfo);
                         await this._context.SaveChangesAsync();
 
                         request.Id = Convert.ToString(oSaveUserInfo.Id);
+                        _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
                         return new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
+                    #endregion
 
-                    #region ADO.NET Codeblock
+                    #region ADO.NET Codeblock of saving data
                     //List<IDbDataParameter> parameters = new()
                     //{
                     //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.SAVE_KEY, DbType.String),
@@ -317,6 +334,7 @@ namespace SB.Security.Service
                     //int isSave = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
 
                     //request.Id = Convert.ToString(oSaveUserInfo.Id);
+                    //_securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
                     //return isSave > 0
                     //? new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request }
                     //: new DataResponse { Success = false, Message = ConstantSupplier.REG_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
@@ -328,6 +346,7 @@ namespace SB.Security.Service
 
                         if ((oldUser != null) && (oldUser.Id != new Guid(request.Id)))
                         {
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(oldUser, Formatting.Indented)));
                             return new DataResponse { Success = false, Message = ConstantSupplier.EXIST_USER, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
                         }
 
@@ -340,6 +359,7 @@ namespace SB.Security.Service
                         dbUserInfo.UpdatedBy = Convert.ToString(this._context.UserInfos.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id);
                         dbUserInfo.UpdatedDate = DateTime.UtcNow;
 
+                        #region EF Codeblock of updating data
                         var isFullNameModified = this._context.Entry(dbUserInfo).Property("FullName").IsModified;
                         var isUserNameModified = this._context.Entry(dbUserInfo).Property("UserName").IsModified;
                         var isEmailModified = this._context.Entry(dbUserInfo).Property("Email").IsModified;
@@ -348,9 +368,11 @@ namespace SB.Security.Service
                         var isUpdatedDateModified = this._context.Entry(dbUserInfo).Property("UpdatedDate").IsModified;
                         this._context.SaveChanges();
 
+                        _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
                         return new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
+                        #endregion
 
-                        #region ADO.NET Codeblock
+                        #region ADO.NET Codeblock of updating data
                         //List<IDbDataParameter> upParameters = new()
                         //{
                         //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.UPDATE_KEY, DbType.String),
@@ -368,7 +390,8 @@ namespace SB.Security.Service
                         //};
 
                         //int isUpdate = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, upParameters.ToArray());
-
+                        
+                        ////_securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
 
                         //return isUpdate > 0
                         //? new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request }
@@ -377,26 +400,30 @@ namespace SB.Security.Service
                 }
 
             }
-
+            _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
             return new DataResponse { Success = false, Message = ConstantSupplier.REG_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
         }
 
         /// <summary>
+        /// <para>EF & ADO.NET Codeblocks: DeleteUserAsync</para>
         /// This method simply delete the user details from the database.
         /// </summary>
         /// <param name="id"></param>
         /// <returns>DataResponse</returns>
         public async Task<DataResponse> DeleteUserAsync(string id)
         {
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_DELUSER_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
             UserInfo? oUserInfo = await this._context.UserInfos.FindAsync(new Guid(id));
 
             if (oUserInfo != null)
             {
+                #region EF Codeblock of deleting data
                 this._context.UserInfos.Remove(oUserInfo);
                 await this._context.SaveChangesAsync();
                 return new DataResponse { Success = true, Message = ConstantSupplier.DELETE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oUserInfo };
+                #endregion
 
-                #region ADO.NET Codeblock
+                #region ADO.NET Codeblock of deleting data
                 //List<IDbDataParameter> parameters = new()
                 //        {
                 //            _dbmanager.CreateParameter("@Id", oUserInfo.Id, DbType.Guid)
@@ -410,6 +437,7 @@ namespace SB.Security.Service
                 //: new DataResponse { Success = false, Message = ConstantSupplier.DELETE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
                 #endregion
             }
+            _securityLogService.LogError(String.Format(ConstantSupplier.DELUSER_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
             return new DataResponse { Success = false, Message = ConstantSupplier.DELETE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = id };
         }
 

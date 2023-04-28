@@ -48,17 +48,23 @@ namespace SB.Security.Controllers
         [ServiceFilter(typeof(ValidateModelAttribute))]
         public async Task<object> GetUserbyId([FromQuery] string id)
         {
+            _securityLogService.LogInfo(ConstantSupplier.GETBYID_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
             DataResponse response;
             try
             {
+                #region EF Codeblock
                 response = await _userService.GetUserByIdAsync(id);
+                #endregion
+
                 #region ADO.NET Codeblock
                 //response = await _userService.GetUserByIdAdoAsync(id);
                 #endregion
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(Ex.Message);
+                //_securityLogService.LogError(Ex.Message);
+                _securityLogService.LogError(String.Format(ConstantSupplier.GETBYID_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
                 return new DataResponse
                 {
                     Message = Ex.Message,
@@ -68,6 +74,7 @@ namespace SB.Security.Controllers
                     Result = null
                 };
             }
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.GETBYID_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
 
@@ -83,13 +90,20 @@ namespace SB.Security.Controllers
         [ServiceFilter(typeof(ValidateModelAttribute))]
         public async Task<object> GetAllUsers(int pageNumber, int pageSize)
         {
+            _securityLogService.LogInfo(ConstantSupplier.GETALL_STARTED_INFO_MSG);
+            PaginationFilter oPaginationFilter = new() { PageNumber = pageNumber, PageSize = pageSize };
             DataResponse response;
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.GETBYID_REQ_MSG, JsonConvert.SerializeObject(oPaginationFilter, Formatting.Indented)));
             try
             {
-                PaginationFilter oPaginationFilter = new() { PageNumber = pageNumber, PageSize = pageSize };
+                
+               
+
+                #region EF Codeblock
                 PageResult<UserInfo>? result = await _userService.GetAllUserAsync(oPaginationFilter);
                 if ((result != null) && (result.Count > 0))
                 {
+                    _securityLogService.LogInfo(String.Format(ConstantSupplier.GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
                     return response = new()
                     {
                         Success = true,
@@ -99,6 +113,8 @@ namespace SB.Security.Controllers
                         Result = result
                     };
                 }
+                #endregion
+
                 #region ADO.NET Codeblock
                 //PagingResult<UserInfo>? result = await _userService.GetAllUserAdoAsync(oPaginationFilter);
                 //if ((result != null) && (result.RowCount > 0))
@@ -126,7 +142,8 @@ namespace SB.Security.Controllers
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(Ex.Message);
+                //_securityLogService.LogError(Ex.Message);
+                _securityLogService.LogError(String.Format(ConstantSupplier.GETALL_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -136,6 +153,7 @@ namespace SB.Security.Controllers
                     Result = null
                 };
             }
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.GETALL_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
 
@@ -192,6 +210,8 @@ namespace SB.Security.Controllers
         [ServiceFilter(typeof(ValidateModelAttribute))]
         public async Task<object> RegisterUser(UserRegisterRequest request)
         {
+            _securityLogService.LogInfo(ConstantSupplier.SAVEUP_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SAVEUP_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
             DataResponse response;
             try
             {
@@ -199,7 +219,8 @@ namespace SB.Security.Controllers
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(Ex.Message);
+                //_securityLogService.LogError(Ex.Message);
+                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
                 return new DataResponse
                 {
                     Message = Ex.Message,
@@ -209,6 +230,7 @@ namespace SB.Security.Controllers
                     Result = null
                 };
             }
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SAVEUP_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
 
@@ -223,6 +245,8 @@ namespace SB.Security.Controllers
         [ServiceFilter(typeof(ValidateModelAttribute))]
         public async Task<object> DeleteUser([FromQuery] string id)
         {
+            _securityLogService.LogInfo(ConstantSupplier.DELUSER_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.DELUSER_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
             DataResponse response;
             try
             {
@@ -230,7 +254,8 @@ namespace SB.Security.Controllers
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(Ex.Message);
+                //_securityLogService.LogError(Ex.Message);
+                _securityLogService.LogError(String.Format(ConstantSupplier.DELUSER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
                 return new DataResponse
                 {
                     Message = Ex.Message,
@@ -240,6 +265,7 @@ namespace SB.Security.Controllers
                     Result = null
                 };
             }
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.DELUSER_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
         #endregion
