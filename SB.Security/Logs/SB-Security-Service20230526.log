@@ -1,0 +1,272 @@
+[2023-05-26 17:27:17.363] [Information] () <> Application is starting
+[2023-05-26 17:27:17.490] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-05-26 18:11:02.698] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-26 18:11:02.698] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-26 18:11:02.698] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-26 18:11:02.741] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": " ",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:02.741] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": " ",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:02.741] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": " ",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:02.800] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": " ",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:02.800] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": " ",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:02.800] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": " ",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:03.859] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-26 18:11:03.860] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": " ",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:03.860] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": " ",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:04.560] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-26 18:11:04.560] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": " ",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:04.562] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": " ",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:04.833] [Error] () <SB.Security.Service.SecurityLogService> Response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:04.833] [Error] () <SB.Security.Service.SecurityLogService> Response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:04.833] [Error] () <SB.Security.Service.SecurityLogService> Response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:04.833] [Error] () <SB.Security.Service.SecurityLogService> Response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:04.833] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:04.833] [Error] () <SB.Security.Service.SecurityLogService> Response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:04.833] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:04.833] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:04.833] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:04.833] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:04.903] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 343.5412 ms
+[2023-05-26 18:11:04.903] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 1040.0629 ms
+[2023-05-26 18:11:04.903] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 2908.7853 ms
+[2023-05-26 18:11:04.903] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 3022.8180 ms
+[2023-05-26 18:11:04.903] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 2244.8475 ms
+[2023-05-26 18:11:09.293] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-26 18:11:09.293] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "   ",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:09.293] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "   ",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:09.301] [Error] () <SB.Security.Service.SecurityLogService> Response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:09.301] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:09.302] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 9.6177 ms
+[2023-05-26 18:11:09.933] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-26 18:11:09.934] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "   ",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:09.934] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "   ",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:09.945] [Error] () <SB.Security.Service.SecurityLogService> Response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:09.946] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:09.948] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 14.5916 ms
+[2023-05-26 18:11:23.354] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-26 18:11:23.354] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree ddd",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:23.354] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree ddd",
+  "Password": "password"
+}
+
+[2023-05-26 18:11:23.359] [Error] () <SB.Security.Service.SecurityLogService> Response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:23.361] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": false,
+  "Message": "Invalid credential",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-05-26 18:11:23.364] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 10.7813 ms

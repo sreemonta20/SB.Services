@@ -1,0 +1,76 @@
+[2023-05-21 13:44:11.529] [Information] () <> Application is starting
+[2023-05-21 13:44:11.605] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-05-21 15:51:12.003] [Information] () <> Application is starting
+[2023-05-21 15:51:12.133] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-05-21 15:58:14.049] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 400 in 1135.9968 ms
+[2023-05-21 16:01:50.878] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-21 16:01:50.883] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-21 16:01:50.897] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-21 16:01:53.627] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIwMWJlOWI5OC1iOTEwLTQ1MjAtYmI0OC1jYzBlNWRiNmIyMDMiLCJpYXQiOjE2ODQ2NzA1MTMsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg0NjcwNTEzLCJleHAiOjE2ODQ3MDY1MTN9.e-UvNSjYk8IEn3eUcCK3ilt19eM5cdTsQ5HMWjdSBD0",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-05-21 16:01:53.628] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIwMWJlOWI5OC1iOTEwLTQ1MjAtYmI0OC1jYzBlNWRiNmIyMDMiLCJpYXQiOjE2ODQ2NzA1MTMsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg0NjcwNTEzLCJleHAiOjE2ODQ3MDY1MTN9.e-UvNSjYk8IEn3eUcCK3ilt19eM5cdTsQ5HMWjdSBD0",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-05-21 16:01:53.655] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 2950.3561 ms

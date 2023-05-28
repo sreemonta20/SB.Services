@@ -1,0 +1,179 @@
+[2023-04-28 20:59:36.918] [Information] () <> Application is starting
+[2023-04-28 20:59:37.044] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-04-28 20:59:49.263] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-04-28 20:59:49.309] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-04-28 20:59:49.361] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "rohine",
+  "Password": "routine"
+}
+
+[2023-04-28 20:59:52.634] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIxZjQ4ZjhmNy1jNmU1LTQ5MzYtYTE3NS1iZmM2NmIxNmMyMmUiLCJpYXQiOjE2ODI3MDExOTIsIlVzZXJJZCI6ImJjMDM1OWIzLTI1NDQtNDIyYy04YjBhLTQ3YjBjNzU1MWJiZCIsIkZ1bGxOYW1lIjoiQW5hbm55YSBSb2hpbmUiLCJVc2VyTmFtZSI6InJvaGluZSIsIkVtYWlsIjoicm9oaW5lMjAwOUBnbWFpbC5jb20iLCJuYmYiOjE2ODI3MDExOTIsImV4cCI6MTY4MjczNzE5Mn0.QDMXRZO8z5meahN7a6JdcFbySeNBAGQKj_PtPCmod2Y",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "bc0359b3-2544-422c-8b0a-47b0c7551bbd",
+      "FullName": "rohine",
+      "UserName": "rohine",
+      "Email": "rohine2009@gmail.com",
+      "UserRole": "User"
+    }
+  }
+}
+
+[2023-04-28 20:59:52.635] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIxZjQ4ZjhmNy1jNmU1LTQ5MzYtYTE3NS1iZmM2NmIxNmMyMmUiLCJpYXQiOjE2ODI3MDExOTIsIlVzZXJJZCI6ImJjMDM1OWIzLTI1NDQtNDIyYy04YjBhLTQ3YjBjNzU1MWJiZCIsIkZ1bGxOYW1lIjoiQW5hbm55YSBSb2hpbmUiLCJVc2VyTmFtZSI6InJvaGluZSIsIkVtYWlsIjoicm9oaW5lMjAwOUBnbWFpbC5jb20iLCJuYmYiOjE2ODI3MDExOTIsImV4cCI6MTY4MjczNzE5Mn0.QDMXRZO8z5meahN7a6JdcFbySeNBAGQKj_PtPCmod2Y",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "bc0359b3-2544-422c-8b0a-47b0c7551bbd",
+      "FullName": "rohine",
+      "UserName": "rohine",
+      "Email": "rohine2009@gmail.com",
+      "UserRole": "User"
+    }
+  }
+}
+
+[2023-04-28 20:59:52.685] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 4084.2887 ms
+[2023-04-28 21:00:15.525] [Information] () <SB.Security.Service.SecurityLogService> RegisterUser api method started.
+
+[2023-04-28 21:00:15.528] [Information] () <SB.Security.Service.SecurityLogService> RegisterUser api method request is: 
+{
+  "ActionName": "Update",
+  "Id": "10bb4212-ac20-4ac5-a3f6-b5fff08338c8",
+  "FullName": "Samir Khan",
+  "UserName": "samir",
+  "Password": "password",
+  "Email": "samir@gmail.com",
+  "UserRole": "Admin"
+}
+
+[2023-04-28 21:00:15.533] [Information] () <SB.Security.Service.SecurityLogService> RegisterUser (User service) method request is: 
+{
+  "ActionName": "Update",
+  "Id": "10bb4212-ac20-4ac5-a3f6-b5fff08338c8",
+  "FullName": "Samir Khan",
+  "UserName": "samir",
+  "Password": "password",
+  "Email": "samir@gmail.com",
+  "UserRole": "Admin"
+}
+
+[2023-04-28 21:00:15.557] [Warning] () <SB.Security.Service.SecurityLogService> RegisterUser (User service) method response is: 
+{
+  "Id": "e22bd111-99db-428e-a111-1954cbaae70b",
+  "FullName": "Samir Khan",
+  "UserName": "samir",
+  "Password": "$2b$13$4ALWYVCTFiIHVuEMLx/dt.PPVWYsyrdTKExBGk86at0rLE5OGxF12",
+  "SaltKey": "$2b$13$4ALWYVCTFiIHVuEMLx/dt.",
+  "Email": "samir@gmail.com",
+  "UserRole": "User",
+  "LastLoginAttemptAt": null,
+  "LoginFailedAttemptsCount": 0,
+  "CreatedBy": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+  "CreatedDate": "2023-04-26T17:52:07.9018618",
+  "UpdatedBy": null,
+  "UpdatedDate": null
+}
+
+[2023-04-28 21:00:15.560] [Information] () <SB.Security.Service.SecurityLogService> RegisterUser api method response is: 
+{
+  "Success": false,
+  "Message": "User is already exist. Try unique username",
+  "MessageType": 2,
+  "ResponseCode": 400,
+  "Result": {
+    "ActionName": "Update",
+    "Id": "10bb4212-ac20-4ac5-a3f6-b5fff08338c8",
+    "FullName": "Samir Khan",
+    "UserName": "samir",
+    "Password": "password",
+    "Email": "samir@gmail.com",
+    "UserRole": "Admin"
+  }
+}
+
+[2023-04-28 21:00:15.564] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 50.2188 ms
+[2023-04-28 21:01:55.775] [Information] () <SB.Security.Service.SecurityLogService> RegisterUser api method started.
+
+[2023-04-28 21:01:55.776] [Information] () <SB.Security.Service.SecurityLogService> RegisterUser api method request is: 
+{
+  "ActionName": "Update",
+  "Id": "bc0359b3-2544-422c-8b0a-47b0c7551bbd",
+  "FullName": "Anannya Rohine",
+  "UserName": "rohine",
+  "Password": "routine",
+  "Email": "rohine2009@gmail.com",
+  "UserRole": "User"
+}
+
+[2023-04-28 21:01:55.777] [Information] () <SB.Security.Service.SecurityLogService> RegisterUser (User service) method request is: 
+{
+  "ActionName": "Update",
+  "Id": "bc0359b3-2544-422c-8b0a-47b0c7551bbd",
+  "FullName": "Anannya Rohine",
+  "UserName": "rohine",
+  "Password": "routine",
+  "Email": "rohine2009@gmail.com",
+  "UserRole": "User"
+}
+
+[2023-04-28 21:01:55.958] [Information] () <SB.Security.Service.SecurityLogService> RegisterUser (User service) method response is: 
+{
+  "ActionName": "Update",
+  "Id": "bc0359b3-2544-422c-8b0a-47b0c7551bbd",
+  "FullName": "Anannya Rohine",
+  "UserName": "rohine",
+  "Password": "routine",
+  "Email": "rohine2009@gmail.com",
+  "UserRole": "User"
+}
+
+[2023-04-28 21:01:56.272] [Information] () <SB.Security.Service.SecurityLogService> RegisterUser api method response is: 
+{
+  "Success": true,
+  "Message": "Updating user details success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "ActionName": "Update",
+    "Id": "bc0359b3-2544-422c-8b0a-47b0c7551bbd",
+    "FullName": "Anannya Rohine",
+    "UserName": "rohine",
+    "Password": "routine",
+    "Email": "rohine2009@gmail.com",
+    "UserRole": "User"
+  }
+}
+
+[2023-04-28 21:01:56.291] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/registerUser" responded 200 in 520.1711 ms
