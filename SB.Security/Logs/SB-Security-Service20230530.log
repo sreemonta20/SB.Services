@@ -1,0 +1,742 @@
+[2023-05-30 21:06:04.075] [Information] () <> Application is starting
+[2023-05-30 21:06:04.209] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-05-30 21:06:49.899] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-30 21:06:49.942] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 21:06:50.036] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 21:06:52.801] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI3M2RiOGNkNC04NGY5LTRhZmEtYWVmMS1hYzBmZDA5Zjc1YzMiLCJpYXQiOjE2ODU0NjY0MTIsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDY2NDEyLCJleHAiOjE2ODU1MDI0MTJ9.26uhi7Kx7I23le3G6rDAjzZobPwnRENNijgEaO0lP1U",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-05-30 21:06:52.802] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI3M2RiOGNkNC04NGY5LTRhZmEtYWVmMS1hYzBmZDA5Zjc1YzMiLCJpYXQiOjE2ODU0NjY0MTIsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDY2NDEyLCJleHAiOjE2ODU1MDI0MTJ9.26uhi7Kx7I23le3G6rDAjzZobPwnRENNijgEaO0lP1U",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-05-30 21:06:52.853] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 3835.8390 ms
+[2023-05-30 21:32:11.472] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-30 21:32:11.472] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 21:32:11.473] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 21:32:11.624] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI2NTVhZmIwMC1jMTIzLTRhZDctOGQxMS04NzVhMzQ4NjU5NjUiLCJpYXQiOjE2ODU0Njc5MzEsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDY3OTMxLCJleHAiOjE2ODU1MDM5MzF9.o0n_IiyUfTWfr-dmWUWa0yFeU9Dv77WeHYRU1DzguTk",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-05-30 21:32:11.624] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI2NTVhZmIwMC1jMTIzLTRhZDctOGQxMS04NzVhMzQ4NjU5NjUiLCJpYXQiOjE2ODU0Njc5MzEsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDY3OTMxLCJleHAiOjE2ODU1MDM5MzF9.o0n_IiyUfTWfr-dmWUWa0yFeU9Dv77WeHYRU1DzguTk",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-05-30 21:32:11.626] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 155.4565 ms
+[2023-05-30 21:33:00.739] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-30 21:33:00.739] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 21:33:00.739] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 21:33:00.952] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJkMWRmMGIyZC03MDdmLTRjMWYtYTg5Mi1lYjU2NzcwODVmMTIiLCJpYXQiOjE2ODU0Njc5ODAsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDY3OTgwLCJleHAiOjE2ODU1MDM5ODB9.ht6xK_6xs4Xxgsv_Piesp61RSaF5K6tSYENcnlPmeqQ",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-05-30 21:33:01.247] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJkMWRmMGIyZC03MDdmLTRjMWYtYTg5Mi1lYjU2NzcwODVmMTIiLCJpYXQiOjE2ODU0Njc5ODAsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDY3OTgwLCJleHAiOjE2ODU1MDM5ODB9.ht6xK_6xs4Xxgsv_Piesp61RSaF5K6tSYENcnlPmeqQ",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin"
+    }
+  }
+}
+
+[2023-05-30 21:33:01.251] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 519.8339 ms
+[2023-05-30 22:07:24.995] [Information] () <> Application is starting
+[2023-05-30 22:07:25.073] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-05-30 22:10:30.648] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-30 22:10:30.687] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:10:30.699] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:10:33.037] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI2NmI4MDVhZC0zOWZjLTQ3ZjUtYmM5ZC05NTZjMmIwZjJlOGUiLCJpYXQiOjE2ODU0NzAyMzIsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcwMjMyLCJleHAiOjE2ODU1MDYyMzJ9.RO7TTjn_ONMYt4SF_dq_-v4JnsDfKuv93tFp0qEtv4A",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:10:33.037] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI2NmI4MDVhZC0zOWZjLTQ3ZjUtYmM5ZC05NTZjMmIwZjJlOGUiLCJpYXQiOjE2ODU0NzAyMzIsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcwMjMyLCJleHAiOjE2ODU1MDYyMzJ9.RO7TTjn_ONMYt4SF_dq_-v4JnsDfKuv93tFp0qEtv4A",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:10:33.099] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 2853.0524 ms
+[2023-05-30 22:11:07.113] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-30 22:11:07.113] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:11:07.113] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:11:07.223] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJiZDhhNDk5Ni0zYjNmLTRjZTktYWZkNi0yZTE2MWVlMTc1N2IiLCJpYXQiOjE2ODU0NzAyNjcsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcwMjY3LCJleHAiOjE2ODU1MDYyNjd9.xohwlGXdxTsI4n-Vf5TbH3j28hxBqz9dGuJ1LEkYib4",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:11:07.223] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJiZDhhNDk5Ni0zYjNmLTRjZTktYWZkNi0yZTE2MWVlMTc1N2IiLCJpYXQiOjE2ODU0NzAyNjcsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcwMjY3LCJleHAiOjE2ODU1MDYyNjd9.xohwlGXdxTsI4n-Vf5TbH3j28hxBqz9dGuJ1LEkYib4",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:11:07.224] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 114.4019 ms
+[2023-05-30 22:12:04.303] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-30 22:12:04.303] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:12:04.303] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:12:04.500] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIxNTY1OWU4My0wYTQzLTQ5NjgtODA0OC1hYTAzOGMwZDk5YTIiLCJpYXQiOjE2ODU0NzAzMjQsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcwMzI0LCJleHAiOjE2ODU1MDYzMjR9.PWMWpHLGjKabqovUsez92nhHcUIOOMyWCce8rg-alQ0",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:12:04.504] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIxNTY1OWU4My0wYTQzLTQ5NjgtODA0OC1hYTAzOGMwZDk5YTIiLCJpYXQiOjE2ODU0NzAzMjQsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcwMzI0LCJleHAiOjE2ODU1MDYzMjR9.PWMWpHLGjKabqovUsez92nhHcUIOOMyWCce8rg-alQ0",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:12:04.509] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 214.8934 ms
+[2023-05-30 22:17:42.894] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-30 22:17:42.895] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:17:42.896] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:17:43.040] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIxNjE2ODQ5YS1lOWVkLTQxNTYtYWM2NS1lYTUwNTE2NDdmNTEiLCJpYXQiOjE2ODU0NzA2NjMsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcwNjYzLCJleHAiOjE2ODU1MDY2NjN9.XSYF2lscXBAvytwuEj6wxcCr4JgnzzC6qyiSPSu5TUg",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:17:43.040] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIxNjE2ODQ5YS1lOWVkLTQxNTYtYWM2NS1lYTUwNTE2NDdmNTEiLCJpYXQiOjE2ODU0NzA2NjMsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcwNjYzLCJleHAiOjE2ODU1MDY2NjN9.XSYF2lscXBAvytwuEj6wxcCr4JgnzzC6qyiSPSu5TUg",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:17:43.041] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 148.9203 ms
+[2023-05-30 22:20:27.505] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-30 22:20:27.505] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:20:27.505] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:20:27.649] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJlM2Y1NGViZS03YmI1LTRkMmUtYTM4Ny02NjQzOWEyYzM5MWMiLCJpYXQiOjE2ODU0NzA4MjcsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcwODI3LCJleHAiOjE2ODU1MDY4Mjd9.pYWabG_fBclnTQx84Rk-xqugiqm0Bq1nQ1Al9bjE3WQ",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:20:27.921] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJlM2Y1NGViZS03YmI1LTRkMmUtYTM4Ny02NjQzOWEyYzM5MWMiLCJpYXQiOjE2ODU0NzA4MjcsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcwODI3LCJleHAiOjE2ODU1MDY4Mjd9.pYWabG_fBclnTQx84Rk-xqugiqm0Bq1nQ1Al9bjE3WQ",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:20:27.924] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 419.7527 ms
+[2023-05-30 22:26:19.307] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-30 22:26:19.307] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:26:19.307] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:26:19.448] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI5NjMzYTg2MC02NjUzLTQ0YjctYTA5NC02Y2JkMWJjMzkyZWYiLCJpYXQiOjE2ODU0NzExNzksIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcxMTc5LCJleHAiOjE2ODU1MDcxNzl9.Mr2upj2Eo8R3u2RoLOfDMdVOdvlJUdMJzfYsMc875-M",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:26:19.724] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI5NjMzYTg2MC02NjUzLTQ0YjctYTA5NC02Y2JkMWJjMzkyZWYiLCJpYXQiOjE2ODU0NzExNzksIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcxMTc5LCJleHAiOjE2ODU1MDcxNzl9.Mr2upj2Eo8R3u2RoLOfDMdVOdvlJUdMJzfYsMc875-M",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:26:19.728] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 421.1898 ms
+[2023-05-30 22:28:06.350] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-30 22:28:06.351] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:28:06.351] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:28:06.474] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI5MDA0NjllMS0xNjc1LTQwYmMtYThiNS1hMzQ0ZTY2MTBmM2UiLCJpYXQiOjE2ODU0NzEyODYsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcxMjg2LCJleHAiOjE2ODU1MDcyODZ9.sY2cdj-U63kOjhCfl7J1QB1raxTvMfyJFXKc8rpmQ4s",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:28:06.474] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI5MDA0NjllMS0xNjc1LTQwYmMtYThiNS1hMzQ0ZTY2MTBmM2UiLCJpYXQiOjE2ODU0NzEyODYsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcxMjg2LCJleHAiOjE2ODU1MDcyODZ9.sY2cdj-U63kOjhCfl7J1QB1raxTvMfyJFXKc8rpmQ4s",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:28:06.475] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 124.8664 ms
+[2023-05-30 22:29:09.155] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-30 22:29:09.155] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:29:09.155] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:29:09.279] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJkODYyZWE0Mi0xN2EwLTQ1YTQtYWU4Zi0wNTgxM2ZhZmM2ZjkiLCJpYXQiOjE2ODU0NzEzNDksIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcxMzQ5LCJleHAiOjE2ODU1MDczNDl9.LkFb0gzyOY3bTVgvlj1C0lxMntbS9cbzpUJhveN1Ytk",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:29:09.279] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJkODYyZWE0Mi0xN2EwLTQ1YTQtYWU4Zi0wNTgxM2ZhZmM2ZjkiLCJpYXQiOjE2ODU0NzEzNDksIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcxMzQ5LCJleHAiOjE2ODU1MDczNDl9.LkFb0gzyOY3bTVgvlj1C0lxMntbS9cbzpUJhveN1Ytk",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:29:09.280] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 124.7491 ms
+[2023-05-30 22:40:36.447] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-05-30 22:40:36.448] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:40:36.448] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-05-30 22:40:36.585] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJkNThmZGRhOS0xYzBlLTRkYmUtYmY1NS03NGNhNTg2ZTA3ZjYiLCJpYXQiOjE2ODU0NzIwMzYsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcyMDM2LCJleHAiOjE2ODU1MDgwMzZ9.Pys0bGqh21yPV7-KyicIPNLYJa1pQC-50mgdKoZCmW4",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:40:36.585] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJkNThmZGRhOS0xYzBlLTRkYmUtYmY1NS03NGNhNTg2ZTA3ZjYiLCJpYXQiOjE2ODU0NzIwMzYsIlVzZXJJZCI6ImQ2NzBhN2JhLWYxMGQtNDI0MS04MjMwLTZjZDhlMGEyYjdjMCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwibmJmIjoxNjg1NDcyMDM2LCJleHAiOjE2ODU1MDgwMzZ9.Pys0bGqh21yPV7-KyicIPNLYJa1pQC-50mgdKoZCmW4",
+    "expires_in": 36000,
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d670a7ba-f10d-4241-8230-6cd8e0a2b7c0",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-04-20T06:54:10.983512"
+    }
+  }
+}
+
+[2023-05-30 22:40:36.586] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 139.2394 ms

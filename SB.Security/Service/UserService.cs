@@ -482,7 +482,7 @@ namespace SB.Security.Service
                     token_type = ConstantSupplier.AUTHORIZATION_TOKEN_TYPE,
                     error = string.Empty,
                     error_description = string.Empty,
-                    user = new User() { Id = Convert.ToString(user.Id), FullName = user.UserName, UserName = user.UserName, Email = user.Email, UserRole = user.UserRole }
+                    user = new User() { Id = Convert.ToString(user.Id), FullName = user.UserName, UserName = user.UserName, Email = user.Email, UserRole = user.UserRole, CreatedDate = user.CreatedDate }
 
                 };
             }
