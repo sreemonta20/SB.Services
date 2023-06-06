@@ -43,6 +43,7 @@ namespace SB.Security.Service
         private readonly AppSettings _appSettings;
         private readonly ISecurityLogService _securityLogService;
         private readonly IDatabaseManager _dbmanager;
+        private readonly ITokenService _tokenService;
         /// <summary>
         /// 
         /// </summary>
@@ -51,7 +52,8 @@ namespace SB.Security.Service
         /// <param name="emailService"></param>
         /// <param name="options"></param>
         /// <param name="securityLogService"></param>
-        public UserService(IConfiguration config, SBSecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options, ISecurityLogService securityLogService, IDatabaseManager dbManager)
+        public UserService(IConfiguration config, SBSecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options, 
+        ISecurityLogService securityLogService, IDatabaseManager dbManager, ITokenService tokenService)
         {
             this._configuration = config;
             this._context = context;
@@ -60,6 +62,7 @@ namespace SB.Security.Service
             this._securityLogService = securityLogService;
             this._dbmanager = dbManager;
             this._dbmanager.InitializeDatabase(_appSettings.ConnectionStrings.SecurityConectionString, _appSettings.ConnectionProvider);
+            _tokenService = tokenService;
         }
         #endregion
 
@@ -228,10 +231,16 @@ namespace SB.Security.Service
                         await TrackAndUpdateLoginAttempts(user);
                         JwtSecurityToken token;
                         DateTime expires;
-                        var TokenResult = GetToken(user);
+                        //var TokenResult = GetToken(user);
+                        Token? tokenResult = _tokenService?.GenerateAccessToken(user);
+                        if (tokenResult != null)
+                        {
+                            tokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
+                        }
+                        
                         //return new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = TokenResult };
 
-                        var oDataResponse1 = new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = TokenResult };
+                        var oDataResponse1 = new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = tokenResult };
                         _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_LOGIN_RES_MSG, JsonConvert.SerializeObject(oDataResponse1, Formatting.Indented)));
 
                         return oDataResponse1;
@@ -446,50 +455,50 @@ namespace SB.Security.Service
         /// </summary>
         /// <param name="user"></param>
         /// <returns>Token</returns>
-        private Token? GetToken(UserInfo user)
-        {
+        //private Token? GetToken(UserInfo user)
+        //{
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(this._configuration["AppSettings:JWT:Key"]);
+        //    var tokenHandler = new JwtSecurityTokenHandler();
+        //    var key = Encoding.ASCII.GetBytes(this._configuration["AppSettings:JWT:Key"]);
 
-            //DateTime expiryTime = DateTime.UtcNow.AddMinutes(10);
-            DateTime expiryTime = DateTime.Now.AddSeconds(Convert.ToDouble(this._configuration["AppSettings:AccessTokenExpireTime"]));
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                        new Claim(JwtRegisteredClaimNames.Sub, this._configuration["AppSettings:JWT:Subject"]),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("UserId", user.Id.ToString()),
-                        new Claim("FullName", user.FullName),
-                        new Claim("UserName", user.UserName),
-                        new Claim("Email", user.Email)
-                }),
-                Expires = expiryTime,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
+        //    DateTime expiryTime = DateTime.Now.AddSeconds(Convert.ToDouble(this._configuration["AppSettings:AccessTokenExpireTime"]));
+        //    var tokenDescriptor = new SecurityTokenDescriptor
+        //    {
+        //        Subject = new ClaimsIdentity(new Claim[]
+        //        {
+        //                new Claim(JwtRegisteredClaimNames.Sub, this._configuration["AppSettings:JWT:Subject"]),
+        //                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        //                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+        //                new Claim("UserId", user.Id.ToString()),
+        //                new Claim("FullName", user.FullName),
+        //                new Claim("UserName", user.UserName),
+        //                new Claim("Email", user.Email)
+        //        }),
+        //        Expires = expiryTime,
+        //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        //    };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+        //    var token = tokenHandler.CreateToken(tokenDescriptor);
+        //    var tokenString = tokenHandler.WriteToken(token);
 
-            if (tokenString != null)
-            {
-                return new Token()
-                {
-                    access_token = tokenString,
-                    expires_in = Convert.ToInt32(Convert.ToDouble(this._configuration["AppSettings:AccessTokenExpireTime"])),
-                    token_type = ConstantSupplier.AUTHORIZATION_TOKEN_TYPE,
-                    error = string.Empty,
-                    error_description = string.Empty,
-                    user = new User() { Id = Convert.ToString(user.Id), FullName = user.UserName, UserName = user.UserName, Email = user.Email, UserRole = user.UserRole, CreatedDate = user.CreatedDate }
+        //    if (tokenString != null)
+        //    {
+        //        return new Token()
+        //        {
+        //            access_token = tokenString,
+        //            expires_in = Convert.ToInt32(Convert.ToDouble(this._configuration["AppSettings:AccessTokenExpireTime"])),
+        //            token_type = ConstantSupplier.AUTHORIZATION_TOKEN_TYPE,
+        //            error = string.Empty,
+        //            error_description = string.Empty,
+        //            user = new User() { Id = Convert.ToString(user.Id), FullName = user.UserName, UserName = user.UserName, Email = user.Email, UserRole = user.UserRole, CreatedDate = user.CreatedDate }
 
-                };
-            }
-            return null;
+        //        };
+        //    }
+        //    return null;
 
 
-        }
+        //}
+        
 
         /// <summary>
         /// It update the "LastLoginAttemptAt" and "LoginFailedAttemptsCount" database table columns.

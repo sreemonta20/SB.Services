@@ -151,14 +151,9 @@ namespace SB.Security
             services.AddHttpContextAccessor();
 
             #region Dependency Injection added into service
-            //services.AddTransient<IDatabaseManager, DatabaseManager>();
-            //services.AddTransient<IDatabaseHandlerFactory, DatabaseHandlerFactory>();
-            //services.AddTransient<IDatabaseHandler, SqlServerDataHandler>();
-            //services.AddTransient<IDatabaseHandler, OracleDataHandler>();
-            //services.AddTransient<IDatabaseHandler, OleDataHandler>();
-            //services.AddTransient<IDatabaseHandler, OdbcDataHandler>();
             services.AddTransient<ISecurityLogService, SecurityLogService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ITokenService, TokenService>();
             services.AddScoped<IDatabaseManager, DatabaseManager>();
             services.AddScoped<IDatabaseHandlerFactory, DatabaseHandlerFactory>();
             services.AddScoped<ValidateModelAttribute>();

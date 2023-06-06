@@ -130,6 +130,8 @@
         public const string POST_AUTH_ROUTE_NAME = "login";
         public const string POST_PUT_USER_ROUTE_NAME = "registerUser";
         public const string DEL_USER_ROUTE_NAME = "deleteUser";
+        public const string REFRESH_TOKEN_ROUTE_NAME = "refreshtoken";
+        public const string REVOKE_ROUTE_NAME = "revoke";
 
         #endregion
 

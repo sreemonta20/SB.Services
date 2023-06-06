@@ -268,6 +268,14 @@ namespace SB.Security.Controllers
             _securityLogService.LogInfo(String.Format(ConstantSupplier.DELUSER_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
+
+        [HttpPost]
+        [Route(ConstantSupplier.REFRESH_TOKEN_ROUTE_NAME)]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
+        public async Task<object> RefreshToken([FromBody] RefreshTokenRequest refreshTokenReq)
+        {
+            return null;
+        }
         #endregion
     }
 }
