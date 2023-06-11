@@ -345,6 +345,8 @@ namespace SB.Security.Middlewares
             List<string> excludeURL = new()
             {
                 "/api/User/login",
+                "/api/User/refreshtoken",
+                "/api/User/revoke",
                 "/api/User/getUserbyId",
                 "/api/User/getAllUsers",
                 "/api/User/registerUser",

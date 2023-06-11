@@ -1,0 +1,2230 @@
+[2023-06-11 01:22:16.152] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 01:22:16.164] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 01:22:20.590] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 01:22:21.238] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJkYjRhMmQzMi1hMDAwLTQ5NDctYTZjYi1kODMwNmQwNmQzN2EiLCJpYXQiOiI2LzEwLzIwMjMgOToyMjoyMSBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDMyNDQxLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.zNBBlE-sbm8QJ9E1hNZqzVlc2UHUraJulcN8swTu7v4",
+    "refresh_token": "yGaYGqFfhlrBjdtwQ7uTfJzYfYvVcL/Sld1tgeE8zjg=",
+    "expires_in": "2023-06-11T01:27:21.2351206+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 01:22:50.391] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJkYjRhMmQzMi1hMDAwLTQ5NDctYTZjYi1kODMwNmQwNmQzN2EiLCJpYXQiOiI2LzEwLzIwMjMgOToyMjoyMSBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDMyNDQxLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.zNBBlE-sbm8QJ9E1hNZqzVlc2UHUraJulcN8swTu7v4",
+    "refresh_token": "yGaYGqFfhlrBjdtwQ7uTfJzYfYvVcL/Sld1tgeE8zjg=",
+    "expires_in": "2023-06-11T01:27:21.2351206+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 01:22:50.418] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 34267.0016 ms
+[2023-06-11 01:35:06.783] [Information] () <> Application is starting
+[2023-06-11 01:35:06.965] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-06-11 01:35:48.414] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 01:35:48.456] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 01:36:01.603] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 01:36:05.806] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIzODQ3YmFiZS0yOWM4LTQ5ZjYtOGIwMS1lZjRlY2Y5MWJhZTkiLCJpYXQiOiI2LzEwLzIwMjMgOTozNjowNCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDMzMDg0LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.5Yj8bYn2P6bP2BJc6HzP0n2ILAox-oauLb3THllzcyg",
+    "refresh_token": "fP8yWT6iJ1+g8ZCJ8wK2AOvwi2X+lLva5tLbd0UdQyw=",
+    "expires_in": "2023-06-11T01:38:04.9665695+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 01:36:08.653] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIzODQ3YmFiZS0yOWM4LTQ5ZjYtOGIwMS1lZjRlY2Y5MWJhZTkiLCJpYXQiOiI2LzEwLzIwMjMgOTozNjowNCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDMzMDg0LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.5Yj8bYn2P6bP2BJc6HzP0n2ILAox-oauLb3THllzcyg",
+    "refresh_token": "fP8yWT6iJ1+g8ZCJ8wK2AOvwi2X+lLva5tLbd0UdQyw=",
+    "expires_in": "2023-06-11T01:38:04.9665695+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 01:36:08.727] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 21760.9818 ms
+[2023-06-11 01:42:16.244] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 01:42:16.244] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 01:42:18.190] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 01:42:18.416] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIzZWZiMTM0ZC1mODNiLTQ1ZDktYjIzYy1lNmU1ZTA4OGRhNDkiLCJpYXQiOiI2LzEwLzIwMjMgOTo0MjoxOCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDMzNDU4LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.cOaJlhyCI6K1UvBh53QxBMRrgKRltuTvWWMXkvaMXPI",
+    "refresh_token": "8EsCnyu85sShwTnGaI7ESS91RiBqijK5y3eUst5YImw=",
+    "expires_in": "2023-06-11T01:44:18.4001296+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 01:42:18.416] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIzZWZiMTM0ZC1mODNiLTQ1ZDktYjIzYy1lNmU1ZTA4OGRhNDkiLCJpYXQiOiI2LzEwLzIwMjMgOTo0MjoxOCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDMzNDU4LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.cOaJlhyCI6K1UvBh53QxBMRrgKRltuTvWWMXkvaMXPI",
+    "refresh_token": "8EsCnyu85sShwTnGaI7ESS91RiBqijK5y3eUst5YImw=",
+    "expires_in": "2023-06-11T01:44:18.4001296+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 01:42:18.419] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 2206.3391 ms
+[2023-06-11 01:52:36.701] [Information] () <> Application is starting
+[2023-06-11 01:52:36.827] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-06-11 01:53:21.647] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 01:53:21.689] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 01:53:23.628] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 01:53:28.429] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIyZmNhMWYyOC02YmUyLTQxYjgtYThiYy1jYmNlMzc5N2I1NGQiLCJpYXQiOiI2LzEwLzIwMjMgOTo1MzoyNyBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDM0MTI3LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.nDThWvgtSdJRytpz7zdEtkrkJkxLYvPgNCZoZ8xRHX4",
+    "refresh_token": "RYn17Iy9GuOHA0khbRVmEKakOUAGpjhoUyNdw1qQb9s=",
+    "expires_in": "2023-06-11T01:55:27.8996628+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 01:53:28.429] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIyZmNhMWYyOC02YmUyLTQxYjgtYThiYy1jYmNlMzc5N2I1NGQiLCJpYXQiOiI2LzEwLzIwMjMgOTo1MzoyNyBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDM0MTI3LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.nDThWvgtSdJRytpz7zdEtkrkJkxLYvPgNCZoZ8xRHX4",
+    "refresh_token": "RYn17Iy9GuOHA0khbRVmEKakOUAGpjhoUyNdw1qQb9s=",
+    "expires_in": "2023-06-11T01:55:27.8996628+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 01:53:28.505] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 7814.5198 ms
+[2023-06-11 02:05:57.364] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 02:05:57.367] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 02:05:59.047] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 02:05:59.190] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJkYzRhMzIwOS03NDUzLTQzMTQtYTk3OS1mM2YyNTk5NzU4MzUiLCJpYXQiOiI2LzEwLzIwMjMgMTA6MDU6NTkgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQzNDg3OSwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.X08lLDpnEvrP6C8GocrQ1JcozxOydg1mp-cXjT--xEA",
+    "refresh_token": "OOrP90IAvbYNLnwXQcw74RSp5KtLsIUK2bZ3gGconFU=",
+    "expires_in": "2023-06-11T02:07:59.1788969+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 02:05:59.190] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJkYzRhMzIwOS03NDUzLTQzMTQtYTk3OS1mM2YyNTk5NzU4MzUiLCJpYXQiOiI2LzEwLzIwMjMgMTA6MDU6NTkgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQzNDg3OSwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.X08lLDpnEvrP6C8GocrQ1JcozxOydg1mp-cXjT--xEA",
+    "refresh_token": "OOrP90IAvbYNLnwXQcw74RSp5KtLsIUK2bZ3gGconFU=",
+    "expires_in": "2023-06-11T02:07:59.1788969+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 02:05:59.192] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 1849.1553 ms
+[2023-06-11 02:21:09.081] [Information] () <> Application is starting
+[2023-06-11 02:21:09.168] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-06-11 02:21:34.153] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 02:21:34.194] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 02:21:36.412] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 02:21:39.594] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJlZDA2MzgxOC1jN2E2LTRhMDItOWVlYy03OTgzYTljNGJmOTUiLCJpYXQiOiI2LzEwLzIwMjMgMTA6MjE6MzkgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQzNTgxOSwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.736c0wwbjNTZslPNMSDjKO91bBTlJo0lFdUDr81z2ZM",
+    "refresh_token": "p+5qUKaluhI7kjjFIGYyn/vYa22EcvsfYe3+ZIr02H4=",
+    "expires_in": "2023-06-11T02:23:39.029272+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 02:21:39.595] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJlZDA2MzgxOC1jN2E2LTRhMDItOWVlYy03OTgzYTljNGJmOTUiLCJpYXQiOiI2LzEwLzIwMjMgMTA6MjE6MzkgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQzNTgxOSwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.736c0wwbjNTZslPNMSDjKO91bBTlJo0lFdUDr81z2ZM",
+    "refresh_token": "p+5qUKaluhI7kjjFIGYyn/vYa22EcvsfYe3+ZIr02H4=",
+    "expires_in": "2023-06-11T02:23:39.029272+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 02:21:39.652] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 6380.0775 ms
+[2023-06-11 02:28:59.835] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 02:28:59.835] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 02:29:01.461] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 02:29:01.624] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJmNjU1NWJjNS0yYTE4LTQ0YzQtOWYyMS0yZjMwNTVhMjhlOTgiLCJpYXQiOiI2LzEwLzIwMjMgMTA6Mjk6MDEgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQzNjI2MSwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.1Hq4zBDt6r-4DWyNtNSk4VqFy8JehqLR4551F--DsAM",
+    "refresh_token": "0qGgZADD7SqZEz5/MP1S8+4P2cWETy9nakpqG/AbtSo=",
+    "expires_in": "2023-06-11T02:31:01.6187494+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 02:29:01.624] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJmNjU1NWJjNS0yYTE4LTQ0YzQtOWYyMS0yZjMwNTVhMjhlOTgiLCJpYXQiOiI2LzEwLzIwMjMgMTA6Mjk6MDEgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQzNjI2MSwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.1Hq4zBDt6r-4DWyNtNSk4VqFy8JehqLR4551F--DsAM",
+    "refresh_token": "0qGgZADD7SqZEz5/MP1S8+4P2cWETy9nakpqG/AbtSo=",
+    "expires_in": "2023-06-11T02:31:01.6187494+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 02:29:01.628] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 1800.1710 ms
+[2023-06-11 02:36:08.494] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 02:36:08.494] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 02:36:09.903] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 02:36:10.172] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIxMWNlYzBiYy1mZDE5LTQ5YjQtOGNlYS1iMTNlZDgyYjMzZjgiLCJpYXQiOiI2LzEwLzIwMjMgMTA6MzY6MTAgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQzNjY5MCwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.3ZSXVVNfeNmed9Pl4PSzd8PN0lFlXW5GjyD5lyIbVRU",
+    "refresh_token": "tmFlUn3rCFSx8f7znyYZNSKbEtMUMY02ZES6hRDX4gU=",
+    "expires_in": "2023-06-11T02:38:10.1664717+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 02:36:10.172] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIxMWNlYzBiYy1mZDE5LTQ5YjQtOGNlYS1iMTNlZDgyYjMzZjgiLCJpYXQiOiI2LzEwLzIwMjMgMTA6MzY6MTAgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQzNjY5MCwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.3ZSXVVNfeNmed9Pl4PSzd8PN0lFlXW5GjyD5lyIbVRU",
+    "refresh_token": "tmFlUn3rCFSx8f7znyYZNSKbEtMUMY02ZES6hRDX4gU=",
+    "expires_in": "2023-06-11T02:38:10.1664717+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 02:36:10.175] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 1686.3882 ms
+[2023-06-11 02:38:03.563] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method started.
+
+[2023-06-11 02:38:03.567] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method request is: 
+{
+  "Access_Token": null,
+  "Refresh_Token": null
+}
+
+[2023-06-11 02:38:03.571] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method request is: 
+{
+  "Access_Token": null,
+  "Refresh_Token": null
+}
+
+[2023-06-11 02:38:04.930] [Error] () <SB.Security.Service.SecurityLogService> Exception is: 			IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')
+Response is: 
+{
+  "Success": false,
+  "Message": "IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')",
+  "MessageType": 3,
+  "ResponseCode": 500,
+  "Result": null
+}
+
+[2023-06-11 02:38:04.931] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/refreshtoken" responded 200 in 3213.4582 ms
+[2023-06-11 02:38:05.019] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/revoke" responded 400 in 58.1006 ms
+[2023-06-11 02:39:36.582] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 02:39:36.582] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 02:39:39.334] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 02:39:39.478] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI4NDA1OGFjNi01MGMxLTQwNDEtOWEwYy0wYTRlMDMxNjgyNWMiLCJpYXQiOiI2LzEwLzIwMjMgMTA6Mzk6MzkgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQzNjg5OSwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.GFNvwBrUPNqhrJKGMNQaq9fARDBlrgkqLxPXuPTKHgk",
+    "refresh_token": "PNtb70WueuX6imx8gGKtOImS9iPRekhc962DHFzLW5E=",
+    "expires_in": "2023-06-11T02:41:39.4692452+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 02:39:39.478] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI4NDA1OGFjNi01MGMxLTQwNDEtOWEwYy0wYTRlMDMxNjgyNWMiLCJpYXQiOiI2LzEwLzIwMjMgMTA6Mzk6MzkgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQzNjg5OSwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.GFNvwBrUPNqhrJKGMNQaq9fARDBlrgkqLxPXuPTKHgk",
+    "refresh_token": "PNtb70WueuX6imx8gGKtOImS9iPRekhc962DHFzLW5E=",
+    "expires_in": "2023-06-11T02:41:39.4692452+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 02:39:39.479] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 2897.5448 ms
+[2023-06-11 02:50:30.771] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 02:50:30.771] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 02:50:32.208] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 02:50:32.601] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI3ODRhNmE4MC1mMjQwLTQ1ZDAtYmJiNi0yODAxYzNiZWY4YjUiLCJpYXQiOiI2LzEwLzIwMjMgMTA6NTA6MzIgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQzNzU1MiwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.971R3IrezlSt6VPg25U9-rUguqOOXDy5gTZoaNoWdxg",
+    "refresh_token": "WLSNzmsZEr/uKSW8OhbdByaHLosegMYr/qQYS7uU7xs=",
+    "expires_in": "2023-06-11T02:52:32.5939611+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 02:50:32.601] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI3ODRhNmE4MC1mMjQwLTQ1ZDAtYmJiNi0yODAxYzNiZWY4YjUiLCJpYXQiOiI2LzEwLzIwMjMgMTA6NTA6MzIgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQzNzU1MiwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.971R3IrezlSt6VPg25U9-rUguqOOXDy5gTZoaNoWdxg",
+    "refresh_token": "WLSNzmsZEr/uKSW8OhbdByaHLosegMYr/qQYS7uU7xs=",
+    "expires_in": "2023-06-11T02:52:32.5939611+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 02:50:32.606] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 1836.3040 ms
+[2023-06-11 03:35:25.473] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 03:35:25.473] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 03:35:27.099] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 03:35:27.573] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI0MDI5MTI4Yy0xNzVkLTQ0NzUtODRiNS1jYzBkNzRlMGIwNjIiLCJpYXQiOiI2LzEwLzIwMjMgMTE6MzU6MjcgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQ0MDI0NywiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.ChNJAIzjezI2RAaMdqSYmLwhdrw1_-6F42ZzdlwnuhQ",
+    "refresh_token": "hyariGwMFQ7QH/cXqT1j8B/Fn/dMtJ9doazNRKWmR5A=",
+    "expires_in": "2023-06-11T03:37:27.5694597+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 03:35:27.573] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI0MDI5MTI4Yy0xNzVkLTQ0NzUtODRiNS1jYzBkNzRlMGIwNjIiLCJpYXQiOiI2LzEwLzIwMjMgMTE6MzU6MjcgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQ0MDI0NywiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.ChNJAIzjezI2RAaMdqSYmLwhdrw1_-6F42ZzdlwnuhQ",
+    "refresh_token": "hyariGwMFQ7QH/cXqT1j8B/Fn/dMtJ9doazNRKWmR5A=",
+    "expires_in": "2023-06-11T03:37:27.5694597+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 03:35:27.574] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 2101.9340 ms
+[2023-06-11 03:40:43.410] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 03:40:43.411] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 03:40:44.933] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 03:40:45.072] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI1NjQ2MjMwMC02NWI2LTQ1ZjUtODQ0NC01Njc1MzJlM2Q2MjMiLCJpYXQiOiI2LzEwLzIwMjMgMTE6NDA6NDUgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQ0MDU2NSwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.n3dlSDRBc7nuFNfC4D1dg01JfriCAb0Wx5K0Y0GfI9k",
+    "refresh_token": "prKlfwFN79POge7vpWiK4gQ3hmaLiZ+yRnOnAQQx3U4=",
+    "expires_in": "2023-06-11T03:42:45.0687382+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 03:40:45.073] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI1NjQ2MjMwMC02NWI2LTQ1ZjUtODQ0NC01Njc1MzJlM2Q2MjMiLCJpYXQiOiI2LzEwLzIwMjMgMTE6NDA6NDUgUE0iLCJVc2VySWQiOiJkOTdjNjllMi02MGUzLTRlN2ItOGI2Ny00YzVhOGNhNmQ0NTAiLCJGdWxsTmFtZSI6IlNyZWVtb250YSBCaG93bWlrIiwiVXNlck5hbWUiOiJzcmVlIiwiRW1haWwiOiJzYmhvd21pa2NzZTA4QGdtYWlsLmNvbSIsImV4cCI6MTY4NjQ0MDU2NSwiaXNzIjoiSldUQXV0aGVudGljYXRpb25TZXJ2ZXIiLCJhdWQiOiJKV1RTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.n3dlSDRBc7nuFNfC4D1dg01JfriCAb0Wx5K0Y0GfI9k",
+    "refresh_token": "prKlfwFN79POge7vpWiK4gQ3hmaLiZ+yRnOnAQQx3U4=",
+    "expires_in": "2023-06-11T03:42:45.0687382+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 03:40:45.073] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 1663.4310 ms
+[2023-06-11 17:11:06.055] [Information] () <> Application is starting
+[2023-06-11 17:11:06.150] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-06-11 17:14:02.280] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 17:14:02.318] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 17:14:02.400] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 17:14:05.178] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIyZDA1OTU5ZS02OTFmLTQ2OGQtOWE4Zi1jZmQ4Mjk1ZGFjZWMiLCJpYXQiOiI2LzExLzIwMjMgMToxNDowNCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDg5MzY0LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.V-cPcsQm4QFPqgyybhguA8AIVJDxxDc5qBRgw2oatxI",
+    "refresh_token": "cL+mLBh0Lm3y9qK92ng5HqN9omIu3U2zdk1ldqXNRTc=",
+    "expires_in": "2023-06-11T17:16:04.5523005+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 17:14:05.179] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIyZDA1OTU5ZS02OTFmLTQ2OGQtOWE4Zi1jZmQ4Mjk1ZGFjZWMiLCJpYXQiOiI2LzExLzIwMjMgMToxNDowNCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDg5MzY0LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.V-cPcsQm4QFPqgyybhguA8AIVJDxxDc5qBRgw2oatxI",
+    "refresh_token": "cL+mLBh0Lm3y9qK92ng5HqN9omIu3U2zdk1ldqXNRTc=",
+    "expires_in": "2023-06-11T17:16:04.5523005+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 17:14:05.262] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 3824.7360 ms
+[2023-06-11 17:17:03.668] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method started.
+
+[2023-06-11 17:17:05.143] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method request is: 
+{
+  "Access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIyZDA1OTU5ZS02OTFmLTQ2OGQtOWE4Zi1jZmQ4Mjk1ZGFjZWMiLCJpYXQiOiI2LzExLzIwMjMgMToxNDowNCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDg5MzY0LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.V-cPcsQm4QFPqgyybhguA8AIVJDxxDc5qBRgw2oatxI",
+  "Refresh_Token": "cL+mLBh0Lm3y9qK92ng5HqN9omIu3U2zdk1ldqXNRTc="
+}
+
+[2023-06-11 17:17:21.500] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method request is: 
+{
+  "Access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIyZDA1OTU5ZS02OTFmLTQ2OGQtOWE4Zi1jZmQ4Mjk1ZGFjZWMiLCJpYXQiOiI2LzExLzIwMjMgMToxNDowNCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDg5MzY0LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.V-cPcsQm4QFPqgyybhguA8AIVJDxxDc5qBRgw2oatxI",
+  "Refresh_Token": "cL+mLBh0Lm3y9qK92ng5HqN9omIu3U2zdk1ldqXNRTc="
+}
+
+[2023-06-11 17:30:16.696] [Information] () <> Application is starting
+[2023-06-11 17:30:16.837] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-06-11 17:31:00.661] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 17:31:00.729] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 17:31:00.764] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 17:31:04.277] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJhMzIxOTkyNy01YjgxLTRiODQtODdlZS1iZjM3NTUxYmZiYzAiLCJpYXQiOiI2LzExLzIwMjMgMTozMTowMyBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkwMzgzLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.laDCDgnzbRCfGhv3D7XRQRP7GdQRXb2pIx6r1yFsVEM",
+    "refresh_token": "MDGTyNHWV9obvFkEgk+LWsednMHWD3rtI6U20Plb/5k=",
+    "expires_in": "2023-06-11T17:33:03.8084773+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 17:31:04.277] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJhMzIxOTkyNy01YjgxLTRiODQtODdlZS1iZjM3NTUxYmZiYzAiLCJpYXQiOiI2LzExLzIwMjMgMTozMTowMyBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkwMzgzLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.laDCDgnzbRCfGhv3D7XRQRP7GdQRXb2pIx6r1yFsVEM",
+    "refresh_token": "MDGTyNHWV9obvFkEgk+LWsednMHWD3rtI6U20Plb/5k=",
+    "expires_in": "2023-06-11T17:33:03.8084773+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 17:31:04.336] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 7145.8357 ms
+[2023-06-11 17:33:43.819] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method started.
+
+[2023-06-11 17:33:44.383] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method request is: 
+{
+  "Access_Token": null,
+  "Refresh_Token": null
+}
+
+[2023-06-11 17:33:47.222] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method request is: 
+{
+  "Access_Token": null,
+  "Refresh_Token": null
+}
+
+[2023-06-11 17:34:21.322] [Error] () <SB.Security.Service.SecurityLogService> Exception is: 			IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')
+Response is: 
+{
+  "Success": false,
+  "Message": "IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')",
+  "MessageType": 3,
+  "ResponseCode": 500,
+  "Result": null
+}
+
+[2023-06-11 17:34:21.332] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/refreshtoken" responded 200 in 40095.5714 ms
+[2023-06-11 17:34:41.396] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/revoke" responded 400 in 496.9775 ms
+[2023-06-11 17:35:17.540] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 17:35:17.540] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 17:35:17.541] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 17:35:17.693] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIxYTg2YzZmZi02MzRhLTRmMTUtOGQ0ZC05NzUwODdiOTI1ZDQiLCJpYXQiOiI2LzExLzIwMjMgMTozNToxNyBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkwNjM3LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.O1LRmfXtwCpBhcvuYsMCspsDOT4Sh586O10SlFhqeB0",
+    "refresh_token": "PkdHHNULco/tEtfAB/3FqqA4q8d+D/vLYpseTRcIXBA=",
+    "expires_in": "2023-06-11T17:37:17.6815699+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 17:35:17.694] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIxYTg2YzZmZi02MzRhLTRmMTUtOGQ0ZC05NzUwODdiOTI1ZDQiLCJpYXQiOiI2LzExLzIwMjMgMTozNToxNyBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkwNjM3LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.O1LRmfXtwCpBhcvuYsMCspsDOT4Sh586O10SlFhqeB0",
+    "refresh_token": "PkdHHNULco/tEtfAB/3FqqA4q8d+D/vLYpseTRcIXBA=",
+    "expires_in": "2023-06-11T17:37:17.6815699+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 17:35:17.695] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 1757.2318 ms
+[2023-06-11 17:39:30.031] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method started.
+
+[2023-06-11 17:39:30.920] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method request is: 
+{
+  "Access_Token": null,
+  "Refresh_Token": null
+}
+
+[2023-06-11 17:39:35.493] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method started.
+
+[2023-06-11 17:39:35.495] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method request is: 
+{
+  "Access_Token": null,
+  "Refresh_Token": null
+}
+
+[2023-06-11 17:39:37.454] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method request is: 
+{
+  "Access_Token": null,
+  "Refresh_Token": null
+}
+
+[2023-06-11 17:39:37.458] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method request is: 
+{
+  "Access_Token": null,
+  "Refresh_Token": null
+}
+
+[2023-06-11 17:39:37.660] [Error] () <SB.Security.Service.SecurityLogService> Exception is: 			IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')
+Response is: 
+{
+  "Success": false,
+  "Message": "IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')",
+  "MessageType": 3,
+  "ResponseCode": 500,
+  "Result": null
+}
+
+[2023-06-11 17:39:37.660] [Error] () <SB.Security.Service.SecurityLogService> Exception is: 			IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')
+Response is: 
+{
+  "Success": false,
+  "Message": "IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')",
+  "MessageType": 3,
+  "ResponseCode": 500,
+  "Result": null
+}
+
+[2023-06-11 17:39:37.660] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/refreshtoken" responded 200 in 92000.2610 ms
+[2023-06-11 17:39:37.660] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/refreshtoken" responded 200 in 6740.8705 ms
+[2023-06-11 17:39:52.088] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/revoke" responded 400 in 3.0076 ms
+[2023-06-11 17:39:56.379] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/revoke" responded 400 in 1.4792 ms
+[2023-06-11 17:41:01.741] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method started.
+
+[2023-06-11 17:41:01.741] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method request is: 
+{
+  "Access_Token": null,
+  "Refresh_Token": null
+}
+
+[2023-06-11 17:41:02.630] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method request is: 
+{
+  "Access_Token": null,
+  "Refresh_Token": null
+}
+
+[2023-06-11 17:41:03.041] [Error] () <SB.Security.Service.SecurityLogService> Exception is: 			IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')
+Response is: 
+{
+  "Success": false,
+  "Message": "IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')",
+  "MessageType": 3,
+  "ResponseCode": 500,
+  "Result": null
+}
+
+[2023-06-11 17:41:03.062] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/refreshtoken" responded 200 in 22719.7064 ms
+[2023-06-11 17:41:16.496] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/revoke" responded 400 in 0.7967 ms
+[2023-06-11 17:41:30.067] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 17:41:30.067] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 17:41:30.067] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 17:41:30.255] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI0MmI5MDAzMi1iNWJlLTQ3MzYtYTRjMi0zN2NlYWY0NDdhOWQiLCJpYXQiOiI2LzExLzIwMjMgMTo0MTozMCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkxMDEwLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.wzMKrUGmAxsED2B4GTCokxUUR3E3qmOd1Zlo_-9G1R8",
+    "refresh_token": "XHgbDQNl5vvv8Hz/qMXlpopOnw6GzlpqhhRS4xMUshY=",
+    "expires_in": "2023-06-11T17:43:30.2489935+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 17:41:30.255] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI0MmI5MDAzMi1iNWJlLTQ3MzYtYTRjMi0zN2NlYWY0NDdhOWQiLCJpYXQiOiI2LzExLzIwMjMgMTo0MTozMCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkxMDEwLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.wzMKrUGmAxsED2B4GTCokxUUR3E3qmOd1Zlo_-9G1R8",
+    "refresh_token": "XHgbDQNl5vvv8Hz/qMXlpopOnw6GzlpqhhRS4xMUshY=",
+    "expires_in": "2023-06-11T17:43:30.2489935+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 17:41:30.256] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 1639.6353 ms
+[2023-06-11 17:44:02.312] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method started.
+
+[2023-06-11 17:44:02.939] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method request is: 
+{
+  "Access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI0MmI5MDAzMi1iNWJlLTQ3MzYtYTRjMi0zN2NlYWY0NDdhOWQiLCJpYXQiOiI2LzExLzIwMjMgMTo0MTozMCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkxMDEwLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.wzMKrUGmAxsED2B4GTCokxUUR3E3qmOd1Zlo_-9G1R8",
+  "Refresh_Token": "XHgbDQNl5vvv8Hz/qMXlpopOnw6GzlpqhhRS4xMUshY="
+}
+
+[2023-06-11 17:44:11.790] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method request is: 
+{
+  "Access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI0MmI5MDAzMi1iNWJlLTQ3MzYtYTRjMi0zN2NlYWY0NDdhOWQiLCJpYXQiOiI2LzExLzIwMjMgMTo0MTozMCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkxMDEwLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.wzMKrUGmAxsED2B4GTCokxUUR3E3qmOd1Zlo_-9G1R8",
+  "Refresh_Token": "XHgbDQNl5vvv8Hz/qMXlpopOnw6GzlpqhhRS4xMUshY="
+}
+
+[2023-06-11 17:45:50.274] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Refreshing token success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJjOGIwMzliYy0zNTE3LTRkNmQtOWQwNC1kOWI3ZjBiOGMyYTEiLCJpYXQiOiI2LzExLzIwMjMgMTo0NDo1MyBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkxMjE3LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.1rOMdS5oOOo7L6RzrIM-Uc2z8emY8ZZuQ-UpGmVZcLI",
+    "refresh_token": "YruWzf2p42fWRyfh82e8W6/Urj/QSBf2i/QB4bKcW5I=",
+    "expires_in": "2023-06-11T17:46:57.0757634+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 17:45:58.540] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method response is: 
+{
+  "Success": true,
+  "Message": "Refreshing token success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJjOGIwMzliYy0zNTE3LTRkNmQtOWQwNC1kOWI3ZjBiOGMyYTEiLCJpYXQiOiI2LzExLzIwMjMgMTo0NDo1MyBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkxMjE3LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.1rOMdS5oOOo7L6RzrIM-Uc2z8emY8ZZuQ-UpGmVZcLI",
+    "refresh_token": "YruWzf2p42fWRyfh82e8W6/Urj/QSBf2i/QB4bKcW5I=",
+    "expires_in": "2023-06-11T17:46:57.0757634+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 17:45:58.545] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/refreshtoken" responded 200 in 122089.9771 ms
+[2023-06-11 17:54:36.068] [Information] () <> Application is starting
+[2023-06-11 17:54:36.215] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-06-11 17:55:25.773] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method started.
+
+[2023-06-11 17:55:25.817] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method request is: 
+{
+  "Access_Token": null,
+  "Refresh_Token": null
+}
+
+[2023-06-11 17:55:26.840] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method request is: 
+{
+  "Access_Token": null,
+  "Refresh_Token": null
+}
+
+[2023-06-11 17:55:26.964] [Error] () <SB.Security.Service.SecurityLogService> Exception is: 			IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')
+Response is: 
+{
+  "Success": false,
+  "Message": "IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')",
+  "MessageType": 3,
+  "ResponseCode": 500,
+  "Result": null
+}
+
+[2023-06-11 17:55:27.024] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/refreshtoken" responded 200 in 4772.3978 ms
+[2023-06-11 17:55:27.178] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/revoke" responded 400 in 71.7398 ms
+[2023-06-11 17:55:58.796] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 17:55:58.800] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 17:55:58.841] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 17:56:04.013] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI0OTZhZGRjNC0xZGQ1LTRlODktYWY5MS00ODc0NDllOTZiOWQiLCJpYXQiOiI2LzExLzIwMjMgMTo1NjowMyBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkxODgzLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.jhITCpMp_yUOahY861WhZ_iM4-UIgJbu1_vWUxoBDl4",
+    "refresh_token": "Bo0nJ/OJYP6nXsTKYTImadV2lBiMoPeiR4aP8kcssVQ=",
+    "expires_in": "2023-06-11T17:58:03.748232+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 17:56:04.013] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI0OTZhZGRjNC0xZGQ1LTRlODktYWY5MS00ODc0NDllOTZiOWQiLCJpYXQiOiI2LzExLzIwMjMgMTo1NjowMyBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkxODgzLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.jhITCpMp_yUOahY861WhZ_iM4-UIgJbu1_vWUxoBDl4",
+    "refresh_token": "Bo0nJ/OJYP6nXsTKYTImadV2lBiMoPeiR4aP8kcssVQ=",
+    "expires_in": "2023-06-11T17:58:03.748232+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 17:56:04.041] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 6711.6647 ms
+[2023-06-11 17:58:37.173] [Information] () <> Application is starting
+[2023-06-11 17:58:37.262] [Information] () <> 
+**********************************************************************
+**                      SB Services                                **
+**                    [Version 1.0.0]                               **
+**  ©2022-2023 Health Care Solutions. All rights reserved           **
+**********************************************************************
+
+[2023-06-11 18:01:31.861] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 18:01:31.990] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 18:01:32.036] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 18:01:39.614] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJhZmFlZjc0MC1jMDQ2LTQ3MTEtYWM3OS1kYjY2YjllOWI0Y2UiLCJpYXQiOiI2LzExLzIwMjMgMjowMTozOSBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkyMjE5LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.CS_f1U4Cg9rFOgxbkYo6k7Z4nvIOUImDtZ2FCo9EQb0",
+    "refresh_token": "dyaZUCgj+flfJkM6wsDlHzes0oxn5EOXXARNb1ZjA6g=",
+    "expires_in": "2023-06-11T18:03:39.167703+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 18:01:39.614] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJhZmFlZjc0MC1jMDQ2LTQ3MTEtYWM3OS1kYjY2YjllOWI0Y2UiLCJpYXQiOiI2LzExLzIwMjMgMjowMTozOSBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkyMjE5LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.CS_f1U4Cg9rFOgxbkYo6k7Z4nvIOUImDtZ2FCo9EQb0",
+    "refresh_token": "dyaZUCgj+flfJkM6wsDlHzes0oxn5EOXXARNb1ZjA6g=",
+    "expires_in": "2023-06-11T18:03:39.167703+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 18:01:39.668] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 10981.3286 ms
+[2023-06-11 18:43:40.693] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method started.
+
+[2023-06-11 18:43:41.327] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method request is: 
+{
+  "Access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJhZmFlZjc0MC1jMDQ2LTQ3MTEtYWM3OS1kYjY2YjllOWI0Y2UiLCJpYXQiOiI2LzExLzIwMjMgMjowMTozOSBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkyMjE5LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.CS_f1U4Cg9rFOgxbkYo6k7Z4nvIOUImDtZ2FCo9EQb0",
+  "Refresh_Token": "dyaZUCgj+flfJkM6wsDlHzes0oxn5EOXXARNb1ZjA6g="
+}
+
+[2023-06-11 18:43:47.851] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method request is: 
+{
+  "Access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJhZmFlZjc0MC1jMDQ2LTQ3MTEtYWM3OS1kYjY2YjllOWI0Y2UiLCJpYXQiOiI2LzExLzIwMjMgMjowMTozOSBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDkyMjE5LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.CS_f1U4Cg9rFOgxbkYo6k7Z4nvIOUImDtZ2FCo9EQb0",
+  "Refresh_Token": "dyaZUCgj+flfJkM6wsDlHzes0oxn5EOXXARNb1ZjA6g="
+}
+
+[2023-06-11 18:44:06.905] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Refreshing token success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIzNWRhYzlhZi01MDI0LTRmZmMtODA0Zi1jMGYyNDc0YjQ2MzciLCJpYXQiOiI2LzExLzIwMjMgMjo0Mzo1NSBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk0NzU2LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.BKTDH0742HZ_4YUOg1leSqhTarQ1VTHmDpUENlxVrOo",
+    "refresh_token": "9Ysq/IbwjtqtvVm1A33SzQeIwdo8bPP30gVSReBogrU=",
+    "expires_in": "2023-06-11T18:45:56.6475064+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 18:44:06.905] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method response is: 
+{
+  "Success": true,
+  "Message": "Refreshing token success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIzNWRhYzlhZi01MDI0LTRmZmMtODA0Zi1jMGYyNDc0YjQ2MzciLCJpYXQiOiI2LzExLzIwMjMgMjo0Mzo1NSBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk0NzU2LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.BKTDH0742HZ_4YUOg1leSqhTarQ1VTHmDpUENlxVrOo",
+    "refresh_token": "9Ysq/IbwjtqtvVm1A33SzQeIwdo8bPP30gVSReBogrU=",
+    "expires_in": "2023-06-11T18:45:56.6475064+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 18:44:06.909] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/refreshtoken" responded 200 in 30849.8288 ms
+[2023-06-11 18:46:59.130] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 18:46:59.131] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 18:46:59.131] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 18:47:00.943] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIyYWNiZDY5Yi01YmFlLTRkNjAtODllYi02YmFlOGY5N2Q3NTciLCJpYXQiOiI2LzExLzIwMjMgMjo0NzowMCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk0OTQwLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.aTMx6T7qoWj2at-DC2BTThE0Byuxs9g-guyNbQPc0YQ",
+    "refresh_token": "TD5RIu3WEa5WwyLH8n8ggO+Y9lwto641zRAlj0FamX8=",
+    "expires_in": "2023-06-11T18:49:00.9398133+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 18:47:00.944] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIyYWNiZDY5Yi01YmFlLTRkNjAtODllYi02YmFlOGY5N2Q3NTciLCJpYXQiOiI2LzExLzIwMjMgMjo0NzowMCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk0OTQwLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.aTMx6T7qoWj2at-DC2BTThE0Byuxs9g-guyNbQPc0YQ",
+    "refresh_token": "TD5RIu3WEa5WwyLH8n8ggO+Y9lwto641zRAlj0FamX8=",
+    "expires_in": "2023-06-11T18:49:00.9398133+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 18:47:00.945] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 3283.6369 ms
+[2023-06-11 19:03:59.403] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 19:03:59.403] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 19:03:59.404] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 19:04:01.237] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIwYjA0NjBlZS1lMGI2LTQ1OTctYmFhYy02YjdlMTk4ODMzNWYiLCJpYXQiOiI2LzExLzIwMjMgMzowNDowMSBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk1OTYxLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.Jh3bJ-kMQiXxgxoKWbg4g1Jufo6bUlbJsbaynMAzJ5Y",
+    "refresh_token": "YOlK1wTTIyCd2wosKFv+boGmC9PUqIe5DzQqP8lT4Cc=",
+    "expires_in": "2023-06-11T19:06:01.0715969+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:04:01.238] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIwYjA0NjBlZS1lMGI2LTQ1OTctYmFhYy02YjdlMTk4ODMzNWYiLCJpYXQiOiI2LzExLzIwMjMgMzowNDowMSBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk1OTYxLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.Jh3bJ-kMQiXxgxoKWbg4g1Jufo6bUlbJsbaynMAzJ5Y",
+    "refresh_token": "YOlK1wTTIyCd2wosKFv+boGmC9PUqIe5DzQqP8lT4Cc=",
+    "expires_in": "2023-06-11T19:06:01.0715969+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:04:01.239] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 3762.2136 ms
+[2023-06-11 19:08:16.995] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method started.
+
+[2023-06-11 19:08:16.995] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method request is: 
+{
+  "Access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIwYjA0NjBlZS1lMGI2LTQ1OTctYmFhYy02YjdlMTk4ODMzNWYiLCJpYXQiOiI2LzExLzIwMjMgMzowNDowMSBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk1OTYxLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.Jh3bJ-kMQiXxgxoKWbg4g1Jufo6bUlbJsbaynMAzJ5Y",
+  "Refresh_Token": "YOlK1wTTIyCd2wosKFv+boGmC9PUqIe5DzQqP8lT4Cc="
+}
+
+[2023-06-11 19:08:19.727] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method request is: 
+{
+  "Access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIwYjA0NjBlZS1lMGI2LTQ1OTctYmFhYy02YjdlMTk4ODMzNWYiLCJpYXQiOiI2LzExLzIwMjMgMzowNDowMSBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk1OTYxLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.Jh3bJ-kMQiXxgxoKWbg4g1Jufo6bUlbJsbaynMAzJ5Y",
+  "Refresh_Token": "YOlK1wTTIyCd2wosKFv+boGmC9PUqIe5DzQqP8lT4Cc="
+}
+
+[2023-06-11 19:08:20.578] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 19:08:20.579] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 19:08:20.579] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 19:08:21.583] [Error] () <SB.Security.Service.SecurityLogService> Invalid client request
+[2023-06-11 19:08:21.584] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method response is: 
+{
+  "Success": false,
+  "Message": "Invalid client request",
+  "MessageType": 3,
+  "ResponseCode": 400,
+  "Result": null
+}
+
+[2023-06-11 19:08:21.585] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/refreshtoken" responded 200 in 65617.6456 ms
+[2023-06-11 19:08:22.680] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIxZjA5NmM2Yi0xNjE3LTRmZGItYWJkZi1iNmY5ODZmNDE3MDIiLCJpYXQiOiI2LzExLzIwMjMgMzowODoyMiBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk2MjIyLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.adMO2yNwI2StT1IhsTapXfZ_wDysRzw8GIeUJz7pZr8",
+    "refresh_token": "YAU+sr0ekXGmy1cTjLnx5ge3TC9I13xsPkZH+aK4ZWI=",
+    "expires_in": "2023-06-11T19:10:22.6772157+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:08:22.680] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIxZjA5NmM2Yi0xNjE3LTRmZGItYWJkZi1iNmY5ODZmNDE3MDIiLCJpYXQiOiI2LzExLzIwMjMgMzowODoyMiBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk2MjIyLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.adMO2yNwI2StT1IhsTapXfZ_wDysRzw8GIeUJz7pZr8",
+    "refresh_token": "YAU+sr0ekXGmy1cTjLnx5ge3TC9I13xsPkZH+aK4ZWI=",
+    "expires_in": "2023-06-11T19:10:22.6772157+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:08:22.681] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 2935.2124 ms
+[2023-06-11 19:09:32.136] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 19:09:32.137] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 19:09:32.137] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 19:09:33.247] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIyZTAwMzNiYi02MWE5LTQyMDctYWQyOC0zMjk5MDYwZTEyM2EiLCJpYXQiOiI2LzExLzIwMjMgMzowOTozMyBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk2MjkzLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.7nm8ptP8OwPaJZPFR6iOnMjEKW7udWOl7A9FmmpORoQ",
+    "refresh_token": "xsorvgRaBJPlv7V7PbqhW2UjdtHmpwgPZzrhrFHeMlc=",
+    "expires_in": "2023-06-11T19:11:33.2444282+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:09:33.430] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIyZTAwMzNiYi02MWE5LTQyMDctYWQyOC0zMjk5MDYwZTEyM2EiLCJpYXQiOiI2LzExLzIwMjMgMzowOTozMyBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk2MjkzLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.7nm8ptP8OwPaJZPFR6iOnMjEKW7udWOl7A9FmmpORoQ",
+    "refresh_token": "xsorvgRaBJPlv7V7PbqhW2UjdtHmpwgPZzrhrFHeMlc=",
+    "expires_in": "2023-06-11T19:11:33.2444282+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:09:33.432] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 2775.7210 ms
+[2023-06-11 19:14:21.496] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 19:14:21.497] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 19:14:21.497] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 19:14:22.738] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJiODk2ZGZmMi0wMjE0LTQyMjQtODAxNi0xNTU4NTVmNWEyMDEiLCJpYXQiOiI2LzExLzIwMjMgMzoxNDoyMiBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk2NTgyLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.UWuOxyFQy5sS35q1o_-z3hyq4MgvGxOTflUmlu4a24E",
+    "refresh_token": "W9pA12GktAifR5ehSdPYgVV7wqPgIXpl9PWEEwKX1yU=",
+    "expires_in": "2023-06-11T19:16:22.7360005+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:14:22.739] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJiODk2ZGZmMi0wMjE0LTQyMjQtODAxNi0xNTU4NTVmNWEyMDEiLCJpYXQiOiI2LzExLzIwMjMgMzoxNDoyMiBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk2NTgyLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.UWuOxyFQy5sS35q1o_-z3hyq4MgvGxOTflUmlu4a24E",
+    "refresh_token": "W9pA12GktAifR5ehSdPYgVV7wqPgIXpl9PWEEwKX1yU=",
+    "expires_in": "2023-06-11T19:16:22.7360005+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:14:22.740] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 3543.9935 ms
+[2023-06-11 19:14:48.755] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 19:14:48.755] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 19:14:48.756] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 19:14:50.263] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJiNTVkNzA0Zi1mODk2LTRjYWEtODZlMC03MzA3OGVkYzE3NzYiLCJpYXQiOiI2LzExLzIwMjMgMzoxNDo1MCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk2NjEwLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.yDYQpGc62m71WQbply4HhREJPW2m1A093fZSOwteG80",
+    "refresh_token": "rkVWGuWpKVzQ20hZmUiWKqDB6iZTMZwAPkY/skzcGts=",
+    "expires_in": "2023-06-11T19:16:50.2605204+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:14:50.263] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJiNTVkNzA0Zi1mODk2LTRjYWEtODZlMC03MzA3OGVkYzE3NzYiLCJpYXQiOiI2LzExLzIwMjMgMzoxNDo1MCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk2NjEwLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.yDYQpGc62m71WQbply4HhREJPW2m1A093fZSOwteG80",
+    "refresh_token": "rkVWGuWpKVzQ20hZmUiWKqDB6iZTMZwAPkY/skzcGts=",
+    "expires_in": "2023-06-11T19:16:50.2605204+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:14:50.264] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 3547.2051 ms
+[2023-06-11 19:19:17.801] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method started.
+
+[2023-06-11 19:19:18.530] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method request is: 
+{
+  "Access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJiNTVkNzA0Zi1mODk2LTRjYWEtODZlMC03MzA3OGVkYzE3NzYiLCJpYXQiOiI2LzExLzIwMjMgMzoxNDo1MCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk2NjEwLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.yDYQpGc62m71WQbply4HhREJPW2m1A093fZSOwteG80",
+  "Refresh_Token": "rkVWGuWpKVzQ20hZmUiWKqDB6iZTMZwAPkY/skzcGts="
+}
+
+[2023-06-11 19:19:27.909] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method request is: 
+{
+  "Access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJiNTVkNzA0Zi1mODk2LTRjYWEtODZlMC03MzA3OGVkYzE3NzYiLCJpYXQiOiI2LzExLzIwMjMgMzoxNDo1MCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk2NjEwLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.yDYQpGc62m71WQbply4HhREJPW2m1A093fZSOwteG80",
+  "Refresh_Token": "rkVWGuWpKVzQ20hZmUiWKqDB6iZTMZwAPkY/skzcGts="
+}
+
+[2023-06-11 19:21:43.053] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Refreshing token success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJlNmI3ODk3My03OTNhLTQ5ZmEtYWEyYi1jMTMzNmIwYzdlN2YiLCJpYXQiOiI2LzExLzIwMjMgMzoxOTo1NSBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk2OTMyLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.DIMjTrJZpH6aky7BA5J9HyAIoDi9hJmQcTnjevYjgmI",
+    "refresh_token": "dOzRuANDe0duYdtzyI9ANR7t0hkAA0ociZZgViEo3c0=",
+    "expires_in": "2023-06-11T19:22:12.4848027+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:21:43.056] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method response is: 
+{
+  "Success": true,
+  "Message": "Refreshing token success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiJlNmI3ODk3My03OTNhLTQ5ZmEtYWEyYi1jMTMzNmIwYzdlN2YiLCJpYXQiOiI2LzExLzIwMjMgMzoxOTo1NSBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk2OTMyLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.DIMjTrJZpH6aky7BA5J9HyAIoDi9hJmQcTnjevYjgmI",
+    "refresh_token": "dOzRuANDe0duYdtzyI9ANR7t0hkAA0ociZZgViEo3c0=",
+    "expires_in": "2023-06-11T19:22:12.4848027+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:21:43.057] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/refreshtoken" responded 200 in 153625.9167 ms
+[2023-06-11 19:27:22.698] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 19:27:22.699] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 19:27:22.699] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 19:27:25.143] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI5ZWIyOGM3OC0zZjI2LTRhMWMtYmY1Mi1iNWZhYmFmM2U1YzMiLCJpYXQiOiI2LzExLzIwMjMgMzoyNzoyNCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk3MzY0LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.GdRCwAQYyXkvloyMbZvLBFONdPhLP1cK1dnRX9xHJ-s",
+    "refresh_token": "TFBaJzS+bFyQ4CHUJWdSqq3AagLl8XFtKCLGkW4vBBo=",
+    "expires_in": "2023-06-11T19:29:24.1785099+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:27:25.146] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI5ZWIyOGM3OC0zZjI2LTRhMWMtYmY1Mi1iNWZhYmFmM2U1YzMiLCJpYXQiOiI2LzExLzIwMjMgMzoyNzoyNCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk3MzY0LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.GdRCwAQYyXkvloyMbZvLBFONdPhLP1cK1dnRX9xHJ-s",
+    "refresh_token": "TFBaJzS+bFyQ4CHUJWdSqq3AagLl8XFtKCLGkW4vBBo=",
+    "expires_in": "2023-06-11T19:29:24.1785099+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:27:25.185] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 4228.4282 ms
+[2023-06-11 19:30:05.042] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method started.
+
+[2023-06-11 19:30:05.043] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method request is: 
+{
+  "Access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI5ZWIyOGM3OC0zZjI2LTRhMWMtYmY1Mi1iNWZhYmFmM2U1YzMiLCJpYXQiOiI2LzExLzIwMjMgMzoyNzoyNCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk3MzY0LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.GdRCwAQYyXkvloyMbZvLBFONdPhLP1cK1dnRX9xHJ-s",
+  "Refresh_Token": "TFBaJzS+bFyQ4CHUJWdSqq3AagLl8XFtKCLGkW4vBBo="
+}
+
+[2023-06-11 19:30:09.231] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method request is: 
+{
+  "Access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI5ZWIyOGM3OC0zZjI2LTRhMWMtYmY1Mi1iNWZhYmFmM2U1YzMiLCJpYXQiOiI2LzExLzIwMjMgMzoyNzoyNCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk3MzY0LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.GdRCwAQYyXkvloyMbZvLBFONdPhLP1cK1dnRX9xHJ-s",
+  "Refresh_Token": "TFBaJzS+bFyQ4CHUJWdSqq3AagLl8XFtKCLGkW4vBBo="
+}
+
+[2023-06-11 19:30:11.610] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Refreshing token success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI3YTMyYzQwMi1lZGZhLTRjYjQtOTcwNy02YzMzNzg0MDdmYmQiLCJpYXQiOiI2LzExLzIwMjMgMzozMDoxMCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk3NTMwLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.kmSvmnF2036PzpwCGJcVBR5KNLv5ViF11ygUwacS4o0",
+    "refresh_token": "BSa/pn1HQORt6Ig6mHSB5A/LrQFAuTmG6LIKtiKf5vI=",
+    "expires_in": "2023-06-11T19:32:10.657409+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:30:11.610] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method response is: 
+{
+  "Success": true,
+  "Message": "Refreshing token success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI3YTMyYzQwMi1lZGZhLTRjYjQtOTcwNy02YzMzNzg0MDdmYmQiLCJpYXQiOiI2LzExLzIwMjMgMzozMDoxMCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk3NTMwLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.kmSvmnF2036PzpwCGJcVBR5KNLv5ViF11ygUwacS4o0",
+    "refresh_token": "BSa/pn1HQORt6Ig6mHSB5A/LrQFAuTmG6LIKtiKf5vI=",
+    "expires_in": "2023-06-11T19:32:10.657409+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:30:11.612] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/refreshtoken" responded 200 in 14401.0454 ms
+[2023-06-11 19:54:13.269] [Information] () <SB.Security.Service.SecurityLogService> Login api method started.
+
+[2023-06-11 19:54:13.270] [Information] () <SB.Security.Service.SecurityLogService> Login api method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 19:54:13.270] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method request is: 
+{
+  "UserName": "sree",
+  "Password": "password"
+}
+
+[2023-06-11 19:54:16.120] [Information] () <SB.Security.Service.SecurityLogService> Authenticate (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIwMmMwNmYxNS1hM2M3LTRiYjgtYTA2MC1iMmIyODNiN2I1NDEiLCJpYXQiOiI2LzExLzIwMjMgMzo1NDoxNCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk4OTc0LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.2hGS2Wvg_gjxjLlDMflqM6Jt8EqHFOj6u2Jhxzomoro",
+    "refresh_token": "HoQzWCOb3rkvkARG+B1CK+zg2LiywoCaMJxvuoTJjGw=",
+    "expires_in": "2023-06-11T19:56:14.6695434+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:54:16.121] [Information] () <SB.Security.Service.SecurityLogService> Login api method response is: 
+{
+  "Success": true,
+  "Message": "Authentation success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIwMmMwNmYxNS1hM2M3LTRiYjgtYTA2MC1iMmIyODNiN2I1NDEiLCJpYXQiOiI2LzExLzIwMjMgMzo1NDoxNCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk4OTc0LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.2hGS2Wvg_gjxjLlDMflqM6Jt8EqHFOj6u2Jhxzomoro",
+    "refresh_token": "HoQzWCOb3rkvkARG+B1CK+zg2LiywoCaMJxvuoTJjGw=",
+    "expires_in": "2023-06-11T19:56:14.6695434+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:54:16.122] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/login" responded 200 in 4947.9763 ms
+[2023-06-11 19:56:46.072] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method started.
+
+[2023-06-11 19:56:46.072] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method request is: 
+{
+  "Access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIwMmMwNmYxNS1hM2M3LTRiYjgtYTA2MC1iMmIyODNiN2I1NDEiLCJpYXQiOiI2LzExLzIwMjMgMzo1NDoxNCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk4OTc0LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.2hGS2Wvg_gjxjLlDMflqM6Jt8EqHFOj6u2Jhxzomoro",
+  "Refresh_Token": "HoQzWCOb3rkvkARG+B1CK+zg2LiywoCaMJxvuoTJjGw="
+}
+
+[2023-06-11 19:56:55.174] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method request is: 
+{
+  "Access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIwMmMwNmYxNS1hM2M3LTRiYjgtYTA2MC1iMmIyODNiN2I1NDEiLCJpYXQiOiI2LzExLzIwMjMgMzo1NDoxNCBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk4OTc0LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.2hGS2Wvg_gjxjLlDMflqM6Jt8EqHFOj6u2Jhxzomoro",
+  "Refresh_Token": "HoQzWCOb3rkvkARG+B1CK+zg2LiywoCaMJxvuoTJjGw="
+}
+
+[2023-06-11 19:56:56.976] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method response is: 
+{
+  "Success": true,
+  "Message": "Refreshing token success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI1NzlhZjQ2YS0wYWQ3LTQ1YWUtOGVlNi1mZjA2ZDRjZGVkNDEiLCJpYXQiOiI2LzExLzIwMjMgMzo1Njo1NiBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk5MTM2LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.ZyrpXsyNqrHlWrzleazID2pu7H0P7mpM9fhuBvPjRFk",
+    "refresh_token": "SHnlPeFki0BJGXdqKbeXxWM7PitiyPTi7k6I3y3wGS0=",
+    "expires_in": "2023-06-11T19:58:56.1173419+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:56:56.976] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method response is: 
+{
+  "Success": true,
+  "Message": "Refreshing token success!",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI1NzlhZjQ2YS0wYWQ3LTQ1YWUtOGVlNi1mZjA2ZDRjZGVkNDEiLCJpYXQiOiI2LzExLzIwMjMgMzo1Njo1NiBQTSIsIlVzZXJJZCI6ImQ5N2M2OWUyLTYwZTMtNGU3Yi04YjY3LTRjNWE4Y2E2ZDQ1MCIsIkZ1bGxOYW1lIjoiU3JlZW1vbnRhIEJob3dtaWsiLCJVc2VyTmFtZSI6InNyZWUiLCJFbWFpbCI6InNiaG93bWlrY3NlMDhAZ21haWwuY29tIiwiZXhwIjoxNjg2NDk5MTM2LCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VQb3N0bWFuQ2xpZW50In0.ZyrpXsyNqrHlWrzleazID2pu7H0P7mpM9fhuBvPjRFk",
+    "refresh_token": "SHnlPeFki0BJGXdqKbeXxWM7PitiyPTi7k6I3y3wGS0=",
+    "expires_in": "2023-06-11T19:58:56.1173419+04:00",
+    "token_type": "bearer",
+    "error": "",
+    "error_description": "",
+    "user": {
+      "Id": "d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450",
+      "FullName": "sree",
+      "UserName": "sree",
+      "Email": "sbhowmikcse08@gmail.com",
+      "UserRole": "Admin",
+      "CreatedDate": "2023-06-10T13:24:24.7063384"
+    }
+  }
+}
+
+[2023-06-11 19:56:56.978] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/refreshtoken" responded 200 in 15814.8114 ms
+[2023-06-11 19:58:42.069] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method started.
+
+[2023-06-11 19:58:42.069] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken api method request is: 
+{
+  "Access_Token": null,
+  "Refresh_Token": null
+}
+
+[2023-06-11 19:58:43.768] [Information] () <SB.Security.Service.SecurityLogService> RefreshToken (User service) method request is: 
+{
+  "Access_Token": null,
+  "Refresh_Token": null
+}
+
+[2023-06-11 19:58:43.894] [Error] () <SB.Security.Service.SecurityLogService> Exception is: 			IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')
+Response is: 
+{
+  "Success": false,
+  "Message": "IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')",
+  "MessageType": 3,
+  "ResponseCode": 500,
+  "Result": null
+}
+
+[2023-06-11 19:58:43.895] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/refreshtoken" responded 200 in 18413.8306 ms
+[2023-06-11 19:58:57.318] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/User/revoke" responded 400 in 182.0271 ms

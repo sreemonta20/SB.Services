@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Text.Json.Nodes;
 using SB.Security.Models.Base;
+using System.Security.Claims;
 
 namespace SB.Security.Controllers
 {
@@ -27,11 +28,12 @@ namespace SB.Security.Controllers
         #region Variable declaration & constructor initialization
         private readonly IUserService _userService;
         private readonly ISecurityLogService _securityLogService;
-
-        public UserController(IUserService userService, ISecurityLogService securityLogService)
+        private readonly ITokenService _tokenService;
+        public UserController(IUserService userService, ISecurityLogService securityLogService, ITokenService tokenService)
         {
             _userService = userService;
             _securityLogService = securityLogService;
+            _tokenService = tokenService;
         }
         #endregion
 
@@ -198,6 +200,95 @@ namespace SB.Security.Controllers
             return response;
         }
 
+        /// <summary>
+        /// Refresh token api endpoint, which gets the user information from the expired access token and validates 
+        /// the refresh token against the user. Once the validation is successful, we generate a new access token and 
+        /// refresh token and the new refresh token is saved against the user in DB.
+        /// </summary>
+        /// <param name="refreshTokenReq"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost]
+        [Route(ConstantSupplier.REFRESH_TOKEN_ROUTE_NAME)]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
+        public async Task<object> RefreshToken([FromBody] RefreshTokenRequest refreshTokenReq)
+        {
+            _securityLogService.LogInfo(ConstantSupplier.REFRESHTOKEN_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.REFRESHTOKEN_REQ_MSG, JsonConvert.SerializeObject(refreshTokenReq, Formatting.Indented)));
+            DataResponse response;
+
+            try
+            {
+                if (refreshTokenReq is null)
+                {
+                    response = new() { Success = false, Message = ConstantSupplier.REFRESHTOKEN_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                    _securityLogService.LogError(String.Format(ConstantSupplier.REFRESHTOKEN_FAILED_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+                }
+                else
+                {
+                    response = await _userService.RefreshTokenAsync(refreshTokenReq);
+                }
+            }
+            catch (Exception Ex)
+            {
+                DataResponse exResponse = new()
+                {
+                    Message = Ex.Message,
+                    Success = false,
+                    MessageType = Enum.EnumResponseType.Error,
+                    ResponseCode = (int)HttpStatusCode.InternalServerError,
+                    Result = null
+                };
+                _securityLogService.LogError(String.Format(ConstantSupplier.REFRESHTOKEN_EXCEPTION_MSG, Ex.Message, JsonConvert.SerializeObject(exResponse, Formatting.Indented)));
+                return exResponse;
+            }
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.REFRESHTOKEN_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            return response;
+        }
+
+        /// <summary>
+        /// It invalidates the refresh token.
+        /// </summary>
+        /// <param name="userToken"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost]
+        [Route(ConstantSupplier.REVOKE_ROUTE_NAME)]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
+        public async Task<object> Revoke([FromQuery] string userToken)
+        {
+            _securityLogService.LogInfo(ConstantSupplier.REVOKE_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.REVOKE_STARTED_INFO_MSG, JsonConvert.SerializeObject(userToken, Formatting.Indented)));
+            DataResponse response;
+
+            try
+            {
+                if (userToken is null)
+                {
+                    response = new() { Success = false, Message = ConstantSupplier.NULL_TOKEN, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                    _securityLogService.LogError(String.Format(ConstantSupplier.REFRESHTOKEN_FAILED_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+                }
+                else
+                {
+                    response = await _userService.RevokeAsync(userToken);
+                }
+            }
+            catch (Exception Ex)
+            {
+                response = new()
+                {
+                    Message = Ex.Message,
+                    Success = false,
+                    MessageType = Enum.EnumResponseType.Error,
+                    ResponseCode = (int)HttpStatusCode.InternalServerError,
+                    Result = null
+                };
+                _securityLogService.LogError(String.Format(ConstantSupplier.REVOKE_EXCEPTION_MSG, Ex.Message, JsonConvert.SerializeObject(response, Formatting.Indented)));
+                return response;
+            }
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.REVOKE_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            return response;
+        }
 
         // POST api/User/registerUser
         /// <summary>
@@ -269,13 +360,7 @@ namespace SB.Security.Controllers
             return response;
         }
 
-        [HttpPost]
-        [Route(ConstantSupplier.REFRESH_TOKEN_ROUTE_NAME)]
-        [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<object> RefreshToken([FromBody] RefreshTokenRequest refreshTokenReq)
-        {
-            return null;
-        }
+        
         #endregion
     }
 }

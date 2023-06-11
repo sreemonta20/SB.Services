@@ -15,6 +15,8 @@
         public const string AUTHORIZATION_TOKEN_HEADER_ADD_NAME_01 = "token-expired";
         public const string AUTHORIZATION_TOKEN_HEADER_ADD_VALUE_01 = "true";
         public const string EMAIL_CONFIG_CLASS_KEY = "EmailConfiguration";
+        public const string INVALID_CLIENT_REQUEST = "Invalid client request";
+        public const string SESSION_EXPIRATION_MSG = "Session expired!. Please login again.";
 
         public const string SWAGGER_SB_API_SERVICE_DOC_VERSION_NAME = "v1";
         public const string SWAGGER_SB_API_SERVICE_DOC_TITLE = "SB Services API";
@@ -48,6 +50,27 @@
         public const string SERVICE_LOGIN_FAILED_MSG = "Response is: \n{0}\n";
         public const string SERVICE_LOGIN_RES_MSG = "Authenticate (User service) method response is: \n{0}\n";
         public const string LOGIN_RES_MSG = "Login api method response is: \n{0}\n";
+
+        //api/User/refreshtoken
+        public const string REFRESHTOKEN_STARTED_INFO_MSG = "RefreshToken api method started.\n";
+        public const string REFRESHTOKEN_REQ_MSG = "RefreshToken api method request is: \n{0}\n";
+        public const string REFRESHTOKEN_FAILED_MSG = "Exception is: \t\t\t{0}\nResponse is: \n{1}\n";
+        public const string REFRESHTOKEN_EXCEPTION_MSG = "Exception is: \t\t\t{0}\nResponse is: \n{1}\n";
+        public const string SERVICE_REFRESHTOKEN_REQ_MSG = "RefreshToken (User service) method request is: \n{0}\n";
+        public const string SERVICE_REFRESHTOKEN_FAILED_MSG = "RefreshToken Failed (User service) : api method response is: \n{0}\n";
+        public const string SERVICE_REFRESHTOKEN_RES_MSG = "RefreshToken (User service) method response is: \n{0}\n";
+        public const string REFRESHTOKEN_RES_MSG = "RefreshToken api method response is: \n{0}\n";
+
+        //api/User/revoke
+        public const string REVOKE_STARTED_INFO_MSG = "Revoke api method started.\n";
+        public const string REVOKE_REQ_MSG = "Revoke api method request is: \n{0}\n";
+        public const string REVOKE_FAILED_MSG = "Failed Message is: \t\t\t{0}\nResponse is: \n{1}\n";
+        public const string REVOKE_EXCEPTION_MSG = "Exception is: \t\t\t{0}\nResponse is: \n{1}\n";
+        public const string REVOKE_RES_MSG = "Revoke api method response is: \n{0}\n";
+        public const string SERVICE_REVOKE_REQ_MSG = "Revoke (User service) method request is: \n{0}\n";
+        public const string SERVICE_REVOKE_FAILED_MSG = "Revoke failed (User service) :: api method response is: \n{0}\n";
+        public const string SERVICE_REVOKE_RES_MSG = "Revoke (User service) method response is: \n{0}\n";
+        
 
         //api/User/getUserbyId
         public const string GETBYID_STARTED_INFO_MSG = "GetUserbyId api method started.\n";
@@ -84,6 +107,8 @@
         public const string DELUSER_RES_MSG = "DeleteUser api method response is: \n{0}\n";
         public const string DELUSER_FAILED_RES_MSG = "DeleteUser Failed (User service) : api method response is: \n{0}\n";
 
+        
+
         #endregion
 
 
@@ -102,8 +127,18 @@
         public const string AUTH_SUCCESS = "Authentation success!";
         public const string AUTH_FAILED_ATTEMPT = "Your account was blocked for a {0} minutes, please try again later.";
 
+        public const string REFRESHTOKEN_FAILED = "Refreshing token failed. Please try again later";
+        public const string REFRESHTOKEN_INVALID_CREDENTIAL = "Invalid refresh token credential";
+        public const string REFRESHTOKEN_SUCCESS = "Refreshing token success!";
+        public const string NULL_TOKEN = "Token is null";
+
+        public const string REVOKE_USER_FAILED = "Revoking user failed. Please try again later";
+        public const string REVOKE_USER_SUCCESS = "Revoking user success!";
+        
+
         public const string SAVE_KEY = "Save";
         public const string UPDATE_KEY = "Update";
+
 
         public const string REG_USER_SAVE_FAILED = "Registering user details failed. Please try again later";
         public const string REG_USER_SAVE_SUCCESS = "Registering user details success!";

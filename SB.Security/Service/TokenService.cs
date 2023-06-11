@@ -24,7 +24,7 @@ namespace SB.Security.Service
 
             //DateTime expiryTime = DateTime.UtcNow.AddMinutes(10);
             DateTime expiryTime = DateTime.Now.AddSeconds(Convert.ToDouble(this._configuration["AppSettings:AccessTokenExpireTime"]));
-            var tokenDescriptor = new SecurityTokenDescriptor
+            SecurityTokenDescriptor tokenDescriptor = new()
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
@@ -33,7 +33,7 @@ namespace SB.Security.Service
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                         new Claim("UserId", user.Id.ToString()),
                         new Claim("FullName", user.FullName),
-                        new Claim("UserName", user.UserName),
+                        new Claim(ClaimTypes.Name, user.UserName),
                         new Claim("Email", user.Email)
                 }),
                 Expires = expiryTime,
@@ -100,10 +100,10 @@ namespace SB.Security.Service
                 new Claim("Email", user.Email)
             };
             SymmetricSecurityKey secretKey = new(Encoding.UTF8.GetBytes(_configuration["AppSettings:JWT:Key"]));
-            SigningCredentials signinCredentials = new(secretKey, SecurityAlgorithms.HmacSha256Signature);
+            SigningCredentials signinCredentials = new(secretKey, SecurityAlgorithms.HmacSha256);
             DateTime expiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["AppSettings:Expires"]));
 
-            JwtSecurityToken tokeOptions = new(
+            JwtSecurityToken tokenOptions = new(
                 issuer: _configuration["AppSettings:JWT:Issuer"],
                 audience: _configuration["AppSettings:JWT:Audience"],
                 claims: claims,
@@ -111,7 +111,7 @@ namespace SB.Security.Service
                 signingCredentials: signinCredentials
             );
 
-            string tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+            string tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             if (tokenString != null)
             {
                 return new Token()
@@ -143,6 +143,7 @@ namespace SB.Security.Service
                 ValidateAudience = false, //you might want to validate the audience and issuer depending on your use case
                 ValidateIssuer = false,
                 ValidateIssuerSigningKey = true,
+                ClockSkew = TimeSpan.Zero,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AppSettings:JWT:Key"])),
                 ValidateLifetime = false //here we are saying that we don't care about the token's expiration date
             };
@@ -150,7 +151,7 @@ namespace SB.Security.Service
             JwtSecurityTokenHandler tokenHandler = new();
             ClaimsPrincipal principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
             JwtSecurityToken? jwtSecurityToken = securityToken as JwtSecurityToken;
-            return jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.OrdinalIgnoreCase)
+            return jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase)
                 ? throw new SecurityTokenException("Invalid token")
                 : principal;
         }

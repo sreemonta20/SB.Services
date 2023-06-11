@@ -20,7 +20,7 @@ namespace SB.Security.Persistence
 
         
         public virtual DbSet<UserInfo>? UserInfos { get; set; }
-
+        public DbSet<UserLogin> UserLogin { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

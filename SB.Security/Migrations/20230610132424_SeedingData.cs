@@ -34,10 +34,25 @@ namespace SB.Security.Migrations
                     table.PrimaryKey("PK_UserInfos", x => x.Id);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserLogin",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserLogin", x => x.Id);
+                });
+
             migrationBuilder.InsertData(
                 table: "UserInfos",
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "Email", "FullName", "LastLoginAttemptAt", "LoginFailedAttemptsCount", "Password", "SaltKey", "UpdatedBy", "UpdatedDate", "UserName", "UserRole" },
-                values: new object[] { new Guid("abfc7517-6e44-461a-896e-c0e00cc70ed2"), null, new DateTime(2023, 4, 28, 16, 54, 47, 802, DateTimeKind.Utc).AddTicks(3488), "sbhowmikcse08@gmail.com", "Sreemonta Bhowmik", new DateTime(2023, 4, 28, 20, 54, 47, 802, DateTimeKind.Local).AddTicks(3449), 0, "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa", "$2b$10$dqPNaHnCGjUcvxXHTRXmDe", null, new DateTime(2023, 4, 28, 16, 54, 47, 802, DateTimeKind.Utc).AddTicks(3488), "sree", "Admin" });
+                values: new object[] { new Guid("d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450"), null, new DateTime(2023, 6, 10, 13, 24, 24, 706, DateTimeKind.Utc).AddTicks(3384), "sbhowmikcse08@gmail.com", "Sreemonta Bhowmik", new DateTime(2023, 6, 10, 17, 24, 24, 706, DateTimeKind.Local).AddTicks(3338), 0, "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa", "$2b$10$dqPNaHnCGjUcvxXHTRXmDe", null, new DateTime(2023, 6, 10, 13, 24, 24, 706, DateTimeKind.Utc).AddTicks(3385), "sree", "Admin" });
         }
 
         /// <inheritdoc />
@@ -45,6 +60,9 @@ namespace SB.Security.Migrations
         {
             migrationBuilder.DropTable(
                 name: "UserInfos");
+
+            migrationBuilder.DropTable(
+                name: "UserLogin");
         }
     }
 }

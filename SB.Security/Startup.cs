@@ -175,37 +175,62 @@ namespace SB.Security
 
             #region Configuring authorization middleware into the service
             //If SB hosted on-premise and customer want to use default Identity 
+            //var key = Encoding.ASCII.GetBytes(appSettings.JWT.Key);
+            //services.AddAuthentication(x =>
+            //{
+            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            //}).AddJwtBearer(x =>
+            //{
+            //    x.Events = new JwtBearerEvents
+            //    {
+            //        OnTokenValidated = context =>
+            //        {
+            //            DateTime secretDate = DateTime.UtcNow.AddSeconds(appSettings.AccessTokenExpireTime);
+
+            //            if (DateTime.UtcNow.Subtract(secretDate).TotalSeconds > 0)
+            //            {
+            //                context.Response.Headers.Add(ConstantSupplier.AUTHORIZATION_TOKEN_HEADER_ADD_NAME_01,
+
+            //                    ConstantSupplier.AUTHORIZATION_TOKEN_HEADER_ADD_VALUE_01);
+            //            }
+
+            //            return Task.CompletedTask;
+            //        }
+            //    };
+            //    x.RequireHttpsMetadata = false;
+            //    x.SaveToken = true;
+            //    x.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuer = false,
+            //        ValidateAudience = false,
+            //        ClockSkew = TimeSpan.Zero,
+            //        ValidateIssuerSigningKey = true,
+            //        IssuerSigningKey = new SymmetricSecurityKey(key)
+            //    };
+            //});
+
             var key = Encoding.ASCII.GetBytes(appSettings.JWT.Key);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 
             }).AddJwtBearer(x =>
             {
-                x.Events = new JwtBearerEvents
-                {
-                    OnTokenValidated = context =>
-                    {
-                        DateTime secretDate = DateTime.UtcNow.AddSeconds(appSettings.AccessTokenExpireTime);
-
-                        if (DateTime.UtcNow.Subtract(secretDate).TotalSeconds > 0)
-                        {
-                            context.Response.Headers.Add(ConstantSupplier.AUTHORIZATION_TOKEN_HEADER_ADD_NAME_01,
-
-                                ConstantSupplier.AUTHORIZATION_TOKEN_HEADER_ADD_VALUE_01);
-                        }
-
-                        return Task.CompletedTask;
-                    }
-                };
-                x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
+                x.RequireHttpsMetadata = false;
+                x.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero,
+                    ValidIssuer = appSettings.JWT.Issuer,
+                    ValidAudience = appSettings.JWT.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
             });

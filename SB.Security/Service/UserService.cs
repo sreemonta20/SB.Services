@@ -52,7 +52,7 @@ namespace SB.Security.Service
         /// <param name="emailService"></param>
         /// <param name="options"></param>
         /// <param name="securityLogService"></param>
-        public UserService(IConfiguration config, SBSecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options, 
+        public UserService(IConfiguration config, SBSecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options,
         ISecurityLogService securityLogService, IDatabaseManager dbManager, ITokenService tokenService)
         {
             this._configuration = config;
@@ -237,7 +237,30 @@ namespace SB.Security.Service
                         {
                             tokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
                         }
-                        
+
+
+
+                        UserLogin? userlogin = _context.UserLogin.FirstOrDefault(u => (u.UserName == user.UserName) && (u.Password == user.Password));
+                        if (userlogin is null)
+                        {
+                            UserLogin oUserLogin = new()
+                            {
+                                Id = Guid.NewGuid(),
+                                UserName = request.UserName,
+                                Password = user.Password,
+                                RefreshToken = tokenResult?.refresh_token,
+                                RefreshTokenExpiryTime = DateTime.Now.AddDays(7)
+                        };
+                            await _context.UserLogin.AddAsync(oUserLogin);
+                            await _context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            userlogin.RefreshToken = tokenResult?.refresh_token;
+                            userlogin.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+                            await _context.SaveChangesAsync();
+                        }
+
                         //return new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = TokenResult };
 
                         var oDataResponse1 = new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = tokenResult };
@@ -274,6 +297,70 @@ namespace SB.Security.Service
             _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(oDataResponse4, Formatting.Indented)));
 
             return oDataResponse4;
+        }
+
+        public async Task<DataResponse> RefreshTokenAsync(RefreshTokenRequest refreshTokenReq)
+        {
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REFRESHTOKEN_REQ_MSG, JsonConvert.SerializeObject(refreshTokenReq, Formatting.Indented)));
+            if(refreshTokenReq != null)
+            {
+                string? accessToken = refreshTokenReq?.Access_Token;
+                string? refreshToken = refreshTokenReq?.Refresh_Token;
+
+                ClaimsPrincipal principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
+                //string? username = principal?.Identity?.Name; //this is mapped to the Name claim by default
+                //principal.Claims.ToList()[5].Value
+                string? username = principal?.Claims?.Where(x => x.Type == "UserName")?.FirstOrDefault()?.Value;
+
+                var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.UserName == username);
+
+                Token? tokenResult = _tokenService?.GenerateAccessToken(user);
+                if (tokenResult != null)
+                {
+                    tokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
+                }
+
+                var userLogin = _context.UserLogin.SingleOrDefault(u => u.UserName == username);
+
+                if (userLogin is null || userLogin.RefreshToken != refreshToken || userLogin.RefreshTokenExpiryTime <= DateTime.Now)
+                {
+                    _securityLogService.LogError(String.Format(ConstantSupplier.INVALID_CLIENT_REQUEST, JsonConvert.SerializeObject(refreshTokenReq, Formatting.Indented)));
+                    return new DataResponse { Success = false, Message = ConstantSupplier.INVALID_CLIENT_REQUEST, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                }
+
+                userLogin.RefreshToken = tokenResult?.refresh_token;
+                userLogin.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+                await _context.SaveChangesAsync();
+
+                DataResponse oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.REFRESHTOKEN_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = tokenResult };
+                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REFRESHTOKEN_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+
+                return oDataResponse;
+            }
+            _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+            return new DataResponse { Success = false, Message = ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+        }
+
+        public async Task<DataResponse> RevokeAsync(string userToken)
+        {
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REVOKE_REQ_MSG, JsonConvert.SerializeObject(userToken, Formatting.Indented)));
+            if (userToken != null)
+            {
+                ClaimsPrincipal principal = _tokenService.GetPrincipalFromExpiredToken(userToken);
+                string? username = principal?.Identity?.Name; //this is mapped to the Name claim by default
+                UserLogin? oUserLogin = _context?.UserLogin.SingleOrDefault(u => u.UserName == username);
+                if (oUserLogin == null)
+                {
+                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                    return new DataResponse { Success = false, Message = ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                }
+                oUserLogin.RefreshToken = null;
+                await _context.SaveChangesAsync();
+                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REVOKE_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REVOKE_USER_SUCCESS, Formatting.Indented)));
+                return new DataResponse { Success = true, Message = ConstantSupplier.SESSION_EXPIRATION_MSG, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = ConstantSupplier.REVOKE_USER_SUCCESS };
+            }
+            _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+            return new DataResponse { Success = false, Message = ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
         }
 
         /// <summary>
@@ -399,7 +486,7 @@ namespace SB.Security.Service
                         //};
 
                         //int isUpdate = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, upParameters.ToArray());
-                        
+
                         ////_securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
 
                         //return isUpdate > 0
@@ -498,7 +585,7 @@ namespace SB.Security.Service
 
 
         //}
-        
+
 
         /// <summary>
         /// It update the "LastLoginAttemptAt" and "LoginFailedAttemptsCount" database table columns.

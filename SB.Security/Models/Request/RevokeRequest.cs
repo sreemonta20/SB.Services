@@ -1,8 +1,7 @@
 ﻿namespace SB.Security.Models.Request
 {
-    public class RefreshTokenRequest
+    public class RevokeRequest
     {
-        //public string? UserName { get; set; }
         public string? Access_Token { get; set; }
         public string? Refresh_Token { get; set; }
     }

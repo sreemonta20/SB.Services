@@ -27,6 +27,8 @@ namespace SB.Security.Service
         /// <returns></returns>
         Task<PagingResult<UserInfo>?> GetAllUserAdoAsync(PaginationFilter paramRequest);
         Task<DataResponse> AuthenticateUserAsync(LoginRequest request);
+        Task<DataResponse> RefreshTokenAsync(RefreshTokenRequest refreshTokenReq);
+        Task<DataResponse> RevokeAsync(string userName);
         Task<DataResponse> RegisterUserAsync(UserRegisterRequest request);
         Task<DataResponse> DeleteUserAsync(string id);
     }

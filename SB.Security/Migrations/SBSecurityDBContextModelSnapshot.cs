@@ -72,18 +72,41 @@ namespace SB.Security.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("abfc7517-6e44-461a-896e-c0e00cc70ed2"),
-                            CreatedDate = new DateTime(2023, 4, 28, 16, 54, 47, 802, DateTimeKind.Utc).AddTicks(3488),
+                            Id = new Guid("d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450"),
+                            CreatedDate = new DateTime(2023, 6, 10, 13, 24, 24, 706, DateTimeKind.Utc).AddTicks(3384),
                             Email = "sbhowmikcse08@gmail.com",
                             FullName = "Sreemonta Bhowmik",
-                            LastLoginAttemptAt = new DateTime(2023, 4, 28, 20, 54, 47, 802, DateTimeKind.Local).AddTicks(3449),
+                            LastLoginAttemptAt = new DateTime(2023, 6, 10, 17, 24, 24, 706, DateTimeKind.Local).AddTicks(3338),
                             LoginFailedAttemptsCount = 0,
                             Password = "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa",
                             SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
-                            UpdatedDate = new DateTime(2023, 4, 28, 16, 54, 47, 802, DateTimeKind.Utc).AddTicks(3488),
+                            UpdatedDate = new DateTime(2023, 6, 10, 13, 24, 24, 706, DateTimeKind.Utc).AddTicks(3385),
                             UserName = "sree",
                             UserRole = "Admin"
                         });
+                });
+
+            modelBuilder.Entity("SB.Security.Models.Base.UserLogin", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserLogin");
                 });
 #pragma warning restore 612, 618
         }
