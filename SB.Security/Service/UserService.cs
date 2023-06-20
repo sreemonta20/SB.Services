@@ -250,7 +250,7 @@ namespace SB.Security.Service
                                 Password = user.Password,
                                 RefreshToken = tokenResult?.refresh_token,
                                 RefreshTokenExpiryTime = DateTime.Now.AddDays(7)
-                        };
+                            };
                             await _context.UserLogin.AddAsync(oUserLogin);
                             await _context.SaveChangesAsync();
                         }
@@ -302,7 +302,7 @@ namespace SB.Security.Service
         public async Task<DataResponse> RefreshTokenAsync(RefreshTokenRequest refreshTokenReq)
         {
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REFRESHTOKEN_REQ_MSG, JsonConvert.SerializeObject(refreshTokenReq, Formatting.Indented)));
-            if(refreshTokenReq != null)
+            if (refreshTokenReq != null)
             {
                 string? accessToken = refreshTokenReq?.Access_Token;
                 string? refreshToken = refreshTokenReq?.Refresh_Token;

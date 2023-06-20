@@ -29,5 +29,5 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
-/redirect.api/Logs
+/HCS.Security/Logs
 /.vs
