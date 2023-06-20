@@ -29,5 +29,6 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
-/HCS.Security/Logs
+/HCS.Security/Logs/*
 /.vs
+/SB.Security/Logs
