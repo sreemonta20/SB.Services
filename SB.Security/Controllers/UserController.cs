@@ -211,6 +211,9 @@ namespace SB.Security.Controllers
         [HttpPost]
         [Route(ConstantSupplier.REFRESH_TOKEN_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<object> RefreshToken([FromBody] RefreshTokenRequest refreshTokenReq)
         {
             _securityLogService.LogInfo(ConstantSupplier.REFRESHTOKEN_STARTED_INFO_MSG);
