@@ -6,5 +6,6 @@
     public class ConnectionStrings
     {
         public string? SecurityConectionString { get; set; }
+        public string? SecurityDevConnectionString { get; set; }
     }
 }
