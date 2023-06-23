@@ -34,6 +34,7 @@ namespace SB.Security
         }
         #endregion
 
+
         #region Declaration & initialization
         public IConfiguration Configuration { get; }
         #endregion
