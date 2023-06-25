@@ -5,7 +5,7 @@
     /// </summary>
     public class ConnectionStrings
     {
-        public string? SecurityConectionString { get; set; }
-        public string? SecurityDevConnectionString { get; set; }
+        public string? PrimaryConnectionString { get; set; }
+        public string? SecondaryConnectionString { get; set; }
     }
 }

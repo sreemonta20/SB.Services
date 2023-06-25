@@ -40,7 +40,7 @@ namespace SB.Security.Service
         public IConfiguration _configuration;
         private readonly SBSecurityDBContext _context;
         private readonly IEmailService _emailService;
-        private readonly AppSettings _appSettings;
+        private readonly AppSettings? _appSettings;
         private readonly ISecurityLogService _securityLogService;
         private readonly IDatabaseManager _dbmanager;
         private readonly ITokenService _tokenService;
@@ -55,13 +55,13 @@ namespace SB.Security.Service
         public UserService(IConfiguration config, SBSecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options,
         ISecurityLogService securityLogService, IDatabaseManager dbManager, ITokenService tokenService)
         {
-            this._configuration = config;
-            this._context = context;
-            this._emailService = emailService;
-            this._appSettings = options.Value;
-            this._securityLogService = securityLogService;
-            this._dbmanager = dbManager;
-            this._dbmanager.InitializeDatabase(_appSettings.ConnectionStrings.SecurityConectionString, _appSettings.ConnectionProvider);
+            _configuration = config;
+            _context = context;
+            _emailService = emailService;
+            _appSettings = options.Value;
+            _securityLogService = securityLogService;
+            _dbmanager = dbManager;
+            _dbmanager.InitializeDatabase(_appSettings?.ConnectionStrings?.PrimaryConnectionString, _appSettings?.ConnectionProvider);
             _tokenService = tokenService;
         }
         #endregion
@@ -347,7 +347,7 @@ namespace SB.Security.Service
             if (userToken != null)
             {
                 ClaimsPrincipal principal = _tokenService.GetPrincipalFromExpiredToken(userToken);
-                string? username = principal?.Identity?.Name; //this is mapped to the Name claim by default
+                string? username = principal?.Claims?.Where(x => x.Type == "UserName")?.FirstOrDefault()?.Value; //this is mapped to the Name claim by default
                 UserLogin? oUserLogin = _context?.UserLogin.SingleOrDefault(u => u.UserName == username);
                 if (oUserLogin == null)
                 {

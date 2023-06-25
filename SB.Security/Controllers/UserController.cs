@@ -255,7 +255,8 @@ namespace SB.Security.Controllers
         /// <param name="userToken"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpPost]
+        //[HttpPost]
+        [HttpGet]
         [Route(ConstantSupplier.REVOKE_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
         public async Task<object> Revoke([FromQuery] string userToken)
