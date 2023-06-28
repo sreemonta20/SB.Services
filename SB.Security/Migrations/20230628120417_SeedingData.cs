@@ -52,7 +52,7 @@ namespace SB.Security.Migrations
             migrationBuilder.InsertData(
                 table: "UserInfos",
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "Email", "FullName", "LastLoginAttemptAt", "LoginFailedAttemptsCount", "Password", "SaltKey", "UpdatedBy", "UpdatedDate", "UserName", "UserRole" },
-                values: new object[] { new Guid("d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450"), null, new DateTime(2023, 6, 10, 13, 24, 24, 706, DateTimeKind.Utc).AddTicks(3384), "sbhowmikcse08@gmail.com", "Sreemonta Bhowmik", new DateTime(2023, 6, 10, 17, 24, 24, 706, DateTimeKind.Local).AddTicks(3338), 0, "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa", "$2b$10$dqPNaHnCGjUcvxXHTRXmDe", null, new DateTime(2023, 6, 10, 13, 24, 24, 706, DateTimeKind.Utc).AddTicks(3385), "sree", "Admin" });
+                values: new object[] { new Guid("31d3163a-5867-4236-8314-15e674b03655"), null, new DateTime(2023, 6, 28, 12, 4, 17, 183, DateTimeKind.Utc).AddTicks(9107), "sbhowmikcse08@gmail.com", "Sreemonta Bhowmik", new DateTime(2023, 6, 28, 16, 4, 17, 183, DateTimeKind.Local).AddTicks(9076), 0, "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa", "$2b$10$dqPNaHnCGjUcvxXHTRXmDe", null, new DateTime(2023, 6, 28, 12, 4, 17, 183, DateTimeKind.Utc).AddTicks(9108), "sree", "Admin" });
         }
 
         /// <inheritdoc />

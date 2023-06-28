@@ -12,7 +12,7 @@ using SB.Security.Persistence;
 namespace SB.Security.Migrations
 {
     [DbContext(typeof(SBSecurityDBContext))]
-    [Migration("20230610132424_SeedingData")]
+    [Migration("20230628120417_SeedingData")]
     partial class SeedingData
     {
         /// <inheritdoc />
@@ -75,15 +75,15 @@ namespace SB.Security.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d97c69e2-60e3-4e7b-8b67-4c5a8ca6d450"),
-                            CreatedDate = new DateTime(2023, 6, 10, 13, 24, 24, 706, DateTimeKind.Utc).AddTicks(3384),
+                            Id = new Guid("31d3163a-5867-4236-8314-15e674b03655"),
+                            CreatedDate = new DateTime(2023, 6, 28, 12, 4, 17, 183, DateTimeKind.Utc).AddTicks(9107),
                             Email = "sbhowmikcse08@gmail.com",
                             FullName = "Sreemonta Bhowmik",
-                            LastLoginAttemptAt = new DateTime(2023, 6, 10, 17, 24, 24, 706, DateTimeKind.Local).AddTicks(3338),
+                            LastLoginAttemptAt = new DateTime(2023, 6, 28, 16, 4, 17, 183, DateTimeKind.Local).AddTicks(9076),
                             LoginFailedAttemptsCount = 0,
                             Password = "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa",
                             SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
-                            UpdatedDate = new DateTime(2023, 6, 10, 13, 24, 24, 706, DateTimeKind.Utc).AddTicks(3385),
+                            UpdatedDate = new DateTime(2023, 6, 28, 12, 4, 17, 183, DateTimeKind.Utc).AddTicks(9108),
                             UserName = "sree",
                             UserRole = "Admin"
                         });

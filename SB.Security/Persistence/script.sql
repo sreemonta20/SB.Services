@@ -44,6 +44,25 @@ CREATE TABLE [dbo].[UserInfos](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
+/****** Object:  Table [dbo].[UserLogin]    Script Date: 6/28/2023 4:07:02 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[UserLogin](
+	[Id] [uniqueidentifier] NOT NULL,
+	[UserName] [nvarchar](max) NULL,
+	[Password] [nvarchar](max) NULL,
+	[RefreshToken] [nvarchar](max) NULL,
+	[RefreshTokenExpiryTime] [datetime2](7) NULL,
+ CONSTRAINT [PK_UserLogin] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
 /****** Object:  StoredProcedure [dbo].[SP_GetAllUser]    Script Date: 26/04/2023 12:36:35 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -229,7 +248,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER PROCEDURE [dbo].[SP_SaveUpdateUser]
+CREATE PROCEDURE [dbo].[SP_SaveUpdateUser]
 	@ActionName     VARCHAR(10), --Save Update
     @Id				UNIQUEIDENTIFIER,
     @FullName		NVARCHAR(50),
@@ -281,7 +300,7 @@ GO
 -- Description:	Delete a user
 -- =============================================
 --EXEC SP_DeleteUser '10BB4212-AC20-4AC5-A3F6-B5FFF08338C8'
-ALTER PROCEDURE [dbo].[SP_DeleteUser]
+CREATE PROCEDURE [dbo].[SP_DeleteUser]
 (
    @Id UNIQUEIDENTIFIER
 )

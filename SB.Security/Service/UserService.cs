@@ -61,7 +61,7 @@ namespace SB.Security.Service
             _appSettings = options.Value;
             _securityLogService = securityLogService;
             _dbmanager = dbManager;
-            _dbmanager.InitializeDatabase(_appSettings?.ConnectionStrings?.PrimaryConnectionString, _appSettings?.ConnectionProvider);
+            _dbmanager.InitializeDatabase(_appSettings?.ConnectionStrings?.ProdSqlConnectionString, _appSettings?.ConnectionProvider);
             _tokenService = tokenService;
         }
         #endregion
