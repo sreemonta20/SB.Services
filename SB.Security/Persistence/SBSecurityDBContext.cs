@@ -40,7 +40,8 @@ namespace SB.Security.Persistence
                       CreatedBy = null,
                       CreatedDate = DateTime.UtcNow,
                       UpdatedBy = null,
-                      UpdatedDate = DateTime.UtcNow
+                      UpdatedDate = DateTime.UtcNow,
+                      IsActive = true
                   });
 
 

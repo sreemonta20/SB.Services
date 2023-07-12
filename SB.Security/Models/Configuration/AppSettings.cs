@@ -17,5 +17,6 @@ namespace SB.Security.Models.Configuration
         public EmailConfiguration? EmailConfiguration { get; set; }
         public string? EncryptKey { get; set; }
         public string? EncryptIV { get; set; }
+        public bool IsUserDelate { get; set; } 
     }
 }

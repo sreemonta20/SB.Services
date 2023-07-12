@@ -77,7 +77,7 @@ namespace SB.Security.Service
         public async Task<DataResponse> GetUserByIdAsync(string id)
         {
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
-            UserInfo? user = await _context.UserInfos.FirstOrDefaultAsync(u => u.Id == new Guid(id));
+            UserInfo? user = await _context.UserInfos.FirstOrDefaultAsync(u => u.Id == new Guid(id) && u.IsActive == true);
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(user, Formatting.Indented)));
             return user != null
                 ? new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user }
@@ -196,7 +196,7 @@ namespace SB.Security.Service
             if (request != null)
             {
 
-                var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.UserName == request.UserName);
+                var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.UserName == request.UserName && u.IsActive == true);
                 if (user != null)
                 {
                     if (user.LoginFailedAttemptsCount > Convert.ToInt32(this._configuration["AppSettings:MaxNumberOfFailedAttempts"])
@@ -312,7 +312,7 @@ namespace SB.Security.Service
                 //principal.Claims.ToList()[5].Value
                 string? username = principal?.Claims?.Where(x => x.Type == "UserName")?.FirstOrDefault()?.Value;
 
-                var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.UserName == username);
+                var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.UserName == username && u.IsActive == true);
 
                 Token? tokenResult = _tokenService?.GenerateAccessToken(user);
                 if (tokenResult != null)
@@ -391,7 +391,8 @@ namespace SB.Security.Service
                             Email = request.Email,
                             UserRole = request.UserRole,
                             CreatedBy = Convert.ToString(this._context.UserInfos.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id),
-                            CreatedDate = DateTime.UtcNow
+                            CreatedDate = DateTime.UtcNow,
+                            IsActive = request.IsActive
                         };
 
                         var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.UserName == request.UserName);
@@ -408,9 +409,9 @@ namespace SB.Security.Service
                         request.Id = Convert.ToString(oSaveUserInfo.Id);
                         _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
                         return new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
-                    #endregion
+                        #endregion
 
-                    #region ADO.NET Codeblock of saving data
+                        #region ADO.NET Codeblock of saving data
                     //List<IDbDataParameter> parameters = new()
                     //{
                     //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.SAVE_KEY, DbType.String),
@@ -424,7 +425,8 @@ namespace SB.Security.Service
                     //    _dbmanager.CreateParameter("@CreatedBy", oSaveUserInfo.CreatedBy, DbType.String),
                     //    _dbmanager.CreateParameter("@CreatedDate", oSaveUserInfo.CreatedDate, DbType.DateTime),
                     //    _dbmanager.CreateParameter("@UpdatedBy", DBNull.Value, DbType.String),
-                    //    _dbmanager.CreateParameter("@UpdatedDate", DBNull.Value, DbType.DateTime)
+                    //    _dbmanager.CreateParameter("@UpdatedDate", DBNull.Value, DbType.DateTime),
+                    //    _dbmanager.CreateParameter("@IsActive", oSaveUserInfo.IsActive, DbType.Boolean)
                     //};
 
                     //int isSave = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
@@ -454,6 +456,7 @@ namespace SB.Security.Service
                         dbUserInfo.UserRole = request.UserRole;
                         dbUserInfo.UpdatedBy = Convert.ToString(this._context.UserInfos.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id);
                         dbUserInfo.UpdatedDate = DateTime.UtcNow;
+                        dbUserInfo.IsActive = request.IsActive;
 
                         #region EF Codeblock of updating data
                         var isFullNameModified = this._context.Entry(dbUserInfo).Property("FullName").IsModified;
@@ -462,6 +465,7 @@ namespace SB.Security.Service
                         var isUserRoleModified = this._context.Entry(dbUserInfo).Property("UserRole").IsModified;
                         var isUpdatedByModified = this._context.Entry(dbUserInfo).Property("UpdatedBy").IsModified;
                         var isUpdatedDateModified = this._context.Entry(dbUserInfo).Property("UpdatedDate").IsModified;
+                        var isIsActive = this._context.Entry(dbUserInfo).Property("IsActive").IsModified;
                         this._context.SaveChanges();
 
                         _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
@@ -483,6 +487,7 @@ namespace SB.Security.Service
                         //    _dbmanager.CreateParameter("@CreatedDate", DBNull.Value, DbType.DateTime),
                         //    _dbmanager.CreateParameter("@UpdatedBy", dbUserInfo.UpdatedBy, DbType.String),
                         //    _dbmanager.CreateParameter("@UpdatedDate", dbUserInfo.UpdatedDate, DbType.DateTime)
+                        //    _dbmanager.CreateParameter("@IsActive", oSaveUserInfo.IsActive, DbType.Boolean)
                         //};
 
                         //int isUpdate = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, upParameters.ToArray());
@@ -510,11 +515,23 @@ namespace SB.Security.Service
         {
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_DELUSER_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
             UserInfo? oUserInfo = await this._context.UserInfos.FindAsync(new Guid(id));
-
+ 
             if (oUserInfo != null)
             {
+
                 #region EF Codeblock of deleting data
-                this._context.UserInfos.Remove(oUserInfo);
+                if (_appSettings.IsUserDelate)
+                {
+                    this._context.UserInfos.Remove(oUserInfo);
+                }
+                else
+                {
+                    UserInfo oUserInfoUp = await _context.UserInfos.FindAsync(id);
+                    oUserInfoUp.IsActive = false;
+                    _context.Entry(oUserInfoUp).State = EntityState.Modified;
+                    _context.SaveChanges();
+                }
+                
                 await this._context.SaveChangesAsync();
                 return new DataResponse { Success = true, Message = ConstantSupplier.DELETE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oUserInfo };
                 #endregion
@@ -522,7 +539,8 @@ namespace SB.Security.Service
                 #region ADO.NET Codeblock of deleting data
                 //List<IDbDataParameter> parameters = new()
                 //        {
-                //            _dbmanager.CreateParameter("@Id", oUserInfo.Id, DbType.Guid)
+                //            _dbmanager.CreateParameter("@Id", oUserInfo.Id, DbType.Guid),
+                //            _dbmanager.CreateParameter("@IsDelete", _appSettings.IsUserDelate? true: false, DbType.Boolean)
                 //        };
 
                 //object isDelete = await _dbmanager.DeleteAsync(ConstantSupplier.DELETE_USER_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());

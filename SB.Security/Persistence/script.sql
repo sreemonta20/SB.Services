@@ -38,6 +38,7 @@ CREATE TABLE [dbo].[UserInfos](
 	[CreatedDate] [datetime2](7) NULL,
 	[UpdatedBy] [nvarchar](max) NULL,
 	[UpdatedDate] [datetime2](7) NULL,
+	[IsActive] [bit] NULL,
  CONSTRAINT [PK_UserInfos] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -260,7 +261,8 @@ CREATE PROCEDURE [dbo].[SP_SaveUpdateUser]
 	@CreatedBy		NVARCHAR(MAX),
 	@CreatedDate	DATETIME2(7),
 	@UpdatedBy		NVARCHAR(MAX),
-	@UpdatedDate	DATETIME2(7)
+	@UpdatedDate	DATETIME2(7),
+	@IsActive		BIT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -268,16 +270,16 @@ BEGIN
     IF @ActionName = 'Save' -- Save
     BEGIN
         INSERT INTO [dbo].[UserInfos] ([Id],[FullName],[UserName],[Password],[SaltKey],[Email],[UserRole],[LastLoginAttemptAt]
-           ,[LoginFailedAttemptsCount],[CreatedBy],[CreatedDate],[UpdatedBy],[UpdatedDate])
+           ,[LoginFailedAttemptsCount],[CreatedBy],[CreatedDate],[UpdatedBy],[UpdatedDate],[IsActive])
      VALUES
-           (@Id,@FullName, @UserName,@Password,@SaltKey, @Email, @UserRole,NULL, 0, @CreatedBy,@CreatedDate,NULL, NULL)
+           (@Id,@FullName, @UserName,@Password,@SaltKey, @Email, @UserRole,NULL, 0, @CreatedBy,@CreatedDate,NULL, NULL, @IsActive)
 
         SELECT @@ROWCOUNT AS 'RowsAffected';
     END
     ELSE IF @ActionName = 'Update' -- Update
     BEGIN
         UPDATE UserInfos SET [FullName] = @FullName, [UserName] = @UserName, [Email] = @Email,[UserRole] = @UserRole
-		, [UpdatedBy] = @UpdatedBy,[UpdatedDate] = @UpdatedDate
+		, [UpdatedBy] = @UpdatedBy,[UpdatedDate] = @UpdatedDate, IsActive = @IsActive
         WHERE [Id] = @Id;
 
         SELECT @@ROWCOUNT AS 'RowsAffected';
@@ -302,11 +304,21 @@ GO
 --EXEC SP_DeleteUser '10BB4212-AC20-4AC5-A3F6-B5FFF08338C8'
 CREATE PROCEDURE [dbo].[SP_DeleteUser]
 (
-   @Id UNIQUEIDENTIFIER
+   @Id			UNIQUEIDENTIFIER,
+   @IsDelete	BIT
 )
 AS
 BEGIN
-     DELETE FROM [dbo].[UserInfos]
-     WHERE Id = @Id
-	 SELECT @@ROWCOUNT AS 'RowsAffected';
+	IF (@IsDelete = 1)
+	BEGIN
+		DELETE FROM [dbo].[UserInfos]
+		WHERE Id = @Id
+		SELECT @@ROWCOUNT AS 'RowsAffected';
+	END
+	ELSE
+	BEGIN
+		UPDATE [dbo].[UserInfos] SET IsActive = 0
+		WHERE Id = @Id
+		SELECT @@ROWCOUNT AS 'RowsAffected';
+	END
 END

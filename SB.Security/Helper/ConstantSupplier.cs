@@ -146,7 +146,7 @@
         public const string REG_USER_UPDATE_FAILED = "Updating user details failed. Please try again later";
         public const string REG_USER_UPDATE_SUCCESS = "Updating user details success!";
 
-        public const string EXIST_USER = "User is already exist. Try unique username";
+        public const string EXIST_USER = "User is already exist. Try unique username or activate/update it.";
 
         public const string DELETE_FAILED = "Deletion of user failed!. Please try again later";
         public const string DELETE_SUCCESS = "User deleted successfully";
