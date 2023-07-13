@@ -5,7 +5,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[SecurityLogs](
+CREATE TABLE [dbo].[SecurityLog](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Message] [nvarchar](max) NULL,
 	[MessageTemplate] [nvarchar](max) NULL,
@@ -13,18 +13,18 @@ CREATE TABLE [dbo].[SecurityLogs](
 	[TimeStamp] [datetime] NULL,
 	[Exception] [nvarchar](max) NULL,
 	[Properties] [nvarchar](max) NULL,
- CONSTRAINT [PK_SecurityLogs] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_SecurityLog] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserInfos]    Script Date: 26/04/2023 12:36:35 PM ******/
+/****** Object:  Table [dbo].[UserInfo]    Script Date: 26/04/2023 12:36:35 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[UserInfos](
+CREATE TABLE [dbo].[UserInfo](
 	[Id] [uniqueidentifier] NOT NULL,
 	[FullName] [nvarchar](max) NULL,
 	[UserName] [nvarchar](max) NULL,
@@ -39,7 +39,7 @@ CREATE TABLE [dbo].[UserInfos](
 	[UpdatedBy] [nvarchar](max) NULL,
 	[UpdatedDate] [datetime2](7) NULL,
 	[IsActive] [bit] NULL,
- CONSTRAINT [PK_UserInfos] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_UserInfo] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -59,6 +59,81 @@ CREATE TABLE [dbo].[UserLogin](
 	[RefreshToken] [nvarchar](max) NULL,
 	[RefreshTokenExpiryTime] [datetime2](7) NULL,
  CONSTRAINT [PK_UserLogin] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[UserMenu]    Script Date: 13/07/2023 11:09:53 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[UserMenu](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Name] [nvarchar](max) NULL,
+	[IsHeader] [bit] NULL,
+	[CssClass] [nvarchar](max) NULL,
+	[RouteLink] [nvarchar](max) NULL,
+	[RouteLinkClass] [nvarchar](max) NULL,
+	[Icon] [nvarchar](max) NULL,
+	[Remark] [nvarchar](max) NULL,
+	[ParentId] [uniqueidentifier] NULL,
+	[DropdownIcon] [nvarchar](max) NULL,
+	[SerialNo] [int] NULL,
+	[CreatedBy] [nvarchar](max) NULL,
+	[CreatedDate] [datetime2](7) NULL,
+	[UpdatedBy] [nvarchar](max) NULL,
+	[UpdatedDate] [datetime2](7) NULL,
+	[IsActive] [bit] NULL,
+ CONSTRAINT [PK_UserMenu] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[UserRole]    Script Date: 13/07/2023 11:10:35 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[UserRole](
+	[Id] [uniqueidentifier] NOT NULL,
+	[RoleName] [nvarchar](max) NULL,
+	[Description] [nvarchar](max) NULL,
+	[CreatedBy] [nvarchar](max) NULL,
+	[CreatedDate] [datetime2](7) NULL,
+	[UpdatedBy] [nvarchar](max) NULL,
+	[UpdatedDate] [datetime2](7) NULL,
+	[IsActive] [bit] NULL,
+ CONSTRAINT [PK_UserRole] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[UserRoleMenu]    Script Date: 13/07/2023 11:11:02 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[UserRoleMenu](
+	[Id] [uniqueidentifier] NOT NULL,
+	[RoleId] [uniqueidentifier] NOT NULL,
+	[MenuId] [uniqueidentifier] NOT NULL,
+	[CreatedBy] [nvarchar](max) NULL,
+	[CreatedDate] [datetime2](7) NULL,
+	[UpdatedBy] [nvarchar](max) NULL,
+	[UpdatedDate] [datetime2](7) NULL,
+	[IsActive] [bit] NULL,
+ CONSTRAINT [PK_UserRoleMenu] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -89,12 +164,12 @@ BEGIN
 	--SET @TotalRecords = 0  
 	--IF(@GetTotal = 1)  
 	--BEGIN  
-	--SELECT @TotalRecords = COUNT(Id) FROM UserInfos  
+	--SELECT @TotalRecords = COUNT(Id) FROM UserInfo  
 	--END  
 	SET @PageIndex = (CASE WHEN @PageIndex = 0 THEN 1 ELSE @PageIndex END)
 	SELECT UI.Id, UI.FullName,UI.UserName,NULL AS [Password],UI.SaltKey,UI.Email,UI.UserRole,UI.LastLoginAttemptAt,
 	UI.LoginFailedAttemptsCount,UI.CreatedBy,UI.CreatedDate,UI.UpdatedBy,UI.UpdatedDate
-	FROM UserInfos UI
+	FROM UserInfo UI
 	ORDER BY Id ASC OFFSET (@PageIndex-1)*@PageSize ROWS FETCH NEXT @PageSize ROWS ONLY  
 	RETURN 
 END
@@ -124,7 +199,7 @@ BEGIN
 
 	SET @QUERY='SELECT UI.Id, UI.FullName,UI.UserName,NULL AS [Password],UI.SaltKey,UI.Email,UI.UserRole,UI.LastLoginAttemptAt,
 	UI.LoginFailedAttemptsCount,UI.CreatedBy,UI.CreatedDate,UI.UpdatedBy,UI.UpdatedDate
-	FROM UserInfos UI '
+	FROM UserInfo UI '
 
 	-- SEARCH OPERATION
 	IF(ISNULL(@SearchTerm,'')<>'')
@@ -202,7 +277,7 @@ BEGIN
 			 ,UpdatedBy
              ,UpdatedDate
       INTO #Results
-      FROM UserInfos UI
+      FROM UserInfo UI
       WHERE UI.UserName LIKE '%' + ISNULL(@SearchTerm,'') + '%' OR ISNULL(@SearchTerm,'') = ''
     
       SELECT @TotalRecords = COUNT(*)
@@ -239,7 +314,7 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT UI.Id, UI.FullName,UI.UserName,NULL AS [Password],UI.SaltKey,UI.Email,UI.UserRole,UI.LastLoginAttemptAt,
 	UI.LoginFailedAttemptsCount,UI.CreatedBy,UI.CreatedDate,UI.UpdatedBy,UI.UpdatedDate
-	FROM UserInfos UI 
+	FROM UserInfo UI 
 	WHERE UI.Id = @Id
 END
 
@@ -269,7 +344,7 @@ BEGIN
 
     IF @ActionName = 'Save' -- Save
     BEGIN
-        INSERT INTO [dbo].[UserInfos] ([Id],[FullName],[UserName],[Password],[SaltKey],[Email],[UserRole],[LastLoginAttemptAt]
+        INSERT INTO [dbo].[UserInfo] ([Id],[FullName],[UserName],[Password],[SaltKey],[Email],[UserRole],[LastLoginAttemptAt]
            ,[LoginFailedAttemptsCount],[CreatedBy],[CreatedDate],[UpdatedBy],[UpdatedDate],[IsActive])
      VALUES
            (@Id,@FullName, @UserName,@Password,@SaltKey, @Email, @UserRole,NULL, 0, @CreatedBy,@CreatedDate,NULL, NULL, @IsActive)
@@ -278,7 +353,7 @@ BEGIN
     END
     ELSE IF @ActionName = 'Update' -- Update
     BEGIN
-        UPDATE UserInfos SET [FullName] = @FullName, [UserName] = @UserName, [Email] = @Email,[UserRole] = @UserRole
+        UPDATE UserInfo SET [FullName] = @FullName, [UserName] = @UserName, [Email] = @Email,[UserRole] = @UserRole
 		, [UpdatedBy] = @UpdatedBy,[UpdatedDate] = @UpdatedDate, IsActive = @IsActive
         WHERE [Id] = @Id;
 
@@ -311,13 +386,13 @@ AS
 BEGIN
 	IF (@IsDelete = 1)
 	BEGIN
-		DELETE FROM [dbo].[UserInfos]
+		DELETE FROM [dbo].[UserInfo]
 		WHERE Id = @Id
 		SELECT @@ROWCOUNT AS 'RowsAffected';
 	END
 	ELSE
 	BEGIN
-		UPDATE [dbo].[UserInfos] SET IsActive = 0
+		UPDATE [dbo].[UserInfo] SET IsActive = 0
 		WHERE Id = @Id
 		SELECT @@ROWCOUNT AS 'RowsAffected';
 	END

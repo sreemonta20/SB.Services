@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SB.Security.Persistence;
 
@@ -11,9 +12,11 @@ using SB.Security.Persistence;
 namespace SB.Security.Migrations
 {
     [DbContext(typeof(SBSecurityDBContext))]
-    partial class SBSecurityDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230713190443_SeedingData")]
+    partial class SeedingData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

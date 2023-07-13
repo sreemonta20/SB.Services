@@ -77,7 +77,7 @@ namespace SB.Security.Service
         public async Task<DataResponse> GetUserByIdAsync(string id)
         {
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
-            UserInfo? user = await _context.UserInfos.FirstOrDefaultAsync(u => u.Id == new Guid(id) && u.IsActive == true);
+            UserInfo? user = await _context.UserInfo.FirstOrDefaultAsync(u => u.Id == new Guid(id) && u.IsActive == true);
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(user, Formatting.Indented)));
             return user != null
                 ? new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user }
@@ -118,8 +118,8 @@ namespace SB.Security.Service
         public async Task<PageResult<UserInfo>> GetAllUserAsync(PaginationFilter paramRequest)
         {
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-            int count = await _context.UserInfos.CountAsync();
-            List<UserInfo> Items = await _context.UserInfos.OrderByDescending(x => x.CreatedDate).Skip((paramRequest.PageNumber - 1) * paramRequest.PageSize).Take(paramRequest.PageSize).ToListAsync();
+            int count = await _context.UserInfo.CountAsync();
+            List<UserInfo> Items = await _context.UserInfo.OrderByDescending(x => x.CreatedDate).Skip((paramRequest.PageNumber - 1) * paramRequest.PageSize).Take(paramRequest.PageSize).ToListAsync();
             PageResult<UserInfo> result = new PageResult<UserInfo>
             {
                 Count = count,
@@ -144,7 +144,7 @@ namespace SB.Security.Service
         {
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
             //var source = _context.UserInfos.OrderBy(a=>a.CreatedDate).AsQueryable();
-            IQueryable<UserInfo> source = (from user in _context?.UserInfos?.OrderBy(a => a.CreatedDate) select user).AsQueryable();
+            IQueryable<UserInfo> source = (from user in _context?.UserInfo?.OrderBy(a => a.CreatedDate) select user).AsQueryable();
             PagingResult<UserInfo> result = await Utilities.GetPagingResult(source, paramRequest.PageNumber, paramRequest.PageSize);
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
             return result;
@@ -196,7 +196,7 @@ namespace SB.Security.Service
             if (request != null)
             {
 
-                var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.UserName == request.UserName && u.IsActive == true);
+                var user = await this._context.UserInfo.FirstOrDefaultAsync(u => u.UserName == request.UserName && u.IsActive == true);
                 if (user != null)
                 {
                     if (user.LoginFailedAttemptsCount > Convert.ToInt32(this._configuration["AppSettings:MaxNumberOfFailedAttempts"])
@@ -312,7 +312,7 @@ namespace SB.Security.Service
                 //principal.Claims.ToList()[5].Value
                 string? username = principal?.Claims?.Where(x => x.Type == "UserName")?.FirstOrDefault()?.Value;
 
-                var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.UserName == username && u.IsActive == true);
+                var user = await this._context.UserInfo.FirstOrDefaultAsync(u => u.UserName == username && u.IsActive == true);
 
                 Token? tokenResult = _tokenService?.GenerateAccessToken(user);
                 if (tokenResult != null)
@@ -390,12 +390,12 @@ namespace SB.Security.Service
                             SaltKey = saltKey,
                             Email = request.Email,
                             UserRole = request.UserRole,
-                            CreatedBy = Convert.ToString(this._context.UserInfos.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id),
+                            CreatedBy = Convert.ToString(this._context.UserInfo.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id),
                             CreatedDate = DateTime.UtcNow,
                             IsActive = request.IsActive
                         };
 
-                        var user = await this._context.UserInfos.FirstOrDefaultAsync(u => u.UserName == request.UserName);
+                        var user = await this._context.UserInfo.FirstOrDefaultAsync(u => u.UserName == request.UserName);
                         if (user != null && !String.IsNullOrEmpty(Convert.ToString(user.Id)))
                         {
                             _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(user, Formatting.Indented)));
@@ -403,7 +403,7 @@ namespace SB.Security.Service
                         }
 
                         #region EF Codeblock of saving data
-                        await this._context.UserInfos.AddAsync(oSaveUserInfo);
+                        await this._context.UserInfo.AddAsync(oSaveUserInfo);
                         await this._context.SaveChangesAsync();
 
                         request.Id = Convert.ToString(oSaveUserInfo.Id);
@@ -440,7 +440,7 @@ namespace SB.Security.Service
 
                     case ConstantSupplier.UPDATE_KEY:
 
-                        var oldUser = await this._context.UserInfos.FirstOrDefaultAsync(u => u.UserName == (request.UserName));
+                        var oldUser = await this._context.UserInfo.FirstOrDefaultAsync(u => u.UserName == (request.UserName));
 
                         if ((oldUser != null) && (oldUser.Id != new Guid(request.Id)))
                         {
@@ -449,12 +449,12 @@ namespace SB.Security.Service
                         }
 
 
-                        var dbUserInfo = this._context.UserInfos.FirstOrDefault(s => s.Id.Equals(new Guid(request.Id)));
+                        var dbUserInfo = this._context.UserInfo.FirstOrDefault(s => s.Id.Equals(new Guid(request.Id)));
                         dbUserInfo.FullName = request.FullName;
                         dbUserInfo.UserName = request.UserName;
                         dbUserInfo.Email = request.Email;
                         dbUserInfo.UserRole = request.UserRole;
-                        dbUserInfo.UpdatedBy = Convert.ToString(this._context.UserInfos.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id);
+                        dbUserInfo.UpdatedBy = Convert.ToString(this._context.UserInfo.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id);
                         dbUserInfo.UpdatedDate = DateTime.UtcNow;
                         dbUserInfo.IsActive = request.IsActive;
 
@@ -514,7 +514,7 @@ namespace SB.Security.Service
         public async Task<DataResponse> DeleteUserAsync(string id)
         {
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_DELUSER_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
-            UserInfo? oUserInfo = await this._context.UserInfos.FindAsync(new Guid(id));
+            UserInfo? oUserInfo = await this._context.UserInfo.FindAsync(new Guid(id));
  
             if (oUserInfo != null)
             {
@@ -522,11 +522,11 @@ namespace SB.Security.Service
                 #region EF Codeblock of deleting data
                 if (_appSettings.IsUserDelate)
                 {
-                    this._context.UserInfos.Remove(oUserInfo);
+                    this._context.UserInfo.Remove(oUserInfo);
                 }
                 else
                 {
-                    UserInfo oUserInfoUp = await _context.UserInfos.FindAsync(id);
+                    UserInfo oUserInfoUp = await _context.UserInfo.FindAsync(id);
                     oUserInfoUp.IsActive = false;
                     _context.Entry(oUserInfoUp).State = EntityState.Modified;
                     _context.SaveChanges();
@@ -612,7 +612,7 @@ namespace SB.Security.Service
         /// <returns></returns>
         private async Task TrackAndUpdateLoginAttempts(UserInfo? user)
         {
-            var dbUserInfo = await this._context.UserInfos.FirstOrDefaultAsync(u => u.Id == user.Id);
+            var dbUserInfo = await this._context.UserInfo.FirstOrDefaultAsync(u => u.Id == user.Id);
             dbUserInfo.LastLoginAttemptAt = user.LastLoginAttemptAt;
             dbUserInfo.LoginFailedAttemptsCount = user.LoginFailedAttemptsCount;
             var isLastLoginAttemptAtModified = this._context.Entry(dbUserInfo).Property("LastLoginAttemptAt").IsModified;
