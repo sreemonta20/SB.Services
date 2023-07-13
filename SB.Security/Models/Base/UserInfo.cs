@@ -4,6 +4,7 @@ using SB.Security.Helper;
 
 namespace SB.Security.Models.Base
 {
+
     /// <summary>
     /// This is base user class used for getting user, user list, registerng, updating, and deleting the user.
     /// </summary>

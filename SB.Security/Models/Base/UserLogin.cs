@@ -2,6 +2,7 @@
 
 namespace SB.Security.Models.Base
 {
+
     public class UserLogin
     {
         [Key]

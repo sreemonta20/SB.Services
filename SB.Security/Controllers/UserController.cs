@@ -80,6 +80,7 @@ namespace SB.Security.Controllers
             return response;
         }
 
+
         // GET api/User/getAllUsers
         /// <summary>
         /// This method used to get a list users based on the supplied page number and page size.
