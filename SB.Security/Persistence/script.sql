@@ -400,7 +400,7 @@ BEGIN
 END
 
 GO
-/****** Object:  UserDefinedFunction [dbo].[GetChildMenus]    Script Date: 7/14/2023 5:38:39 PM ******/
+/****** Object:  UserDefinedFunction [dbo].[GetChildMenus]    Script Date: 15/07/2023 12:15:02 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -410,7 +410,7 @@ GO
 -- Create date: 14.07.2023
 -- Description: To generate children menu under particular menu
 -- =============================================
-CREATE FUNCTION [dbo].[GetChildMenus](@parentId UNIQUEIDENTIFIER)
+ALTER FUNCTION [dbo].[GetChildMenus](@parentId UNIQUEIDENTIFIER)
 RETURNS NVARCHAR(MAX)
 AS
 BEGIN
@@ -432,7 +432,7 @@ BEGIN
 			,[UpdatedBy]
 			,[UpdatedDate]
 			,[IsActive],
-            dbo.GetChildMenus(UM.Id) AS Children
+            ISNULL(JSON_QUERY(dbo.GetChildMenus(UM.Id), '$'), '[]') AS Children
         FROM
             UserMenu UM
         WHERE
@@ -441,16 +441,25 @@ BEGIN
     )
 END
 GO
+/****** Object:  StoredProcedure [dbo].[GetMenuWithChildrenAsJson]    Script Date: 14/07/2023 11:28:10 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 -- =============================================
 -- Author:		Sreemonta Bhowmik
 -- Create date: 14.07.2023
 -- Description: To generate parent menu.
 -- =============================================
---EXEC GetMenuWithChildrenAsJson
-CREATE PROCEDURE GetMenuWithChildrenAsJson
+--EXEC GetMenuWithChildrenAsJson 'C68023AA-8D1C-47AB-90E2-3AD749F4CB1C'
+--EXEC GetMenuWithChildrenAsJson '1D90437E-D986-435F-8712-2058F70AE704'
+ALTER PROCEDURE [dbo].[GetMenuWithChildrenAsJson]
+@UserId				UNIQUEIDENTIFIER
 AS
 BEGIN
-DECLARE @JsonMenu NVARCHAR(MAX);
+DECLARE @JsonMenu NVARCHAR(MAX),
+		@RoleId UNIQUEIDENTIFIER,
+		@RoleName VARCHAR(20);
  --   SELECT
  --        [Id]
 	--	,[Name]
@@ -475,32 +484,37 @@ DECLARE @JsonMenu NVARCHAR(MAX);
  --       ParentId IS NULL
 	--ORDER BY SerialNo
  --   FOR JSON PATH, ROOT('UserMenu');
-
+	SELECT @RoleName = UserRole FROM UserInfo UI WHERE  UI.Id =  @UserId
+	SELECT @RoleId = UR.Id FROM UserRole UR WHERE  UR.RoleName = @RoleName
+	
 	SELECT @JsonMenu = (
         SELECT
-         [Id]
-		,[Name]
-		,[IsHeader]
-		,[CssClass]
-		,[RouteLink]
-		,[RouteLinkClass]
-		,[Icon]
-		,[Remark]
-		,[ParentId]
-		,[DropdownIcon]
-		,[SerialNo]
-		,[CreatedBy]
-		,[CreatedDate]
-		,[UpdatedBy]
-		,[UpdatedDate]
-		,[IsActive],
-        dbo.GetChildMenus(UM.Id) AS Children
+         UM.[Id]
+		,UM.[Name]
+		,UM.[IsHeader]
+		,UM.[CssClass]
+		,UM.[RouteLink]
+		,UM.[RouteLinkClass]
+		,UM.[Icon]
+		,UM.[Remark]
+		,UM.[ParentId]
+		,UM.[DropdownIcon]
+		,UM.[SerialNo]
+		,UM.[CreatedBy]
+		,UM.[CreatedDate]
+		,UM.[UpdatedBy]
+		,UM.[UpdatedDate]
+		,UM.[IsActive],
+        ISNULL(JSON_QUERY(dbo.GetChildMenus(UM.Id), '$'), '[]') AS Children
     FROM
         UserMenu UM
-    WHERE
-        ParentId IS NULL
+		INNER JOIN UserRoleMenu URM ON URM.MenuId = UM.Id
+		WHERE URM.RoleId = @RoleId AND UM.ParentId IS NULL
+        
 	ORDER BY SerialNo
-        FOR JSON AUTO, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER
+        --FOR JSON AUTO,INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER
+		FOR JSON AUTO,INCLUDE_NULL_VALUES, ROOT('Menu')
+		--FOR JSON PATH,INCLUDE_NULL_VALUES, ROOT('Menu')
     );
 
     SELECT @JsonMenu AS JsonMenu;
