@@ -398,3 +398,110 @@ BEGIN
 		SELECT @@ROWCOUNT AS 'RowsAffected';
 	END
 END
+
+GO
+/****** Object:  UserDefinedFunction [dbo].[GetChildMenus]    Script Date: 7/14/2023 5:38:39 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Sreemonta Bhowmik
+-- Create date: 14.07.2023
+-- Description: To generate children menu under particular menu
+-- =============================================
+CREATE FUNCTION [dbo].[GetChildMenus](@parentId UNIQUEIDENTIFIER)
+RETURNS NVARCHAR(MAX)
+AS
+BEGIN
+    RETURN (
+        SELECT
+			 [Id]
+            ,[Name]
+			,[IsHeader]
+			,[CssClass]
+			,[RouteLink]
+			,[RouteLinkClass]
+			,[Icon]
+			,[Remark]
+			,[ParentId]
+			,[DropdownIcon]
+			,[SerialNo]
+			,[CreatedBy]
+			,[CreatedDate]
+			,[UpdatedBy]
+			,[UpdatedDate]
+			,[IsActive],
+            dbo.GetChildMenus(UM.Id) AS Children
+        FROM
+            UserMenu UM
+        WHERE
+            ParentId = @parentId
+        FOR JSON PATH
+    )
+END
+GO
+-- =============================================
+-- Author:		Sreemonta Bhowmik
+-- Create date: 14.07.2023
+-- Description: To generate parent menu.
+-- =============================================
+--EXEC GetMenuWithChildrenAsJson
+CREATE PROCEDURE GetMenuWithChildrenAsJson
+AS
+BEGIN
+DECLARE @JsonMenu NVARCHAR(MAX);
+ --   SELECT
+ --        [Id]
+	--	,[Name]
+	--	,[IsHeader]
+	--	,[CssClass]
+	--	,[RouteLink]
+	--	,[RouteLinkClass]
+	--	,[Icon]
+	--	,[Remark]
+	--	,[ParentId]
+	--	,[DropdownIcon]
+	--	,[SerialNo]
+	--	,[CreatedBy]
+	--	,[CreatedDate]
+	--	,[UpdatedBy]
+	--	,[UpdatedDate]
+	--	,[IsActive],
+ --       dbo.GetChildMenus(UM.Id) AS Children
+ --   FROM
+ --       UserMenu UM
+ --   WHERE
+ --       ParentId IS NULL
+	--ORDER BY SerialNo
+ --   FOR JSON PATH, ROOT('UserMenu');
+
+	SELECT @JsonMenu = (
+        SELECT
+         [Id]
+		,[Name]
+		,[IsHeader]
+		,[CssClass]
+		,[RouteLink]
+		,[RouteLinkClass]
+		,[Icon]
+		,[Remark]
+		,[ParentId]
+		,[DropdownIcon]
+		,[SerialNo]
+		,[CreatedBy]
+		,[CreatedDate]
+		,[UpdatedBy]
+		,[UpdatedDate]
+		,[IsActive],
+        dbo.GetChildMenus(UM.Id) AS Children
+    FROM
+        UserMenu UM
+    WHERE
+        ParentId IS NULL
+	ORDER BY SerialNo
+        FOR JSON AUTO, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER
+    );
+
+    SELECT @JsonMenu AS JsonMenu;
+END

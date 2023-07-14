@@ -75,16 +75,16 @@ namespace SB.Security.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c68023aa-8d1c-47ab-90e2-3ad749f4cb1c"),
-                            CreatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2141),
+                            Id = new Guid("52bc5ac3-8a09-4605-864d-58ab29a6761b"),
+                            CreatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6470),
                             Email = "sbhowmikcse08@gmail.com",
                             FullName = "Sreemonta Bhowmik",
                             IsActive = true,
-                            LastLoginAttemptAt = new DateTime(2023, 7, 13, 23, 4, 43, 776, DateTimeKind.Local).AddTicks(2099),
+                            LastLoginAttemptAt = new DateTime(2023, 7, 14, 12, 19, 14, 987, DateTimeKind.Local).AddTicks(6265),
                             LoginFailedAttemptsCount = 0,
                             Password = "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa",
                             SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
-                            UpdatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2142),
+                            UpdatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6470),
                             UserName = "sree",
                             UserRole = "Admin"
                         });
@@ -171,8 +171,8 @@ namespace SB.Security.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9228b41c-8db5-4624-9427-be645234759f"),
-                            CreatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2254),
+                            Id = new Guid("dc639f43-be0d-4b00-b664-b8a159ed3d19"),
+                            CreatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6672),
                             CssClass = "nav-header",
                             Icon = "",
                             IsActive = true,
@@ -182,12 +182,12 @@ namespace SB.Security.Migrations
                             RouteLink = "",
                             RouteLinkClass = "",
                             SerialNo = 1,
-                            UpdatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2255)
+                            UpdatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6672)
                         },
                         new
                         {
-                            Id = new Guid("0ba16451-3045-4770-8e05-f894666acaf4"),
-                            CreatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2258),
+                            Id = new Guid("b86a96b9-9a26-4848-8381-a270a1cd2eda"),
+                            CreatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6675),
                             CssClass = "nav-item",
                             Icon = "nav-icon fas fa-tachometer-alt",
                             IsActive = true,
@@ -197,12 +197,12 @@ namespace SB.Security.Migrations
                             RouteLink = "/business/home",
                             RouteLinkClass = "nav-link active",
                             SerialNo = 2,
-                            UpdatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2258)
+                            UpdatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6676)
                         },
                         new
                         {
-                            Id = new Guid("9ee64115-c836-48c6-824a-0420fa6473f8"),
-                            CreatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2260),
+                            Id = new Guid("20e6e353-1d7b-4382-8528-2749dee0d067"),
+                            CreatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6678),
                             CssClass = "nav-header",
                             Icon = "",
                             IsActive = true,
@@ -212,45 +212,45 @@ namespace SB.Security.Migrations
                             RouteLink = "",
                             RouteLinkClass = "",
                             SerialNo = 3,
-                            UpdatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2260)
+                            UpdatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6678)
                         },
                         new
                         {
-                            Id = new Guid("d4e001f6-9dc8-46f2-bfd9-f63ba5f1c1ab"),
-                            CreatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2273),
+                            Id = new Guid("1e5313ef-0224-4dc9-9b69-e5fe31397943"),
+                            CreatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6693),
                             CssClass = "nav-item",
                             DropdownIcon = "fas fa-angle-left right",
                             Icon = "nav-icon fas fa-cog",
                             IsActive = true,
                             IsHeader = false,
                             Name = "Security",
-                            ParentId = new Guid("054da5d9-8034-40d4-995f-9e11a344d764"),
+                            ParentId = new Guid("5352e0cf-e7d7-4449-9ff7-232c09806937"),
                             Remark = "Navigation Item",
                             RouteLink = "",
                             RouteLinkClass = "nav-link active",
                             SerialNo = 4,
-                            UpdatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2273)
+                            UpdatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6694)
                         },
                         new
                         {
-                            Id = new Guid("a2228b17-c6ab-4da0-a071-65a099f03d56"),
-                            CreatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2276),
+                            Id = new Guid("8e6a3c9e-b316-4b87-a37b-a34cef6e0c1d"),
+                            CreatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6696),
                             CssClass = "nav-item",
                             Icon = "far fa-circle nav-icon",
                             IsActive = true,
                             IsHeader = false,
                             Name = "User",
-                            ParentId = new Guid("7630c8a8-0319-4e9f-8020-e2feaf0cde5c"),
+                            ParentId = new Guid("a9b05c8b-84aa-4edf-871a-bff7110a174f"),
                             Remark = "Navigation Item",
                             RouteLink = "/business/security",
                             RouteLinkClass = "nav-link",
                             SerialNo = 5,
-                            UpdatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2276)
+                            UpdatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6697)
                         },
                         new
                         {
-                            Id = new Guid("6f36b193-383f-491e-a443-887a4774b999"),
-                            CreatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2278),
+                            Id = new Guid("243de74f-beb1-4366-9ca8-41e414882570"),
+                            CreatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6698),
                             CssClass = "nav-header",
                             Icon = "",
                             IsActive = true,
@@ -260,12 +260,12 @@ namespace SB.Security.Migrations
                             RouteLink = "",
                             RouteLinkClass = "",
                             SerialNo = 6,
-                            UpdatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2278)
+                            UpdatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6699)
                         },
                         new
                         {
-                            Id = new Guid("fa9b5c11-39e9-43f7-9431-86acb209e552"),
-                            CreatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2280),
+                            Id = new Guid("d58d22e7-bc6b-4823-a81d-41c1869239e9"),
+                            CreatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6701),
                             CssClass = "nav-item",
                             Icon = "nav-icon fas fa-cog",
                             IsActive = true,
@@ -275,7 +275,7 @@ namespace SB.Security.Migrations
                             RouteLink = "/business/appsettings",
                             RouteLinkClass = "nav-link active",
                             SerialNo = 7,
-                            UpdatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2280)
+                            UpdatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6701)
                         });
                 });
 
@@ -313,21 +313,21 @@ namespace SB.Security.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ee4338ad-5e80-40d6-88eb-085cddea22c0"),
-                            CreatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2232),
+                            Id = new Guid("2a6152df-89c5-4b5c-8b88-be3686ab5b8d"),
+                            CreatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6654),
                             Description = "Admin",
                             IsActive = true,
                             RoleName = "Admin",
-                            UpdatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2233)
+                            UpdatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6655)
                         },
                         new
                         {
-                            Id = new Guid("ae992bbb-ecfa-428e-9e7c-760b29ba1311"),
-                            CreatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2235),
+                            Id = new Guid("85008dde-a159-4b81-ab52-00859404109d"),
+                            CreatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6657),
                             Description = "User",
                             IsActive = true,
                             RoleName = "User",
-                            UpdatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2235)
+                            UpdatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6657)
                         });
                 });
 
@@ -365,21 +365,21 @@ namespace SB.Security.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9d437d3e-7bdc-4541-a35f-f9853796a8bb"),
-                            CreatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2338),
+                            Id = new Guid("63ffa85c-bff6-4807-8525-b96404437008"),
+                            CreatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6722),
                             IsActive = true,
-                            MenuId = new Guid("a4241050-178f-45f1-a92d-e3ad54672c09"),
-                            RoleId = new Guid("7d45960e-a4a5-411c-8084-66c477b16379"),
-                            UpdatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2338)
+                            MenuId = new Guid("ad987118-9c71-4a84-9df1-b975314e0cdb"),
+                            RoleId = new Guid("4ba27142-a0c9-4331-bf62-4d21eb9ae4fd"),
+                            UpdatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6723)
                         },
                         new
                         {
-                            Id = new Guid("4f5dc663-fa73-45e5-850d-4a1479f7911b"),
-                            CreatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2344),
+                            Id = new Guid("9ed95872-e35a-4c60-831d-0308705beedd"),
+                            CreatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6727),
                             IsActive = true,
-                            MenuId = new Guid("e99c408a-0c57-4d60-b000-c70d0745156b"),
-                            RoleId = new Guid("10fb98f4-c1d5-4644-9183-b380021fc283"),
-                            UpdatedDate = new DateTime(2023, 7, 13, 19, 4, 43, 776, DateTimeKind.Utc).AddTicks(2344)
+                            MenuId = new Guid("cc6ce2af-e055-4d3e-9df6-b1d045eb89cd"),
+                            RoleId = new Guid("cc270c13-54d3-4653-9327-41cfe2b81a85"),
+                            UpdatedDate = new DateTime(2023, 7, 14, 8, 19, 14, 987, DateTimeKind.Utc).AddTicks(6728)
                         });
                 });
 #pragma warning restore 612, 618
