@@ -28,6 +28,7 @@ using BCryptNet = BCrypt.Net.BCrypt;
 using SB.DataAccessLayer;
 using System.Data;
 using Org.BouncyCastle.Asn1.Ocsp;
+using StackExchange.Redis;
 
 namespace SB.Security.Service
 {
@@ -390,7 +391,9 @@ namespace SB.Security.Service
                             Password = BCryptNet.HashPassword(request.Password, saltKey),
                             SaltKey = saltKey,
                             Email = request.Email,
-                            UserRole = request.UserRole,
+                            //UserRole = request.UserRole,
+                            //UserRole = new Guid(request.UserRole),
+                            RoleId = new Guid(request.RoleId),
                             CreatedBy = Convert.ToString(this._context.UserInfo.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id),
                             CreatedDate = DateTime.UtcNow,
                             IsActive = request.IsActive
@@ -410,9 +413,9 @@ namespace SB.Security.Service
                         request.Id = Convert.ToString(oSaveUserInfo.Id);
                         _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
                         return new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
-                        #endregion
+                    #endregion
 
-                        #region ADO.NET Codeblock of saving data
+                    #region ADO.NET Codeblock of saving data
                     //List<IDbDataParameter> parameters = new()
                     //{
                     //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.SAVE_KEY, DbType.String),
@@ -422,7 +425,7 @@ namespace SB.Security.Service
                     //    _dbmanager.CreateParameter("@Password", oSaveUserInfo.Password, DbType.String),
                     //    _dbmanager.CreateParameter("@SaltKey", oSaveUserInfo.SaltKey, DbType.String),
                     //    _dbmanager.CreateParameter("@Email", oSaveUserInfo.Email, DbType.String),
-                    //    _dbmanager.CreateParameter("@UserRole", oSaveUserInfo.UserRole, DbType.String),
+                    //    _dbmanager.CreateParameter("@RoleId", oSaveUserInfo.RoleId, DbType.Guid),
                     //    _dbmanager.CreateParameter("@CreatedBy", oSaveUserInfo.CreatedBy, DbType.String),
                     //    _dbmanager.CreateParameter("@CreatedDate", oSaveUserInfo.CreatedDate, DbType.DateTime),
                     //    _dbmanager.CreateParameter("@UpdatedBy", DBNull.Value, DbType.String),
@@ -454,7 +457,9 @@ namespace SB.Security.Service
                         dbUserInfo.FullName = request.FullName;
                         dbUserInfo.UserName = request.UserName;
                         dbUserInfo.Email = request.Email;
-                        dbUserInfo.UserRole = request.UserRole;
+                        //dbUserInfo.UserRole = request.UserRole;
+                        //dbUserInfo.UserRole = new Guid(request.UserRole);
+                        dbUserInfo.RoleId = new Guid(request.RoleId);
                         dbUserInfo.UpdatedBy = Convert.ToString(this._context.UserInfo.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id);
                         dbUserInfo.UpdatedDate = DateTime.UtcNow;
                         dbUserInfo.IsActive = request.IsActive;
@@ -463,7 +468,7 @@ namespace SB.Security.Service
                         var isFullNameModified = this._context.Entry(dbUserInfo).Property("FullName").IsModified;
                         var isUserNameModified = this._context.Entry(dbUserInfo).Property("UserName").IsModified;
                         var isEmailModified = this._context.Entry(dbUserInfo).Property("Email").IsModified;
-                        var isUserRoleModified = this._context.Entry(dbUserInfo).Property("UserRole").IsModified;
+                        var isRoleIdModified = this._context.Entry(dbUserInfo).Property("RoleId").IsModified;
                         var isUpdatedByModified = this._context.Entry(dbUserInfo).Property("UpdatedBy").IsModified;
                         var isUpdatedDateModified = this._context.Entry(dbUserInfo).Property("UpdatedDate").IsModified;
                         var isIsActive = this._context.Entry(dbUserInfo).Property("IsActive").IsModified;
@@ -483,7 +488,7 @@ namespace SB.Security.Service
                         //    _dbmanager.CreateParameter("@Password", DBNull.Value, DbType.String),
                         //    _dbmanager.CreateParameter("@SaltKey", DBNull.Value, DbType.String),
                         //    _dbmanager.CreateParameter("@Email", dbUserInfo.Email, DbType.String),
-                        //    _dbmanager.CreateParameter("@UserRole", dbUserInfo.UserRole, DbType.String),
+                        //    _dbmanager.CreateParameter("@RoleId", dbUserInfo.RoleId, DbType.Guid),
                         //    _dbmanager.CreateParameter("@CreatedBy", DBNull.Value, DbType.String),
                         //    _dbmanager.CreateParameter("@CreatedDate", DBNull.Value, DbType.DateTime),
                         //    _dbmanager.CreateParameter("@UpdatedBy", dbUserInfo.UpdatedBy, DbType.String),

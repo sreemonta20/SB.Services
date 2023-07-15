@@ -20,11 +20,13 @@ CREATE TABLE [dbo].[SecurityLog](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[UserInfo]    Script Date: 26/04/2023 12:36:35 PM ******/
+/****** Object:  Table [dbo].[UserInfo]    Script Date: 7/16/2023 1:06:56 AM ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE TABLE [dbo].[UserInfo](
 	[Id] [uniqueidentifier] NOT NULL,
 	[FullName] [nvarchar](max) NULL,
@@ -32,7 +34,7 @@ CREATE TABLE [dbo].[UserInfo](
 	[Password] [nvarchar](max) NULL,
 	[SaltKey] [nvarchar](max) NULL,
 	[Email] [nvarchar](max) NULL,
-	[UserRole] [nvarchar](max) NOT NULL,
+	[RoleId] [uniqueidentifier] NOT NULL,
 	[LastLoginAttemptAt] [datetime2](7) NULL,
 	[LoginFailedAttemptsCount] [int] NOT NULL,
 	[CreatedBy] [nvarchar](max) NULL,
@@ -46,7 +48,16 @@ CREATE TABLE [dbo].[UserInfo](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserLogin]    Script Date: 6/28/2023 4:07:02 PM ******/
+
+ALTER TABLE [dbo].[UserInfo]  WITH CHECK ADD  CONSTRAINT [FK_UserInfo_UserRole_RoleId] FOREIGN KEY([RoleId])
+REFERENCES [dbo].[UserRole] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[UserInfo] CHECK CONSTRAINT [FK_UserInfo_UserRole_RoleId]
+GO
+
+/****** Object:  Table [dbo].[UserLogin]    Script Date: 7/16/2023 1:08:29 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -66,7 +77,7 @@ CREATE TABLE [dbo].[UserLogin](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[UserMenu]    Script Date: 13/07/2023 11:09:53 PM ******/
+/****** Object:  Table [dbo].[UserMenu]    Script Date: 7/16/2023 1:08:54 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -96,7 +107,8 @@ CREATE TABLE [dbo].[UserMenu](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserRole]    Script Date: 13/07/2023 11:10:35 PM ******/
+
+/****** Object:  Table [dbo].[UserRole]    Script Date: 7/16/2023 1:09:10 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -118,7 +130,8 @@ CREATE TABLE [dbo].[UserRole](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserRoleMenu]    Script Date: 13/07/2023 11:11:02 PM ******/
+
+/****** Object:  Table [dbo].[UserRoleMenu]    Script Date: 7/16/2023 1:09:28 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -140,6 +153,49 @@ CREATE TABLE [dbo].[UserRoleMenu](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
+
+ALTER TABLE [dbo].[UserRoleMenu]  WITH CHECK ADD  CONSTRAINT [FK_UserRoleMenu_UserMenu_MenuId] FOREIGN KEY([MenuId])
+REFERENCES [dbo].[UserMenu] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[UserRoleMenu] CHECK CONSTRAINT [FK_UserRoleMenu_UserMenu_MenuId]
+GO
+
+ALTER TABLE [dbo].[UserRoleMenu]  WITH CHECK ADD  CONSTRAINT [FK_UserRoleMenu_UserRole_RoleId] FOREIGN KEY([RoleId])
+REFERENCES [dbo].[UserRole] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[UserRoleMenu] CHECK CONSTRAINT [FK_UserRoleMenu_UserRole_RoleId]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_GetUserById]    Script Date: 26/04/2023 12:36:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Sreemonta Bhowmik
+-- Create date: 24.04.2023
+-- Description:	Get user details by supplying ID
+-- =============================================
+--EXEC SP_GetUserById 'C047D662-9F0E-4358-B323-15EC3081312C'
+CREATE PROCEDURE [dbo].[SP_GetUserById] 
+	-- Add the parameters for the stored procedure here
+	@Id UNIQUEIDENTIFIER
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	SELECT UI.Id, UI.FullName,UI.UserName,NULL AS [Password],UI.SaltKey,UI.Email,UI.RoleId,UI.LastLoginAttemptAt,
+	UI.LoginFailedAttemptsCount,UI.CreatedBy,UI.CreatedDate,UI.UpdatedBy,UI.UpdatedDate
+	FROM UserInfo UI 
+	WHERE UI.Id = @Id
+END
+GO
 /****** Object:  StoredProcedure [dbo].[SP_GetAllUser]    Script Date: 26/04/2023 12:36:35 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -150,10 +206,10 @@ GO
 -- Create date: 25.04.2023
 -- Description:	Get all users
 -- =============================================
---EXEC SP_GetAllUser 1, 1, true, null
---EXEC SP_GetAllUser 2, 1, true, null
---EXEC SP_GetAllUser 1, 2, true, null
---EXEC SP_GetAllUser 2, 2, true, null
+--EXEC SP_GetAllUser 1, 1
+--EXEC SP_GetAllUser 2, 1
+--EXEC SP_GetAllUser 1, 2
+--EXEC SP_GetAllUser 2, 2
 CREATE PROCEDURE [dbo].[SP_GetAllUser] 
 	@PageIndex INT, @PageSize INT
 	--, @GetTotal BIT, @TotalRecords INT OUTPUT 
@@ -168,7 +224,7 @@ BEGIN
 	--SELECT @TotalRecords = COUNT(Id) FROM UserInfo  
 	--END  
 	SET @PageIndex = (CASE WHEN @PageIndex = 0 THEN 1 ELSE @PageIndex END)
-	SELECT UI.Id, UI.FullName,UI.UserName,NULL AS [Password],UI.SaltKey,UI.Email,UI.UserRole,UI.LastLoginAttemptAt,
+	SELECT UI.Id, UI.FullName,UI.UserName,NULL AS [Password],UI.SaltKey,UI.Email,UI.RoleId,UI.LastLoginAttemptAt,
 	UI.LoginFailedAttemptsCount,UI.CreatedBy,UI.CreatedDate,UI.UpdatedBy,UI.UpdatedDate
 	FROM UserInfo UI
 	ORDER BY Id ASC OFFSET (@PageIndex-1)*@PageSize ROWS FETCH NEXT @PageSize ROWS ONLY  
@@ -186,7 +242,8 @@ GO
 -- Create date: 25.04.2023
 -- Description:	Get all users list
 -- =============================================
---EXEC SP_GetAllUserList 's','Id','ASC',2,1
+--EXEC SP_GetAllUserList 'sree','Id','ASC',1,1
+--EXEC SP_GetAllUserList 'rohine','Id','ASC',1,2
 CREATE     PROCEDURE [dbo].[SP_GetAllUserList]
 @SearchTerm AS VARCHAR(50)='',
 @SortColumnName AS VARCHAR(50)='',
@@ -198,7 +255,7 @@ BEGIN
 	DECLARE @QUERY AS VARCHAR(MAX)='',@ORDER_QUERY AS VARCHAR(MAX)='',@CONDITIONS AS VARCHAR(MAX)='',
 	@PAGINATION AS VARCHAR(MAX)=''
 
-	SET @QUERY='SELECT UI.Id, UI.FullName,UI.UserName,NULL AS [Password],UI.SaltKey,UI.Email,UI.UserRole,UI.LastLoginAttemptAt,
+	SET @QUERY='SELECT UI.Id, UI.FullName,UI.UserName,NULL AS [Password],UI.SaltKey,UI.Email,UI.RoleId,UI.LastLoginAttemptAt,
 	UI.LoginFailedAttemptsCount,UI.CreatedBy,UI.CreatedDate,UI.UpdatedBy,UI.UpdatedDate
 	FROM UserInfo UI '
 
@@ -218,7 +275,7 @@ BEGIN
 			OR FullName LIKE ''%'+@SearchTerm+'%''
 			OR UserName LIKE ''%'+@SearchTerm+'%''
 			OR Email LIKE ''%'+@SearchTerm+'%''
-			OR UserRole LIKE ''%'+@SearchTerm+'%''
+			OR RoleId LIKE ''%'+@SearchTerm+'%''
 		'
 		END
 	END
@@ -251,7 +308,8 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
---EXEC SP_GetAllUserPagingSearch 'Aa', 1, 10, ''
+--EXEC SP_GetAllUserPagingSearch 'sree', 1, 10, ''
+--EXEC SP_GetAllUserPagingSearch 'rohine', 1, 10, ''
 CREATE PROCEDURE [dbo].[SP_GetAllUserPagingSearch]
       @SearchTerm VARCHAR(100) = ''
       ,@PageIndex INT = 1
@@ -270,7 +328,7 @@ BEGIN
              ,NULL AS [Password]
              ,SaltKey
              ,Email
-             ,UserRole
+             ,RoleId
              ,LastLoginAttemptAt
              ,LoginFailedAttemptsCount
              ,CreatedBy
@@ -284,40 +342,14 @@ BEGIN
       SELECT @TotalRecords = COUNT(*)
       FROM #Results
           
-      SELECT Id, FullName,UserName,NULL AS [Password],SaltKey,Email,UserRole,LastLoginAttemptAt,
+      SELECT Id, FullName,UserName,NULL AS [Password],SaltKey,Email,RoleId,LastLoginAttemptAt,
 	  LoginFailedAttemptsCount,CreatedBy,CreatedDate,UpdatedBy,UpdatedDate
       FROM #Results
       WHERE RowNumber BETWEEN(@PageIndex -1) * @PageSize + 1 AND(((@PageIndex -1) * @PageSize + 1) + @PageSize) - 1
     
       DROP TABLE #Results
 END
-GO
-/****** Object:  StoredProcedure [dbo].[SP_GetUserById]    Script Date: 26/04/2023 12:36:35 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
--- =============================================
--- Author:		Sreemonta Bhowmik
--- Create date: 24.04.2023
--- Description:	Get user details by supplying ID
--- =============================================
---EXEC SP_GetUserById 'D670A7BA-F10D-4241-8230-6CD8E0A2B7C0'
-CREATE PROCEDURE [dbo].[SP_GetUserById] 
-	-- Add the parameters for the stored procedure here
-	@Id UNIQUEIDENTIFIER
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
 
-    -- Insert statements for procedure here
-	SELECT UI.Id, UI.FullName,UI.UserName,NULL AS [Password],UI.SaltKey,UI.Email,UI.UserRole,UI.LastLoginAttemptAt,
-	UI.LoginFailedAttemptsCount,UI.CreatedBy,UI.CreatedDate,UI.UpdatedBy,UI.UpdatedDate
-	FROM UserInfo UI 
-	WHERE UI.Id = @Id
-END
 
 GO
 /****** Object:  StoredProcedure [dbo].[SP_SaveUpdateUser]    Script Date: 26/04/2023 4:57:27 PM ******/
@@ -333,7 +365,7 @@ CREATE PROCEDURE [dbo].[SP_SaveUpdateUser]
 	@Password		NVARCHAR(MAX),
 	@SaltKey		NVARCHAR(MAX),
 	@Email			VARCHAR(200),
-	@UserRole		VARCHAR(15),
+	@RoleId			UNIQUEIDENTIFIER,
 	@CreatedBy		NVARCHAR(MAX),
 	@CreatedDate	DATETIME2(7),
 	@UpdatedBy		NVARCHAR(MAX),
@@ -345,16 +377,16 @@ BEGIN
 
     IF @ActionName = 'Save' -- Save
     BEGIN
-        INSERT INTO [dbo].[UserInfo] ([Id],[FullName],[UserName],[Password],[SaltKey],[Email],[UserRole],[LastLoginAttemptAt]
+        INSERT INTO [dbo].[UserInfo] ([Id],[FullName],[UserName],[Password],[SaltKey],[Email],[RoleId],[LastLoginAttemptAt]
            ,[LoginFailedAttemptsCount],[CreatedBy],[CreatedDate],[UpdatedBy],[UpdatedDate],[IsActive])
      VALUES
-           (@Id,@FullName, @UserName,@Password,@SaltKey, @Email, @UserRole,NULL, 0, @CreatedBy,@CreatedDate,NULL, NULL, @IsActive)
+           (@Id,@FullName, @UserName,@Password,@SaltKey, @Email, @RoleId,NULL, 0, @CreatedBy,@CreatedDate,NULL, NULL, @IsActive)
 
         SELECT @@ROWCOUNT AS 'RowsAffected';
     END
     ELSE IF @ActionName = 'Update' -- Update
     BEGIN
-        UPDATE UserInfo SET [FullName] = @FullName, [UserName] = @UserName, [Email] = @Email,[UserRole] = @UserRole
+        UPDATE UserInfo SET [FullName] = @FullName, [UserName] = @UserName, [Email] = @Email,[RoleId] = @RoleId
 		, [UpdatedBy] = @UpdatedBy,[UpdatedDate] = @UpdatedDate, IsActive = @IsActive
         WHERE [Id] = @Id;
 
@@ -377,7 +409,7 @@ GO
 -- Create date: 26.04.2023
 -- Description:	Delete a user
 -- =============================================
---EXEC SP_DeleteUser '10BB4212-AC20-4AC5-A3F6-B5FFF08338C8'
+--EXEC SP_DeleteUser 'C047D662-9F0E-4358-B323-15EC3081312C',0
 CREATE PROCEDURE [dbo].[SP_DeleteUser]
 (
    @Id			UNIQUEIDENTIFIER,
@@ -410,7 +442,7 @@ GO
 -- Create date: 14.07.2023
 -- Description: To generate children menu under particular menu
 -- =============================================
-ALTER FUNCTION [dbo].[GetChildMenus](@parentId UNIQUEIDENTIFIER)
+CREATE FUNCTION [dbo].[GetChildMenus](@parentId UNIQUEIDENTIFIER)
 RETURNS NVARCHAR(MAX)
 AS
 BEGIN
@@ -451,41 +483,15 @@ GO
 -- Create date: 14.07.2023
 -- Description: To generate parent menu.
 -- =============================================
---EXEC GetMenuWithChildrenAsJson 'C68023AA-8D1C-47AB-90E2-3AD749F4CB1C'
---EXEC GetMenuWithChildrenAsJson '1D90437E-D986-435F-8712-2058F70AE704'
-ALTER PROCEDURE [dbo].[GetMenuWithChildrenAsJson]
+--EXEC GetMenuWithChildrenAsJson 'C047D662-9F0E-4358-B323-15EC3081312C'
+--EXEC GetMenuWithChildrenAsJson 'EFEDC118-3459-4C2E-9158-AD69196A59E0'
+CREATE PROCEDURE [dbo].[GetMenuWithChildrenAsJson]
 @UserId				UNIQUEIDENTIFIER
 AS
 BEGIN
 DECLARE @JsonMenu NVARCHAR(MAX),
-		@RoleId UNIQUEIDENTIFIER,
-		@RoleName VARCHAR(20);
- --   SELECT
- --        [Id]
-	--	,[Name]
-	--	,[IsHeader]
-	--	,[CssClass]
-	--	,[RouteLink]
-	--	,[RouteLinkClass]
-	--	,[Icon]
-	--	,[Remark]
-	--	,[ParentId]
-	--	,[DropdownIcon]
-	--	,[SerialNo]
-	--	,[CreatedBy]
-	--	,[CreatedDate]
-	--	,[UpdatedBy]
-	--	,[UpdatedDate]
-	--	,[IsActive],
- --       dbo.GetChildMenus(UM.Id) AS Children
- --   FROM
- --       UserMenu UM
- --   WHERE
- --       ParentId IS NULL
-	--ORDER BY SerialNo
- --   FOR JSON PATH, ROOT('UserMenu');
-	SELECT @RoleName = UserRole FROM UserInfo UI WHERE  UI.Id =  @UserId
-	SELECT @RoleId = UR.Id FROM UserRole UR WHERE  UR.RoleName = @RoleName
+		@RoleId UNIQUEIDENTIFIER;
+	SELECT @RoleId = RoleId FROM UserInfo UI WHERE  UI.Id =  @UserId
 	
 	SELECT @JsonMenu = (
         SELECT
@@ -509,6 +515,7 @@ DECLARE @JsonMenu NVARCHAR(MAX),
     FROM
         UserMenu UM
 		INNER JOIN UserRoleMenu URM ON URM.MenuId = UM.Id
+		INNER JOIN UserRole UR ON UR.Id = URM.RoleId
 		WHERE URM.RoleId = @RoleId AND UM.ParentId IS NULL
         
 	ORDER BY SerialNo

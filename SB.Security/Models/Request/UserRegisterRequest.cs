@@ -13,7 +13,8 @@ namespace SB.Security.Models.Request
         public string? UserName { get; set; }
         public string? Password { get; set; }
         public string? Email { get; set; }
-        public string UserRole { get; set; } = ConstantSupplier.USER;  
+        //public string UserRole { get; set; } = ConstantSupplier.USER;  
+        public string RoleId { get; set; }
         public Boolean? IsActive { get; set; } = true;
     }
 }

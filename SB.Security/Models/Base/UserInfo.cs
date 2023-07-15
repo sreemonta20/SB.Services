@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using SB.Security.Helper;
+using Pipelines.Sockets.Unofficial.Arenas;
 
 namespace SB.Security.Models.Base
 {
@@ -17,7 +18,9 @@ namespace SB.Security.Models.Base
         public string? Password { get; set; }
         public string? SaltKey { get; set; }
         public string? Email { get; set; }
-        public string UserRole { get; set; } = ConstantSupplier.USER;
+        [ForeignKey("UserRole")]
+        public Guid RoleId { get; set; }
+        public virtual UserRole UserRole { get; set; }
         public DateTime? LastLoginAttemptAt { get; set; }
         public int LoginFailedAttemptsCount { get; set; }
         public string? CreatedBy { get; set; }
