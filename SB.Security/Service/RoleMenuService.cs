@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SB.DataAccessLayer;
@@ -9,6 +10,7 @@ using SB.Security.Models.Configuration;
 using SB.Security.Models.Request;
 using SB.Security.Models.Response;
 using SB.Security.Persistence;
+using System.Data;
 using System.Net;
 
 namespace SB.Security.Service
@@ -92,9 +94,38 @@ namespace SB.Security.Service
             throw new NotImplementedException();
         }
 
-        public Task<DataResponse> GetAllMenuByUserIdAsync(string userId)
+        public async Task<DataResponse> GetAllMenuByUserIdAsync(string userId)
         {
-            throw new NotImplementedException();
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_REQ_MSG, JsonConvert.SerializeObject(userId, Formatting.Indented)));
+            DataResponse? oDataResponse;
+            try
+            {
+
+                List<IDbDataParameter> parameters = new()
+                {
+                    _dbmanager.CreateParameter("@UserId", new Guid(userId), DbType.Guid)
+                };
+
+                string userMenus = (string)await _dbmanager.GetScalarValueAsync(ConstantSupplier.GET_GET_ALL_MENU_BY_USER_ID_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+
+                if (userMenus == null)
+                {
+                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_MENU_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+
+                }
+                else
+                {
+                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_MENU_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userMenus };
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return oDataResponse;
         }
 
         

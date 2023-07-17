@@ -208,6 +208,8 @@
 
         public const string NO_ROLE_DATA = "No user role data found";
         public const string SUCCESS_ROLE_DATA = "Fething Role data successful!";
+        public const string NO_MENU_DATA = "No menu data found";
+        public const string SUCCESS_MENU_DATA = "Fething menu data successful!";
 
         //SP
         public const string GET_USER_BY_ID_SP_NAME = "SP_GetUserById";
@@ -235,6 +237,10 @@
         public const string POST_SAVE_UPDATE_ROLE_ROUTE_NAME = "saveUpdateRole";
         public const string DELETE_ROLE_ROUTE_NAME = "deleteRole";
         public const string GET_ALL_MENU_BY_USER_ID_ROUTE_NAME = "getAllMenuByUserId";
+        #endregion
+
+        #region Role Menu Service
+        public const string GET_GET_ALL_MENU_BY_USER_ID_SP_NAME = "SP_GetAllMenuByUserId";
         #endregion
 
     }

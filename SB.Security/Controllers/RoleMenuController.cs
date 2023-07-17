@@ -66,6 +66,44 @@ namespace SB.Security.Controllers
             _securityLogService.LogInfo(String.Format(ConstantSupplier.GETALLROLES_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
+
+        // GET api/RoleMenu/getAllMenuByUserId
+
+        /// <summary>
+        /// It used to get all user roles.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(ConstantSupplier.GET_ALL_MENU_BY_USER_ID_ROUTE_NAME)]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
+        public async Task<object> GetAllMenuByUserId([FromQuery] string userId)
+        {
+            _securityLogService.LogInfo(ConstantSupplier.GETALLMENUBYUSERID_STARTED_INFO_MSG);
+            DataResponse response;
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.GETALLMENUBYUSERID_REQ_MSG, JsonConvert.SerializeObject(userId, Formatting.Indented)));
+            try
+            {
+                #region EF Codeblock
+                response = await _roleMenuService.GetAllMenuByUserIdAsync(userId);
+                #endregion
+            }
+            catch (Exception Ex)
+            {
+                _securityLogService.LogError(String.Format(ConstantSupplier.GETALLMENUBYUSERID_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(String.Format(ConstantSupplier.GETALLMENUBYUSERID_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                return new DataResponse
+                {
+                    Success = false,
+                    Message = Ex.Message,
+                    MessageType = Enum.EnumResponseType.Error,
+                    ResponseCode = (int)HttpStatusCode.InternalServerError,
+                    Result = null
+                };
+            }
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.GETALLMENUBYUSERID_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            return response;
+        }
+
         #endregion
     }
 }
