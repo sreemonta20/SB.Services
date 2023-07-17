@@ -20,7 +20,7 @@ namespace SB.Security.Controllers
     /// This API Controller contains specific user, all users, save or update user, and delete a user methods.
     /// </summary>
     [Authorize]
-    [Route(ConstantSupplier.USER_CTRLER_ROUTE_NAME)]
+    [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
     public class UserController : ControllerBase

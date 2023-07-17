@@ -154,6 +154,7 @@ namespace SB.Security
             #region Dependency Injection added into service
             services.AddTransient<ISecurityLogService, SecurityLogService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRoleMenuService, RoleMenuService>();
             services.AddTransient<ITokenService, TokenService>();
             services.AddScoped<IDatabaseManager, DatabaseManager>();
             services.AddScoped<IDatabaseHandlerFactory, DatabaseHandlerFactory>();

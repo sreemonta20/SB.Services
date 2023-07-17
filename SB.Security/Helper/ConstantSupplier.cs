@@ -107,7 +107,62 @@
         public const string DELUSER_RES_MSG = "DeleteUser api method response is: \n{0}\n";
         public const string DELUSER_FAILED_RES_MSG = "DeleteUser Failed (User service) : api method response is: \n{0}\n";
 
-        
+
+        //api/RoleMenu/getAllRoles
+        public const string GETALLROLES_STARTED_INFO_MSG = "GetAllRoles api method started.\n";
+        public const string GETALLROLES_REQ_MSG = "GetAllRoles api method request is: \n{0}\n";
+        public const string GETALLROLES_EXCEPTION_MSG = "GetAllRoles Exception below:: \n{0}\n";
+        public const string GETALLROLES_INNER_EXCEPTION_MSG = "GetAllRoles Inner Exception below:: \n{0}\n";
+        public const string SERVICE_GETALLROLES_REQ_MSG = "GetAllRolesAsync (User service) method request is: \n{0}\n";
+        public const string SERVICE_GETALLROLES_RES_MSG = "GetAllRolesAsync (User service) method response is: \n{0}\n";
+        public const string GETALLROLES_RES_MSG = "GetAllRoles api method response is: \n{0}\n";
+
+        //api/RoleMenu/getAllRolesPagination
+        public const string GETALLROLESPAGINATION_STARTED_INFO_MSG = "GetAllRolesPagination api method started.\n";
+        public const string GETALLROLESPAGINATION_REQ_MSG = "GetAllRolesPagination api method request is: \n{0}\n";
+        public const string GETALLROLESPAGINATION_EXCEPTION_MSG = "GetAllRolesPagination Exception below:: \n{0}\n";
+        public const string GETALLROLESPAGINATION_INNER_EXCEPTION_MSG = "GetAllRolesPagination Inner Exception below:: \n{0}\n";
+        public const string SERVICE_GETALLROLESPAGINATION_REQ_MSG = "GetAllRolesPaginationAsync (User service) method request is: \n{0}\n";
+        public const string SERVICE_GETALLROLESPAGINATION_RES_MSG = "GetAllRolesPaginationAsync (User service) method response is: \n{0}\n";
+        public const string GETALLROLESPAGINATION_RES_MSG = "GetAllRolesPagination api method response is: \n{0}\n";
+
+        //api/RoleMenu/getRoleById
+        public const string GETROLEBYID_STARTED_INFO_MSG = "getRoleById api method started.\n";
+        public const string GETROLEBYID_REQ_MSG = "getRoleById api method request is: \n{0}\n";
+        public const string GETROLEBYID_EXCEPTION_MSG = "getRoleById Exception below:: \n{0}\n";
+        public const string GETROLEBYID_INNER_EXCEPTION_MSG = "getRoleById Inner Exception below:: \n{0}\n";
+        public const string SERVICE_GETROLEBYID_REQ_MSG = "getRoleByIdAsync (User service) method request is: \n{0}\n";
+        public const string SERVICE_GETROLEBYID_RES_MSG = "getRoleByIdAsync (User service) method response is: \n{0}\n";
+        public const string GETROLEBYID_RES_MSG = "getRoleById api method response is: \n{0}\n";
+
+        //api/RoleMenu/saveUpdateRole
+        public const string SAVEUPDATEROLE_STARTED_INFO_MSG = "SaveUpdateRole api method started.\n";
+        public const string SAVEUPDATEROLE_REQ_MSG = "SaveUpdateRole api method request is: \n{0}\n";
+        public const string SAVEUPDATEROLE_EXCEPTION_MSG = "SaveUpdateRole Exception below:: \n{0}\n";
+        public const string SAVEUPDATEROLE_INNER_EXCEPTION_MSG = "SaveUpdateRole Inner Exception below:: \n{0}\n";
+        public const string SERVICE_SAVEUPDATEROLE_REQ_MSG = "SaveUpdateRoleAsync (User service) method request is: \n{0}\n";
+        public const string SERVICE_SAVEUPDATEROLE_RES_MSG = "SaveUpdateRoleAsync (User service) method response is: \n{0}\n";
+        public const string SAVEUPDATEROLE_RES_MSG = "SaveUpdateRole api method response is: \n{0}\n";
+
+        //api/RoleMenu/deleteRole
+        public const string DELETEROLE_STARTED_INFO_MSG = "DeleteRole api method started.\n";
+        public const string DELETEROLE_REQ_MSG = "DeleteRole api method request is: \n{0}\n";
+        public const string DELETEROLE_EXCEPTION_MSG = "DeleteRole Exception below:: \n{0}\n";
+        public const string DELETEROLE_INNER_EXCEPTION_MSG = "DeleteRole Inner Exception below:: \n{0}\n";
+        public const string SERVICE_DELETEROLE_REQ_MSG = "DeleteRoleAsync (User service) method request is: \n{0}\n";
+        public const string SERVICE_DELETEROLE_RES_MSG = "DeleteRoleAsync (User service) method response is: \n{0}\n";
+        public const string DELETEROLE_RES_MSG = "DeleteRole api method response is: \n{0}\n";
+
+        //api/RoleMenu/getAllMenuByUserId
+        public const string GETALLMENUBYUSERID_STARTED_INFO_MSG = "GetAllMenuByUserId api method started.\n";
+        public const string GETALLMENUBYUSERID_REQ_MSG = "GetAllMenuByUserId api method request is: \n{0}\n";
+        public const string GETALLMENUBYUSERID_EXCEPTION_MSG = "GetAllMenuByUserId Exception below:: \n{0}\n";
+        public const string GETALLMENUBYUSERID_INNER_EXCEPTION_MSG = "GetAllMenuByUserId Inner Exception below:: \n{0}\n";
+        public const string SERVICE_GETALLMENUBYUSERID_REQ_MSG = "GetAllMenuByUserIdAsync (User service) method request is: \n{0}\n";
+        public const string SERVICE_GETALLMENUBYUSERID_RES_MSG = "GetAllMenuByUserIdAsync (User service) method response is: \n{0}\n";
+        public const string GETALLMENUBYUSERID_RES_MSG = "GetAllMenuByUserId api method response is: \n{0}\n";
+
+
 
         #endregion
 
@@ -151,6 +206,9 @@
         public const string DELETE_FAILED = "Deletion of user failed!. Please try again later";
         public const string DELETE_SUCCESS = "User deleted successfully";
 
+        public const string NO_ROLE_DATA = "No user role data found";
+        public const string SUCCESS_ROLE_DATA = "Fething Role data successful!";
+
         //SP
         public const string GET_USER_BY_ID_SP_NAME = "SP_GetUserById";
         public const string GET_ALL_USER_SP_NAME = "SP_GetAllUser";
@@ -158,8 +216,9 @@
         public const string DELETE_USER_SP_NAME = "SP_DeleteUser";
         #endregion
 
+        public const string CTRLER_ROUTE_PATH_NAME = "api/[controller]";
+
         #region User Controller
-        public const string USER_CTRLER_ROUTE_NAME = "api/[controller]";
         public const string GET_USER_ROUTE_NAME = "getUserbyId";
         public const string GET_ALL_USER_ROUTE_NAME = "getAllUsers";
         public const string POST_AUTH_ROUTE_NAME = "login";
@@ -167,7 +226,15 @@
         public const string DEL_USER_ROUTE_NAME = "deleteUser";
         public const string REFRESH_TOKEN_ROUTE_NAME = "refreshtoken";
         public const string REVOKE_ROUTE_NAME = "revoke";
+        #endregion
 
+        #region Role Menu Controller
+        public const string GET_ALL_ROLES_ROUTE_NAME = "getAllRoles";
+        public const string GET_ALL_ROLES_PAGINATION_ROUTE_NAME = "getAllRolesPagination";
+        public const string GET_ROLE_BY_ID_ROUTE_NAME = "getRoleById";
+        public const string POST_SAVE_UPDATE_ROLE_ROUTE_NAME = "saveUpdateRole";
+        public const string DELETE_ROLE_ROUTE_NAME = "deleteRole";
+        public const string GET_ALL_MENU_BY_USER_ID_ROUTE_NAME = "getAllMenuByUserId";
         #endregion
 
     }

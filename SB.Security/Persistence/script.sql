@@ -473,7 +473,7 @@ BEGIN
     )
 END
 GO
-/****** Object:  StoredProcedure [dbo].[GetMenuWithChildrenAsJson]    Script Date: 14/07/2023 11:28:10 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllMenuByUserId]    Script Date: 7/17/2023 9:50:49 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -483,14 +483,40 @@ GO
 -- Create date: 14.07.2023
 -- Description: To generate parent menu.
 -- =============================================
---EXEC GetMenuWithChildrenAsJson 'C047D662-9F0E-4358-B323-15EC3081312C'
---EXEC GetMenuWithChildrenAsJson 'EFEDC118-3459-4C2E-9158-AD69196A59E0'
-CREATE PROCEDURE [dbo].[GetMenuWithChildrenAsJson]
+--EXEC SP_GetAllMenuByUserId 'C047D662-9F0E-4358-B323-15EC3081312C'
+--EXEC SP_GetAllMenuByUserId 'EFEDC118-3459-4C2E-9158-AD69196A59E0'
+ALTER PROCEDURE [dbo].[SP_GetAllMenuByUserId]
 @UserId				UNIQUEIDENTIFIER
 AS
 BEGIN
 DECLARE @JsonMenu NVARCHAR(MAX),
 		@RoleId UNIQUEIDENTIFIER;
+ --   SELECT
+ --        [Id]
+	--	,[Name]
+	--	,[IsHeader]
+	--	,[CssClass]
+	--	,[RouteLink]
+	--	,[RouteLinkClass]
+	--	,[Icon]
+	--	,[Remark]
+	--	,[ParentId]
+	--	,[DropdownIcon]
+	--	,[SerialNo]
+	--	,[CreatedBy]
+	--	,[CreatedDate]
+	--	,[UpdatedBy]
+	--	,[UpdatedDate]
+	--	,[IsActive],
+ --       dbo.GetChildMenus(UM.Id) AS Children
+ --   FROM
+ --       UserMenu UM
+ --   WHERE
+ --       ParentId IS NULL
+	--ORDER BY SerialNo
+ --   FOR JSON PATH, ROOT('UserMenu');
+ --	  SELECT @RoleName = UserRole FROM UserInfo UI WHERE  UI.Id =  @UserId
+ --	  SELECT @RoleId = UR.Id FROM UserRole UR WHERE  UR.RoleName = @RoleName
 	SELECT @RoleId = RoleId FROM UserInfo UI WHERE  UI.Id =  @UserId
 	
 	SELECT @JsonMenu = (
