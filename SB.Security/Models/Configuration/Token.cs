@@ -13,5 +13,6 @@
         public string?  error { get; set; }
         public string? error_description { get; set; }
         public User? user { get; set; }
+        public string? userMenus { get; set; }
     }
 }

@@ -45,6 +45,7 @@ namespace SB.Security.Service
         private readonly ISecurityLogService _securityLogService;
         private readonly IDatabaseManager _dbmanager;
         private readonly ITokenService _tokenService;
+        private readonly IRoleMenuService _roleMenuService;
         /// <summary>
         /// 
         /// </summary>
@@ -54,7 +55,7 @@ namespace SB.Security.Service
         /// <param name="options"></param>
         /// <param name="securityLogService"></param>
         public UserService(IConfiguration config, SBSecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options,
-        ISecurityLogService securityLogService, IDatabaseManager dbManager, ITokenService tokenService)
+        ISecurityLogService securityLogService, IDatabaseManager dbManager, ITokenService tokenService, IRoleMenuService roleMenuService)
         {
             _configuration = config;
             _context = context;
@@ -64,6 +65,7 @@ namespace SB.Security.Service
             _dbmanager = dbManager;
             _dbmanager.InitializeDatabase(_appSettings?.ConnectionStrings?.ProdSqlConnectionString, _appSettings?.ConnectionProvider);
             _tokenService = tokenService;
+            _roleMenuService = roleMenuService;
         }
         #endregion
 
@@ -237,9 +239,13 @@ namespace SB.Security.Service
                         if (tokenResult != null)
                         {
                             tokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
+                            
                         }
 
-
+                        DataResponse menuResponse = await _roleMenuService.GetAllMenuByUserIdAsync(user.Id.ToString());
+                        if(menuResponse != null && menuResponse.ResponseCode == 200) {
+                            tokenResult.userMenus = Convert.ToString(menuResponse.Result);
+                        }
 
                         UserLogin? userlogin = _context.UserLogin.FirstOrDefault(u => (u.UserName == user.UserName) && (u.Password == user.Password));
                         if (userlogin is null)
@@ -319,6 +325,12 @@ namespace SB.Security.Service
                 if (tokenResult != null)
                 {
                     tokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
+                }
+
+                DataResponse menuResponse = await _roleMenuService.GetAllMenuByUserIdAsync(user.Id.ToString());
+                if (menuResponse != null && menuResponse.ResponseCode == 200)
+                {
+                    tokenResult.userMenus = Convert.ToString(menuResponse.Result);
                 }
 
                 var userLogin = _context.UserLogin.SingleOrDefault(u => u.UserName == username);

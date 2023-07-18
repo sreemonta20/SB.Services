@@ -473,7 +473,7 @@ BEGIN
     )
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllMenuByUserId]    Script Date: 7/17/2023 9:50:49 AM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllMenuByUserId]    Script Date: 7/18/2023 10:51:59 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -546,8 +546,8 @@ DECLARE @JsonMenu NVARCHAR(MAX),
         
 	ORDER BY SerialNo
         --FOR JSON AUTO,INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER
-		FOR JSON AUTO,INCLUDE_NULL_VALUES, ROOT('Menu')
-		--FOR JSON PATH,INCLUDE_NULL_VALUES, ROOT('Menu')
+		--FOR JSON AUTO,INCLUDE_NULL_VALUES, ROOT('Menu')
+		FOR JSON PATH,INCLUDE_NULL_VALUES
     );
 
     SELECT @JsonMenu AS JsonMenu;
