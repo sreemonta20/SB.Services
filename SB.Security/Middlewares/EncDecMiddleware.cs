@@ -350,7 +350,13 @@ namespace SB.Security.Middlewares
                 "/api/User/getUserbyId",
                 "/api/User/getAllUsers",
                 "/api/User/registerUser",
-                "/api/User/deleteUser"
+                "/api/User/deleteUser",
+                "/api/RoleMenu/getAllRoles",
+                "/api/RoleMenu/getAllRolesPagination",
+                "/api/RoleMenu/getRoleById",
+                "/api/RoleMenu/saveUpdateRole",
+                "/api/RoleMenu/deleteRole",
+                "/api/RoleMenu/getAllMenuByUserId"
             };
             return excludeURL;
         }
