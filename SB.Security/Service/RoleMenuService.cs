@@ -75,19 +75,81 @@ namespace SB.Security.Service
             return oDataResponse;
         }
 
-        public Task<PagingResult<UserInfo>> GetAllRolesPaginationAsync(PaginationFilter paramRequest)
+        public async Task<PagingResult<UserRole>?> GetAllRolesPaginationAsync(PaginationFilter paramRequest)
         {
-            throw new NotImplementedException();
+            PagingResult<UserRole>? result = null;
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+            try
+            {
+                IQueryable<UserRole> source =  (from userRole in  _context?.UserRole?.OrderBy(a => a.CreatedDate) select userRole).AsQueryable();
+                result = await Utilities.GetPagingResult(source, paramRequest.PageNumber, paramRequest.PageSize);
+                if (result == null)
+                {
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_RES_MSG, JsonConvert.SerializeObject(null, Formatting.Indented)));
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return result;
         }
 
-        public Task<DataResponse> GetRoleByIdAsync(string roleId)
+        public async Task<DataResponse> GetRoleByIdAsync(string roleId)
         {
-            throw new NotImplementedException();
+            DataResponse? oDataResponse = null;
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETROLEBYID_REQ_MSG, JsonConvert.SerializeObject(roleId, Formatting.Indented)));
+            try
+            {
+
+                UserRole? userRole = await _context.UserRole.FirstOrDefaultAsync(u => u.Id == new Guid(roleId) && u.IsActive == true);
+                if (userRole == null)
+                {
+                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(userRole, Formatting.Indented)));
+                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_USER_FAILED, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                }
+                oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userRole };
+                
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return oDataResponse;
         }
 
-        public Task<DataResponse> SaveUpdateRoleAsync(RoleSaveUpdateRequest roleSaveUpdateRequest)
+        public async Task<DataResponse> SaveUpdateRoleAsync(RoleSaveUpdateRequest roleSaveUpdateRequest)
         {
-            throw new NotImplementedException();
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_REQ_MSG, JsonConvert.SerializeObject(roleSaveUpdateRequest, Formatting.Indented)));
+            try
+            {
+                switch (roleSaveUpdateRequest.ActionName)
+                {
+                    case ConstantSupplier.SAVE_KEY:
+                        UserRole oUserRole = new()
+                        {
+                            Id = Guid.NewGuid(),
+                            RoleName = roleSaveUpdateRequest.RoleName,
+                            Description = roleSaveUpdateRequest.Description,
+                            CreatedBy = roleSaveUpdateRequest.CreateUpdateBy,
+                            CreatedDate = DateTime.UtcNow,
+                            IsActive = roleSaveUpdateRequest.IsActive
+                        };
+                        var role = await this._context.UserRole.FirstOrDefaultAsync(u => u.RoleName == roleSaveUpdateRequest.RoleName);
+                        if (role != null)
+                        {
+
+                        }
+                        break;
+
+                    case ConstantSupplier.UPDATE_KEY:
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         public Task<DataResponse> DeleteRoleAsync(string roleId)
         {

@@ -19,14 +19,11 @@ CREATE TABLE [dbo].[SecurityLog](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-
-/****** Object:  Table [dbo].[UserInfo]    Script Date: 7/16/2023 1:06:56 AM ******/
+/****** Object:  Table [dbo].[UserInfo]    Script Date: 23/07/2023 6:18:23 PM ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE TABLE [dbo].[UserInfo](
 	[Id] [uniqueidentifier] NOT NULL,
 	[FullName] [nvarchar](max) NULL,
@@ -48,22 +45,11 @@ CREATE TABLE [dbo].[UserInfo](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-
-ALTER TABLE [dbo].[UserInfo]  WITH CHECK ADD  CONSTRAINT [FK_UserInfo_UserRole_RoleId] FOREIGN KEY([RoleId])
-REFERENCES [dbo].[UserRole] ([Id])
-ON DELETE CASCADE
-GO
-
-ALTER TABLE [dbo].[UserInfo] CHECK CONSTRAINT [FK_UserInfo_UserRole_RoleId]
-GO
-
-/****** Object:  Table [dbo].[UserLogin]    Script Date: 7/16/2023 1:08:29 AM ******/
+/****** Object:  Table [dbo].[UserLogin]    Script Date: 23/07/2023 6:18:23 PM ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE TABLE [dbo].[UserLogin](
 	[Id] [uniqueidentifier] NOT NULL,
 	[UserName] [nvarchar](max) NULL,
@@ -76,14 +62,11 @@ CREATE TABLE [dbo].[UserLogin](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-
-/****** Object:  Table [dbo].[UserMenu]    Script Date: 7/16/2023 1:08:54 AM ******/
+/****** Object:  Table [dbo].[UserMenu]    Script Date: 23/07/2023 6:18:23 PM ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE TABLE [dbo].[UserMenu](
 	[Id] [uniqueidentifier] NOT NULL,
 	[Name] [nvarchar](max) NULL,
@@ -107,14 +90,11 @@ CREATE TABLE [dbo].[UserMenu](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-
-/****** Object:  Table [dbo].[UserRole]    Script Date: 7/16/2023 1:09:10 AM ******/
+/****** Object:  Table [dbo].[UserRole]    Script Date: 23/07/2023 6:18:23 PM ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE TABLE [dbo].[UserRole](
 	[Id] [uniqueidentifier] NOT NULL,
 	[RoleName] [nvarchar](max) NULL,
@@ -130,18 +110,19 @@ CREATE TABLE [dbo].[UserRole](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-
-/****** Object:  Table [dbo].[UserRoleMenu]    Script Date: 7/16/2023 1:09:28 AM ******/
+/****** Object:  Table [dbo].[UserRoleMenu]    Script Date: 23/07/2023 6:18:23 PM ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE TABLE [dbo].[UserRoleMenu](
 	[Id] [uniqueidentifier] NOT NULL,
 	[RoleId] [uniqueidentifier] NOT NULL,
 	[MenuId] [uniqueidentifier] NOT NULL,
+	[IsView] [bit] NULL,
+	[IsCreate] [bit] NULL,
+	[IsUpdate] [bit] NULL,
+	[IsDelete] [bit] NULL,
 	[CreatedBy] [nvarchar](max) NULL,
 	[CreatedDate] [datetime2](7) NULL,
 	[UpdatedBy] [nvarchar](max) NULL,
@@ -154,22 +135,25 @@ CREATE TABLE [dbo].[UserRoleMenu](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+ALTER TABLE [dbo].[UserInfo]  WITH CHECK ADD  CONSTRAINT [FK_UserInfo_UserRole_RoleId] FOREIGN KEY([RoleId])
+REFERENCES [dbo].[UserRole] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[UserInfo] CHECK CONSTRAINT [FK_UserInfo_UserRole_RoleId]
+GO
 ALTER TABLE [dbo].[UserRoleMenu]  WITH CHECK ADD  CONSTRAINT [FK_UserRoleMenu_UserMenu_MenuId] FOREIGN KEY([MenuId])
 REFERENCES [dbo].[UserMenu] ([Id])
 ON DELETE CASCADE
 GO
-
 ALTER TABLE [dbo].[UserRoleMenu] CHECK CONSTRAINT [FK_UserRoleMenu_UserMenu_MenuId]
 GO
-
 ALTER TABLE [dbo].[UserRoleMenu]  WITH CHECK ADD  CONSTRAINT [FK_UserRoleMenu_UserRole_RoleId] FOREIGN KEY([RoleId])
 REFERENCES [dbo].[UserRole] ([Id])
 ON DELETE CASCADE
 GO
-
 ALTER TABLE [dbo].[UserRoleMenu] CHECK CONSTRAINT [FK_UserRoleMenu_UserRole_RoleId]
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetUserById]    Script Date: 26/04/2023 12:36:35 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetUserById]    Script Date: 23/07/2023 6:18:23 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -179,7 +163,7 @@ GO
 -- Create date: 24.04.2023
 -- Description:	Get user details by supplying ID
 -- =============================================
---EXEC SP_GetUserById 'C047D662-9F0E-4358-B323-15EC3081312C'
+--EXEC SP_GetUserById 'D670A7BA-F10D-4241-8230-6CD8E0A2B7C0'
 CREATE PROCEDURE [dbo].[SP_GetUserById] 
 	-- Add the parameters for the stored procedure here
 	@Id UNIQUEIDENTIFIER
@@ -196,7 +180,7 @@ BEGIN
 	WHERE UI.Id = @Id
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUser]    Script Date: 26/04/2023 12:36:35 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUser]    Script Date: 23/07/2023 6:18:23 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -206,10 +190,10 @@ GO
 -- Create date: 25.04.2023
 -- Description:	Get all users
 -- =============================================
---EXEC SP_GetAllUser 1, 1
---EXEC SP_GetAllUser 2, 1
---EXEC SP_GetAllUser 1, 2
---EXEC SP_GetAllUser 2, 2
+--EXEC SP_GetAllUser 1, 1, true, null
+--EXEC SP_GetAllUser 2, 1, true, null
+--EXEC SP_GetAllUser 1, 2, true, null
+--EXEC SP_GetAllUser 2, 2, true, null
 CREATE PROCEDURE [dbo].[SP_GetAllUser] 
 	@PageIndex INT, @PageSize INT
 	--, @GetTotal BIT, @TotalRecords INT OUTPUT 
@@ -232,7 +216,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserList]    Script Date: 26/04/2023 12:36:35 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUserList]    Script Date: 23/07/2023 6:18:23 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -242,8 +226,7 @@ GO
 -- Create date: 25.04.2023
 -- Description:	Get all users list
 -- =============================================
---EXEC SP_GetAllUserList 'sree','Id','ASC',1,1
---EXEC SP_GetAllUserList 'rohine','Id','ASC',1,2
+--EXEC SP_GetAllUserList 's','Id','ASC',2,1
 CREATE     PROCEDURE [dbo].[SP_GetAllUserList]
 @SearchTerm AS VARCHAR(50)='',
 @SortColumnName AS VARCHAR(50)='',
@@ -303,13 +286,12 @@ BEGIN
 	EXEC(@QUERY)
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserPagingSearch]    Script Date: 26/04/2023 12:36:35 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUserPagingSearch]    Script Date: 23/07/2023 6:18:23 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
---EXEC SP_GetAllUserPagingSearch 'sree', 1, 10, ''
---EXEC SP_GetAllUserPagingSearch 'rohine', 1, 10, ''
+--EXEC SP_GetAllUserPagingSearch 'Aa', 1, 10, ''
 CREATE PROCEDURE [dbo].[SP_GetAllUserPagingSearch]
       @SearchTerm VARCHAR(100) = ''
       ,@PageIndex INT = 1
@@ -352,7 +334,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_SaveUpdateUser]    Script Date: 26/04/2023 4:57:27 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_SaveUpdateUser]    Script Date: 23/07/2023 6:18:23 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -399,7 +381,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_DeleteUser]    Script Date: 4/26/2023 9:51:02 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_DeleteUser]    Script Date: 23/07/2023 6:18:23 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -409,7 +391,7 @@ GO
 -- Create date: 26.04.2023
 -- Description:	Delete a user
 -- =============================================
---EXEC SP_DeleteUser 'C047D662-9F0E-4358-B323-15EC3081312C',0
+--EXEC SP_DeleteUser '10BB4212-AC20-4AC5-A3F6-B5FFF08338C8'
 CREATE PROCEDURE [dbo].[SP_DeleteUser]
 (
    @Id			UNIQUEIDENTIFIER,
@@ -432,7 +414,7 @@ BEGIN
 END
 
 GO
-/****** Object:  UserDefinedFunction [dbo].[GetChildMenus]    Script Date: 15/07/2023 12:15:02 AM ******/
+/****** Object:  UserDefinedFunction [dbo].[GetChildMenus]    Script Date: 23/07/2023 6:18:23 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -442,38 +424,44 @@ GO
 -- Create date: 14.07.2023
 -- Description: To generate children menu under particular menu
 -- =============================================
-CREATE FUNCTION [dbo].[GetChildMenus](@parentId UNIQUEIDENTIFIER)
+CREATE FUNCTION [dbo].[GetChildMenus](@parentId UNIQUEIDENTIFIER, @RoleID UNIQUEIDENTIFIER)
 RETURNS NVARCHAR(MAX)
 AS
 BEGIN
     RETURN (
         SELECT
-			 [Id]
-            ,[Name]
-			,[IsHeader]
-			,[CssClass]
-			,[RouteLink]
-			,[RouteLinkClass]
-			,[Icon]
-			,[Remark]
-			,[ParentId]
-			,[DropdownIcon]
-			,[SerialNo]
-			,[CreatedBy]
-			,[CreatedDate]
-			,[UpdatedBy]
-			,[UpdatedDate]
-			,[IsActive],
-            ISNULL(JSON_QUERY(dbo.GetChildMenus(UM.Id), '$'), '[]') AS Children
+			 UM.[Id]
+            ,UM.[Name]
+			,UM.[IsHeader]
+			,UM.[CssClass]
+			,UM.[RouteLink]
+			,UM.[RouteLinkClass]
+			,UM.[Icon]
+			,UM.[Remark]
+			,UM.[ParentId]
+			,UM.[DropdownIcon]
+			,UM.[SerialNo]
+			,UM.[CreatedBy]
+			,UM.[CreatedDate]
+			,UM.[UpdatedBy]
+			,UM.[UpdatedDate]
+			,UM.[IsActive]
+			,URM.[IsView]
+			,URM.[IsCreate]
+			,URM.[IsUpdate]
+			,URM.[IsDelete]
+            ,ISNULL(JSON_QUERY(dbo.GetChildMenus(UM.Id,@RoleID), '$'), '[]') AS Children
         FROM
             UserMenu UM
+			INNER JOIN UserRoleMenu URM ON URM.MenuId = UM.Id
+			INNER JOIN UserRole UR ON UR.Id = URM.RoleId
         WHERE
-            ParentId = @parentId
+            ParentId = @parentId AND URM.RoleId = @RoleId
         FOR JSON PATH
     )
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllMenuByUserId]    Script Date: 7/18/2023 10:51:59 AM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllMenuByUserId]    Script Date: 23/07/2023 6:18:23 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -485,7 +473,7 @@ GO
 -- =============================================
 --EXEC SP_GetAllMenuByUserId 'C047D662-9F0E-4358-B323-15EC3081312C'
 --EXEC SP_GetAllMenuByUserId 'EFEDC118-3459-4C2E-9158-AD69196A59E0'
-ALTER PROCEDURE [dbo].[SP_GetAllMenuByUserId]
+CREATE PROCEDURE [dbo].[SP_GetAllMenuByUserId]
 @UserId				UNIQUEIDENTIFIER
 AS
 BEGIN
@@ -536,8 +524,12 @@ DECLARE @JsonMenu NVARCHAR(MAX),
 		,UM.[CreatedDate]
 		,UM.[UpdatedBy]
 		,UM.[UpdatedDate]
-		,UM.[IsActive],
-        ISNULL(JSON_QUERY(dbo.GetChildMenus(UM.Id), '$'), '[]') AS Children
+		,UM.[IsActive]
+		,URM.[IsView]
+		,URM.[IsCreate]
+		,URM.[IsUpdate]
+		,URM.[IsDelete]
+        ,ISNULL(JSON_QUERY(dbo.GetChildMenus(UM.Id,@RoleId), '$'), '[]') AS Children
     FROM
         UserMenu UM
 		INNER JOIN UserRoleMenu URM ON URM.MenuId = UM.Id

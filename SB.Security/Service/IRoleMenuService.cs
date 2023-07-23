@@ -14,7 +14,7 @@ namespace SB.Security.Service
     {
 
         Task<DataResponse> GetAllRolesAsync();
-        Task<PagingResult<UserInfo>> GetAllRolesPaginationAsync(PaginationFilter paramRequest);
+        Task<PagingResult<UserRole>?> GetAllRolesPaginationAsync(PaginationFilter paramRequest);
         Task<DataResponse> GetRoleByIdAsync(string roleId);
         Task<DataResponse> SaveUpdateRoleAsync(RoleSaveUpdateRequest roleSaveUpdateRequest);
         Task<DataResponse> DeleteRoleAsync(string roleId);

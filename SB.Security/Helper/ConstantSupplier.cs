@@ -113,8 +113,8 @@
         public const string GETALLROLES_REQ_MSG = "GetAllRoles api method request is: \n{0}\n";
         public const string GETALLROLES_EXCEPTION_MSG = "GetAllRoles Exception below:: \n{0}\n";
         public const string GETALLROLES_INNER_EXCEPTION_MSG = "GetAllRoles Inner Exception below:: \n{0}\n";
-        public const string SERVICE_GETALLROLES_REQ_MSG = "GetAllRolesAsync (User service) method request is: \n{0}\n";
-        public const string SERVICE_GETALLROLES_RES_MSG = "GetAllRolesAsync (User service) method response is: \n{0}\n";
+        public const string SERVICE_GETALLROLES_REQ_MSG = "GetAllRolesAsync (Role Menu service) method request is: \n{0}\n";
+        public const string SERVICE_GETALLROLES_RES_MSG = "GetAllRolesAsync (Role Menu service) method response is: \n{0}\n";
         public const string GETALLROLES_RES_MSG = "GetAllRoles api method response is: \n{0}\n";
 
         //api/RoleMenu/getAllRolesPagination
@@ -122,8 +122,8 @@
         public const string GETALLROLESPAGINATION_REQ_MSG = "GetAllRolesPagination api method request is: \n{0}\n";
         public const string GETALLROLESPAGINATION_EXCEPTION_MSG = "GetAllRolesPagination Exception below:: \n{0}\n";
         public const string GETALLROLESPAGINATION_INNER_EXCEPTION_MSG = "GetAllRolesPagination Inner Exception below:: \n{0}\n";
-        public const string SERVICE_GETALLROLESPAGINATION_REQ_MSG = "GetAllRolesPaginationAsync (User service) method request is: \n{0}\n";
-        public const string SERVICE_GETALLROLESPAGINATION_RES_MSG = "GetAllRolesPaginationAsync (User service) method response is: \n{0}\n";
+        public const string SERVICE_GETALLROLESPAGINATION_REQ_MSG = "GetAllRolesPaginationAsync (Role Menu service) method request is: \n{0}\n";
+        public const string SERVICE_GETALLROLESPAGINATION_RES_MSG = "GetAllRolesPaginationAsync (Role Menu service) method response is: \n{0}\n";
         public const string GETALLROLESPAGINATION_RES_MSG = "GetAllRolesPagination api method response is: \n{0}\n";
 
         //api/RoleMenu/getRoleById
@@ -131,8 +131,8 @@
         public const string GETROLEBYID_REQ_MSG = "getRoleById api method request is: \n{0}\n";
         public const string GETROLEBYID_EXCEPTION_MSG = "getRoleById Exception below:: \n{0}\n";
         public const string GETROLEBYID_INNER_EXCEPTION_MSG = "getRoleById Inner Exception below:: \n{0}\n";
-        public const string SERVICE_GETROLEBYID_REQ_MSG = "getRoleByIdAsync (User service) method request is: \n{0}\n";
-        public const string SERVICE_GETROLEBYID_RES_MSG = "getRoleByIdAsync (User service) method response is: \n{0}\n";
+        public const string SERVICE_GETROLEBYID_REQ_MSG = "getRoleByIdAsync (Role Menu service) method request is: \n{0}\n";
+        public const string SERVICE_GETROLEBYID_RES_MSG = "getRoleByIdAsync (Role Menu service) method response is: \n{0}\n";
         public const string GETROLEBYID_RES_MSG = "getRoleById api method response is: \n{0}\n";
 
         //api/RoleMenu/saveUpdateRole
@@ -140,8 +140,8 @@
         public const string SAVEUPDATEROLE_REQ_MSG = "SaveUpdateRole api method request is: \n{0}\n";
         public const string SAVEUPDATEROLE_EXCEPTION_MSG = "SaveUpdateRole Exception below:: \n{0}\n";
         public const string SAVEUPDATEROLE_INNER_EXCEPTION_MSG = "SaveUpdateRole Inner Exception below:: \n{0}\n";
-        public const string SERVICE_SAVEUPDATEROLE_REQ_MSG = "SaveUpdateRoleAsync (User service) method request is: \n{0}\n";
-        public const string SERVICE_SAVEUPDATEROLE_RES_MSG = "SaveUpdateRoleAsync (User service) method response is: \n{0}\n";
+        public const string SERVICE_SAVEUPDATEROLE_REQ_MSG = "SaveUpdateRoleAsync (Role Menu service) method request is: \n{0}\n";
+        public const string SERVICE_SAVEUPDATEROLE_RES_MSG = "SaveUpdateRoleAsync (Role Menu service) method response is: \n{0}\n";
         public const string SAVEUPDATEROLE_RES_MSG = "SaveUpdateRole api method response is: \n{0}\n";
 
         //api/RoleMenu/deleteRole
@@ -149,8 +149,8 @@
         public const string DELETEROLE_REQ_MSG = "DeleteRole api method request is: \n{0}\n";
         public const string DELETEROLE_EXCEPTION_MSG = "DeleteRole Exception below:: \n{0}\n";
         public const string DELETEROLE_INNER_EXCEPTION_MSG = "DeleteRole Inner Exception below:: \n{0}\n";
-        public const string SERVICE_DELETEROLE_REQ_MSG = "DeleteRoleAsync (User service) method request is: \n{0}\n";
-        public const string SERVICE_DELETEROLE_RES_MSG = "DeleteRoleAsync (User service) method response is: \n{0}\n";
+        public const string SERVICE_DELETEROLE_REQ_MSG = "DeleteRoleAsync (Role Menu service) method request is: \n{0}\n";
+        public const string SERVICE_DELETEROLE_RES_MSG = "DeleteRoleAsync (Role Menu service) method response is: \n{0}\n";
         public const string DELETEROLE_RES_MSG = "DeleteRole api method response is: \n{0}\n";
 
         //api/RoleMenu/getAllMenuByUserId
@@ -158,8 +158,8 @@
         public const string GETALLMENUBYUSERID_REQ_MSG = "GetAllMenuByUserId api method request is: \n{0}\n";
         public const string GETALLMENUBYUSERID_EXCEPTION_MSG = "GetAllMenuByUserId Exception below:: \n{0}\n";
         public const string GETALLMENUBYUSERID_INNER_EXCEPTION_MSG = "GetAllMenuByUserId Inner Exception below:: \n{0}\n";
-        public const string SERVICE_GETALLMENUBYUSERID_REQ_MSG = "GetAllMenuByUserIdAsync (User service) method request is: \n{0}\n";
-        public const string SERVICE_GETALLMENUBYUSERID_RES_MSG = "GetAllMenuByUserIdAsync (User service) method response is: \n{0}\n";
+        public const string SERVICE_GETALLMENUBYUSERID_REQ_MSG = "GetAllMenuByUserIdAsync (Role Menu service) method request is: \n{0}\n";
+        public const string SERVICE_GETALLMENUBYUSERID_RES_MSG = "GetAllMenuByUserIdAsync (Role Menu service) method response is: \n{0}\n";
         public const string GETALLMENUBYUSERID_RES_MSG = "GetAllMenuByUserId api method response is: \n{0}\n";
 
 
