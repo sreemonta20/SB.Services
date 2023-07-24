@@ -118,9 +118,10 @@ namespace SB.Security.Service
             return oDataResponse;
         }
 
-        public async Task<DataResponse> SaveUpdateRoleAsync(RoleSaveUpdateRequest roleSaveUpdateRequest)
+        public async Task<DataResponse> SaveUpdateRoleAsync(RoleSaveUpdateRequest? roleSaveUpdateRequest)
         {
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_REQ_MSG, JsonConvert.SerializeObject(roleSaveUpdateRequest, Formatting.Indented)));
+            DataResponse? oDataResponse = null;
             try
             {
                 switch (roleSaveUpdateRequest.ActionName)
@@ -135,14 +136,39 @@ namespace SB.Security.Service
                             CreatedDate = DateTime.UtcNow,
                             IsActive = roleSaveUpdateRequest.IsActive
                         };
-                        var role = await this._context.UserRole.FirstOrDefaultAsync(u => u.RoleName == roleSaveUpdateRequest.RoleName);
-                        if (role != null)
+                        UserRole? role = await this._context.UserRole.FirstOrDefaultAsync(u => u.RoleName.ToLower() == roleSaveUpdateRequest.RoleName.ToLower());
+                        if (role != null && !String.IsNullOrEmpty(Convert.ToString(role.Id)))
                         {
-
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_RES_MSG, JsonConvert.SerializeObject(role, Formatting.Indented)));
+                            oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_ROLE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = roleSaveUpdateRequest };
                         }
+                        await this._context.UserRole.AddAsync(oUserRole);
+                        await this._context.SaveChangesAsync();
+                        roleSaveUpdateRequest.Id = Convert.ToString(oUserRole.Id);
+                        oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = roleSaveUpdateRequest };
                         break;
-
                     case ConstantSupplier.UPDATE_KEY:
+                        var oExistUserRole = await this._context.UserRole.FirstOrDefaultAsync(u => u.Id == new Guid(roleSaveUpdateRequest.Id));
+                        if (oExistUserRole != null)
+                        {
+                            oExistUserRole.RoleName = roleSaveUpdateRequest.RoleName;
+                            oExistUserRole.Description = roleSaveUpdateRequest.Description;
+                            oExistUserRole.UpdatedBy = roleSaveUpdateRequest.CreateUpdateBy;
+                            oExistUserRole.UpdatedDate = DateTime.UtcNow;
+                            oExistUserRole.IsActive = roleSaveUpdateRequest.IsActive;
+
+                            var isFullNameModified = this._context.Entry(oExistUserRole).Property("RoleName").IsModified;
+                            var isUserNameModified = this._context.Entry(oExistUserRole).Property("Description").IsModified;
+                            var isUpdatedByModified = this._context.Entry(oExistUserRole).Property("UpdatedBy").IsModified;
+                            var isUpdatedDateModified = this._context.Entry(oExistUserRole).Property("UpdatedDate").IsModified;
+                            var isIsActive = this._context.Entry(oExistUserRole).Property("IsActive").IsModified;
+                            this._context.SaveChanges();
+                            oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.USER_ROLE_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = roleSaveUpdateRequest };
+                        }
+                        _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_RES_MSG, JsonConvert.SerializeObject(oExistUserRole, Formatting.Indented)));
+                        oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_ROLE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = roleSaveUpdateRequest };
+                        break;
+                    default:
                         break;
                 }
             }
@@ -150,6 +176,7 @@ namespace SB.Security.Service
             {
                 throw;
             }
+            return oDataResponse;
         }
         public Task<DataResponse> DeleteRoleAsync(string roleId)
         {
@@ -190,6 +217,6 @@ namespace SB.Security.Service
             return oDataResponse;
         }
 
-        
+
     }
 }
