@@ -13,6 +13,10 @@ namespace SB.Security.Models.Base
         public virtual UserRole UserRole { get; set; }
         [ForeignKey("UserMenu")]
         public Guid MenuId { get; set; }
+        public Boolean? IsView { get; set; }
+        public Boolean? IsCreate { get; set; }
+        public Boolean? IsUpdate { get; set; }
+        public Boolean? IsDelete { get; set; }
         public virtual UserMenu UserMenu { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }

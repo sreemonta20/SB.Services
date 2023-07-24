@@ -241,6 +241,7 @@
 
         #region Role Menu Service
         public const string EXIST_ROLE = "There is a role with same name. Try different.";
+        public const string USER_ROLE_SAVE_SUCCESS = "saving user role success!";
         public const string USER_ROLE_UPDATE_SUCCESS = "Updating user role success!";
         public const string NOT_EXIST_ROLE = "There is no role with such name.";
         //SP
