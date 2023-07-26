@@ -456,7 +456,7 @@ BEGIN
 			INNER JOIN UserRoleMenu URM ON URM.MenuId = UM.Id
 			INNER JOIN UserRole UR ON UR.Id = URM.RoleId
         WHERE
-            ParentId = @parentId AND URM.RoleId = @RoleId
+            ParentId = @parentId AND URM.RoleId = @RoleId AND URM.IsActive = 1
         FOR JSON PATH
     )
 END
@@ -534,7 +534,7 @@ DECLARE @JsonMenu NVARCHAR(MAX),
         UserMenu UM
 		INNER JOIN UserRoleMenu URM ON URM.MenuId = UM.Id
 		INNER JOIN UserRole UR ON UR.Id = URM.RoleId
-		WHERE URM.RoleId = @RoleId AND UM.ParentId IS NULL
+		WHERE URM.RoleId = @RoleId AND UM.ParentId IS NULL AND URM.IsActive = 1
         
 	ORDER BY SerialNo
         --FOR JSON AUTO,INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER
@@ -544,3 +544,18 @@ DECLARE @JsonMenu NVARCHAR(MAX),
 
     SELECT @JsonMenu AS JsonMenu;
 END
+
+
+--SELECT URM.Id, URM.RoleId, UR.RoleName, URM.MenuId, UM.Name MenuName, UM.RouteLink,
+--	   CASE
+--			WHEN UM.IsHeader = 1 AND ISNULL(CAST(UM.ParentId AS VARCHAR(MAX)),'') = '' THEN 'Module'
+--			WHEN UM.IsHeader = 0 AND  ISNULL(CAST(UM.ParentId AS VARCHAR(MAX)),'') = '' THEN 'SubModule'
+--			ELSE 'Entity'
+--	   END AS MenuType,
+--	   URM.IsView, URM.IsCreate, URM.IsUpdate, URM.IsDelete,
+--URM.CreatedBy, URM.CreatedDate, URM.UpdatedBy, URM.UpdatedDate, URM.IsActive
+
+--FROM UserRoleMenu URM
+--INNER JOIN UserRole UR ON UR.Id = URM.RoleId
+--INNER JOIN UserMenu UM ON UM.Id = URM.MenuId
+--ORDER BY UM.SerialNo
