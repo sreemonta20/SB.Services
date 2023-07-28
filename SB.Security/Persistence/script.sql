@@ -559,3 +559,45 @@ END
 --INNER JOIN UserRole UR ON UR.Id = URM.RoleId
 --INNER JOIN UserMenu UM ON UM.Id = URM.MenuId
 --ORDER BY UM.SerialNo
+GO
+/****** Object:  StoredProcedure [dbo].[SP_GetMenuHierarchyByMenuId]    Script Date: 7/28/2023 11:13:28 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Sreemonta Bhowmik
+-- Create date: 28.07.2023
+-- Description: To generate parent menu.
+-- =============================================
+--EXEC SP_GetMenuHierarchyByMenuId '60AADC18-6B91-4CEE-ACE7-97700B685C98'
+--EXEC SP_GetMenuHierarchyByMenuId '52F916CC-6C4D-4B4F-B884-4E89F1489B8D'
+ALTER PROCEDURE [dbo].[SP_GetMenuHierarchyByMenuId] 
+	@MenuId				UNIQUEIDENTIFIER
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	WITH UserMenuCTE AS
+	(
+	     Select	[Id],[Name],[IsHeader] ,[CssClass] ,[RouteLink] ,[RouteLinkClass] ,[Icon] ,[ParentId]
+			,[DropdownIcon],[SerialNo] ,[CreatedBy] ,[CreatedDate],[UpdatedBy],[UpdatedDate],[IsActive]
+		 From [UserMenu]
+		 Where [Id] = @MenuId
+    
+		 UNION ALL
+    
+		 Select	UM.[Id],UM.[Name],UM.[IsHeader] ,UM.[CssClass] ,UM.[RouteLink] ,UM.[RouteLinkClass] ,UM.[Icon] ,UM.[ParentId]
+			,UM.[DropdownIcon],UM.[SerialNo] ,UM.[CreatedBy] ,UM.[CreatedDate],UM.[UpdatedBy],UM.[UpdatedDate],UM.[IsActive]
+		 From [UserMenu] UM
+		 JOIN UserMenuCTE UMC
+		 ON UM.[Id] = UMC.[ParentId]
+	)
+
+	Select UM1.[Id],UM1.[Name],UM1.[IsHeader] ,UM1.[CssClass] ,UM1.[RouteLink] ,UM1.[RouteLinkClass] ,UM1.[Icon], ISNULL(UM2.[Name], 'No Parent') as ParentName
+	From UserMenuCTE UM1
+	LEFT Join UserMenuCTE UM2
+	ON UM1.[ParentId] = UM2.[Id]
+END
