@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.X9;
 using SB.DataAccessLayer;
@@ -11,6 +12,8 @@ using SB.Security.Models.Configuration;
 using SB.Security.Models.Request;
 using SB.Security.Models.Response;
 using SB.Security.Persistence;
+using System;
+using System.Collections.Immutable;
 using System.Data;
 using System.Net;
 
@@ -253,6 +256,43 @@ namespace SB.Security.Service
                 else
                 {
                     oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_MENU_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userMenus };
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return oDataResponse;
+        }
+
+        public async Task<DataResponse> GetAllParentMenusAsync()
+        {
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GET_ALL_PARENT_MENUS_REQ_MSG, JsonConvert.SerializeObject(ConstantSupplier.NOT_APPLICABLE, Formatting.Indented)));
+            DataResponse? oDataResponse = null;
+            try
+            {
+                List<(Guid? Id, string? Name)>? parentMenuList = new List<(Guid? Id, string? Name)>();
+                List<UserMenu>? oUserMenuList = await _context.UserMenu.ToListAsync();
+
+                foreach (UserMenu item in oUserMenuList)
+                {
+                    if (String.IsNullOrEmpty(item.ParentId.ToString()))
+                    {
+                        parentMenuList.Add((item.Id, item?.Name));
+                    }
+                    else if (parentMenuList.Any(x => x.Id == item.ParentId))
+                    {
+                        continue;
+                    }
+                }
+                if (parentMenuList.IsNullOrEmpty())
+                {
+                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_PARENT_MENU_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GET_ALL_PARENT_MENUS_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                }
+                else
+                {
+                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_PARENT_MENU_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = parentMenuList };
                 }
             }
             catch (Exception)

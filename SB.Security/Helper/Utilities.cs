@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SB.Security.Models.Response;
+using System.Collections;
 using System.Data;
 using System.Linq.Dynamic.Core;
 using System.Reflection;
@@ -153,6 +154,19 @@ namespace SB.Security.Helper
                 }
             }
             return obj;
+        }
+
+        public static bool IsNullOrEmpty(this IEnumerable enumerable)
+        {
+            if (enumerable is null) return true;
+
+            foreach (var element in enumerable)
+            {
+                //If we make it here, it means there are elements, and we return false
+                return false;
+            }
+
+            return true;
         }
     }
 }

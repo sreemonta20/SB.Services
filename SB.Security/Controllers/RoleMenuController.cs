@@ -104,6 +104,41 @@ namespace SB.Security.Controllers
             return response;
         }
 
+        // GET api/RoleMenu/getAllParentMenus
+
+        /// <summary>
+        /// It used to get all parent menu list.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(ConstantSupplier.GET_ALL_PARENT_MENUS_ROUTE_NAME)]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
+        public async Task<object> GetAllParentMenus()
+        {
+            _securityLogService.LogInfo(ConstantSupplier.GET_ALL_PARENT_MENUS_STARTED_INFO_MSG);
+            DataResponse response;
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.GET_ALL_PARENT_MENUS_REQ_MSG, JsonConvert.SerializeObject(ConstantSupplier.NOT_APPLICABLE, Formatting.Indented)));
+            try
+            {
+                response = await _roleMenuService.GetAllParentMenusAsync();
+            }
+            catch (Exception Ex)
+            {
+                _securityLogService.LogError(String.Format(ConstantSupplier.GET_ALL_PARENT_MENUS_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(String.Format(ConstantSupplier.GET_ALL_PARENT_MENUS_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                return new DataResponse
+                {
+                    Success = false,
+                    Message = Ex.Message,
+                    MessageType = Enum.EnumResponseType.Error,
+                    ResponseCode = (int)HttpStatusCode.InternalServerError,
+                    Result = null
+                };
+            }
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.GET_ALL_PARENT_MENUS_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            return response;
+        }
+
         #endregion
     }
 }
