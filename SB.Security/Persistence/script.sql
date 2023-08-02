@@ -572,7 +572,7 @@ GO
 -- =============================================
 --EXEC SP_GetMenuHierarchyByMenuId '60AADC18-6B91-4CEE-ACE7-97700B685C98'
 --EXEC SP_GetMenuHierarchyByMenuId '52F916CC-6C4D-4B4F-B884-4E89F1489B8D'
-ALTER PROCEDURE [dbo].[SP_GetMenuHierarchyByMenuId] 
+CREATE PROCEDURE [dbo].[SP_GetMenuHierarchyByMenuId] 
 	@MenuId				UNIQUEIDENTIFIER
 AS
 BEGIN
@@ -600,4 +600,77 @@ BEGIN
 	From UserMenuCTE UM1
 	LEFT Join UserMenuCTE UM2
 	ON UM1.[ParentId] = UM2.[Id]
+END
+GO
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUserMenuListPagingWithSearch]    Script Date: 02/08/2023 8:35:57 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Sreemonta Bhowmik
+-- Create date: 25.04.2023
+-- Description:	Get all user menu list using paging with search
+-- =============================================
+--EXEC SP_GetAllUserMenuListPagingWithSearch '','','',1,1
+--EXEC SP_GetAllUserMenuListPagingWithSearch 'nav-icon fas fa-cog','Icon','ASC',1,2
+--EXEC SP_GetAllUserMenuListPagingWithSearch 'User','','ASC',1,2
+CREATE PROCEDURE [dbo].[SP_GetAllUserMenuListPagingWithSearch]
+@SearchTerm AS VARCHAR(50)='',
+@SortColumnName AS VARCHAR(50)='',
+@SortColumnDirection AS VARCHAR(50)='',
+@PageIndex AS INT=0,
+@PageSize AS INT=10
+AS
+BEGIN
+	DECLARE @QUERY AS VARCHAR(MAX)='',@ORDER_QUERY AS VARCHAR(MAX)='',@CONDITIONS AS VARCHAR(MAX)='',
+	@PAGINATION AS VARCHAR(MAX)=''
+
+	SET @QUERY='SELECT UM.Id, UM.Name,UM.IsHeader,UM.CssClass,UM.RouteLink,UM.RouteLinkClass,UM.Icon,UM.Remark,
+	UM.ParentId,UM.DropdownIcon,UM.SerialNo,UM.CreatedBy,UM.CreatedDate,UM.UpdatedBy,UM.UpdatedDate,UM.IsActive
+	FROM UserMenu UM '
+
+	-- SEARCH OPERATION
+	IF(ISNULL(@SearchTerm,'')<>'')
+	BEGIN
+		IF(ISDATE(@SearchTerm)=1) 
+			SET @CONDITIONS=' WHERE CAST(CreatedBy AS DATE)=CAST('+@SearchTerm+'AS DATE)'
+		ELSE
+		BEGIN
+			SET @CONDITIONS='
+			WHERE
+			Id LIKE ''%'+@SearchTerm+'%''
+			OR Name LIKE ''%'+@SearchTerm+'%''
+			OR CssClass LIKE ''%'+@SearchTerm+'%''
+			OR RouteLink LIKE ''%'+@SearchTerm+'%''
+			OR RouteLinkClass LIKE ''%'+@SearchTerm+'%''
+			OR Icon LIKE ''%'+@SearchTerm+'%''
+			OR Remark LIKE ''%'+@SearchTerm+'%''
+			OR DropdownIcon LIKE ''%'+@SearchTerm+'%''
+			OR SerialNo LIKE ''%'+@SearchTerm+'%''
+		'
+		END
+	END
+
+	-- SORT OPERATION
+	IF(ISNULL(@SortColumnName,'')<>'' AND ISNULL(@SortColumnDirection,'')<>'')
+	BEGIN
+		SET @ORDER_QUERY=' ORDER BY '+@SortColumnName+' '+@SortColumnDirection
+	END
+	ELSE SET @ORDER_QUERY=' ORDER BY Id ASC'
+
+	-- PAGINATION OPERATION
+	IF(@PageSize>0)
+	BEGIN
+		SET @PAGINATION=' OFFSET '+(CAST(((@PageIndex-1)*@PageSize) AS varchar(10)))+' ROWS
+		FETCH NEXT '+(CAST(@PageSize AS varchar(10)))+' ROWS ONLY'
+	END
+
+	IF(@CONDITIONS<>'') SET @QUERY+=@CONDITIONS
+	IF(@ORDER_QUERY<>'') SET @QUERY+=@ORDER_QUERY
+	IF(@PAGINATION<>'') SET @QUERY+=@PAGINATION
+
+	--PRINT(@CONDITIONS)
+	PRINT(@QUERY)
+	EXEC(@QUERY)
 END

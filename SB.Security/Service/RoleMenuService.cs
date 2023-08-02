@@ -302,6 +302,38 @@ namespace SB.Security.Service
             return oDataResponse;
         }
 
+        /// <summary>
+        /// <para>ADO.NET Codeblock: GetAllUserMenuPagingWithSearchAsync</para> 
+        /// This service method used to get a list of user menu based on the supplied searchterm, sortcolumnname, sortcolumndirection, page number, and page size.
+        /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
+        /// </summary>
+        /// <param name="paramRequest"></param>
+        /// <returns>PageResult<![CDATA[<T>]]></returns>
+        public async Task<PagingResult<UserMenu>?> GetAllUserMenuPagingWithSearchAsync(PagingSearchFilter paramRequest)
+        {
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+            List<UserMenu> oUserMenuList;
+            List<IDbDataParameter> parameters = new()
+            {
+                _dbmanager.CreateParameter("@SearchTerm", paramRequest.SearchTerm, DbType.String),
+                _dbmanager.CreateParameter("@SortColumnName", paramRequest.SortColumnName, DbType.String),
+                _dbmanager.CreateParameter("@SortColumnDirection", paramRequest.SortColumnDirection, DbType.String),
+                _dbmanager.CreateParameter("@PageIndex", paramRequest.PageNumber, DbType.Int32),
+                _dbmanager.CreateParameter("@PageSize", paramRequest.PageSize, DbType.Int32)
+            };
+            DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
 
+            if (oDT != null && oDT.Rows.Count > 0)
+            {
+                oUserMenuList = Utilities.ConvertDataTable<UserMenu>(oDT);
+
+                //return Utilities.GetPagingResult(oUserList, paramRequest.PageNumber, paramRequest.PageSize);
+                PagingResult<UserMenu> result = Utilities.GetPagingResult(oUserMenuList, paramRequest.PageNumber, paramRequest.PageSize);
+                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
+                return result;
+            }
+            return null;
+
+        }
     }
 }

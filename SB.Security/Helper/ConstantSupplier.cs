@@ -172,6 +172,14 @@
         public const string SERVICE_GET_ALL_PARENT_MENUS_RES_MSG = "GetAllParentMenusAsync (Role Menu service) method response is: \n{0}\n";
         public const string GET_ALL_PARENT_MENUS_RES_MSG = "GetAllParentMenus api method response is: \n{0}\n";
 
+        //api/RoleMenu/GetAllUserMenuPagingWithSearch
+        public const string GETALL_USER_MENU_PAGING_SEARCH_STARTED_INFO_MSG = "GetAllUserMenuPagingWithSearch api method started.\n";
+        public const string GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG = "GetAllUserMenuPagingWithSearch api method request is: \n{0}\n";
+        public const string GETALL_USER_MENU_PAGING_SEARCH_EXCEPTION_MSG = "GetAllUserMenuPagingWithSearch Exception below:: \n{0}\n";
+        public const string SERVICE_GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG = "GetAllUserMenuPagingWithSearchAsync (RoleMenu service) method request is: \n{0}\n";
+        public const string SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG = "GetAllUserMenuPagingWithSearchAsync (RoleMenu service) method response is: \n{0}\n";
+        public const string GETALL_USER_MENU_PAGING_SEARCH_RES_MSG = "GetAllUserMenuPagingWithSearch api method response is: \n{0}\n";
+
         #endregion
 
 
@@ -248,6 +256,7 @@
         public const string DELETE_ROLE_ROUTE_NAME = "deleteRole";
         public const string GET_ALL_MENU_BY_USER_ID_ROUTE_NAME = "getAllMenuByUserId";
         public const string GET_ALL_PARENT_MENUS_ROUTE_NAME = "getAllParentMenus";
+        public const string GETALL_USER_MENU_PAGING_SEARCH_SP_NAME = "SP_GetAllUserMenuListPagingWithSearch";
         #endregion
 
         #region Role Menu Service
