@@ -79,12 +79,27 @@ namespace SB.Security.Service
         /// <returns>DataResponse</returns>
         public async Task<DataResponse> GetUserByIdAsync(string id)
         {
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
-            UserInfo? user = await _context.UserInfo.FirstOrDefaultAsync(u => u.Id == new Guid(id) && u.IsActive == true);
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(user, Formatting.Indented)));
-            return user != null
-                ? new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user }
-                : new DataResponse { Success = false, Message = ConstantSupplier.GET_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+            DataResponse dataResponse;
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
+            try
+            {
+                UserInfo? user = await _context.UserInfo.FirstOrDefaultAsync(u => u.Id == new Guid(id) && u.IsActive == true);
+
+                if (user != null)
+                {
+                    dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user };
+                }
+                else
+                {
+                    dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return dataResponse;
         }
 
         /// <summary>
@@ -95,20 +110,30 @@ namespace SB.Security.Service
         /// <returns>DataResponse</returns>
         public async Task<DataResponse> GetUserByIdAdoAsync(string id)
         {
+            DataResponse dataResponse;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
-            UserInfo? user;
-            List<IDbDataParameter> parameters = new()
+            try
             {
-                _dbmanager.CreateParameter("@Id", new Guid(id), DbType.Guid)
-            };
-            DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GET_USER_BY_ID_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(oDT, Formatting.Indented)));
-            if (oDT != null && oDT.Rows.Count > 0)
-            {
-                user = JArray.FromObject(oDT)[0].ToObject<UserInfo>();
-                return new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user };
+                UserInfo? user;
+                List<IDbDataParameter> parameters = new() { _dbmanager.CreateParameter("@Id", new Guid(id), DbType.Guid) };
+                DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GET_USER_BY_ID_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+                
+                if (oDT != null && oDT.Rows.Count > 0)
+                {
+                    user = JArray.FromObject(oDT)[0].ToObject<UserInfo>();
+                    dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user };
+                }
+                else
+                {
+                    dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
+                }
             }
-            return new DataResponse { Success = false, Message = ConstantSupplier.GET_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+            catch (Exception)
+            {
+                throw;
+            }
+            return dataResponse;
         }
 
         /// <summary>
@@ -121,19 +146,28 @@ namespace SB.Security.Service
         public async Task<PageResult<UserInfo>> GetAllUserAsync(PaginationFilter paramRequest)
         {
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-            int count = await _context.UserInfo.CountAsync();
-            List<UserInfo> Items = await _context.UserInfo.OrderByDescending(x => x.CreatedDate).Skip((paramRequest.PageNumber - 1) * paramRequest.PageSize).Take(paramRequest.PageSize).ToListAsync();
-            PageResult<UserInfo> result = new PageResult<UserInfo>
+            try
             {
-                Count = count,
-                PageIndex = paramRequest.PageNumber > 0 ? paramRequest.PageNumber : 1,
-                PageSize = 10,
-                Items = Items
-            };
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
-            return result;
-
-
+                int count = await _context.UserInfo.CountAsync();
+                List<UserInfo> Items = await _context.UserInfo.OrderByDescending(x => x.CreatedDate).Skip((paramRequest.PageNumber - 1) * paramRequest.PageSize).Take(paramRequest.PageSize).ToListAsync();
+                PageResult<UserInfo> result = new()
+                {
+                    Count = count,
+                    PageIndex = paramRequest.PageNumber > 0 ? paramRequest.PageNumber : 1,
+                    PageSize = 10,
+                    Items = Items
+                };
+                if (!result.Items.Any())
+                {
+                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
+                }
+                
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -145,12 +179,24 @@ namespace SB.Security.Service
         /// <returns>PagingResult<![CDATA[<T>]]></returns>
         public async Task<PagingResult<UserInfo>> GetAllUserExtnAsync(PaginationFilter paramRequest)
         {
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-            //var source = _context.UserInfos.OrderBy(a=>a.CreatedDate).AsQueryable();
-            IQueryable<UserInfo> source = (from user in _context?.UserInfo?.OrderBy(a => a.CreatedDate) select user).AsQueryable();
-            PagingResult<UserInfo> result = await Utilities.GetPagingResult(source, paramRequest.PageNumber, paramRequest.PageSize);
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
-            return result;
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+            try
+            {
+                IQueryable<UserInfo> source = (from user in _context?.UserInfo?.OrderBy(a => a.CreatedDate) select user).AsQueryable();
+                PagingResult<UserInfo> result = await Utilities.GetPagingResult(source, paramRequest.PageNumber, paramRequest.PageSize);
+
+                if (!result.Items.Any())
+                {
+                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
+                }
+                
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
         }
 
         /// <summary>
@@ -162,26 +208,33 @@ namespace SB.Security.Service
         /// <returns>PageResult<![CDATA[<T>]]></returns>
         public async Task<PagingResult<UserInfo>?> GetAllUserAdoAsync(PaginationFilter paramRequest)
         {
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-            List<UserInfo> oUserList;
-            List<IDbDataParameter> parameters = new()
+            PagingResult<UserInfo>? result = null;
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+            try
             {
+                List<UserInfo> oUserList;
+                List<IDbDataParameter> parameters = new(){
                 _dbmanager.CreateParameter("@PageIndex", paramRequest.PageNumber, DbType.Int32),
-                _dbmanager.CreateParameter("@PageSize", paramRequest.PageSize, DbType.Int32)
-            };
-            DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GET_ALL_USER_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+                _dbmanager.CreateParameter("@PageSize", paramRequest.PageSize, DbType.Int32)};
 
-            if (oDT != null && oDT.Rows.Count > 0)
-            {
-                oUserList = Utilities.ConvertDataTable<UserInfo>(oDT);
+                DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GET_ALL_USER_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
 
-                //return Utilities.GetPagingResult(oUserList, paramRequest.PageNumber, paramRequest.PageSize);
-                PagingResult<UserInfo> result = Utilities.GetPagingResult(oUserList, paramRequest.PageNumber, paramRequest.PageSize);
-                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
-                return result;
+                if (oDT != null && oDT.Rows.Count > 0)
+                {
+                    oUserList = Utilities.ConvertDataTable<UserInfo>(oDT);
+                    result = Utilities.GetPagingResult(oUserList, paramRequest.PageNumber, paramRequest.PageSize);
+                }
+                else
+                {
+                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(string.Empty, Formatting.Indented)));
+                }
+                
             }
-            return null;
-
+            catch (Exception)
+            {
+                throw;
+            }
+            return result;
         }
 
         /// <summary>
@@ -195,185 +248,212 @@ namespace SB.Security.Service
         /// <returns>DataResponse</returns>
         public async Task<DataResponse> AuthenticateUserAsync(LoginRequest request)
         {
+            DataResponse dataResponse;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_LOGIN_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
-            if (request != null)
+            
+            try
             {
-
-                var user = await this._context.UserInfo.FirstOrDefaultAsync(u => u.UserName == request.UserName && u.IsActive == true);
-                if (user != null)
+                if (request != null)
                 {
-                    if (user.LoginFailedAttemptsCount > Convert.ToInt32(this._configuration["AppSettings:MaxNumberOfFailedAttempts"])
-                        && user.LastLoginAttemptAt.HasValue
-                        && DateTime.Now < user.LastLoginAttemptAt.Value.AddMinutes(Convert.ToInt32(this._configuration["AppSettings:BlockMinutes"])))
+
+                    UserInfo user = await _context.UserInfo.FirstOrDefaultAsync(u => u.UserName == request.UserName && u.IsActive == true);
+                    if (user != null)
                     {
-
-                        SendResponse emailResponse = await SendEmail(request, user);
-                        if (!emailResponse.Successful)
+                        if (user.LoginFailedAttemptsCount > Convert.ToInt32(_configuration["AppSettings:MaxNumberOfFailedAttempts"])
+                            && user.LastLoginAttemptAt.HasValue
+                            && DateTime.Now < user.LastLoginAttemptAt.Value.AddMinutes(Convert.ToInt32(_configuration["AppSettings:BlockMinutes"])))
                         {
-                            this._securityLogService.LogError(String.Format("{0}", JsonConvert.SerializeObject(emailResponse, Formatting.Indented)));
-                        }
 
-                        var oDataResponse = new DataResponse
-                        {
-                            Success = false,
-                            Message = String.Format(ConstantSupplier.AUTH_FAILED_ATTEMPT, Convert.ToInt32(this._configuration["AppSettings:BlockMinutes"])),
-                            MessageType = Enum.EnumResponseType.Error,
-                            ResponseCode = (int)HttpStatusCode.BadRequest,
-                            Result = null
-                        };
-                        _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
-
-                        return oDataResponse;
-                    }
-
-                    bool verified = BCryptNet.Verify(request.Password, user.Password);
-                    if (verified)
-                    {
-                        user.LoginFailedAttemptsCount = 0;
-                        user.LastLoginAttemptAt = DateTime.Now;
-                        await TrackAndUpdateLoginAttempts(user);
-                        JwtSecurityToken token;
-                        DateTime expires;
-                        //var TokenResult = GetToken(user);
-                        Token? tokenResult = _tokenService?.GenerateAccessToken(user);
-                        if (tokenResult != null)
-                        {
-                            tokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
-                            
-                        }
-
-                        DataResponse menuResponse = await _roleMenuService.GetAllMenuByUserIdAsync(user.Id.ToString());
-                        if(menuResponse != null && menuResponse.ResponseCode == 200) {
-                            tokenResult.userMenus = Convert.ToString(menuResponse.Result);
-                        }
-
-                        UserLogin? userlogin = _context.UserLogin.FirstOrDefault(u => (u.UserName == user.UserName) && (u.Password == user.Password));
-                        if (userlogin is null)
-                        {
-                            UserLogin oUserLogin = new()
+                            SendResponse emailResponse = await SendEmail(request, user);
+                            if (!emailResponse.Successful)
                             {
-                                Id = Guid.NewGuid(),
-                                UserName = request.UserName,
-                                Password = user.Password,
-                                RefreshToken = tokenResult?.refresh_token,
-                                RefreshTokenExpiryTime = DateTime.Now.AddDays(7)
+                                _securityLogService.LogError(String.Format("{0}", JsonConvert.SerializeObject(emailResponse, Formatting.Indented)));
+                            }
+
+                            dataResponse = new DataResponse
+                            {
+                                Success = false,
+                                Message = String.Format(ConstantSupplier.AUTH_FAILED_ATTEMPT, Convert.ToInt32(_configuration["AppSettings:BlockMinutes"])),
+                                MessageType = Enum.EnumResponseType.Error,
+                                ResponseCode = (int)HttpStatusCode.BadRequest,
+                                Result = null
                             };
-                            await _context.UserLogin.AddAsync(oUserLogin);
-                            await _context.SaveChangesAsync();
+                            _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
+
+                            return dataResponse;
+                        }
+
+                        bool verified = BCryptNet.Verify(request.Password, user.Password);
+                        if (verified)
+                        {
+                            user.LoginFailedAttemptsCount = 0;
+                            user.LastLoginAttemptAt = DateTime.Now;
+                            await TrackAndUpdateLoginAttempts(user);
+                            JwtSecurityToken token;
+                            DateTime expires;
+                            //var TokenResult = GetToken(user);
+                            Token? tokenResult = _tokenService?.GenerateAccessToken(user);
+                            if (tokenResult != null)
+                            {
+                                tokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
+
+                            }
+
+                            DataResponse menuResponse = await _roleMenuService.GetAllMenuByUserIdAsync(user.Id.ToString());
+                            if (menuResponse != null && menuResponse.ResponseCode == 200)
+                            {
+                                tokenResult.userMenus = Convert.ToString(menuResponse.Result);
+                            }
+
+                            UserLogin? userlogin = _context.UserLogin.FirstOrDefault(u => (u.UserName == user.UserName) && (u.Password == user.Password));
+                            if (userlogin is null)
+                            {
+                                UserLogin oUserLogin = new()
+                                {
+                                    Id = Guid.NewGuid(),
+                                    UserName = request.UserName,
+                                    Password = user.Password,
+                                    RefreshToken = tokenResult?.refresh_token,
+                                    RefreshTokenExpiryTime = DateTime.Now.AddDays(7)
+                                };
+                                await _context.UserLogin.AddAsync(oUserLogin);
+                                await _context.SaveChangesAsync();
+                            }
+                            else
+                            {
+                                userlogin.RefreshToken = tokenResult?.refresh_token;
+                                userlogin.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+                                await _context.SaveChangesAsync();
+                            }
+
+                            //return new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = TokenResult };
+
+                            dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = tokenResult };
+
+                            return dataResponse;
                         }
                         else
                         {
-                            userlogin.RefreshToken = tokenResult?.refresh_token;
-                            userlogin.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
-                            await _context.SaveChangesAsync();
+                            user.LastLoginAttemptAt = DateTime.Now;
+                            user.LoginFailedAttemptsCount++;
+                            await TrackAndUpdateLoginAttempts(user);
+
+                            //return new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+
+                            dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                            _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
+
+                            return dataResponse;
                         }
 
-                        //return new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = TokenResult };
 
-                        var oDataResponse1 = new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = tokenResult };
-                        _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_LOGIN_RES_MSG, JsonConvert.SerializeObject(oDataResponse1, Formatting.Indented)));
-
-                        return oDataResponse1;
-                    }
-                    else
-                    {
-                        user.LastLoginAttemptAt = DateTime.Now;
-                        user.LoginFailedAttemptsCount++;
-                        await TrackAndUpdateLoginAttempts(user);
-
-                        //return new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-
-                        var oDataResponse2 = new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                        _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(oDataResponse2, Formatting.Indented)));
-
-                        return oDataResponse2;
                     }
 
+                    //return new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                    dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
+
+                    return dataResponse;
 
                 }
-
-                //return new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                var oDataResponse3 = new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(oDataResponse3, Formatting.Indented)));
-
-                return oDataResponse3;
-
+                //return new DataResponse { Success = false, Message = ConstantSupplier.AUTH_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.AUTH_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
             }
-            //return new DataResponse { Success = false, Message = ConstantSupplier.AUTH_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-            var oDataResponse4 = new DataResponse { Success = false, Message = ConstantSupplier.AUTH_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-            _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(oDataResponse4, Formatting.Indented)));
-
-            return oDataResponse4;
+            catch (Exception)
+            {
+                throw;
+            }
+            return dataResponse;
         }
 
         public async Task<DataResponse> RefreshTokenAsync(RefreshTokenRequest refreshTokenReq)
         {
+            DataResponse dataResponse;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REFRESHTOKEN_REQ_MSG, JsonConvert.SerializeObject(refreshTokenReq, Formatting.Indented)));
-            if (refreshTokenReq != null)
+            try
             {
-                string? accessToken = refreshTokenReq?.Access_Token;
-                string? refreshToken = refreshTokenReq?.Refresh_Token;
-
-                ClaimsPrincipal principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
-                //string? username = principal?.Identity?.Name; //this is mapped to the Name claim by default
-                //principal.Claims.ToList()[5].Value
-                string? username = principal?.Claims?.Where(x => x.Type == "UserName")?.FirstOrDefault()?.Value;
-
-                var user = await this._context.UserInfo.FirstOrDefaultAsync(u => u.UserName == username && u.IsActive == true);
-
-                Token? tokenResult = _tokenService?.GenerateAccessToken(user);
-                if (tokenResult != null)
+                if (refreshTokenReq != null)
                 {
-                    tokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
+                    string? accessToken = refreshTokenReq?.Access_Token;
+                    string? refreshToken = refreshTokenReq?.Refresh_Token;
+
+                    ClaimsPrincipal principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
+                    //string? username = principal?.Identity?.Name; //this is mapped to the Name claim by default
+                    //principal.Claims.ToList()[5].Value
+                    string? username = principal?.Claims?.Where(x => x.Type == "UserName")?.FirstOrDefault()?.Value;
+
+                    var user = await _context.UserInfo.FirstOrDefaultAsync(u => u.UserName == username && u.IsActive == true);
+
+                    Token? tokenResult = _tokenService?.GenerateAccessToken(user);
+                    if (tokenResult != null)
+                    {
+                        tokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
+                    }
+
+                    DataResponse menuResponse = await _roleMenuService.GetAllMenuByUserIdAsync(user.Id.ToString());
+                    if (menuResponse != null && menuResponse.ResponseCode == 200)
+                    {
+                        tokenResult.userMenus = Convert.ToString(menuResponse.Result);
+                    }
+
+                    var userLogin = _context.UserLogin.SingleOrDefault(u => u.UserName == username);
+
+                    if (userLogin is null || userLogin.RefreshToken != refreshToken || userLogin.RefreshTokenExpiryTime <= DateTime.Now)
+                    {
+                        _securityLogService.LogError(String.Format(ConstantSupplier.INVALID_CLIENT_REQUEST, JsonConvert.SerializeObject(refreshTokenReq, Formatting.Indented)));
+                        dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.INVALID_CLIENT_REQUEST, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                        return dataResponse;
+                    }
+
+                    userLogin.RefreshToken = tokenResult?.refresh_token;
+                    userLogin.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+                    await _context.SaveChangesAsync();
+
+                    dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.REFRESHTOKEN_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = tokenResult };
+
+                    return dataResponse;
                 }
-
-                DataResponse menuResponse = await _roleMenuService.GetAllMenuByUserIdAsync(user.Id.ToString());
-                if (menuResponse != null && menuResponse.ResponseCode == 200)
-                {
-                    tokenResult.userMenus = Convert.ToString(menuResponse.Result);
-                }
-
-                var userLogin = _context.UserLogin.SingleOrDefault(u => u.UserName == username);
-
-                if (userLogin is null || userLogin.RefreshToken != refreshToken || userLogin.RefreshTokenExpiryTime <= DateTime.Now)
-                {
-                    _securityLogService.LogError(String.Format(ConstantSupplier.INVALID_CLIENT_REQUEST, JsonConvert.SerializeObject(refreshTokenReq, Formatting.Indented)));
-                    return new DataResponse { Success = false, Message = ConstantSupplier.INVALID_CLIENT_REQUEST, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                }
-
-                userLogin.RefreshToken = tokenResult?.refresh_token;
-                userLogin.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
-                await _context.SaveChangesAsync();
-
-                DataResponse oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.REFRESHTOKEN_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = tokenResult };
-                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REFRESHTOKEN_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
-
-                return oDataResponse;
+                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
             }
-            _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
-            return new DataResponse { Success = false, Message = ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+            catch (Exception)
+            {
+                throw;
+            }
+            return dataResponse;
         }
 
         public async Task<DataResponse> RevokeAsync(string userToken)
         {
+            DataResponse dataResponse;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REVOKE_REQ_MSG, JsonConvert.SerializeObject(userToken, Formatting.Indented)));
-            if (userToken != null)
+            try
             {
-                ClaimsPrincipal principal = _tokenService.GetPrincipalFromExpiredToken(userToken);
-                string? username = principal?.Claims?.Where(x => x.Type == "UserName")?.FirstOrDefault()?.Value; //this is mapped to the Name claim by default
-                UserLogin? oUserLogin = _context?.UserLogin.SingleOrDefault(u => u.UserName == username);
-                if (oUserLogin == null)
+                if (userToken != null)
                 {
-                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
-                    return new DataResponse { Success = false, Message = ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                    ClaimsPrincipal principal = _tokenService.GetPrincipalFromExpiredToken(userToken);
+                    string? username = principal?.Claims?.Where(x => x.Type == "UserName")?.FirstOrDefault()?.Value; //this is mapped to the Name claim by default
+                    UserLogin? oUserLogin = _context?.UserLogin.SingleOrDefault(u => u.UserName == username);
+                    if (oUserLogin == null)
+                    {
+                        _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                        dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                        return dataResponse;
+                    }
+                    oUserLogin.RefreshToken = null;
+                    await _context.SaveChangesAsync();
+                    dataResponse =  new DataResponse { Success = true, Message = ConstantSupplier.SESSION_EXPIRATION_MSG, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = ConstantSupplier.REVOKE_USER_SUCCESS };
+                    return dataResponse;
                 }
-                oUserLogin.RefreshToken = null;
-                await _context.SaveChangesAsync();
-                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REVOKE_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REVOKE_USER_SUCCESS, Formatting.Indented)));
-                return new DataResponse { Success = true, Message = ConstantSupplier.SESSION_EXPIRATION_MSG, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = ConstantSupplier.REVOKE_USER_SUCCESS };
+                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
             }
-            _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
-            return new DataResponse { Success = false, Message = ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+            catch (Exception)
+            {
+                throw;
+            }
+            return dataResponse;
         }
 
         /// <summary>
@@ -386,141 +466,150 @@ namespace SB.Security.Service
         /// <returns>DataResponse</returns>
         public async Task<DataResponse> RegisterUserAsync(UserRegisterRequest request)
         {
+            DataResponse dataResponse;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
-            if (request != null)
+            try
             {
-
-
-                switch (request.ActionName)
+                if (request != null)
                 {
-                    case ConstantSupplier.SAVE_KEY:
-                        string saltKey = BCryptNet.GenerateSalt(13);
-                        UserInfo oSaveUserInfo = new()
-                        {
-                            Id = Guid.NewGuid(),
-                            FullName = request.FullName,
-                            UserName = request.UserName,
-                            Password = BCryptNet.HashPassword(request.Password, saltKey),
-                            SaltKey = saltKey,
-                            Email = request.Email,
-                            //UserRole = request.UserRole,
-                            //UserRole = new Guid(request.UserRole),
-                            RoleId = new Guid(request.RoleId),
-                            CreatedBy = Convert.ToString(this._context.UserInfo.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id),
-                            CreatedDate = DateTime.UtcNow,
-                            IsActive = request.IsActive
-                        };
+                    switch (request.ActionName)
+                    {
+                        case ConstantSupplier.SAVE_KEY:
+                            string saltKey = BCryptNet.GenerateSalt(13);
+                            UserInfo oSaveUserInfo = new()
+                            {
+                                Id = Guid.NewGuid(),
+                                FullName = request.FullName,
+                                UserName = request.UserName,
+                                Password = BCryptNet.HashPassword(request.Password, saltKey),
+                                SaltKey = saltKey,
+                                Email = request.Email,
+                                //UserRole = request.UserRole,
+                                //UserRole = new Guid(request.UserRole),
+                                RoleId = new Guid(request.RoleId),
+                                CreatedBy = Convert.ToString(_context.UserInfo.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id),
+                                CreatedDate = DateTime.UtcNow,
+                                IsActive = request.IsActive
+                            };
 
-                        var user = await this._context.UserInfo.FirstOrDefaultAsync(u => u.UserName == request.UserName);
-                        if (user != null && !String.IsNullOrEmpty(Convert.ToString(user.Id)))
-                        {
-                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(user, Formatting.Indented)));
-                            return new DataResponse { Success = false, Message = ConstantSupplier.EXIST_USER, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
-                        }
+                            var user = await _context.UserInfo.FirstOrDefaultAsync(u => u.UserName == request.UserName);
+                            if (user != null && !String.IsNullOrEmpty(Convert.ToString(user.Id)))
+                            {
+                                _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(user, Formatting.Indented)));
+                                dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_USER, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
+                                return dataResponse;
+                            }
 
-                        #region EF Codeblock of saving data
-                        await this._context.UserInfo.AddAsync(oSaveUserInfo);
-                        await this._context.SaveChangesAsync();
+                            #region EF Codeblock of saving data
+                            await _context.UserInfo.AddAsync(oSaveUserInfo);
+                            await _context.SaveChangesAsync();
 
-                        request.Id = Convert.ToString(oSaveUserInfo.Id);
-                        _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
-                        return new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
-                    #endregion
-
-                    #region ADO.NET Codeblock of saving data
-                    //List<IDbDataParameter> parameters = new()
-                    //{
-                    //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.SAVE_KEY, DbType.String),
-                    //    _dbmanager.CreateParameter("@Id", oSaveUserInfo.Id, DbType.Guid),
-                    //    _dbmanager.CreateParameter("@FullName", oSaveUserInfo.FullName, DbType.String),
-                    //    _dbmanager.CreateParameter("@UserName", oSaveUserInfo.UserName, DbType.String),
-                    //    _dbmanager.CreateParameter("@Password", oSaveUserInfo.Password, DbType.String),
-                    //    _dbmanager.CreateParameter("@SaltKey", oSaveUserInfo.SaltKey, DbType.String),
-                    //    _dbmanager.CreateParameter("@Email", oSaveUserInfo.Email, DbType.String),
-                    //    _dbmanager.CreateParameter("@RoleId", oSaveUserInfo.RoleId, DbType.Guid),
-                    //    _dbmanager.CreateParameter("@CreatedBy", oSaveUserInfo.CreatedBy, DbType.String),
-                    //    _dbmanager.CreateParameter("@CreatedDate", oSaveUserInfo.CreatedDate, DbType.DateTime),
-                    //    _dbmanager.CreateParameter("@UpdatedBy", DBNull.Value, DbType.String),
-                    //    _dbmanager.CreateParameter("@UpdatedDate", DBNull.Value, DbType.DateTime),
-                    //    _dbmanager.CreateParameter("@IsActive", oSaveUserInfo.IsActive, DbType.Boolean)
-                    //};
-
-                    //int isSave = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
-
-                    //request.Id = Convert.ToString(oSaveUserInfo.Id);
-                    //_securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
-                    //return isSave > 0
-                    //? new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request }
-                    //: new DataResponse { Success = false, Message = ConstantSupplier.REG_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                    #endregion
-
-                    case ConstantSupplier.UPDATE_KEY:
-
-                        var oldUser = await this._context.UserInfo.FirstOrDefaultAsync(u => u.UserName == (request.UserName));
-
-                        if ((oldUser != null) && (oldUser.Id != new Guid(request.Id)))
-                        {
-                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(oldUser, Formatting.Indented)));
-                            return new DataResponse { Success = false, Message = ConstantSupplier.EXIST_USER, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
-                        }
-
-
-                        var dbUserInfo = this._context.UserInfo.FirstOrDefault(s => s.Id.Equals(new Guid(request.Id)));
-                        dbUserInfo.FullName = request.FullName;
-                        dbUserInfo.UserName = request.UserName;
-                        dbUserInfo.Email = request.Email;
-                        //dbUserInfo.UserRole = request.UserRole;
-                        //dbUserInfo.UserRole = new Guid(request.UserRole);
-                        dbUserInfo.RoleId = new Guid(request.RoleId);
-                        dbUserInfo.UpdatedBy = Convert.ToString(this._context.UserInfo.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id);
-                        dbUserInfo.UpdatedDate = DateTime.UtcNow;
-                        dbUserInfo.IsActive = request.IsActive;
-
-                        #region EF Codeblock of updating data
-                        var isFullNameModified = this._context.Entry(dbUserInfo).Property("FullName").IsModified;
-                        var isUserNameModified = this._context.Entry(dbUserInfo).Property("UserName").IsModified;
-                        var isEmailModified = this._context.Entry(dbUserInfo).Property("Email").IsModified;
-                        var isRoleIdModified = this._context.Entry(dbUserInfo).Property("RoleId").IsModified;
-                        var isUpdatedByModified = this._context.Entry(dbUserInfo).Property("UpdatedBy").IsModified;
-                        var isUpdatedDateModified = this._context.Entry(dbUserInfo).Property("UpdatedDate").IsModified;
-                        var isIsActive = this._context.Entry(dbUserInfo).Property("IsActive").IsModified;
-                        this._context.SaveChanges();
-
-                        _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
-                        return new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
+                            request.Id = Convert.ToString(oSaveUserInfo.Id);
+                            dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
+                            return dataResponse;
                         #endregion
 
-                        #region ADO.NET Codeblock of updating data
-                        //List<IDbDataParameter> upParameters = new()
+                        #region ADO.NET Codeblock of saving data
+                        //List<IDbDataParameter> parameters = new()
                         //{
-                        //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.UPDATE_KEY, DbType.String),
-                        //    _dbmanager.CreateParameter("@Id", dbUserInfo.Id, DbType.Guid),
-                        //    _dbmanager.CreateParameter("@FullName", dbUserInfo.FullName, DbType.String),
-                        //    _dbmanager.CreateParameter("@UserName", dbUserInfo.UserName, DbType.String),
-                        //    _dbmanager.CreateParameter("@Password", DBNull.Value, DbType.String),
-                        //    _dbmanager.CreateParameter("@SaltKey", DBNull.Value, DbType.String),
-                        //    _dbmanager.CreateParameter("@Email", dbUserInfo.Email, DbType.String),
-                        //    _dbmanager.CreateParameter("@RoleId", dbUserInfo.RoleId, DbType.Guid),
-                        //    _dbmanager.CreateParameter("@CreatedBy", DBNull.Value, DbType.String),
-                        //    _dbmanager.CreateParameter("@CreatedDate", DBNull.Value, DbType.DateTime),
-                        //    _dbmanager.CreateParameter("@UpdatedBy", dbUserInfo.UpdatedBy, DbType.String),
-                        //    _dbmanager.CreateParameter("@UpdatedDate", dbUserInfo.UpdatedDate, DbType.DateTime)
+                        //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.SAVE_KEY, DbType.String),
+                        //    _dbmanager.CreateParameter("@Id", oSaveUserInfo.Id, DbType.Guid),
+                        //    _dbmanager.CreateParameter("@FullName", oSaveUserInfo.FullName, DbType.String),
+                        //    _dbmanager.CreateParameter("@UserName", oSaveUserInfo.UserName, DbType.String),
+                        //    _dbmanager.CreateParameter("@Password", oSaveUserInfo.Password, DbType.String),
+                        //    _dbmanager.CreateParameter("@SaltKey", oSaveUserInfo.SaltKey, DbType.String),
+                        //    _dbmanager.CreateParameter("@Email", oSaveUserInfo.Email, DbType.String),
+                        //    _dbmanager.CreateParameter("@RoleId", oSaveUserInfo.RoleId, DbType.Guid),
+                        //    _dbmanager.CreateParameter("@CreatedBy", oSaveUserInfo.CreatedBy, DbType.String),
+                        //    _dbmanager.CreateParameter("@CreatedDate", oSaveUserInfo.CreatedDate, DbType.DateTime),
+                        //    _dbmanager.CreateParameter("@UpdatedBy", DBNull.Value, DbType.String),
+                        //    _dbmanager.CreateParameter("@UpdatedDate", DBNull.Value, DbType.DateTime),
                         //    _dbmanager.CreateParameter("@IsActive", oSaveUserInfo.IsActive, DbType.Boolean)
                         //};
 
-                        //int isUpdate = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, upParameters.ToArray());
+                        //int isSave = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
 
-                        ////_securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
-
-                        //return isUpdate > 0
-                        //? new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request }
-                        //: new DataResponse { Success = false, Message = ConstantSupplier.REG_USER_UPDATE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                        //request.Id = Convert.ToString(oSaveUserInfo.Id);
+                        //_securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+                        //return isSave > 0
+                        //? new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request }
+                        //: new DataResponse { Success = false, Message = ConstantSupplier.REG_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
                         #endregion
-                }
 
+                        case ConstantSupplier.UPDATE_KEY:
+
+                            var oldUser = await _context.UserInfo.FirstOrDefaultAsync(u => u.UserName == request.UserName);
+
+                            if ((oldUser != null) && (oldUser.Id != new Guid(request.Id)))
+                            {
+                                _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(oldUser, Formatting.Indented)));
+                                dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_USER, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
+                                return dataResponse;
+                            }
+
+
+                            var dbUserInfo = _context.UserInfo.FirstOrDefault(s => s.Id.Equals(new Guid(request.Id)));
+                            dbUserInfo.FullName = request.FullName;
+                            dbUserInfo.UserName = request.UserName;
+                            dbUserInfo.Email = request.Email;
+                            //dbUserInfo.UserRole = request.UserRole;
+                            //dbUserInfo.UserRole = new Guid(request.UserRole);
+                            dbUserInfo.RoleId = new Guid(request.RoleId);
+                            dbUserInfo.UpdatedBy = Convert.ToString(_context.UserInfo.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id);
+                            dbUserInfo.UpdatedDate = DateTime.UtcNow;
+                            dbUserInfo.IsActive = request.IsActive;
+
+                            #region EF Codeblock of updating data
+                            var isFullNameModified = _context.Entry(dbUserInfo).Property("FullName").IsModified;
+                            var isUserNameModified = _context.Entry(dbUserInfo).Property("UserName").IsModified;
+                            var isEmailModified = _context.Entry(dbUserInfo).Property("Email").IsModified;
+                            var isRoleIdModified = _context.Entry(dbUserInfo).Property("RoleId").IsModified;
+                            var isUpdatedByModified = _context.Entry(dbUserInfo).Property("UpdatedBy").IsModified;
+                            var isUpdatedDateModified = _context.Entry(dbUserInfo).Property("UpdatedDate").IsModified;
+                            var isIsActive = _context.Entry(dbUserInfo).Property("IsActive").IsModified;
+                            _context.SaveChanges();
+
+                            dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
+                            return dataResponse;
+                            #endregion
+
+                            #region ADO.NET Codeblock of updating data
+                            //List<IDbDataParameter> upParameters = new()
+                            //{
+                            //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.UPDATE_KEY, DbType.String),
+                            //    _dbmanager.CreateParameter("@Id", dbUserInfo.Id, DbType.Guid),
+                            //    _dbmanager.CreateParameter("@FullName", dbUserInfo.FullName, DbType.String),
+                            //    _dbmanager.CreateParameter("@UserName", dbUserInfo.UserName, DbType.String),
+                            //    _dbmanager.CreateParameter("@Password", DBNull.Value, DbType.String),
+                            //    _dbmanager.CreateParameter("@SaltKey", DBNull.Value, DbType.String),
+                            //    _dbmanager.CreateParameter("@Email", dbUserInfo.Email, DbType.String),
+                            //    _dbmanager.CreateParameter("@RoleId", dbUserInfo.RoleId, DbType.Guid),
+                            //    _dbmanager.CreateParameter("@CreatedBy", DBNull.Value, DbType.String),
+                            //    _dbmanager.CreateParameter("@CreatedDate", DBNull.Value, DbType.DateTime),
+                            //    _dbmanager.CreateParameter("@UpdatedBy", dbUserInfo.UpdatedBy, DbType.String),
+                            //    _dbmanager.CreateParameter("@UpdatedDate", dbUserInfo.UpdatedDate, DbType.DateTime)
+                            //    _dbmanager.CreateParameter("@IsActive", oSaveUserInfo.IsActive, DbType.Boolean)
+                            //};
+
+                            //int isUpdate = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, upParameters.ToArray());
+
+                            ////_securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+
+                            //return isUpdate > 0
+                            //? new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request }
+                            //: new DataResponse { Success = false, Message = ConstantSupplier.REG_USER_UPDATE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                            #endregion
+                    }
+
+                }
+                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.REG_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
             }
-            _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
-            return new DataResponse { Success = false, Message = ConstantSupplier.REG_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+            catch (Exception)
+            {
+                throw;
+            }
+            return dataResponse;
         }
 
         /// <summary>
@@ -531,46 +620,56 @@ namespace SB.Security.Service
         /// <returns>DataResponse</returns>
         public async Task<DataResponse> DeleteUserAsync(string id)
         {
+            DataResponse dataResponse;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_DELUSER_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
-            UserInfo? oUserInfo = await this._context.UserInfo.FindAsync(new Guid(id));
- 
-            if (oUserInfo != null)
+            try
             {
+                UserInfo? oUserInfo = await _context.UserInfo.FindAsync(new Guid(id));
 
-                #region EF Codeblock of deleting data
-                if (_appSettings.IsUserDelate)
+                if (oUserInfo != null)
                 {
-                    this._context.UserInfo.Remove(oUserInfo);
+
+                    #region EF Codeblock of deleting data
+                    if (_appSettings.IsUserDelate)
+                    {
+                        _context.UserInfo.Remove(oUserInfo);
+                    }
+                    else
+                    {
+                        UserInfo oUserInfoUp = await _context.UserInfo.FindAsync(id);
+                        oUserInfoUp.IsActive = false;
+                        _context.Entry(oUserInfoUp).State = EntityState.Modified;
+                        _context.SaveChanges();
+                    }
+
+                    await _context.SaveChangesAsync();
+                    dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.DELETE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oUserInfo };
+                    return dataResponse;
+                    #endregion
+
+                    #region ADO.NET Codeblock of deleting data
+                    //List<IDbDataParameter> parameters = new()
+                    //        {
+                    //            _dbmanager.CreateParameter("@Id", oUserInfo.Id, DbType.Guid),
+                    //            _dbmanager.CreateParameter("@IsDelete", _appSettings.IsUserDelate? true: false, DbType.Boolean)
+                    //        };
+
+                    //object isDelete = await _dbmanager.DeleteAsync(ConstantSupplier.DELETE_USER_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+
+
+                    //return Convert.ToInt32(isDelete) > 0
+                    //? new DataResponse { Success = true, Message = ConstantSupplier.DELETE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oUserInfo }
+                    //: new DataResponse { Success = false, Message = ConstantSupplier.DELETE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                    #endregion
                 }
-                else
-                {
-                    UserInfo oUserInfoUp = await _context.UserInfo.FindAsync(id);
-                    oUserInfoUp.IsActive = false;
-                    _context.Entry(oUserInfoUp).State = EntityState.Modified;
-                    _context.SaveChanges();
-                }
-                
-                await this._context.SaveChangesAsync();
-                return new DataResponse { Success = true, Message = ConstantSupplier.DELETE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oUserInfo };
-                #endregion
-
-                #region ADO.NET Codeblock of deleting data
-                //List<IDbDataParameter> parameters = new()
-                //        {
-                //            _dbmanager.CreateParameter("@Id", oUserInfo.Id, DbType.Guid),
-                //            _dbmanager.CreateParameter("@IsDelete", _appSettings.IsUserDelate? true: false, DbType.Boolean)
-                //        };
-
-                //object isDelete = await _dbmanager.DeleteAsync(ConstantSupplier.DELETE_USER_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
-
-
-                //return Convert.ToInt32(isDelete) > 0
-                //? new DataResponse { Success = true, Message = ConstantSupplier.DELETE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oUserInfo }
-                //: new DataResponse { Success = false, Message = ConstantSupplier.DELETE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                #endregion
+                _securityLogService.LogError(String.Format(ConstantSupplier.DELUSER_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.DELETE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = id };
             }
-            _securityLogService.LogError(String.Format(ConstantSupplier.DELUSER_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
-            return new DataResponse { Success = false, Message = ConstantSupplier.DELETE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = id };
+            catch (Exception)
+            {
+                throw;
+            }
+            return dataResponse;
         }
 
         /// <summary>
@@ -582,14 +681,14 @@ namespace SB.Security.Service
         //{
 
         //    var tokenHandler = new JwtSecurityTokenHandler();
-        //    var key = Encoding.ASCII.GetBytes(this._configuration["AppSettings:JWT:Key"]);
+        //    var key = Encoding.ASCII.GetBytes(_configuration["AppSettings:JWT:Key"]);
 
-        //    DateTime expiryTime = DateTime.Now.AddSeconds(Convert.ToDouble(this._configuration["AppSettings:AccessTokenExpireTime"]));
+        //    DateTime expiryTime = DateTime.Now.AddSeconds(Convert.ToDouble(_configuration["AppSettings:AccessTokenExpireTime"]));
         //    var tokenDescriptor = new SecurityTokenDescriptor
         //    {
         //        Subject = new ClaimsIdentity(new Claim[]
         //        {
-        //                new Claim(JwtRegisteredClaimNames.Sub, this._configuration["AppSettings:JWT:Subject"]),
+        //                new Claim(JwtRegisteredClaimNames.Sub, _configuration["AppSettings:JWT:Subject"]),
         //                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         //                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
         //                new Claim("UserId", user.Id.ToString()),
@@ -609,7 +708,7 @@ namespace SB.Security.Service
         //        return new Token()
         //        {
         //            access_token = tokenString,
-        //            expires_in = Convert.ToInt32(Convert.ToDouble(this._configuration["AppSettings:AccessTokenExpireTime"])),
+        //            expires_in = Convert.ToInt32(Convert.ToDouble(_configuration["AppSettings:AccessTokenExpireTime"])),
         //            token_type = ConstantSupplier.AUTHORIZATION_TOKEN_TYPE,
         //            error = string.Empty,
         //            error_description = string.Empty,
@@ -630,12 +729,20 @@ namespace SB.Security.Service
         /// <returns></returns>
         private async Task TrackAndUpdateLoginAttempts(UserInfo? user)
         {
-            var dbUserInfo = await this._context.UserInfo.FirstOrDefaultAsync(u => u.Id == user.Id);
-            dbUserInfo.LastLoginAttemptAt = user.LastLoginAttemptAt;
-            dbUserInfo.LoginFailedAttemptsCount = user.LoginFailedAttemptsCount;
-            var isLastLoginAttemptAtModified = this._context.Entry(dbUserInfo).Property("LastLoginAttemptAt").IsModified;
-            var isLoginFailedAttemptsCountModified = this._context.Entry(dbUserInfo).Property("LoginFailedAttemptsCount").IsModified;
-            this._context.SaveChanges();
+            try
+            {
+                var dbUserInfo = await _context.UserInfo.FirstOrDefaultAsync(u => u.Id == user.Id);
+                dbUserInfo.LastLoginAttemptAt = user.LastLoginAttemptAt;
+                dbUserInfo.LoginFailedAttemptsCount = user.LoginFailedAttemptsCount;
+                var isLastLoginAttemptAtModified = _context.Entry(dbUserInfo).Property("LastLoginAttemptAt").IsModified;
+                var isLoginFailedAttemptsCountModified = _context.Entry(dbUserInfo).Property("LoginFailedAttemptsCount").IsModified;
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
         }
 
         /// <summary>
@@ -646,12 +753,21 @@ namespace SB.Security.Service
         /// <returns></returns>
         private async Task<SendResponse> SendEmail(LoginRequest request, UserInfo? user)
         {
-            string body = _emailService.PopulateBody("EmailTemplates/emailblocknotice.htm", user.UserName,
+            SendResponse response;
+            try
+            {
+                string body = _emailService.PopulateBody("EmailTemplates/emailblocknotice.htm", user.UserName,
                                         "User management", "https://localhost:4200/",
                                         "Please check your username and password. Please wait for mentioned time to re-login");
-            var message = new Message() { To = user.Email, Name = request.UserName, Subject = "Email Blocked", Body = body };
-            var emailResponse = await this._emailService.SendEmailAsync(_appSettings.EmailConfiguration, message);
-            return emailResponse;
+                Message message = new() { To = user.Email, Name = request.UserName, Subject = "Email Blocked", Body = body };
+                response = await _emailService.SendEmailAsync(_appSettings.EmailConfiguration, message);
+                
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return response;
         }
         #endregion
     }

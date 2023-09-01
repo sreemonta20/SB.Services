@@ -32,6 +32,7 @@ namespace SB.Security.Service
         private readonly AppSettings? _appSettings;
         private readonly ISecurityLogService _securityLogService;
         private readonly IDatabaseManager _dbmanager;
+
         /// <summary>
         /// 
         /// </summary>
@@ -52,34 +53,38 @@ namespace SB.Security.Service
             _dbmanager.InitializeDatabase(_appSettings?.ConnectionStrings?.ProdSqlConnectionString, _appSettings?.ConnectionProvider);
         }
         #endregion
+
+        #region All methods
         public async Task<DataResponse> GetAllRolesAsync()
         {
+            DataResponse? dataResponse;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALLROLES_REQ_MSG, JsonConvert.SerializeObject(null, Formatting.Indented)));
-            DataResponse? oDataResponse = null;
+            
             try
             {
                 List<UserRole> userRoleList = await _context.UserRole.OrderByDescending(x => x.RoleName).ToListAsync();
                 if (userRoleList == null)
                 {
-                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_ROLE_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLROLES_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_ROLE_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_GETALLROLES_RES_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
                 }
                 else
                 {
-                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_ROLE_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userRoleList };
+                    dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_ROLE_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userRoleList };
                 }
             }
             catch (Exception)
             {
                 throw;
             }
-            return oDataResponse;
+            return dataResponse;
         }
 
         public async Task<PagingResult<UserRole>?> GetAllRolesPaginationAsync(PaginationFilter paramRequest)
         {
+            PagingResult<UserRole>? result;
             _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-            PagingResult<UserRole>? result = null;
+            
             try
             {
                 IQueryable<UserRole> source = (from userRole in _context?.UserRole?.OrderBy(a => a.CreatedDate) select userRole).AsQueryable();
@@ -98,32 +103,34 @@ namespace SB.Security.Service
 
         public async Task<DataResponse> GetRoleByIdAsync(string roleId)
         {
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETROLEBYID_REQ_MSG, JsonConvert.SerializeObject(roleId, Formatting.Indented)));
-            DataResponse? oDataResponse = null;
+            DataResponse? dataResponse;
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETROLEBYID_REQ_MSG, JsonConvert.SerializeObject(roleId, Formatting.Indented)));
+            
             try
             {
                 UserRole? userRole = await _context.UserRole.FirstOrDefaultAsync(u => u.Id == new Guid(roleId) && u.IsActive == true);
                 if (userRole == null)
                 {
-                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_USER_FAILED, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_USER_FAILED, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
                 }
                 else
                 {
-                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userRole };
+                    dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.GET_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userRole };
                 }
             }
             catch (Exception)
             {
                 throw;
             }
-            return oDataResponse;
+            return dataResponse;
         }
 
         public async Task<DataResponse> SaveUpdateRoleAsync(RoleSaveUpdateRequest? roleSaveUpdateRequest)
         {
+            DataResponse? dataResponse = null;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_REQ_MSG, JsonConvert.SerializeObject(roleSaveUpdateRequest, Formatting.Indented)));
-            DataResponse? oDataResponse = null;
+            
             try
             {
                 switch (roleSaveUpdateRequest.ActionName)
@@ -139,23 +146,23 @@ namespace SB.Security.Service
                             IsActive = roleSaveUpdateRequest.IsActive
                         };
 
-                        UserRole? role = await this._context.UserRole.FirstOrDefaultAsync(u => u.RoleName.ToLower() == roleSaveUpdateRequest.RoleName.ToLower());
+                        UserRole? role = await _context.UserRole.FirstOrDefaultAsync(u => u.RoleName.ToLower() == roleSaveUpdateRequest.RoleName.ToLower());
                         if (role != null && !String.IsNullOrEmpty(Convert.ToString(role.Id)))
                         {
-                            oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_ROLE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = roleSaveUpdateRequest };
-                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                            dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_ROLE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = roleSaveUpdateRequest };
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_RES_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
                         }
                         else
                         {
-                            await this._context.UserRole.AddAsync(oUserRole);
-                            await this._context.SaveChangesAsync();
+                            await _context.UserRole.AddAsync(oUserRole);
+                            await _context.SaveChangesAsync();
                             roleSaveUpdateRequest.Id = Convert.ToString(oUserRole.Id);
-                            oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.USER_ROLE_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = roleSaveUpdateRequest };
+                            dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.USER_ROLE_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = roleSaveUpdateRequest };
                         }
                         
                         break;
                     case ConstantSupplier.UPDATE_KEY:
-                        var oExistUserRole = await this._context.UserRole.FirstOrDefaultAsync(u => u.Id == new Guid(roleSaveUpdateRequest.Id));
+                        var oExistUserRole = await _context.UserRole.FirstOrDefaultAsync(u => u.Id == new Guid(roleSaveUpdateRequest.Id));
                         if (oExistUserRole != null)
                         {
                             oExistUserRole.RoleName = roleSaveUpdateRequest.RoleName;
@@ -164,18 +171,18 @@ namespace SB.Security.Service
                             oExistUserRole.UpdatedDate = DateTime.UtcNow;
                             oExistUserRole.IsActive = roleSaveUpdateRequest.IsActive;
 
-                            var isFullNameModified = this._context.Entry(oExistUserRole).Property("RoleName").IsModified;
-                            var isUserNameModified = this._context.Entry(oExistUserRole).Property("Description").IsModified;
-                            var isUpdatedByModified = this._context.Entry(oExistUserRole).Property("UpdatedBy").IsModified;
-                            var isUpdatedDateModified = this._context.Entry(oExistUserRole).Property("UpdatedDate").IsModified;
-                            var isIsActive = this._context.Entry(oExistUserRole).Property("IsActive").IsModified;
-                            this._context.SaveChanges();
-                            oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.USER_ROLE_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = roleSaveUpdateRequest };
+                            bool isFullNameModified = _context.Entry(oExistUserRole).Property("RoleName").IsModified;
+                            bool isUserNameModified = _context.Entry(oExistUserRole).Property("Description").IsModified;
+                            bool isUpdatedByModified = _context.Entry(oExistUserRole).Property("UpdatedBy").IsModified;
+                            bool isUpdatedDateModified = _context.Entry(oExistUserRole).Property("UpdatedDate").IsModified;
+                            bool isIsActive = _context.Entry(oExistUserRole).Property("IsActive").IsModified;
+                            _context.SaveChanges();
+                            dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.USER_ROLE_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = roleSaveUpdateRequest };
                         }
                         else
                         {
-                            oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_ROLE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = roleSaveUpdateRequest };
-                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                            dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_ROLE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = roleSaveUpdateRequest };
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_RES_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
                         }
                         
                         break;
@@ -187,12 +194,13 @@ namespace SB.Security.Service
             {
                 throw;
             }
-            return oDataResponse;
+            return dataResponse;
         }
         public async Task<DataResponse> DeleteRoleAsync(string roleId)
         {
+            DataResponse? dataResponse = null;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_DELETEROLE_REQ_MSG, JsonConvert.SerializeObject(roleId, Formatting.Indented)));
-            DataResponse? oDataResponse = null;
+            
             try
             {
                 UserRole? oExistUserRole = await _context.UserRole.FindAsync(new Guid(roleId));
@@ -220,24 +228,27 @@ namespace SB.Security.Service
                         _context.Entry(oExistUserRole).State = EntityState.Modified;
                         _context.SaveChanges();
                     }
+                    dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.DELETE_ROLE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = roleId };
+                    _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_DELETEROLE_RES_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
                 }
                 else
                 {
-                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_ROLE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_DELETEROLE_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_ROLE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_DELETEROLE_RES_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
                 }
             }
             catch (Exception)
             {
                 throw;
             }
-            return oDataResponse;
+            return dataResponse;
         }
 
         public async Task<DataResponse> GetAllMenuByUserIdAsync(string userId)
         {
+            DataResponse? dataResponse;
             _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_REQ_MSG, JsonConvert.SerializeObject(userId, Formatting.Indented)));
-            DataResponse? oDataResponse;
+            
             try
             {
 
@@ -250,25 +261,26 @@ namespace SB.Security.Service
 
                 if (userMenus == null)
                 {
-                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_MENU_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_MENU_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_RES_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
                 }
                 else
                 {
-                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_MENU_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userMenus };
+                    dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_MENU_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userMenus };
                 }
             }
             catch (Exception)
             {
                 throw;
             }
-            return oDataResponse;
+            return dataResponse;
         }
 
         public async Task<DataResponse> GetAllParentMenusAsync()
         {
+            DataResponse? dataResponse;
             _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GET_ALL_PARENT_MENUS_REQ_MSG, JsonConvert.SerializeObject(ConstantSupplier.NOT_APPLICABLE, Formatting.Indented)));
-            DataResponse? oDataResponse = null;
+            
             try
             {
                 List<(Guid? Id, string? Name)>? parentMenuList = new List<(Guid? Id, string? Name)>();
@@ -287,19 +299,19 @@ namespace SB.Security.Service
                 }
                 if (parentMenuList.IsNullOrEmpty())
                 {
-                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_PARENT_MENU_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GET_ALL_PARENT_MENUS_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_PARENT_MENU_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GET_ALL_PARENT_MENUS_RES_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
                 }
                 else
                 {
-                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_PARENT_MENU_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = parentMenuList };
+                    dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_PARENT_MENU_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = parentMenuList };
                 }
             }
             catch (Exception)
             {
                 throw;
             }
-            return oDataResponse;
+            return dataResponse;
         }
 
         /// <summary>
@@ -311,29 +323,37 @@ namespace SB.Security.Service
         /// <returns>PageResult<![CDATA[<T>]]></returns>
         public async Task<PagingResult<UserMenu>?> GetAllUserMenuPagingWithSearchAsync(PagingSearchFilter paramRequest)
         {
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-            List<UserMenu> oUserMenuList;
-            List<IDbDataParameter> parameters = new()
+            try
             {
-                _dbmanager.CreateParameter("@SearchTerm", paramRequest.SearchTerm, DbType.String),
-                _dbmanager.CreateParameter("@SortColumnName", paramRequest.SortColumnName, DbType.String),
-                _dbmanager.CreateParameter("@SortColumnDirection", paramRequest.SortColumnDirection, DbType.String),
-                _dbmanager.CreateParameter("@PageIndex", paramRequest.PageNumber, DbType.Int32),
-                _dbmanager.CreateParameter("@PageSize", paramRequest.PageSize, DbType.Int32)
-            };
-            DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+                List<UserMenu> oUserMenuList;
+                List<IDbDataParameter> parameters = new()
+                {
+                    _dbmanager.CreateParameter("@SearchTerm", paramRequest.SearchTerm, DbType.String),
+                    _dbmanager.CreateParameter("@SortColumnName", paramRequest.SortColumnName, DbType.String),
+                    _dbmanager.CreateParameter("@SortColumnDirection", paramRequest.SortColumnDirection, DbType.String),
+                    _dbmanager.CreateParameter("@PageIndex", paramRequest.PageNumber, DbType.Int32),
+                    _dbmanager.CreateParameter("@PageSize", paramRequest.PageSize, DbType.Int32)
+                };
+                DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
 
-            if (oDT != null && oDT.Rows.Count > 0)
-            {
-                oUserMenuList = Utilities.ConvertDataTable<UserMenu>(oDT);
+                if (oDT != null && oDT.Rows.Count > 0)
+                {
+                    oUserMenuList = Utilities.ConvertDataTable<UserMenu>(oDT);
 
-                //return Utilities.GetPagingResult(oUserList, paramRequest.PageNumber, paramRequest.PageSize);
-                PagingResult<UserMenu> result = Utilities.GetPagingResult(oUserMenuList, paramRequest.PageNumber, paramRequest.PageSize);
-                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
-                return result;
+                    //return Utilities.GetPagingResult(oUserList, paramRequest.PageNumber, paramRequest.PageSize);
+                    PagingResult<UserMenu> result = Utilities.GetPagingResult(oUserMenuList, paramRequest.PageNumber, paramRequest.PageSize);
+                    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
+                    return result;
+                }
+                return null;
             }
-            return null;
+            catch (Exception)
+            {
+                throw;
+            }
 
         }
+        #endregion
     }
 }

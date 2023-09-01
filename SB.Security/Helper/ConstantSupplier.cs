@@ -78,7 +78,7 @@
         public const string GETBYID_REQ_MSG = "GetUserbyId api method request is: \n{0}\n";
         public const string GETBYID_EXCEPTION_MSG = "GetUserbyId Exception below:: \n{0}\n";
         public const string SERVICE_GETBYID_REQ_MSG = "GetUserbyId (User service) method request is: \n{0}\n";
-        public const string SERVICE_GETBYID_RES_MSG = "GetUserbyId (User service) method response is: \n{0}\n";
+        public const string SERVICE_GETBYID_RES_MSG = "GetUserbyId (User service) method error response is: \n{0}\n";
         public const string GETBYID_RES_MSG = "GetUserbyId api method response is: \n{0}\n";
 
         //api/User/getAllUsers
@@ -86,7 +86,7 @@
         public const string GETALL_REQ_MSG = "GetAllUsers api method request is: \n{0}\n";
         public const string GETALL_EXCEPTION_MSG = "GetAllUsers Exception below:: \n{0}\n";
         public const string SERVICE_GETALL_REQ_MSG = "GetAllUsers (User service) method request is: \n{0}\n";
-        public const string SERVICE_GETALL_RES_MSG = "GetAllUsers (User service) method response is: \n{0}\n";
+        public const string SERVICE_GETALL_RES_MSG = "GetAllUsers (User service) method error response is: \n{0}\n";
         public const string GETALL_RES_MSG = "GetAllUsers api method response is: \n{0}\n";
 
 
@@ -264,6 +264,7 @@
         public const string USER_ROLE_SAVE_SUCCESS = "saving user role success!";
         public const string USER_ROLE_UPDATE_SUCCESS = "Updating user role success!";
         public const string NOT_EXIST_ROLE = "There is no role with such name.";
+        public const string DELETE_ROLE_SUCCESS = "Role is successfully removed";
         //SP
         public const string GET_GET_ALL_MENU_BY_USER_ID_SP_NAME = "SP_GetAllMenuByUserId";
         #endregion
