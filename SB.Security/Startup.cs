@@ -152,7 +152,9 @@ namespace SB.Security
             services.AddHttpContextAccessor();
 
             #region Dependency Injection added into service
+            
             services.AddTransient<ISecurityLogService, SecurityLogService>();
+            services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleMenuService, RoleMenuService>();
             services.AddTransient<ITokenService, TokenService>();

@@ -39,48 +39,6 @@ namespace SB.Security.Controllers
 
         #region All Http methods
 
-        // GET api/User/getUserbyId
-        /// <summary>
-        /// This method used to get a specific user details by supplying user id.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>object</returns>
-        [HttpGet]
-        [Route(ConstantSupplier.GET_USER_ROUTE_NAME)]
-        [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<object> GetUserbyId([FromQuery] string id)
-        {
-            _securityLogService.LogInfo(ConstantSupplier.GETBYID_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
-            DataResponse response;
-            try
-            {
-                #region EF Codeblock
-                response = await _userService.GetUserByIdAsync(id);
-                #endregion
-
-                #region ADO.NET Codeblock
-                //response = await _userService.GetUserByIdAdoAsync(id);
-                #endregion
-            }
-            catch (Exception Ex)
-            {
-                //_securityLogService.LogError(Ex.Message);
-                _securityLogService.LogError(String.Format(ConstantSupplier.GETBYID_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                return new DataResponse
-                {
-                    Message = Ex.Message,
-                    Success = false,
-                    MessageType = Enum.EnumResponseType.Error,
-                    ResponseCode = (int)HttpStatusCode.InternalServerError,
-                    Result = null
-                };
-            }
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.GETBYID_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
-            return response;
-        }
-
-
         // GET api/User/getAllUsers
         /// <summary>
         /// This method used to get a list users based on the supplied page number and page size.
@@ -99,8 +57,8 @@ namespace SB.Security.Controllers
             _securityLogService.LogInfo(String.Format(ConstantSupplier.GETBYID_REQ_MSG, JsonConvert.SerializeObject(oPaginationFilter, Formatting.Indented)));
             try
             {
-                
-               
+
+
 
                 #region EF Codeblock
                 PageResult<UserInfo>? result = await _userService.GetAllUserAsync(oPaginationFilter);
@@ -160,127 +118,35 @@ namespace SB.Security.Controllers
             return response;
         }
 
-        // POST api/User/login
+        // GET api/User/getUserbyId
         /// <summary>
-        /// This method authenticate user credential.
+        /// This method used to get a specific user details by supplying user id.
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="id"></param>
         /// <returns>object</returns>
-        [AllowAnonymous]
-        [HttpPost]
-        [Route(ConstantSupplier.POST_AUTH_ROUTE_NAME)]
-        [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<object> Login([FromBody] LoginRequest request)
-        //public async Task<object> Login([FromBody] string request)
-        {
-            //LoginRequest request
-            _securityLogService.LogInfo(ConstantSupplier.LOGIN_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.LOGIN_REQ_MSG,JsonConvert.SerializeObject(request,Formatting.Indented)));
-            DataResponse response;
-            try
-            {
-
-                //var loginRequest = JsonConvert.DeserializeObject<LoginRequest>(request);
-                //response = await _userService.AuthenticateUserAsync(loginRequest);
-                response = await _userService.AuthenticateUserAsync(request);
-            }
-            catch (Exception Ex)
-            {
-                var oDataResponse = new DataResponse
-                {
-                    Message = Ex.Message,
-                    Success = false,
-                    MessageType = Enum.EnumResponseType.Error,
-                    ResponseCode = (int)HttpStatusCode.InternalServerError,
-                    Result = null
-                };
-                _securityLogService.LogError(String.Format(ConstantSupplier.LOGIN_EXCEPTION_MSG,Ex.Message, JsonConvert.SerializeObject(oDataResponse,Formatting.Indented)));
-                return oDataResponse;
-            }
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.LOGIN_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
-            return response;
-        }
-
-        /// <summary>
-        /// Refresh token api endpoint, which gets the user information from the expired access token and validates 
-        /// the refresh token against the user. Once the validation is successful, we generate a new access token and 
-        /// refresh token and the new refresh token is saved against the user in DB.
-        /// </summary>
-        /// <param name="refreshTokenReq"></param>
-        /// <returns></returns>
-        [AllowAnonymous]
-        [HttpPost]
-        [Route(ConstantSupplier.REFRESH_TOKEN_ROUTE_NAME)]
-        [ServiceFilter(typeof(ValidateModelAttribute))]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<object> RefreshToken([FromBody] RefreshTokenRequest refreshTokenReq)
-        {
-            _securityLogService.LogInfo(ConstantSupplier.REFRESHTOKEN_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.REFRESHTOKEN_REQ_MSG, JsonConvert.SerializeObject(refreshTokenReq, Formatting.Indented)));
-            DataResponse response;
-
-            try
-            {
-                if (refreshTokenReq is null)
-                {
-                    response = new() { Success = false, Message = ConstantSupplier.REFRESHTOKEN_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                    _securityLogService.LogError(String.Format(ConstantSupplier.REFRESHTOKEN_FAILED_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
-                }
-                else
-                {
-                    response = await _userService.RefreshTokenAsync(refreshTokenReq);
-                }
-            }
-            catch (Exception Ex)
-            {
-                DataResponse exResponse = new()
-                {
-                    Message = Ex.Message,
-                    Success = false,
-                    MessageType = Enum.EnumResponseType.Error,
-                    ResponseCode = (int)HttpStatusCode.InternalServerError,
-                    Result = null
-                };
-                _securityLogService.LogError(String.Format(ConstantSupplier.REFRESHTOKEN_EXCEPTION_MSG, Ex.Message, JsonConvert.SerializeObject(exResponse, Formatting.Indented)));
-                return exResponse;
-            }
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.REFRESHTOKEN_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
-            return response;
-        }
-
-        /// <summary>
-        /// It invalidates the refresh token.
-        /// </summary>
-        /// <param name="userToken"></param>
-        /// <returns></returns>
-        [AllowAnonymous]
-        //[HttpPost]
         [HttpGet]
-        [Route(ConstantSupplier.REVOKE_ROUTE_NAME)]
+        [Route(ConstantSupplier.GET_USER_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<object> Revoke([FromQuery] string userToken)
+        public async Task<object> GetUserbyId([FromQuery] string id)
         {
-            _securityLogService.LogInfo(ConstantSupplier.REVOKE_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.REVOKE_STARTED_INFO_MSG, JsonConvert.SerializeObject(userToken, Formatting.Indented)));
+            _securityLogService.LogInfo(ConstantSupplier.GETBYID_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
             DataResponse response;
-
             try
             {
-                if (userToken is null)
-                {
-                    response = new() { Success = false, Message = ConstantSupplier.NULL_TOKEN, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                    _securityLogService.LogError(String.Format(ConstantSupplier.REFRESHTOKEN_FAILED_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
-                }
-                else
-                {
-                    response = await _userService.RevokeAsync(userToken);
-                }
+                #region EF Codeblock
+                response = await _userService.GetUserByIdAsync(id);
+                #endregion
+
+                #region ADO.NET Codeblock
+                //response = await _userService.GetUserByIdAdoAsync(id);
+                #endregion
             }
             catch (Exception Ex)
             {
-                response = new()
+                //_securityLogService.LogError(Ex.Message);
+                _securityLogService.LogError(String.Format(ConstantSupplier.GETBYID_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                return new DataResponse
                 {
                     Message = Ex.Message,
                     Success = false,
@@ -288,10 +154,8 @@ namespace SB.Security.Controllers
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
                 };
-                _securityLogService.LogError(String.Format(ConstantSupplier.REVOKE_EXCEPTION_MSG, Ex.Message, JsonConvert.SerializeObject(response, Formatting.Indented)));
-                return response;
             }
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.REVOKE_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.GETBYID_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
 
@@ -364,6 +228,11 @@ namespace SB.Security.Controllers
             _securityLogService.LogInfo(String.Format(ConstantSupplier.DELUSER_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
+
+
+        
+
+        
 
         
         #endregion

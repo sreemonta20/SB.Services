@@ -461,7 +461,7 @@ BEGIN
     )
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllMenuByUserId]    Script Date: 23/07/2023 6:18:23 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUserMenuByUserId]    Script Date: 23/07/2023 6:18:23 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -471,9 +471,9 @@ GO
 -- Create date: 14.07.2023
 -- Description: To generate parent menu.
 -- =============================================
---EXEC SP_GetAllMenuByUserId 'C047D662-9F0E-4358-B323-15EC3081312C'
---EXEC SP_GetAllMenuByUserId 'EFEDC118-3459-4C2E-9158-AD69196A59E0'
-CREATE PROCEDURE [dbo].[SP_GetAllMenuByUserId]
+--EXEC SP_GetAllUserMenuByUserId 'C047D662-9F0E-4358-B323-15EC3081312C'
+--EXEC SP_GetAllUserMenuByUserId 'EFEDC118-3459-4C2E-9158-AD69196A59E0'
+CREATE PROCEDURE [dbo].[SP_GetAllUserMenuByUserId]
 @UserId				UNIQUEIDENTIFIER
 AS
 BEGIN
@@ -602,7 +602,7 @@ BEGIN
 	ON UM1.[ParentId] = UM2.[Id]
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserMenuListPagingWithSearch]    Script Date: 02/08/2023 8:35:57 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUserMenuPagingWithSearch]    Script Date: 02/08/2023 8:35:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -612,10 +612,10 @@ GO
 -- Create date: 25.04.2023
 -- Description:	Get all user menu list using paging with search
 -- =============================================
---EXEC SP_GetAllUserMenuListPagingWithSearch '','','',1,1
---EXEC SP_GetAllUserMenuListPagingWithSearch 'nav-icon fas fa-cog','Icon','ASC',1,2
---EXEC SP_GetAllUserMenuListPagingWithSearch 'User','','ASC',1,2
-CREATE PROCEDURE [dbo].[SP_GetAllUserMenuListPagingWithSearch]
+--EXEC SP_GetAllUserMenuPagingWithSearch '','','',1,1
+--EXEC SP_GetAllUserMenuPagingWithSearch 'nav-icon fas fa-cog','Icon','ASC',1,2
+--EXEC SP_GetAllUserMenuPagingWithSearch 'User','','ASC',1,2
+CREATE PROCEDURE [dbo].[SP_GetAllUserMenuPagingWithSearch]
 @SearchTerm AS VARCHAR(50)='',
 @SortColumnName AS VARCHAR(50)='',
 @SortColumnDirection AS VARCHAR(50)='',

@@ -33,19 +33,17 @@ using StackExchange.Redis;
 namespace SB.Security.Service
 {
     /// <summary>
-    /// includes all the methods for user operation incuding the user login. It implements  <see cref="IUserService"/>.
+    /// includes all the methods for user operation incuding the getAllUser, getByUserId, registerUser, and DeleteUser . It implements  <see cref="IUserService"/>.
     /// </summary>
     public class UserService : IUserService
     {
         #region Variable declaration & constructor initialization
         public IConfiguration _configuration;
         private readonly SBSecurityDBContext _context;
-        private readonly IEmailService _emailService;
         private readonly AppSettings? _appSettings;
         private readonly ISecurityLogService _securityLogService;
         private readonly IDatabaseManager _dbmanager;
-        private readonly ITokenService _tokenService;
-        private readonly IRoleMenuService _roleMenuService;
+        
         /// <summary>
         /// 
         /// </summary>
@@ -54,22 +52,120 @@ namespace SB.Security.Service
         /// <param name="emailService"></param>
         /// <param name="options"></param>
         /// <param name="securityLogService"></param>
-        public UserService(IConfiguration config, SBSecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options,
-        ISecurityLogService securityLogService, IDatabaseManager dbManager, ITokenService tokenService, IRoleMenuService roleMenuService)
+        public UserService(IConfiguration config, SBSecurityDBContext context, IOptions<AppSettings> options,
+        ISecurityLogService securityLogService, IDatabaseManager dbManager)
         {
             _configuration = config;
             _context = context;
-            _emailService = emailService;
             _appSettings = options.Value;
             _securityLogService = securityLogService;
             _dbmanager = dbManager;
             _dbmanager.InitializeDatabase(_appSettings?.ConnectionStrings?.ProdSqlConnectionString, _appSettings?.ConnectionProvider);
-            _tokenService = tokenService;
-            _roleMenuService = roleMenuService;
         }
         #endregion
 
         #region All service methods
+
+        /// <summary>
+        /// <para>EF Codeblock: GetAllUserAsync</para> 
+        /// This service method used to get a list users based on the supplied page number and page size.
+        /// <br/> And retriving result as PageResult<![CDATA[<T>]]>.
+        /// </summary>
+        /// <param name="paramRequest"></param>
+        /// <returns>PageResult<![CDATA[<T>]]></returns>
+        public async Task<PageResult<UserInfo>> GetAllUserAsync(PaginationFilter paramRequest)
+        {
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+            try
+            {
+                int count = await _context.UserInfo.CountAsync();
+                List<UserInfo> Items = await _context.UserInfo.OrderByDescending(x => x.CreatedDate).Skip((paramRequest.PageNumber - 1) * paramRequest.PageSize).Take(paramRequest.PageSize).ToListAsync();
+                PageResult<UserInfo> result = new()
+                {
+                    Count = count,
+                    PageIndex = paramRequest.PageNumber > 0 ? paramRequest.PageNumber : 1,
+                    PageSize = 10,
+                    Items = Items
+                };
+                if (!result.Items.Any())
+                {
+                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
+                }
+
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// <para>EF Codeblock: GetAllUserExtnAsync</para> 
+        /// This service method used to get a list users based on the supplied page number and page size.
+        /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
+        /// </summary>
+        /// <param name="paramRequest"></param>
+        /// <returns>PagingResult<![CDATA[<T>]]></returns>
+        public async Task<PagingResult<UserInfo>> GetAllUserExtnAsync(PaginationFilter paramRequest)
+        {
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+            try
+            {
+                IQueryable<UserInfo> source = (from user in _context?.UserInfo?.OrderBy(a => a.CreatedDate) select user).AsQueryable();
+                PagingResult<UserInfo> result = await Utilities.GetPagingResult(source, paramRequest.PageNumber, paramRequest.PageSize);
+
+                if (!result.Items.Any())
+                {
+                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
+                }
+
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        /// <summary>
+        /// <para>ADO.NET Codeblock: GetAllUserAdoAsync</para> 
+        /// This service method used to get a list users based on the supplied page number and page size.
+        /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
+        /// </summary>
+        /// <param name="paramRequest"></param>
+        /// <returns>PageResult<![CDATA[<T>]]></returns>
+        public async Task<PagingResult<UserInfo>?> GetAllUserAdoAsync(PaginationFilter paramRequest)
+        {
+            PagingResult<UserInfo>? result = null;
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+            try
+            {
+                List<UserInfo> oUserList;
+                List<IDbDataParameter> parameters = new(){
+                _dbmanager.CreateParameter("@PageIndex", paramRequest.PageNumber, DbType.Int32),
+                _dbmanager.CreateParameter("@PageSize", paramRequest.PageSize, DbType.Int32)};
+
+                DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GET_ALL_USER_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+
+                if (oDT != null && oDT.Rows.Count > 0)
+                {
+                    oUserList = Utilities.ConvertDataTable<UserInfo>(oDT);
+                    result = Utilities.GetPagingResult(oUserList, paramRequest.PageNumber, paramRequest.PageSize);
+                }
+                else
+                {
+                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(string.Empty, Formatting.Indented)));
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return result;
+        }
 
         /// <summary>
         /// <para>EF Codeblock: GetUserByIdAsync</para> 
@@ -137,326 +233,6 @@ namespace SB.Security.Service
         }
 
         /// <summary>
-        /// <para>EF Codeblock: GetAllUserAsync</para> 
-        /// This service method used to get a list users based on the supplied page number and page size.
-        /// <br/> And retriving result as PageResult<![CDATA[<T>]]>.
-        /// </summary>
-        /// <param name="paramRequest"></param>
-        /// <returns>PageResult<![CDATA[<T>]]></returns>
-        public async Task<PageResult<UserInfo>> GetAllUserAsync(PaginationFilter paramRequest)
-        {
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-            try
-            {
-                int count = await _context.UserInfo.CountAsync();
-                List<UserInfo> Items = await _context.UserInfo.OrderByDescending(x => x.CreatedDate).Skip((paramRequest.PageNumber - 1) * paramRequest.PageSize).Take(paramRequest.PageSize).ToListAsync();
-                PageResult<UserInfo> result = new()
-                {
-                    Count = count,
-                    PageIndex = paramRequest.PageNumber > 0 ? paramRequest.PageNumber : 1,
-                    PageSize = 10,
-                    Items = Items
-                };
-                if (!result.Items.Any())
-                {
-                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
-                }
-                
-                return result;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// <para>EF Codeblock: GetAllUserExtnAsync</para> 
-        /// This service method used to get a list users based on the supplied page number and page size.
-        /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
-        /// </summary>
-        /// <param name="paramRequest"></param>
-        /// <returns>PagingResult<![CDATA[<T>]]></returns>
-        public async Task<PagingResult<UserInfo>> GetAllUserExtnAsync(PaginationFilter paramRequest)
-        {
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-            try
-            {
-                IQueryable<UserInfo> source = (from user in _context?.UserInfo?.OrderBy(a => a.CreatedDate) select user).AsQueryable();
-                PagingResult<UserInfo> result = await Utilities.GetPagingResult(source, paramRequest.PageNumber, paramRequest.PageSize);
-
-                if (!result.Items.Any())
-                {
-                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
-                }
-                
-                return result;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            
-        }
-
-        /// <summary>
-        /// <para>ADO.NET Codeblock: GetAllUserAdoAsync</para> 
-        /// This service method used to get a list users based on the supplied page number and page size.
-        /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
-        /// </summary>
-        /// <param name="paramRequest"></param>
-        /// <returns>PageResult<![CDATA[<T>]]></returns>
-        public async Task<PagingResult<UserInfo>?> GetAllUserAdoAsync(PaginationFilter paramRequest)
-        {
-            PagingResult<UserInfo>? result = null;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-            try
-            {
-                List<UserInfo> oUserList;
-                List<IDbDataParameter> parameters = new(){
-                _dbmanager.CreateParameter("@PageIndex", paramRequest.PageNumber, DbType.Int32),
-                _dbmanager.CreateParameter("@PageSize", paramRequest.PageSize, DbType.Int32)};
-
-                DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GET_ALL_USER_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
-
-                if (oDT != null && oDT.Rows.Count > 0)
-                {
-                    oUserList = Utilities.ConvertDataTable<UserInfo>(oDT);
-                    result = Utilities.GetPagingResult(oUserList, paramRequest.PageNumber, paramRequest.PageSize);
-                }
-                else
-                {
-                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(string.Empty, Formatting.Indented)));
-                }
-                
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// <para>EF Codeblock: AuthenticateUserAsync</para> 
-        /// This method authenticate user credential. It checks user name and then password. In between the checking, if client attempts consecutive 
-        /// 3 failed request then this method will block the any further request for authentication of the user. Where, It update the datetime
-        /// of the failed attempts and count of failed attempts. So threshold(appsettings.json) says after 3 failed attempts, user get blocked for the 
-        /// next 1 min. This method ensures the unique username for all the user records.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns>DataResponse</returns>
-        public async Task<DataResponse> AuthenticateUserAsync(LoginRequest request)
-        {
-            DataResponse dataResponse;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_LOGIN_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
-            
-            try
-            {
-                if (request != null)
-                {
-
-                    UserInfo user = await _context.UserInfo.FirstOrDefaultAsync(u => u.UserName == request.UserName && u.IsActive == true);
-                    if (user != null)
-                    {
-                        if (user.LoginFailedAttemptsCount > Convert.ToInt32(_configuration["AppSettings:MaxNumberOfFailedAttempts"])
-                            && user.LastLoginAttemptAt.HasValue
-                            && DateTime.Now < user.LastLoginAttemptAt.Value.AddMinutes(Convert.ToInt32(_configuration["AppSettings:BlockMinutes"])))
-                        {
-
-                            SendResponse emailResponse = await SendEmail(request, user);
-                            if (!emailResponse.Successful)
-                            {
-                                _securityLogService.LogError(String.Format("{0}", JsonConvert.SerializeObject(emailResponse, Formatting.Indented)));
-                            }
-
-                            dataResponse = new DataResponse
-                            {
-                                Success = false,
-                                Message = String.Format(ConstantSupplier.AUTH_FAILED_ATTEMPT, Convert.ToInt32(_configuration["AppSettings:BlockMinutes"])),
-                                MessageType = Enum.EnumResponseType.Error,
-                                ResponseCode = (int)HttpStatusCode.BadRequest,
-                                Result = null
-                            };
-                            _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
-
-                            return dataResponse;
-                        }
-
-                        bool verified = BCryptNet.Verify(request.Password, user.Password);
-                        if (verified)
-                        {
-                            user.LoginFailedAttemptsCount = 0;
-                            user.LastLoginAttemptAt = DateTime.Now;
-                            await TrackAndUpdateLoginAttempts(user);
-                            JwtSecurityToken token;
-                            DateTime expires;
-                            //var TokenResult = GetToken(user);
-                            Token? tokenResult = _tokenService?.GenerateAccessToken(user);
-                            if (tokenResult != null)
-                            {
-                                tokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
-
-                            }
-
-                            DataResponse menuResponse = await _roleMenuService.GetAllMenuByUserIdAsync(user.Id.ToString());
-                            if (menuResponse != null && menuResponse.ResponseCode == 200)
-                            {
-                                tokenResult.userMenus = Convert.ToString(menuResponse.Result);
-                            }
-
-                            UserLogin? userlogin = _context.UserLogin.FirstOrDefault(u => (u.UserName == user.UserName) && (u.Password == user.Password));
-                            if (userlogin is null)
-                            {
-                                UserLogin oUserLogin = new()
-                                {
-                                    Id = Guid.NewGuid(),
-                                    UserName = request.UserName,
-                                    Password = user.Password,
-                                    RefreshToken = tokenResult?.refresh_token,
-                                    RefreshTokenExpiryTime = DateTime.Now.AddDays(7)
-                                };
-                                await _context.UserLogin.AddAsync(oUserLogin);
-                                await _context.SaveChangesAsync();
-                            }
-                            else
-                            {
-                                userlogin.RefreshToken = tokenResult?.refresh_token;
-                                userlogin.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
-                                await _context.SaveChangesAsync();
-                            }
-
-                            //return new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = TokenResult };
-
-                            dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = tokenResult };
-
-                            return dataResponse;
-                        }
-                        else
-                        {
-                            user.LastLoginAttemptAt = DateTime.Now;
-                            user.LoginFailedAttemptsCount++;
-                            await TrackAndUpdateLoginAttempts(user);
-
-                            //return new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-
-                            dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                            _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
-
-                            return dataResponse;
-                        }
-
-
-                    }
-
-                    //return new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                    dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
-
-                    return dataResponse;
-
-                }
-                //return new DataResponse { Success = false, Message = ConstantSupplier.AUTH_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.AUTH_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return dataResponse;
-        }
-
-        public async Task<DataResponse> RefreshTokenAsync(RefreshTokenRequest refreshTokenReq)
-        {
-            DataResponse dataResponse;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REFRESHTOKEN_REQ_MSG, JsonConvert.SerializeObject(refreshTokenReq, Formatting.Indented)));
-            try
-            {
-                if (refreshTokenReq != null)
-                {
-                    string? accessToken = refreshTokenReq?.Access_Token;
-                    string? refreshToken = refreshTokenReq?.Refresh_Token;
-
-                    ClaimsPrincipal principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
-                    //string? username = principal?.Identity?.Name; //this is mapped to the Name claim by default
-                    //principal.Claims.ToList()[5].Value
-                    string? username = principal?.Claims?.Where(x => x.Type == "UserName")?.FirstOrDefault()?.Value;
-
-                    var user = await _context.UserInfo.FirstOrDefaultAsync(u => u.UserName == username && u.IsActive == true);
-
-                    Token? tokenResult = _tokenService?.GenerateAccessToken(user);
-                    if (tokenResult != null)
-                    {
-                        tokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
-                    }
-
-                    DataResponse menuResponse = await _roleMenuService.GetAllMenuByUserIdAsync(user.Id.ToString());
-                    if (menuResponse != null && menuResponse.ResponseCode == 200)
-                    {
-                        tokenResult.userMenus = Convert.ToString(menuResponse.Result);
-                    }
-
-                    var userLogin = _context.UserLogin.SingleOrDefault(u => u.UserName == username);
-
-                    if (userLogin is null || userLogin.RefreshToken != refreshToken || userLogin.RefreshTokenExpiryTime <= DateTime.Now)
-                    {
-                        _securityLogService.LogError(String.Format(ConstantSupplier.INVALID_CLIENT_REQUEST, JsonConvert.SerializeObject(refreshTokenReq, Formatting.Indented)));
-                        dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.INVALID_CLIENT_REQUEST, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                        return dataResponse;
-                    }
-
-                    userLogin.RefreshToken = tokenResult?.refresh_token;
-                    userLogin.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
-                    await _context.SaveChangesAsync();
-
-                    dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.REFRESHTOKEN_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = tokenResult };
-
-                    return dataResponse;
-                }
-                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
-                dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return dataResponse;
-        }
-
-        public async Task<DataResponse> RevokeAsync(string userToken)
-        {
-            DataResponse dataResponse;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REVOKE_REQ_MSG, JsonConvert.SerializeObject(userToken, Formatting.Indented)));
-            try
-            {
-                if (userToken != null)
-                {
-                    ClaimsPrincipal principal = _tokenService.GetPrincipalFromExpiredToken(userToken);
-                    string? username = principal?.Claims?.Where(x => x.Type == "UserName")?.FirstOrDefault()?.Value; //this is mapped to the Name claim by default
-                    UserLogin? oUserLogin = _context?.UserLogin.SingleOrDefault(u => u.UserName == username);
-                    if (oUserLogin == null)
-                    {
-                        _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
-                        dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                        return dataResponse;
-                    }
-                    oUserLogin.RefreshToken = null;
-                    await _context.SaveChangesAsync();
-                    dataResponse =  new DataResponse { Success = true, Message = ConstantSupplier.SESSION_EXPIRATION_MSG, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = ConstantSupplier.REVOKE_USER_SUCCESS };
-                    return dataResponse;
-                }
-                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
-                dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.SERVICE_REVOKE_FAILED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return dataResponse;
-        }
-
-        /// <summary>
         /// <para>EF & ADO.NET Codeblocks: RegisterUserAsync</para>
         /// This method saves and update the user details. It tracks the action name (save or update). Based on this it send the request for saving or
         /// updating the user credential. In Update method, no user password can be updated by Admin due to data protection policy in general. Password 
@@ -484,8 +260,6 @@ namespace SB.Security.Service
                                 Password = BCryptNet.HashPassword(request.Password, saltKey),
                                 SaltKey = saltKey,
                                 Email = request.Email,
-                                //UserRole = request.UserRole,
-                                //UserRole = new Guid(request.UserRole),
                                 RoleId = new Guid(request.RoleId),
                                 CreatedBy = Convert.ToString(_context.UserInfo.FirstOrDefault(s => s.UserRole.Equals(ConstantSupplier.ADMIN)).Id),
                                 CreatedDate = DateTime.UtcNow,
@@ -670,104 +444,6 @@ namespace SB.Security.Service
                 throw;
             }
             return dataResponse;
-        }
-
-        /// <summary>
-        /// This private method is being used for generating token after user credential found ok.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns>Token</returns>
-        //private Token? GetToken(UserInfo user)
-        //{
-
-        //    var tokenHandler = new JwtSecurityTokenHandler();
-        //    var key = Encoding.ASCII.GetBytes(_configuration["AppSettings:JWT:Key"]);
-
-        //    DateTime expiryTime = DateTime.Now.AddSeconds(Convert.ToDouble(_configuration["AppSettings:AccessTokenExpireTime"]));
-        //    var tokenDescriptor = new SecurityTokenDescriptor
-        //    {
-        //        Subject = new ClaimsIdentity(new Claim[]
-        //        {
-        //                new Claim(JwtRegisteredClaimNames.Sub, _configuration["AppSettings:JWT:Subject"]),
-        //                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        //                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-        //                new Claim("UserId", user.Id.ToString()),
-        //                new Claim("FullName", user.FullName),
-        //                new Claim("UserName", user.UserName),
-        //                new Claim("Email", user.Email)
-        //        }),
-        //        Expires = expiryTime,
-        //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        //    };
-
-        //    var token = tokenHandler.CreateToken(tokenDescriptor);
-        //    var tokenString = tokenHandler.WriteToken(token);
-
-        //    if (tokenString != null)
-        //    {
-        //        return new Token()
-        //        {
-        //            access_token = tokenString,
-        //            expires_in = Convert.ToInt32(Convert.ToDouble(_configuration["AppSettings:AccessTokenExpireTime"])),
-        //            token_type = ConstantSupplier.AUTHORIZATION_TOKEN_TYPE,
-        //            error = string.Empty,
-        //            error_description = string.Empty,
-        //            user = new User() { Id = Convert.ToString(user.Id), FullName = user.UserName, UserName = user.UserName, Email = user.Email, UserRole = user.UserRole, CreatedDate = user.CreatedDate }
-
-        //        };
-        //    }
-        //    return null;
-
-
-        //}
-
-
-        /// <summary>
-        /// It update the "LastLoginAttemptAt" and "LoginFailedAttemptsCount" database table columns.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        private async Task TrackAndUpdateLoginAttempts(UserInfo? user)
-        {
-            try
-            {
-                var dbUserInfo = await _context.UserInfo.FirstOrDefaultAsync(u => u.Id == user.Id);
-                dbUserInfo.LastLoginAttemptAt = user.LastLoginAttemptAt;
-                dbUserInfo.LoginFailedAttemptsCount = user.LoginFailedAttemptsCount;
-                var isLastLoginAttemptAtModified = _context.Entry(dbUserInfo).Property("LastLoginAttemptAt").IsModified;
-                var isLoginFailedAttemptsCountModified = _context.Entry(dbUserInfo).Property("LoginFailedAttemptsCount").IsModified;
-                _context.SaveChanges();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            
-        }
-
-        /// <summary>
-        /// Send email regarding the user blocked after 3 times incorrect login attempt.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        private async Task<SendResponse> SendEmail(LoginRequest request, UserInfo? user)
-        {
-            SendResponse response;
-            try
-            {
-                string body = _emailService.PopulateBody("EmailTemplates/emailblocknotice.htm", user.UserName,
-                                        "User management", "https://localhost:4200/",
-                                        "Please check your username and password. Please wait for mentioned time to re-login");
-                Message message = new() { To = user.Email, Name = request.UserName, Subject = "Email Blocked", Body = body };
-                response = await _emailService.SendEmailAsync(_appSettings.EmailConfiguration, message);
-                
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return response;
         }
         #endregion
     }

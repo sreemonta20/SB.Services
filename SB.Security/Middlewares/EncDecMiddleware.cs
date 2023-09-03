@@ -344,11 +344,11 @@ namespace SB.Security.Middlewares
         {
             List<string> excludeURL = new()
             {
-                "/api/User/login",
-                "/api/User/refreshtoken",
-                "/api/User/revoke",
-                "/api/User/getUserbyId",
+                "/api/Auth/login",
+                "/api/Auth/refreshtoken",
+                "/api/Auth/revoke",
                 "/api/User/getAllUsers",
+                "/api/User/getUserbyId",
                 "/api/User/registerUser",
                 "/api/User/deleteUser",
                 "/api/RoleMenu/getAllRoles",
@@ -356,7 +356,9 @@ namespace SB.Security.Middlewares
                 "/api/RoleMenu/getRoleById",
                 "/api/RoleMenu/saveUpdateRole",
                 "/api/RoleMenu/deleteRole",
-                "/api/RoleMenu/getAllMenuByUserId"
+                "/api/RoleMenu/getAllUserMenuPagingWithSearch",
+                "/api/RoleMenu/getAllMenuByUserId",
+                "/api/RoleMenu/getAllParentMenus"
             };
             return excludeURL;
         }
