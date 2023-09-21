@@ -155,6 +155,7 @@ namespace SB.Security
             
             services.AddTransient<ISecurityLogService, SecurityLogService>();
             services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<IDataAnalyticsService, DataAnalyticsService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleMenuService, RoleMenuService>();
             services.AddTransient<ITokenService, TokenService>();
