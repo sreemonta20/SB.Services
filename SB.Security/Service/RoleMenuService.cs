@@ -80,17 +80,22 @@ namespace SB.Security.Service
             return dataResponse;
         }
 
-        public async Task<PagingResult<UserRole>?> GetAllRolesPaginationAsync(PaginationFilter paramRequest)
+        public async Task<DataResponse> GetAllRolesPaginationAsync(PaginationFilter paramRequest)
         {
-            PagingResult<UserRole>? result;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-            
+            DataResponse? dataResponse;
+            PagingResult<UserRole>? result = null;
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
             try
             {
                 IQueryable<UserRole> source = (from userRole in _context?.UserRole?.OrderBy(a => a.CreatedDate) select userRole).AsQueryable();
                 result = await Utilities.GetPagingResult(source, paramRequest.PageNumber, paramRequest.PageSize);
-                if (result == null)
+                if (result.Items.Any())
                 {
+                    dataResponse =  new DataResponse { Success = true, Message = ConstantSupplier.GET_ALL_ROLES_PAGINATION_FOUND, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = result };
+                }
+                else
+                {
+                    dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_ALL_ROLES_PAGINATION_NOT_FOUND, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = result };
                     _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
                 }
             }
@@ -98,13 +103,13 @@ namespace SB.Security.Service
             {
                 throw;
             }
-            return result;
+            return dataResponse;
         }
 
         public async Task<DataResponse> GetRoleByIdAsync(string roleId)
         {
             DataResponse? dataResponse;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETROLEBYID_REQ_MSG, JsonConvert.SerializeObject(roleId, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETROLEBYID_REQ_MSG, JsonConvert.SerializeObject(roleId, Formatting.Indented)));
             
             try
             {
@@ -112,7 +117,7 @@ namespace SB.Security.Service
                 if (userRole == null)
                 {
                     dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_USER_FAILED, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
                 }
                 else
                 {

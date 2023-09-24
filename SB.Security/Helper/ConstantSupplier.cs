@@ -6,6 +6,7 @@
     public class ConstantSupplier
     {
         #region Common Constants
+        public const string CTRLER_ROUTE_PATH_NAME = "api/[controller]";
         public const string REQUIRED_PARAMETER_NOT_EMPTY = "Required Parameters Should Not Empty Or Null";
         public const string REQ_OR_DATA_NULL = "Request is found null or data not found";
         public const string CORSS_POLICY_NAME = "AllowRedirectOrigin";
@@ -182,6 +183,38 @@
 
         #endregion
 
+        #region Role Menu Controller
+        public const string GET_ALL_ROLES_ROUTE_NAME = "getAllRoles";
+        public const string GET_ALL_ROLES_PAGINATION_ROUTE_NAME = "getAllRolesPagination";
+        public const string GET_ROLE_BY_ID_ROUTE_NAME = "getRoleById";
+        public const string POST_SAVE_UPDATE_ROLE_ROUTE_NAME = "createUpdateRole";
+        public const string DELETE_ROLE_ROUTE_NAME = "deleteRole";
+        public const string GET_ALL_MENU_BY_USER_ID_ROUTE_NAME = "getAllMenuByUserId";
+        public const string GET_ALL_PARENT_MENUS_ROUTE_NAME = "getAllParentMenus";
+        public const string GETALL_USER_MENU_PAGING_SEARCH_SP_NAME = "SP_GetAllUserMenuPagingWithSearch";
+        #endregion
+
+        #region Role Menu Service
+        public const string GET_ALL_ROLES_PAGINATION_FOUND = "List of Roles retrieved successfully.";
+        public const string GET_ALL_ROLES_PAGINATION_NOT_FOUND = "Empty roles.";
+        public const string EXIST_ROLE = "There is a role with same name. Try different.";
+        public const string USER_ROLE_SAVE_SUCCESS = "saving user role success!";
+        public const string USER_ROLE_UPDATE_SUCCESS = "Updating user role success!";
+        public const string NOT_EXIST_ROLE = "There is no role with such name.";
+        public const string DELETE_ROLE_SUCCESS = "Role is successfully removed";
+
+        public const string GET_GET_ALL_MENU_BY_USER_ID_SP_NAME = "SP_GetAllUserMenuByUserId";
+        #endregion
+
+        #region User Controller
+        public const string GET_USER_ROUTE_NAME = "getUserbyId";
+        public const string GET_ALL_USER_ROUTE_NAME = "getAllUsers";
+        public const string POST_AUTH_ROUTE_NAME = "login";
+        public const string POST_PUT_USER_ROUTE_NAME = "registerUser";
+        public const string DEL_USER_ROUTE_NAME = "deleteUser";
+        public const string REFRESH_TOKEN_ROUTE_NAME = "refreshtoken";
+        public const string REVOKE_ROUTE_NAME = "revoke";
+        #endregion
 
         #region User Service
         public const string ADMIN = "Admin";
@@ -205,7 +238,7 @@
 
         public const string REVOKE_USER_FAILED = "Revoking user failed. Please try again later";
         public const string REVOKE_USER_SUCCESS = "Revoking user success!";
-        
+
 
         public const string SAVE_KEY = "Save";
         public const string UPDATE_KEY = "Update";
@@ -236,37 +269,12 @@
         public const string DELETE_USER_SP_NAME = "SP_DeleteUser";
         #endregion
 
-        public const string CTRLER_ROUTE_PATH_NAME = "api/[controller]";
+        #region Data Analytics Controller
 
-        #region User Controller
-        public const string GET_USER_ROUTE_NAME = "getUserbyId";
-        public const string GET_ALL_USER_ROUTE_NAME = "getAllUsers";
-        public const string POST_AUTH_ROUTE_NAME = "login";
-        public const string POST_PUT_USER_ROUTE_NAME = "registerUser";
-        public const string DEL_USER_ROUTE_NAME = "deleteUser";
-        public const string REFRESH_TOKEN_ROUTE_NAME = "refreshtoken";
-        public const string REVOKE_ROUTE_NAME = "revoke";
         #endregion
 
-        #region Role Menu Controller
-        public const string GET_ALL_ROLES_ROUTE_NAME = "getAllRoles";
-        public const string GET_ALL_ROLES_PAGINATION_ROUTE_NAME = "getAllRolesPagination";
-        public const string GET_ROLE_BY_ID_ROUTE_NAME = "getRoleById";
-        public const string POST_SAVE_UPDATE_ROLE_ROUTE_NAME = "saveUpdateRole";
-        public const string DELETE_ROLE_ROUTE_NAME = "deleteRole";
-        public const string GET_ALL_MENU_BY_USER_ID_ROUTE_NAME = "getAllMenuByUserId";
-        public const string GET_ALL_PARENT_MENUS_ROUTE_NAME = "getAllParentMenus";
-        public const string GETALL_USER_MENU_PAGING_SEARCH_SP_NAME = "SP_GetAllUserMenuPagingWithSearch";
-        #endregion
+        #region Data Analytics Service
 
-        #region Role Menu Service
-        public const string EXIST_ROLE = "There is a role with same name. Try different.";
-        public const string USER_ROLE_SAVE_SUCCESS = "saving user role success!";
-        public const string USER_ROLE_UPDATE_SUCCESS = "Updating user role success!";
-        public const string NOT_EXIST_ROLE = "There is no role with such name.";
-        public const string DELETE_ROLE_SUCCESS = "Role is successfully removed";
-        //SP
-        public const string GET_GET_ALL_MENU_BY_USER_ID_SP_NAME = "SP_GetAllUserMenuByUserId";
         #endregion
 
     }
