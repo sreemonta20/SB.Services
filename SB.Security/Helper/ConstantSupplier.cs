@@ -18,6 +18,11 @@
         public const string EMAIL_CONFIG_CLASS_KEY = "EmailConfiguration";
         public const string INVALID_CLIENT_REQUEST = "Invalid client request";
         public const string SESSION_EXPIRATION_MSG = "Session expired!. Please login again.";
+        public const string LOGGEDIN_USER_CREATED_MSG = "Loggedin user record created successfully.";
+        public const string LOGGEDIN_USER_UPDATED_MSG = "Loggedin user record updated successfully.";
+        public const string LOGGEDIN_USER_FAILED_MSG = "Creating/Updating loggedin user record failed.";
+        public const string UPDATE_LOGGEDINUSER_LOGIN_ATTEMPT_SUCCESS_MSG = "Updating login attempt is successful.";
+        public const string UPDATE_LOGGEDINUSER_LOGIN_ATTEMPT_FAILED_MSG = "Updating login attempt failed.";
 
         public const string SWAGGER_SB_API_SERVICE_DOC_VERSION_NAME = "v1";
         public const string SWAGGER_SB_API_SERVICE_DOC_TITLE = "SB Services API";

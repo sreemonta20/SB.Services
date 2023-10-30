@@ -544,7 +544,7 @@ namespace SB.Security.Persistence
                       IsActive = true
                   });
 
-            modelBuilder.Entity<UserInfo>().HasData(
+            modelBuilder.Entity<AppUserProfile>().HasData(
                   new UserInfo()
                   {
                       Id = new Guid("C047D662-9F0E-4358-B323-15EC3081312C"),

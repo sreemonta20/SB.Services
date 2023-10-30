@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Compile Remove="Helper\EncryptDecryptMiddleware0.cs" />
+    <Compile Remove="Persistence\SBSecurityDBContext.cs" />
     <Compile Remove="Service\EncryptDecryptService.cs" />
     <Compile Remove="Service\IEncryptDecryptService.cs" />
   </ItemGroup>

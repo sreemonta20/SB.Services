@@ -54,7 +54,9 @@ namespace SB.Security
             #endregion
 
             #region Registers the given security db context as a service into the services
-            services.AddDbContext<SBSecurityDBContext>(options =>
+            //services.AddDbContext<SBSecurityDBContext>(options =>
+            //options.UseSqlServer(appSettings?.ConnectionStrings?.ProdSqlConnectionString));
+            services.AddDbContext<SecurityDBContext>(options =>
             options.UseSqlServer(appSettings?.ConnectionStrings?.ProdSqlConnectionString));
             #endregion
 
