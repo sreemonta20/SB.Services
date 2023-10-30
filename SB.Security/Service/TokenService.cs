@@ -19,7 +19,7 @@ namespace SB.Security.Service
         {
             _configuration = config;
         }
-        public Token? GetToken(UserInfo user)
+        public Token? GetToken(AppUserProfile user)
         {
 
             JwtSecurityTokenHandler tokenHandler = new();
@@ -90,7 +90,7 @@ namespace SB.Security.Service
         //    return tokenString;
         //}
 
-        public Token? GenerateAccessToken(UserInfo user)
+        public Token? GenerateAccessToken(AppUserProfile user)
         {
             List<Claim> claims = new()
             {

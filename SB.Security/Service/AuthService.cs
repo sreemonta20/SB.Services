@@ -206,13 +206,41 @@ namespace SB.Security.Service
                         bool isVarified = BCryptNet.Verify(request.Password, oAppUserProfile.Password);
                         if (isVarified)
                         {
+                            AppLoggedInUser? oExistAppLoggedInUser = await _context.AppLoggedInUsers.FirstOrDefaultAsync(x => x.AppUserProfileId == oAppUserProfile.Id && x.IsActive == true);
+                            if (oExistAppLoggedInUser != null)
+                            {
+                                
+                                Token? oTokenResult = _tokenService?.GenerateAccessToken(oAppUserProfile);
+                                if (oTokenResult != null)
+                                {
+                                    oTokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
+                                }
 
+                                DataResponse? oMenuResponse = await _roleMenuService.GetAllMenuByUserIdAsync(oAppUserProfile.Id.ToString());
+                                if (oMenuResponse != null && oMenuResponse.ResponseCode == 200)
+                                {
+                                    oTokenResult.userMenus = Convert.ToString(oMenuResponse.Result);
+                                }
+                                
+                                
+                                oExistAppLoggedInUser.RefreshToken = oTokenResult?.refresh_token;
+                                oExistAppLoggedInUser.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+                                oExistAppLoggedInUser.LastLoginAttemptAt = DateTime.UtcNow;
+                                oExistAppLoggedInUser.LoginFailedAttemptsCount = 0;
+                                await _context.SaveChangesAsync();
+                            }
                         }
                         else
                         {
-
+                            AppLoggedInUser? oExistAppLoggedInUser = await _context.AppLoggedInUsers.FirstOrDefaultAsync(x => x.AppUserProfileId == oAppUserProfile.Id && x.IsActive == true);
+                            if(oExistAppLoggedInUser != null)
+                            {
+                                oAppLoggedInUser.LastLoginAttemptAt = DateTime.UtcNow;
+                                oAppLoggedInUser.LoginFailedAttemptsCount++;
+                            }
+                            
                         }
-                        AppLoggedInUser? loggedInUser = await _context.AppLoggedInUsers.FirstOrDefaultAsync(x => x.AppUserProfileId == user.Id && x.IsActive == true);
+                        
                         if (loggedInUser != null)
                         {
                             if (loggedInUser.LoginFailedAttemptsCount > Convert.ToInt32(_configuration["AppSettings:MaxNumberOfFailedAttempts"])

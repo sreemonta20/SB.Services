@@ -9,8 +9,8 @@ namespace SB.Security.Service
     /// </summary>
     public interface ITokenService
     {
-        Token? GetToken(UserInfo user);
-        Token? GenerateAccessToken(UserInfo user);
+        Token? GetToken(AppUserProfile user);
+        Token? GenerateAccessToken(AppUserProfile user);
         string GenerateRefreshToken();
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
     }
