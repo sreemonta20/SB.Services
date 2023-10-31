@@ -199,18 +199,17 @@ namespace SB.Security.Service
                 if (request != null)
                 {
 
-                    AppUserProfile? oAppUserProfile = await _context.AppUserProfiles.FirstOrDefaultAsync(u => u.UserName == request.UserName && u.IsActive == true);
-                    
-                    if (oAppUserProfile != null)
+                    AppUser? oExistAppUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.UserName == request.UserName && x.IsActive == true);
+                    if (Utilities.IsNotNull(oExistAppUser))
                     {
-                        bool isVarified = BCryptNet.Verify(request.Password, oAppUserProfile.Password);
-                        if (isVarified)
+                        AppUserProfile? oAppUserProfile = await _context.AppUserProfiles.FirstOrDefaultAsync(x => x.Id == oExistAppUser.AppUserProfileId && x.IsActive == true);
+                        if (Utilities.IsNotNull(oAppUserProfile))
                         {
-                            AppLoggedInUser? oExistAppLoggedInUser = await _context.AppLoggedInUsers.FirstOrDefaultAsync(x => x.AppUserProfileId == oAppUserProfile.Id && x.IsActive == true);
-                            if (oExistAppLoggedInUser != null)
+                            bool isVarified = BCryptNet.Verify(request.Password, oExistAppUser.Password);
+                            if (isVarified)
                             {
-                                
-                                Token? oTokenResult = _tokenService?.GenerateAccessToken(oAppUserProfile);
+                                User oUser = new() { Id = Convert.ToString(oAppUserProfile.Id), FullName = oAppUserProfile.FullName, UserName = oExistAppUser.UserName, Email = oAppUserProfile.Email, UserRole = oAppUserProfile.Email, CreatedDate = oAppUserProfile.CreatedDate };
+                                Token? oTokenResult = _tokenService?.GenerateAccessToken(oUser);
                                 if (oTokenResult != null)
                                 {
                                     oTokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
@@ -221,126 +220,185 @@ namespace SB.Security.Service
                                 {
                                     oTokenResult.userMenus = Convert.ToString(oMenuResponse.Result);
                                 }
-                                
-                                
-                                oExistAppLoggedInUser.RefreshToken = oTokenResult?.refresh_token;
-                                oExistAppLoggedInUser.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
-                                oExistAppLoggedInUser.LastLoginAttemptAt = DateTime.UtcNow;
-                                oExistAppLoggedInUser.LoginFailedAttemptsCount = 0;
+
+
+                                oExistAppUser.RefreshToken = oTokenResult?.refresh_token;
+                                oExistAppUser.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+                                oExistAppUser.LastLoginAttemptAt = DateTime.UtcNow;
+                                oExistAppUser.LoginFailedAttemptsCount = 0;
                                 await _context.SaveChangesAsync();
                             }
                         }
-                        else
-                        {
-                            AppLoggedInUser? oExistAppLoggedInUser = await _context.AppLoggedInUsers.FirstOrDefaultAsync(x => x.AppUserProfileId == oAppUserProfile.Id && x.IsActive == true);
-                            if(oExistAppLoggedInUser != null)
-                            {
-                                oAppLoggedInUser.LastLoginAttemptAt = DateTime.UtcNow;
-                                oAppLoggedInUser.LoginFailedAttemptsCount++;
-                            }
-                            
-                        }
-                        
-                        if (loggedInUser != null)
-                        {
-                            if (loggedInUser.LoginFailedAttemptsCount > Convert.ToInt32(_configuration["AppSettings:MaxNumberOfFailedAttempts"])
-                            && loggedInUser.LastLoginAttemptAt.HasValue
-                            && DateTime.UtcNow < loggedInUser.LastLoginAttemptAt.Value.AddMinutes(Convert.ToInt32(_configuration["AppSettings:BlockMinutes"])))
-                            {
+                        dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.INVALID_USER_MSG, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                        _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
 
-                                SendResponse emailResponse = await SendEmail(request, user);
-                                if (!emailResponse.Successful)
-                                {
-                                    _securityLogService.LogError(String.Format("{0}", JsonConvert.SerializeObject(emailResponse, Formatting.Indented)));
-                                }
-
-                                dataResponse = new DataResponse
-                                {
-                                    Success = false,
-                                    Message = String.Format(ConstantSupplier.AUTH_FAILED_ATTEMPT, Convert.ToInt32(_configuration["AppSettings:BlockMinutes"])),
-                                    MessageType = Enum.EnumResponseType.Error,
-                                    ResponseCode = (int)HttpStatusCode.BadRequest,
-                                    Result = null
-                                };
-                                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
-
-                                return dataResponse;
-                            }
-                            bool verified = BCryptNet.Verify(request.Password, user.Password);
-                            if (verified)
-                            {
-                                user.LoginFailedAttemptsCount = 0;
-                                user.LastLoginAttemptAt = DateTime.Now;
-                                await TrackAndUpdateLoginAttempts(user);
-                                JwtSecurityToken token;
-                                DateTime expires;
-                                Token? tokenResult = _tokenService?.GenerateAccessToken(user);
-                                if (tokenResult != null)
-                                {
-                                    tokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
-
-                                }
-
-                                DataResponse menuResponse = await _roleMenuService.GetAllMenuByUserIdAsync(user.Id.ToString());
-                                if (menuResponse != null && menuResponse.ResponseCode == 200)
-                                {
-                                    tokenResult.userMenus = Convert.ToString(menuResponse.Result);
-                                }
-
-                                UserLogin? userlogin = _context.UserLogin.FirstOrDefault(u => (u.UserName == user.UserName) && (u.Password == user.Password));
-                                if (userlogin is null)
-                                {
-                                    UserLogin oUserLogin = new()
-                                    {
-                                        Id = Guid.NewGuid(),
-                                        UserName = request.UserName,
-                                        Password = user.Password,
-                                        RefreshToken = tokenResult?.refresh_token,
-                                        RefreshTokenExpiryTime = DateTime.Now.AddDays(7)
-                                    };
-                                    await _context.UserLogin.AddAsync(oUserLogin);
-                                    await _context.SaveChangesAsync();
-                                }
-                                else
-                                {
-                                    userlogin.RefreshToken = tokenResult?.refresh_token;
-                                    userlogin.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
-                                    await _context.SaveChangesAsync();
-                                }
-
-                                //return new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = TokenResult };
-
-                                dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = tokenResult };
-
-                                return dataResponse;
-                            }
-                            else
-                            {
-                                user.LastLoginAttemptAt = DateTime.Now;
-                                user.LoginFailedAttemptsCount++;
-                                await TrackAndUpdateLoginAttempts(user);
-
-                                //return new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-
-                                dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
-
-                                return dataResponse;
-                            }
-                        }
-                        else
-                        {
-
-                        }
-
-
+                        return dataResponse;
                     }
-
-                    //return new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
                     dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
                     _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
 
                     return dataResponse;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    //AppUserProfile? oAppUserProfile = await _context.AppUserProfiles.FirstOrDefaultAsync(u => u.UserName == request.UserName && u.IsActive == true);
+
+                    //if (oAppUserProfile != null)
+                    //{
+                    //    bool isVarified = BCryptNet.Verify(request.Password, oAppUserProfile.Password);
+                    //    if (isVarified)
+                    //    {
+                    //        AppUser? oExistAppLoggedInUser = await _context.AppLoggedInUsers.FirstOrDefaultAsync(x => x.AppUserProfileId == oAppUserProfile.Id && x.IsActive == true);
+                    //        if (oExistAppLoggedInUser != null)
+                    //        {
+
+                    //            Token? oTokenResult = _tokenService?.GenerateAccessToken(oAppUserProfile);
+                    //            if (oTokenResult != null)
+                    //            {
+                    //                oTokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
+                    //            }
+
+                    //            DataResponse? oMenuResponse = await _roleMenuService.GetAllMenuByUserIdAsync(oAppUserProfile.Id.ToString());
+                    //            if (oMenuResponse != null && oMenuResponse.ResponseCode == 200)
+                    //            {
+                    //                oTokenResult.userMenus = Convert.ToString(oMenuResponse.Result);
+                    //            }
+
+
+                    //            oExistAppLoggedInUser.RefreshToken = oTokenResult?.refresh_token;
+                    //            oExistAppLoggedInUser.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+                    //            oExistAppLoggedInUser.LastLoginAttemptAt = DateTime.UtcNow;
+                    //            oExistAppLoggedInUser.LoginFailedAttemptsCount = 0;
+                    //            await _context.SaveChangesAsync();
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        AppUser? oExistAppLoggedInUser = await _context.AppLoggedInUsers.FirstOrDefaultAsync(x => x.AppUserProfileId == oAppUserProfile.Id && x.IsActive == true);
+                    //        if (oExistAppLoggedInUser != null)
+                    //        {
+                    //            oExistAppLoggedInUser.LastLoginAttemptAt = DateTime.UtcNow;
+                    //            oExistAppLoggedInUser.LoginFailedAttemptsCount++;
+                    //        }
+
+                    //    }
+
+                    //    if (loggedInUser != null)
+                    //    {
+                    //        if (loggedInUser.LoginFailedAttemptsCount > Convert.ToInt32(_configuration["AppSettings:MaxNumberOfFailedAttempts"])
+                    //        && loggedInUser.LastLoginAttemptAt.HasValue
+                    //        && DateTime.UtcNow < loggedInUser.LastLoginAttemptAt.Value.AddMinutes(Convert.ToInt32(_configuration["AppSettings:BlockMinutes"])))
+                    //        {
+
+                    //            SendResponse emailResponse = await SendEmail(request, user);
+                    //            if (!emailResponse.Successful)
+                    //            {
+                    //                _securityLogService.LogError(String.Format("{0}", JsonConvert.SerializeObject(emailResponse, Formatting.Indented)));
+                    //            }
+
+                    //            dataResponse = new DataResponse
+                    //            {
+                    //                Success = false,
+                    //                Message = String.Format(ConstantSupplier.AUTH_FAILED_ATTEMPT, Convert.ToInt32(_configuration["AppSettings:BlockMinutes"])),
+                    //                MessageType = Enum.EnumResponseType.Error,
+                    //                ResponseCode = (int)HttpStatusCode.BadRequest,
+                    //                Result = null
+                    //            };
+                    //            _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
+
+                    //            return dataResponse;
+                    //        }
+                    //        bool verified = BCryptNet.Verify(request.Password, user.Password);
+                    //        if (verified)
+                    //        {
+                    //            user.LoginFailedAttemptsCount = 0;
+                    //            user.LastLoginAttemptAt = DateTime.Now;
+                    //            await TrackAndUpdateLoginAttempts(user);
+                    //            JwtSecurityToken token;
+                    //            DateTime expires;
+                    //            Token? tokenResult = _tokenService?.GenerateAccessToken(user);
+                    //            if (tokenResult != null)
+                    //            {
+                    //                tokenResult.refresh_token = _tokenService?.GenerateRefreshToken();
+
+                    //            }
+
+                    //            DataResponse menuResponse = await _roleMenuService.GetAllMenuByUserIdAsync(user.Id.ToString());
+                    //            if (menuResponse != null && menuResponse.ResponseCode == 200)
+                    //            {
+                    //                tokenResult.userMenus = Convert.ToString(menuResponse.Result);
+                    //            }
+
+                    //            UserLogin? userlogin = _context.UserLogin.FirstOrDefault(u => (u.UserName == user.UserName) && (u.Password == user.Password));
+                    //            if (userlogin is null)
+                    //            {
+                    //                UserLogin oUserLogin = new()
+                    //                {
+                    //                    Id = Guid.NewGuid(),
+                    //                    UserName = request.UserName,
+                    //                    Password = user.Password,
+                    //                    RefreshToken = tokenResult?.refresh_token,
+                    //                    RefreshTokenExpiryTime = DateTime.Now.AddDays(7)
+                    //                };
+                    //                await _context.UserLogin.AddAsync(oUserLogin);
+                    //                await _context.SaveChangesAsync();
+                    //            }
+                    //            else
+                    //            {
+                    //                userlogin.RefreshToken = tokenResult?.refresh_token;
+                    //                userlogin.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+                    //                await _context.SaveChangesAsync();
+                    //            }
+
+                    //            //return new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = TokenResult };
+
+                    //            dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = tokenResult };
+
+                    //            return dataResponse;
+                    //        }
+                    //        else
+                    //        {
+                    //            user.LastLoginAttemptAt = DateTime.Now;
+                    //            user.LoginFailedAttemptsCount++;
+                    //            await TrackAndUpdateLoginAttempts(user);
+
+                    //            //return new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+
+                    //            dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                    //            _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
+
+                    //            return dataResponse;
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+
+                    //    }
+
+
+                    //}
+
+                    ////return new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                    //dataResponse = new DataResponse { Success = false, Message = ConstantSupplier.AUTH_INVALID_CREDENTIAL, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                    //_securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_LOGIN_FAILED_MSG, JsonConvert.SerializeObject(dataResponse, Formatting.Indented)));
+
+                    //return dataResponse;
 
                 }
                 else
@@ -505,55 +563,58 @@ namespace SB.Security.Service
             return response;
         }
 
-        private async Task<DataResponse> UpdateAppUserLoginAttempt(AppLoggedInUser oAppLoggedInUser)
+        private async Task<DataResponse> CreateUpdateAppUser(AppUser oAppUser)
         {
             using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
             try
             {
-                AppLoggedInUser? oExistAppLoggedInUser = await _context.AppLoggedInUsers.FirstOrDefaultAsync(x => x.Id == oAppLoggedInUser.Id && x.AppUserProfileId == oAppLoggedInUser.AppUserProfileId && x.IsActive == true);
-                if (oExistAppLoggedInUser != null)
+                AppUser? oExistAppUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.AppUserProfileId == oAppUser.AppUserProfileId && x.IsActive == true);
+                if (oExistAppUser != null)
                 {
-                    oExistAppLoggedInUser.AppUserProfileId = oAppLoggedInUser.AppUserProfileId;
-                    oExistAppLoggedInUser.RefreshToken = oAppLoggedInUser.RefreshToken;
-                    oExistAppLoggedInUser.RefreshTokenExpiryTime = oAppLoggedInUser.RefreshTokenExpiryTime;
-                    oExistAppLoggedInUser.LastLoginAttemptAt = oAppLoggedInUser.LastLoginAttemptAt;
-                    oExistAppLoggedInUser.LoginFailedAttemptsCount = oAppLoggedInUser.LoginFailedAttemptsCount;
-                    oExistAppLoggedInUser.IsActive = oAppLoggedInUser.IsActive;
-                    _context.Entry(oExistAppLoggedInUser).Property("AppUserProfileId").IsModified = true;
-                    _context.Entry(oExistAppLoggedInUser).Property("RefreshToken").IsModified = true;
-                    _context.Entry(oExistAppLoggedInUser).Property("RefreshTokenExpiryTime").IsModified = true;
-                    _context.Entry(oExistAppLoggedInUser).Property("LastLoginAttemptAt").IsModified = true;
-                    _context.Entry(oExistAppLoggedInUser).Property("LoginFailedAttemptsCount").IsModified = true;
-                    _context.Entry(oExistAppLoggedInUser).Property("IsActive").IsModified = true;
+                    oExistAppUser.AppUserProfileId = oAppUser.AppUserProfileId;
+                    oExistAppUser.RefreshToken = oAppUser.RefreshToken;
+                    oExistAppUser.RefreshTokenExpiryTime = oAppUser.RefreshTokenExpiryTime;
+                    oExistAppUser.LastLoginAttemptAt = oAppUser.LastLoginAttemptAt;
+                    oExistAppUser.LoginFailedAttemptsCount = oAppUser.LoginFailedAttemptsCount;
+                    oExistAppUser.IsActive = oAppUser.IsActive;
+                    _context.Entry(oExistAppUser).Property("AppUserProfileId").IsModified = true;
+                    _context.Entry(oExistAppUser).Property("RefreshToken").IsModified = true;
+                    _context.Entry(oExistAppUser).Property("RefreshTokenExpiryTime").IsModified = true;
+                    _context.Entry(oExistAppUser).Property("LastLoginAttemptAt").IsModified = true;
+                    _context.Entry(oExistAppUser).Property("LoginFailedAttemptsCount").IsModified = true;
+                    _context.Entry(oExistAppUser).Property("IsActive").IsModified = true;
                     await _context.SaveChangesAsync();
                     await oTrasaction.CommitAsync();
 
-                    return new DataResponse { Success = true, Message = ConstantSupplier.UPDATE_LOGGEDINUSER_LOGIN_ATTEMPT_SUCCESS_MSG, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = ConstantSupplier.UPDATE_LOGGEDINUSER_LOGIN_ATTEMPT_SUCCESS_MSG };
+                    return new DataResponse { Success = true, Message = ConstantSupplier.APP_USER_UPDATED_MSG, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = ConstantSupplier.APP_USER_UPDATED_MSG };
 
                 }
                 else
                 {
-                    AppLoggedInUser oNewAppLoggedInUser = new()
+                    AppUser oNewAppUser = new()
                     {
                         Id = Guid.NewGuid(),
-                        AppUserProfileId = oAppLoggedInUser.AppUserProfileId,
-                        RefreshToken = oAppLoggedInUser.RefreshToken,
-                        RefreshTokenExpiryTime = oAppLoggedInUser.RefreshTokenExpiryTime,
-                        LastLoginAttemptAt = oAppLoggedInUser.LastLoginAttemptAt,
-                        LoginFailedAttemptsCount = oAppLoggedInUser.LoginFailedAttemptsCount,
-                        IsActive = oAppLoggedInUser.IsActive
+                        AppUserProfileId = oAppUser.AppUserProfileId,
+                        RefreshToken = oAppUser.RefreshToken,
+                        RefreshTokenExpiryTime = oAppUser.RefreshTokenExpiryTime,
+                        LastLoginAttemptAt = oAppUser.LastLoginAttemptAt,
+                        LoginFailedAttemptsCount = oAppUser.LoginFailedAttemptsCount,
+                        IsActive = oAppUser.IsActive
                     };
-                    await _context.AppLoggedInUsers.AddAsync(oNewAppLoggedInUser);
+                    await _context.AppUsers.AddAsync(oNewAppUser);
                     await _context.SaveChangesAsync();
                     await oTrasaction.CommitAsync();
+
+                    return new DataResponse { Success = true, Message = ConstantSupplier.APP_USER_CREATED_MSG, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = ConstantSupplier.APP_USER_CREATED_MSG };
                 }
-                return new DataResponse { Success = false, Message = ConstantSupplier.UPDATE_LOGGEDINUSER_LOGIN_ATTEMPT_FAILED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = ConstantSupplier.UPDATE_LOGGEDINUSER_LOGIN_ATTEMPT_FAILED_MSG };
+                
             }
             catch (Exception)
             {
                 oTrasaction.Rollback();
-                return new DataResponse { Success = false, Message = ConstantSupplier.UPDATE_LOGGEDINUSER_LOGIN_ATTEMPT_FAILED_MSG, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.InternalServerError, Result = ConstantSupplier.UPDATE_LOGGEDINUSER_LOGIN_ATTEMPT_FAILED_MSG };
+                return new DataResponse { Success = false, Message = ConstantSupplier.APP_USER_CREATED_UPDATED_FAILED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.InternalServerError, Result = ConstantSupplier.APP_USER_CREATED_UPDATED_FAILED_MSG };
             }
+
         }
     }
 }

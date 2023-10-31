@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SB.Security.Models.Response;
 using System.Collections;
 using System.Data;
@@ -168,5 +169,27 @@ namespace SB.Security.Helper
 
             return true;
         }
+
+        public static bool IsNull<T>(T obj)
+        {
+            return obj == null;
+        }
+
+        public static bool IsNull<T>(List<T> list)
+        {
+            return list == null || list.Count == 0;
+        }
+
+        public static bool IsNotNull<T>(T obj)
+        {
+            return obj != null;
+        }
+
+        public static bool IsNotNull<T>(List<T> list)
+        {
+            return list == null || list.Count == 0;
+        }
+
+
     }
 }

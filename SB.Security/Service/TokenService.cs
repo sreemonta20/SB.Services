@@ -19,19 +19,103 @@ namespace SB.Security.Service
         {
             _configuration = config;
         }
-        public Token? GetToken(AppUserProfile user)
+        //public Token? GetToken(AppUserProfile user)
+        //{
+
+        //    JwtSecurityTokenHandler tokenHandler = new();
+        //    byte[] key = Encoding.ASCII.GetBytes(_configuration["AppSettings:JWT:Key"]);
+
+        //    DateTime expiryTime = DateTime.Now.AddSeconds(Convert.ToDouble(this._configuration["AppSettings:AccessTokenExpireTime"]));
+        //    SecurityTokenDescriptor tokenDescriptor = new()
+        //    {
+        //        Subject = new ClaimsIdentity(new Claim[]
+        //        {
+        //                new Claim(JwtRegisteredClaimNames.Sub, this._configuration["AppSettings:JWT:Subject"]),
+        //                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        //                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+        //                new Claim("UserId", user.Id.ToString()),
+        //                new Claim("FullName", user.FullName),
+        //                new Claim(ClaimTypes.Name, user.UserName),
+        //                new Claim("Email", user.Email)
+        //        }),
+        //        Expires = expiryTime,
+        //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        //    };
+
+        //    var token = tokenHandler.CreateToken(tokenDescriptor);
+        //    var tokenString = tokenHandler.WriteToken(token);
+
+        //    if (tokenString != null)
+        //    {
+        //        return new Token()
+        //        {
+        //            access_token = tokenString,
+        //            expires_in = expiryTime,
+        //            token_type = ConstantSupplier.AUTHORIZATION_TOKEN_TYPE,
+        //            error = string.Empty,
+        //            error_description = string.Empty,
+        //            user = new User() { Id = Convert.ToString(user.Id), FullName = user.UserName, UserName = user.UserName, Email = user.Email, UserRole = user.UserRole.ToString(), CreatedDate = user.CreatedDate }
+
+        //        };
+        //    }
+        //    return null;
+
+
+        //}
+
+        //public Token? GenerateAccessToken(AppUserProfile user)
+        //{
+        //    List<Claim> claims = new()
+        //    {
+        //        new Claim(JwtRegisteredClaimNames.Sub, this._configuration["AppSettings:JWT:Subject"]),
+        //        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        //        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+        //        new Claim("UserId", user.Id.ToString()),
+        //        new Claim("FullName", user.FullName),
+        //        new Claim("UserName", user.UserName),
+        //        new Claim("Email", user.Email)
+        //    };
+        //    SymmetricSecurityKey secretKey = new(Encoding.UTF8.GetBytes(_configuration["AppSettings:JWT:Key"]));
+        //    SigningCredentials signinCredentials = new(secretKey, SecurityAlgorithms.HmacSha256);
+        //    DateTime expiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["AppSettings:Expires"]));
+
+        //    JwtSecurityToken tokenOptions = new(
+        //        issuer: _configuration["AppSettings:JWT:Issuer"],
+        //        audience: _configuration["AppSettings:JWT:Audience"],
+        //        claims: claims,
+        //        expires: expiryTime,
+        //        signingCredentials: signinCredentials
+        //    );
+
+        //    string tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        //    if (tokenString != null)
+        //    {
+        //        return new Token()
+        //        {
+        //            access_token = tokenString,
+        //            expires_in = expiryTime,
+        //            token_type = ConstantSupplier.AUTHORIZATION_TOKEN_TYPE,
+        //            error = string.Empty,
+        //            error_description = string.Empty,
+        //            user = new User() { Id = Convert.ToString(user.Id), FullName = user.UserName, UserName = user.UserName, Email = user.Email, UserRole = user.RoleId.ToString(), CreatedDate = user.CreatedDate }
+
+        //        };
+        //    }
+        //    return null;
+        //}
+
+        public Token? GetToken(User? user)
         {
 
             JwtSecurityTokenHandler tokenHandler = new();
             byte[] key = Encoding.ASCII.GetBytes(_configuration["AppSettings:JWT:Key"]);
 
-            //DateTime expiryTime = DateTime.UtcNow.AddMinutes(10);
             DateTime expiryTime = DateTime.Now.AddSeconds(Convert.ToDouble(this._configuration["AppSettings:AccessTokenExpireTime"]));
             SecurityTokenDescriptor tokenDescriptor = new()
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                        new Claim(JwtRegisteredClaimNames.Sub, this._configuration["AppSettings:JWT:Subject"]),
+                        new Claim(JwtRegisteredClaimNames.Sub, _configuration["AppSettings:JWT:Subject"]),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                         new Claim("UserId", user.Id.ToString()),
@@ -63,32 +147,6 @@ namespace SB.Security.Service
 
 
         }
-        //public string GenerateAccessToken(UserInfo user)
-        //{
-        //    List<Claim> claims = new()
-        //    {
-        //        new Claim(JwtRegisteredClaimNames.Sub, this._configuration["AppSettings:JWT:Subject"]),
-        //        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        //        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-        //        new Claim("UserId", user.Id.ToString()),
-        //        new Claim("FullName", user.FullName),
-        //        new Claim("UserName", user.UserName),
-        //        new Claim("Email", user.Email)
-        //    };
-        //    SymmetricSecurityKey secretKey = new(Encoding.UTF8.GetBytes(_configuration["AppSettings:JWT:Key"]));
-        //    SigningCredentials signinCredentials = new(secretKey, SecurityAlgorithms.HmacSha256Signature);
-
-        //    JwtSecurityToken tokeOptions = new(
-        //        issuer: _configuration["AppSettings:JWT:Issuer"],
-        //        audience: _configuration["AppSettings:JWT:Audience"],
-        //        claims: claims,
-        //        expires: DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["AppSettings:Expires"])),
-        //        signingCredentials: signinCredentials
-        //    );
-
-        //    string tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-        //    return tokenString;
-        //}
 
         public Token? GenerateAccessToken(AppUserProfile user)
         {

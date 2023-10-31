@@ -11,9 +11,7 @@ namespace SB.Security.Models.Base
         [Key]
         public Guid Id { get; set; }
         public string? FullName { get; set; }
-        public string? UserName { get; set; }
-        public string? Password { get; set; }
-        public string? SaltKey { get; set; }
+        public string? Address { get; set; }
         public string? Email { get; set; }
         public Guid? AppUserRoleId { get; set; }
         public string? CreatedBy { get; set; }
@@ -22,6 +20,6 @@ namespace SB.Security.Models.Base
         public DateTime? UpdatedDate { get; set; }
         public bool? IsActive { get; set; }
         public virtual AppUserRole? AppUserRole { get; set; }
-        public virtual AppLoggedInUser? AppLoggedInUser { get; set; }
+        public virtual AppUser? AppUser { get; set; }
     }
 }

@@ -23,6 +23,9 @@
         public const string LOGGEDIN_USER_FAILED_MSG = "Creating/Updating loggedin user record failed.";
         public const string UPDATE_LOGGEDINUSER_LOGIN_ATTEMPT_SUCCESS_MSG = "Updating login attempt is successful.";
         public const string UPDATE_LOGGEDINUSER_LOGIN_ATTEMPT_FAILED_MSG = "Updating login attempt failed.";
+        public const string APP_USER_CREATED_MSG = "Application user record created successfully.";
+        public const string APP_USER_UPDATED_MSG = "Application user record updated successfully.";
+        public const string APP_USER_CREATED_UPDATED_FAILED_MSG = "Creating/updating application user record failed.";
 
         public const string SWAGGER_SB_API_SERVICE_DOC_VERSION_NAME = "v1";
         public const string SWAGGER_SB_API_SERVICE_DOC_TITLE = "SB Services API";
@@ -235,6 +238,7 @@
         public const string AUTH_INVALID_CREDENTIAL = "Invalid credential";
         public const string AUTH_SUCCESS = "Authentation success!";
         public const string AUTH_FAILED_ATTEMPT = "Your account was blocked for a {0} minutes, please try again later.";
+        public const string INVALID_USER_MSG = "User might be invalid or inactive. Please contact with administrator.";
 
         public const string REFRESHTOKEN_FAILED = "Refreshing token failed. Please try again later";
         public const string REFRESHTOKEN_INVALID_CREDENTIAL = "Invalid refresh token credential";

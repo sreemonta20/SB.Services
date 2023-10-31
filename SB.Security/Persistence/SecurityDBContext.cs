@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SB.Security.Models.Base;
 using SB.Security.Helper;
 using StackExchange.Redis;
+using FluentEmail.Core.Models;
 
 namespace SB.Security.Persistence
 {
@@ -22,7 +23,7 @@ namespace SB.Security.Persistence
         public virtual DbSet<AppUserProfile>? AppUserProfiles { get; set; }
         public virtual DbSet<AppUserMenu>? AppUserMenus { get; set; }
         public virtual DbSet<AppUserRoleMenu>? AppUserRoleMenus { get; set; }
-        public DbSet<AppLoggedInUser> AppLoggedInUsers { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,7 +32,7 @@ namespace SB.Security.Persistence
             modelBuilder.Entity<AppUserMenu>().HasKey(x => x.Id);
             modelBuilder.Entity<AppUserProfile>().HasKey(x => x.Id);
             modelBuilder.Entity<AppUserRoleMenu>().HasKey(x => x.Id);
-            modelBuilder.Entity<AppLoggedInUser>().HasKey(x => x.Id);
+            modelBuilder.Entity<AppUser>().HasKey(x => x.Id);
 
             modelBuilder.Entity<AppUserRole>(entity =>
             {
@@ -71,11 +72,8 @@ namespace SB.Security.Persistence
             modelBuilder.Entity<AppUserProfile>(entity =>
             {
                 entity.Property(x => x.Id).HasColumnName("Id");
-
                 entity.Property(x => x.FullName).HasMaxLength(200);
-                entity.Property(x => x.UserName).HasMaxLength(100);
-                entity.Property(x => x.Password).HasMaxLength(255);
-                entity.Property(x => x.SaltKey).HasMaxLength(255);
+                entity.Property(x => x.Address).HasMaxLength(200); 
                 entity.Property(x => x.Email).HasMaxLength(200);
                 entity.Property(x => x.AppUserRoleId).HasColumnName("AppUserRoleId");
                 entity.Property(x => x.CreatedBy).HasColumnName("CreatedBy");
@@ -113,17 +111,20 @@ namespace SB.Security.Persistence
                     .HasConstraintName("FK_AppUserRoleMenus_AppUserMenu");
             });
 
-            modelBuilder.Entity<AppLoggedInUser>(entity =>
+            modelBuilder.Entity<AppUser>(entity =>
             {
                 entity.Property(x => x.Id).HasColumnName("Id");
                 entity.Property(x => x.AppUserProfileId).HasColumnName("AppUserProfileId");
+                entity.Property(x => x.UserName).HasMaxLength(100);
+                entity.Property(x => x.Password).HasMaxLength(255);
+                entity.Property(x => x.SaltKey).HasMaxLength(255);
                 entity.Property(x => x.RefreshToken).HasMaxLength(255);
                 entity.Property(x => x.RefreshTokenExpiryTime).HasColumnType("datetime");
                 entity.Property(x => x.LastLoginAttemptAt).HasColumnType("datetime");
                 entity.Property(x => x.LoginFailedAttemptsCount).HasColumnName("LoginFailedAttemptsCount");
                 entity.Property(x => x.IsActive).HasColumnName("IsActive");
                 entity.HasOne(x => x.AppUserProfile)
-                    .WithOne(x => x.AppLoggedInUser)
+                    .WithOne(x => x.AppUser)
                     .HasForeignKey<AppUserProfile>(x => x.Id);
             });
 
@@ -156,9 +157,7 @@ namespace SB.Security.Persistence
                   {
                       Id = new Guid("C047D662-9F0E-4358-B323-15EC3081312C"),
                       FullName = "Sreemonta Bhowmik",
-                      UserName = "sree",
-                      Password = "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa",
-                      SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
+                      Address = "Dubai",
                       Email = "sbhowmikcse08@gmail.com",
                       AppUserRoleId = new Guid("1B15CE5A-56B3-4EB9-8286-6E27F770B0DA"),
                       CreatedBy = null,
@@ -171,12 +170,44 @@ namespace SB.Security.Persistence
                   {
                       Id = new Guid("EFEDC118-3459-4C2E-9158-AD69196A59E0"),
                       FullName = "Anannya Rohine",
-                      UserName = "rohine",
-                      Password = "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa",
-                      SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
+                      Address = "Dubai",
                       Email = "rohine2008@gmail.com",
                       AppUserRoleId = new Guid("10A9E9E7-CB24-4816-9B94-9DB275A40EDD"),
                       CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                      CreatedDate = DateTime.UtcNow,
+                      UpdatedBy = null,
+                      UpdatedDate = DateTime.UtcNow,
+                      IsActive = true
+                  });
+
+            modelBuilder.Entity<AppUser>().HasData(
+                  new AppUser()
+                  {
+                      Id = new Guid("5FD67AAF-183E-48F8-BB53-15B7628A3E0A"),
+                      AppUserProfileId = new Guid("C047D662-9F0E-4358-B323-15EC3081312C"),
+                      UserName = "sree",
+                      Password = "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa",
+                      SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
+                      RefreshToken = null,
+                      RefreshTokenExpiryTime = null,
+                      LoginFailedAttemptsCount = 0,
+                      CreatedBy = null,
+                      CreatedDate = DateTime.UtcNow,
+                      UpdatedBy = null,
+                      UpdatedDate = DateTime.UtcNow,
+                      IsActive = true
+                  },
+                  new AppUser()
+                  {
+                      Id = new Guid("A9E00F47-89EC-46A3-A5E8-31EBD52AC121"),
+                      AppUserProfileId = new Guid("EFEDC118-3459-4C2E-9158-AD69196A59E0"),
+                      UserName = "rohine",
+                      Password = "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa",
+                      SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
+                      RefreshToken = null,
+                      RefreshTokenExpiryTime = null,
+                      LoginFailedAttemptsCount = 0,
+                      CreatedBy = null,
                       CreatedDate = DateTime.UtcNow,
                       UpdatedBy = null,
                       UpdatedDate = DateTime.UtcNow,
