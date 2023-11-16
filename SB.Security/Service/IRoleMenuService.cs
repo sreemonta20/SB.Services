@@ -18,7 +18,7 @@ namespace SB.Security.Service
         Task<DataResponse> GetRoleByIdAsync(string roleId);
         Task<DataResponse> SaveUpdateRoleAsync(RoleSaveUpdateRequest roleSaveUpdateRequest);
         Task<DataResponse> DeleteRoleAsync(string roleId);
-        Task<DataResponse> GetAllMenuByUserIdAsync(string userId);
+        Task<DataResponse> GetAllMenuByUserIdAsync(string? userId);
         Task<DataResponse> GetAllParentMenusAsync();
     }
 }

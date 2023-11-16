@@ -120,8 +120,8 @@ namespace SB.Security.Persistence
                 entity.Property(x => x.SaltKey).HasMaxLength(255);
                 entity.Property(x => x.RefreshToken).HasMaxLength(255);
                 entity.Property(x => x.RefreshTokenExpiryTime).HasColumnType("datetime");
-                entity.Property(x => x.LastLoginAttemptAt).HasColumnType("datetime");
-                entity.Property(x => x.LoginFailedAttemptsCount).HasColumnName("LoginFailedAttemptsCount");
+                //entity.Property(x => x.LastLoginAttemptAt).HasColumnType("datetime");
+                //entity.Property(x => x.LoginFailedAttemptsCount).HasColumnName("LoginFailedAttemptsCount");
                 entity.Property(x => x.IsActive).HasColumnName("IsActive");
                 entity.HasOne(x => x.AppUserProfile)
                     .WithOne(x => x.AppUser)
@@ -190,7 +190,7 @@ namespace SB.Security.Persistence
                       SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
                       RefreshToken = null,
                       RefreshTokenExpiryTime = null,
-                      LoginFailedAttemptsCount = 0,
+                      //LoginFailedAttemptsCount = 0,
                       CreatedBy = null,
                       CreatedDate = DateTime.UtcNow,
                       UpdatedBy = null,
@@ -206,7 +206,7 @@ namespace SB.Security.Persistence
                       SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
                       RefreshToken = null,
                       RefreshTokenExpiryTime = null,
-                      LoginFailedAttemptsCount = 0,
+                      //LoginFailedAttemptsCount = 0,
                       CreatedBy = null,
                       CreatedDate = DateTime.UtcNow,
                       UpdatedBy = null,

@@ -11,20 +11,13 @@ namespace SB.Security.Service
     /// </summary>
     public interface IUserService
     {
+        Task<PageResult<AppUserProfile>> GetAllUserAsync(PaginationFilter paramRequest);
+        Task<PagingResult<AppUserProfile>> GetAllUserExtnAsync(PaginationFilter paramRequest);
+        Task<PagingResult<AppUserProfile>?> GetAllUserAdoAsync(PaginationFilter paramRequest);
         Task<DataResponse> GetUserByIdAsync(string id);
         Task<DataResponse> GetUserByIdAdoAsync(string id);
-        Task<PageResult<UserInfo>> GetAllUserAsync(PaginationFilter paramRequest);
-        Task<PagingResult<UserInfo>> GetAllUserExtnAsync(PaginationFilter paramRequest);
-        Task<PagingResult<UserInfo>?> GetAllUserAdoAsync(PaginationFilter paramRequest);
-        Task<DataResponse> RegisterUserAsync(UserRegisterRequest request);
-        Task<DataResponse> DeleteUserAsync(string id);
-
-        //Task<DataResponse> GetAppUserByIdAsync(string id);
-        //Task<DataResponse> GetAppUserByIdAdoAsync(string id);
-        //Task<PageResult<AppUserProfile>> GetAllAppUserAsync(PaginationFilter paramRequest);
-        //Task<PagingResult<AppUserProfile>> GetAllAppUserExtnAsync(PaginationFilter paramRequest);
-        //Task<PagingResult<AppUserProfile>?> GetAllAppUserAdoAsync(PaginationFilter paramRequest);
-        //Task<DataResponse> RegisterAppUserAsync(UserRegisterRequest request);
-        //Task<DataResponse> DeleteAppUserAsync(string id);
+        Task<DataResponse> CreateUpdateAppUserProfileAsync(AppUserProfileRegisterRequest request);
+        Task<DataResponse> DeleteAppUserProfileAsync(string id);
+        Task<DataResponse> CreateUpdateAppUserAsync(AppUserRequest request);
     }
 }

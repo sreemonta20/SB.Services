@@ -148,7 +148,7 @@ namespace SB.Security.Service
 
         }
 
-        public Token? GenerateAccessToken(AppUserProfile user)
+        public Token? GenerateAccessToken(User user)
         {
             List<Claim> claims = new()
             {
@@ -162,7 +162,7 @@ namespace SB.Security.Service
             };
             SymmetricSecurityKey secretKey = new(Encoding.UTF8.GetBytes(_configuration["AppSettings:JWT:Key"]));
             SigningCredentials signinCredentials = new(secretKey, SecurityAlgorithms.HmacSha256);
-            DateTime expiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["AppSettings:Expires"]));
+            DateTime expiryTime = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["AppSettings:Expires"]));
 
             JwtSecurityToken tokenOptions = new(
                 issuer: _configuration["AppSettings:JWT:Issuer"],
@@ -178,11 +178,12 @@ namespace SB.Security.Service
                 return new Token()
                 {
                     access_token = tokenString,
+                    refresh_token = GenerateRefreshToken(),
                     expires_in = expiryTime,
                     token_type = ConstantSupplier.AUTHORIZATION_TOKEN_TYPE,
                     error = string.Empty,
                     error_description = string.Empty,
-                    user = new User() { Id = Convert.ToString(user.Id), FullName = user.UserName, UserName = user.UserName, Email = user.Email, UserRole = user.RoleId.ToString(), CreatedDate = user.CreatedDate }
+                    user = new User() { Id = Convert.ToString(user.Id), FullName = user.UserName, UserName = user.UserName, Email = user.Email, UserRole = user.UserRole, CreatedDate = user.CreatedDate }
 
                 };
             }

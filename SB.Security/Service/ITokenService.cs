@@ -11,9 +11,9 @@ namespace SB.Security.Service
     {
         //Token? GetToken(AppUserProfile user);
         //Token? GenerateAccessToken(AppUserProfile user);
-        Token? GetToken(User user);
-        Token? GenerateAccessToken(User user);
+        Token? GetToken(User? user);
+        Token? GenerateAccessToken(User? user);
         string GenerateRefreshToken();
-        ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
+        ClaimsPrincipal GetPrincipalFromExpiredToken(string? token);
     }
 }

@@ -47,7 +47,7 @@ namespace SB.Security.Controllers
         /// <param name="pageSize"></param>
         /// <returns>object</returns>
         [HttpGet]
-        [Route(ConstantSupplier.GET_ALL_USER_ROUTE_NAME)]
+        [Route(ConstantSupplier.GET_ALL_APP_USER_PROFILE_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
         public async Task<object> GetAllUsers(int pageNumber, int pageSize)
         {
@@ -58,17 +58,15 @@ namespace SB.Security.Controllers
             try
             {
 
-
-
                 #region EF Codeblock
-                PageResult<UserInfo>? result = await _userService.GetAllUserAsync(oPaginationFilter);
+                PageResult<AppUserProfile>? result = await _userService.GetAllUserAsync(oPaginationFilter);
                 if ((result != null) && (result.Count > 0))
                 {
                     _securityLogService.LogInfo(String.Format(ConstantSupplier.GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
                     return response = new()
                     {
                         Success = true,
-                        Message = ConstantSupplier.GET_USER_LIST_SUCCESS,
+                        Message = ConstantSupplier.GET_APP_USER_PROFILE_LIST_SUCCESS,
                         MessageType = Enum.EnumResponseType.Success,
                         ResponseCode = (int)HttpStatusCode.OK,
                         Result = result
@@ -94,7 +92,7 @@ namespace SB.Security.Controllers
                 response = new()
                 {
                     Success = true,
-                    Message = ConstantSupplier.GET_USER_LIST_FAILED,
+                    Message = ConstantSupplier.GET_APP_USER_PROFILE_LIST_FAILED,
                     MessageType = Enum.EnumResponseType.Warning,
                     ResponseCode = (int)HttpStatusCode.BadRequest,
                     Result = result
@@ -125,7 +123,7 @@ namespace SB.Security.Controllers
         /// <param name="id"></param>
         /// <returns>object</returns>
         [HttpGet]
-        [Route(ConstantSupplier.GET_USER_ROUTE_NAME)]
+        [Route(ConstantSupplier.GET_APP_USER_PROFILE_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
         public async Task<object> GetUserbyId([FromQuery] string id)
         {
@@ -159,28 +157,28 @@ namespace SB.Security.Controllers
             return response;
         }
 
-        // POST api/User/registerUser
+        // POST api/User/createUpdateAppUserProfile
         /// <summary>
         /// This method is being used for registering new user and updating old user. Except the password update during the updating details.
         /// </summary>
         /// <param name="request"></param>
         /// <returns>object</returns>
         [HttpPost]
-        [Route(ConstantSupplier.POST_PUT_USER_ROUTE_NAME)]
+        [Route(ConstantSupplier.POST_APP_USER_PROFILE_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<object> RegisterUser(UserRegisterRequest request)
+        public async Task<object> CreateUpdateAppUserProfile(AppUserProfileRegisterRequest request)
         {
-            _securityLogService.LogInfo(ConstantSupplier.SAVEUP_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SAVEUP_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            _securityLogService.LogInfo(ConstantSupplier.SAVEUP_APP_USER_PROFILE_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
             DataResponse response;
             try
             {
-                response = await _userService.RegisterUserAsync(request);
+                response = await _userService.CreateUpdateAppUserProfileAsync(request);
             }
             catch (Exception Ex)
             {
                 //_securityLogService.LogError(Ex.Message);
-                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
                 return new DataResponse
                 {
                     Message = Ex.Message,
@@ -190,32 +188,32 @@ namespace SB.Security.Controllers
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SAVEUP_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
 
-        // DELETE api/User/deleteUser
+        // DELETE api/User/deletAppUserProfile
         /// <summary>
         /// It deletes user details by supplying the user id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns>object</returns>
         [HttpDelete]
-        [Route(ConstantSupplier.DEL_USER_ROUTE_NAME)]
+        [Route(ConstantSupplier.DEL_APP_USER_PROFILE_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<object> DeleteUser([FromQuery] string id)
+        public async Task<object> DeleteAppUserProfile([FromQuery] string id)
         {
-            _securityLogService.LogInfo(ConstantSupplier.DELUSER_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.DELUSER_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
+            _securityLogService.LogInfo(ConstantSupplier.DEL_APP_USER_PROFILE_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.DEL_APP_USER_PROFILE_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
             DataResponse response;
             try
             {
-                response = await _userService.DeleteUserAsync(id);
+                response = await _userService.DeleteAppUserProfileAsync(id);
             }
             catch (Exception Ex)
             {
                 //_securityLogService.LogError(Ex.Message);
-                _securityLogService.LogError(String.Format(ConstantSupplier.DELUSER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(String.Format(ConstantSupplier.DEL_APP_USER_PROFILE_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
                 return new DataResponse
                 {
                     Message = Ex.Message,
@@ -225,16 +223,46 @@ namespace SB.Security.Controllers
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.DELUSER_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.DEL_APP_USER_PROFILE_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
 
+        // POST api/User/createUpdateAppUser
+        /// <summary>
+        /// <br>This method is used to create or update application user for getting user credential to use the application. Also it creates salt key to save</br> 
+        /// <br>the password with proper hasing during the creating and updating the application user.</br>
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>object</returns>
+        [HttpPost]
+        [Route(ConstantSupplier.POST_APP_USER_ROUTE_NAME)]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
+        public async Task<object> CreateUpdateAppUser(AppUserRequest request)
+        {
+            _securityLogService.LogInfo(ConstantSupplier.SAVEUP_APP_USER_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SAVEUP_APP_USER_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            DataResponse response;
+            try
+            {
+                response = await _userService.CreateUpdateAppUserAsync(request);
+            }
+            catch (Exception Ex)
+            {
+                //_securityLogService.LogError(Ex.Message);
+                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                return new DataResponse
+                {
+                    Message = Ex.Message,
+                    Success = false,
+                    MessageType = Enum.EnumResponseType.Error,
+                    ResponseCode = (int)HttpStatusCode.InternalServerError,
+                    Result = null
+                };
+            }
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SAVEUP_APP_USER_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            return response;
+        }
 
-        
-
-        
-
-        
         #endregion
     }
 }
