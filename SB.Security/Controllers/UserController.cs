@@ -75,13 +75,13 @@ namespace SB.Security.Controllers
                 #endregion
 
                 #region ADO.NET Codeblock
-                //PagingResult<UserInfo>? result = await _userService.GetAllUserAdoAsync(oPaginationFilter);
+                //PagingResult<AppUserProfile>? result = await _userService.GetAllUserAdoAsync(oPaginationFilter);
                 //if ((result != null) && (result.RowCount > 0))
                 //{
                 //    return response = new()
                 //    {
                 //        Success = true,
-                //        Message = ConstantSupplier.GET_USER_LIST_SUCCESS,
+                //        Message = ConstantSupplier.GET_APP_USER_PROFILE_LIST_SUCCESS,
                 //        MessageType = Enum.EnumResponseType.Success,
                 //        ResponseCode = (int)HttpStatusCode.OK,
                 //        Result = result
@@ -101,7 +101,6 @@ namespace SB.Security.Controllers
             }
             catch (Exception Ex)
             {
-                //_securityLogService.LogError(Ex.Message);
                 _securityLogService.LogError(String.Format(ConstantSupplier.GETALL_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
                 return new DataResponse
                 {

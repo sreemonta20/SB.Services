@@ -103,35 +103,6 @@ namespace SB.Security.Service
         }
 
         /// <summary>
-        /// <para>EF Codeblock: GetAllUserExtnAsync</para> 
-        /// This service method used to get a list users based on the supplied page number and page size.
-        /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
-        /// </summary>
-        /// <param name="paramRequest"></param>
-        /// <returns>PagingResult<![CDATA[<T>]]></returns>
-        public async Task<PagingResult<AppUserProfile>> GetAllUserExtnAsync(PaginationFilter paramRequest)
-        {
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-            try
-            {
-                IQueryable<AppUserProfile>? source = (from user in _context?.AppUserProfiles?.OrderBy(a => a.CreatedDate) select user).AsQueryable();
-                PagingResult<AppUserProfile> result = await Utilities.GetPagingResult(source, paramRequest.PageNumber, paramRequest.PageSize);
-
-                if (Utilities.IsNull(result) && !result.Items.Any())
-                {
-                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
-                }
-
-                return result;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-        }
-
-        /// <summary>
         /// <para>ADO.NET Codeblock: GetAllUserAdoAsync</para> 
         /// This service method used to get a list users based on the supplied page number and page size.
         /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
@@ -168,6 +139,37 @@ namespace SB.Security.Service
             }
 
         }
+
+        /// <summary>
+        /// <para>EF Codeblock: GetAllUserExtnAsync</para> 
+        /// This service method used to get a list users based on the supplied page number and page size.
+        /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
+        /// </summary>
+        /// <param name="paramRequest"></param>
+        /// <returns>PagingResult<![CDATA[<T>]]></returns>
+        public async Task<PagingResult<AppUserProfile>> GetAllUserExtnAsync(PaginationFilter paramRequest)
+        {
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+            try
+            {
+                IQueryable<AppUserProfile>? source = (from user in _context?.AppUserProfiles?.OrderBy(a => a.CreatedDate) select user).AsQueryable();
+                PagingResult<AppUserProfile> result = await Utilities.GetPagingResult(source, paramRequest.PageNumber, paramRequest.PageSize);
+
+                if (Utilities.IsNull(result) && !result.Items.Any())
+                {
+                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
+                }
+
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        
 
         /// <summary>
         /// <para>EF Codeblock: GetUserByIdAsync</para> 
@@ -274,38 +276,48 @@ namespace SB.Security.Service
                                 CreatedDate = DateTime.UtcNow,
                                 IsActive = request.IsActive
                             };
+
+                            #region EF Code block of saving data
                             await _context.AppUserProfiles.AddAsync(oNewProfileRequest);
-                            await _context.SaveChangesAsync();
+                            int isSave = await _context.SaveChangesAsync();
                             await oTrasaction.CommitAsync();
 
                             request.Id = Convert.ToString(oNewProfileRequest.Id);
-                            oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_PROFILE_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
+                            if (!isSave.Equals(1))
+                            {
+                                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_FAILED_RES_MSG, oNewProfileRequest));
+                            }
+                            oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_PROFILE_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oNewProfileRequest };
+                            #endregion
 
                             #region ADO.NET Codeblock of saving data
                             //List<IDbDataParameter> parameters = new()
                             //{
                             //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.SAVE_KEY, DbType.String),
-                            //    _dbmanager.CreateParameter("@Id", oSaveUserInfo.Id, DbType.Guid),
-                            //    _dbmanager.CreateParameter("@FullName", oSaveUserInfo.FullName, DbType.String),
-                            //    _dbmanager.CreateParameter("@UserName", oSaveUserInfo.UserName, DbType.String),
-                            //    _dbmanager.CreateParameter("@Password", oSaveUserInfo.Password, DbType.String),
-                            //    _dbmanager.CreateParameter("@SaltKey", oSaveUserInfo.SaltKey, DbType.String),
-                            //    _dbmanager.CreateParameter("@Email", oSaveUserInfo.Email, DbType.String),
-                            //    _dbmanager.CreateParameter("@RoleId", oSaveUserInfo.RoleId, DbType.Guid),
-                            //    _dbmanager.CreateParameter("@CreatedBy", oSaveUserInfo.CreatedBy, DbType.String),
-                            //    _dbmanager.CreateParameter("@CreatedDate", oSaveUserInfo.CreatedDate, DbType.DateTime),
+                            //    _dbmanager.CreateParameter("@Id", oNewProfileRequest.Id, DbType.Guid),
+                            //    _dbmanager.CreateParameter("@FullName", oNewProfileRequest.FullName, DbType.String),
+                            //    _dbmanager.CreateParameter("@Address", oNewProfileRequest.Address, DbType.String),
+                            //    _dbmanager.CreateParameter("@Email", oNewProfileRequest.Email, DbType.String),
+                            //    _dbmanager.CreateParameter("@RoleId", oNewProfileRequest.AppUserRoleId, DbType.Guid),
+                            //    _dbmanager.CreateParameter("@CreatedBy", oNewProfileRequest.CreatedBy, DbType.String),
+                            //    _dbmanager.CreateParameter("@CreatedDate", oNewProfileRequest.CreatedDate, DbType.DateTime),
                             //    _dbmanager.CreateParameter("@UpdatedBy", DBNull.Value, DbType.String),
                             //    _dbmanager.CreateParameter("@UpdatedDate", DBNull.Value, DbType.DateTime),
-                            //    _dbmanager.CreateParameter("@IsActive", oSaveUserInfo.IsActive, DbType.Boolean)
+                            //    _dbmanager.CreateParameter("@IsActive", oNewProfileRequest.IsActive, DbType.Boolean)
                             //};
 
                             //int isSave = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
 
-                            //request.Id = Convert.ToString(oSaveUserInfo.Id);
-                            //_securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
-                            //return isSave > 0
-                            //? new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request }
-                            //: new DataResponse { Success = false, Message = ConstantSupplier.REG_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                            //request.Id = Convert.ToString(oNewProfileRequest.Id);
+                            //if (!isSave.Equals(1))
+                            //{
+                            //    _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_FAILED_RES_MSG, oNewProfileRequest));
+                            //}
+
+
+                            //oDataResponse = isSave > 0
+                            //? new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_PROFILE_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oNewProfileRequest }
+                            //: new DataResponse { Success = false, Message = ConstantSupplier.CREATE_APP_USER_PROFILE_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
                             #endregion
 
                             break;
@@ -323,37 +335,49 @@ namespace SB.Security.Service
                                 oOldAppUserProfile.UpdatedBy = request.CreateUpdatedBy;
                                 oOldAppUserProfile.UpdatedDate = DateTime.UtcNow;
                                 oOldAppUserProfile.IsActive = request.IsActive;
+                            
+
+                                #region EF Code block of saving data
+                                int isUpdate = await _context.SaveChangesAsync();
+                                await oTrasaction.CommitAsync();
+                                if (!isUpdate.Equals(1))
+                                {
+                                    _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_FAILED_RES_MSG, oOldAppUserProfile));
+                                }
+                                oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.UPDATE_APP_USER_PROFILE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oOldAppUserProfile };
+                                #endregion
+
+                                #region ADO.NET Codeblock of updating data
+                                //List<IDbDataParameter> upParameters = new()
+                                //{
+                                //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.UPDATE_KEY, DbType.String),
+                                //    _dbmanager.CreateParameter("@Id", oOldAppUserProfile.Id, DbType.Guid),
+                                //    _dbmanager.CreateParameter("@FullName", oOldAppUserProfile.FullName, DbType.String),
+                                //    _dbmanager.CreateParameter("@Address", oOldAppUserProfile.Address, DbType.String),
+                                //    _dbmanager.CreateParameter("@Email", oOldAppUserProfile.Email, DbType.String),
+                                //    _dbmanager.CreateParameter("@RoleId", oOldAppUserProfile.AppUserRoleId, DbType.Guid),
+                                //    _dbmanager.CreateParameter("@CreatedBy", DBNull.Value, DbType.String),
+                                //    _dbmanager.CreateParameter("@CreatedDate", DBNull.Value, DbType.DateTime),
+                                //    _dbmanager.CreateParameter("@UpdatedBy", oOldAppUserProfile.UpdatedBy, DbType.String),
+                                //    _dbmanager.CreateParameter("@UpdatedDate", oOldAppUserProfile.UpdatedDate, DbType.DateTime),
+                                //    _dbmanager.CreateParameter("@IsActive", oOldAppUserProfile.IsActive, DbType.Boolean)
+                                //};
+
+                                //int isUpdate = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, upParameters.ToArray());
+                                //if (!isUpdate.Equals(1))
+                                //{
+                                //    _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_FAILED_RES_MSG, isUpdate));
+                                //}
+                                //oDataResponse = isUpdate > 0
+                                //? new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_PROFILE_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request }
+                                //: new DataResponse { Success = false, Message = ConstantSupplier.CREATE_APP_USER_PROFILE_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                                #endregion
                             }
-
-                            await _context.SaveChangesAsync();
-                            await oTrasaction.CommitAsync();
-                            oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.UPDATE_APP_USER_PROFILE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
+                            else
+                            {
+                                oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.CREATE_APP_USER_PROFILE_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
+                            }
                             break;
-
-                            #region ADO.NET Codeblock of updating data
-                            //List<IDbDataParameter> upParameters = new()
-                            //{
-                            //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.UPDATE_KEY, DbType.String),
-                            //    _dbmanager.CreateParameter("@Id", dbUserInfo.Id, DbType.Guid),
-                            //    _dbmanager.CreateParameter("@FullName", dbUserInfo.FullName, DbType.String),
-                            //    _dbmanager.CreateParameter("@UserName", dbUserInfo.UserName, DbType.String),
-                            //    _dbmanager.CreateParameter("@Password", DBNull.Value, DbType.String),
-                            //    _dbmanager.CreateParameter("@SaltKey", DBNull.Value, DbType.String),
-                            //    _dbmanager.CreateParameter("@Email", dbUserInfo.Email, DbType.String),
-                            //    _dbmanager.CreateParameter("@RoleId", dbUserInfo.RoleId, DbType.Guid),
-                            //    _dbmanager.CreateParameter("@CreatedBy", DBNull.Value, DbType.String),
-                            //    _dbmanager.CreateParameter("@CreatedDate", DBNull.Value, DbType.DateTime),
-                            //    _dbmanager.CreateParameter("@UpdatedBy", dbUserInfo.UpdatedBy, DbType.String),
-                            //    _dbmanager.CreateParameter("@UpdatedDate", dbUserInfo.UpdatedDate, DbType.DateTime),
-                            //    _dbmanager.CreateParameter("@IsActive", oSaveUserInfo.IsActive, DbType.Boolean)
-                            //};
-
-                            //int isUpdate = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, upParameters.ToArray());
-
-                            //return isUpdate > 0
-                            //? new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request }
-                            //: new DataResponse { Success = false, Message = ConstantSupplier.REG_USER_UPDATE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                            #endregion
                     }
                     return oDataResponse;
                 }
@@ -395,8 +419,8 @@ namespace SB.Security.Service
                     else
                     {
                         oExistAppUserProfile.IsActive = false;
-                        //_context.Entry(oExistAppUserProfile).State = EntityState.Modified;
                     }
+
 
                     await _context.SaveChangesAsync();
                     await oTrasaction.CommitAsync();
@@ -408,16 +432,20 @@ namespace SB.Security.Service
                     #region ADO.NET Codeblock of deleting data
                     //List<IDbDataParameter> parameters = new()
                     //        {
-                    //            _dbmanager.CreateParameter("@Id", oUserInfo.Id, DbType.Guid),
+                    //            _dbmanager.CreateParameter("@Id", oExistAppUserProfile.Id, DbType.Guid),
                     //            _dbmanager.CreateParameter("@IsDelete", _appSettings.IsUserDelate? true: false, DbType.Boolean)
                     //        };
 
                     //object isDelete = await _dbmanager.DeleteAsync(ConstantSupplier.DELETE_USER_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
 
+                    //if (!isDelete.Equals(1))
+                    //{
+                    //    _securityLogService.LogError(String.Format(ConstantSupplier.DEL_APP_USER_PROFILE_FAILED_RES_MSG, isDelete));
+                    //}
 
                     //return Convert.ToInt32(isDelete) > 0
-                    //? new DataResponse { Success = true, Message = ConstantSupplier.DELETE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oUserInfo }
-                    //: new DataResponse { Success = false, Message = ConstantSupplier.DELETE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                    //? new DataResponse { Success = true, Message = ConstantSupplier.DELETE_APP_USER_PROFILE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oExistAppUserProfile }
+                    //: new DataResponse { Success = false, Message = ConstantSupplier.DELETE_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
                     #endregion
                 }
                 _securityLogService.LogError(String.Format(ConstantSupplier.DEL_APP_USER_PROFILE_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
@@ -478,50 +506,59 @@ namespace SB.Security.Service
 
                             #region EF Codeblock of saving data
                             await _context.AppUsers.AddAsync(oNewAppUser);
-                            await _context.SaveChangesAsync();
+                            int isSave = await _context.SaveChangesAsync();
                             await oTrasaction.CommitAsync();
 
                             request.Id = Convert.ToString(oNewAppUser.Id);
-                            oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
-                            
+                            if (!isSave.Equals(1))
+                            {
+                                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(oNewAppUser, Formatting.Indented)));
+                            }
+
+                            oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oNewAppUser };
+
                             #endregion
-                            break;
 
                             #region ADO.NET Codeblock of saving data
-                        //List<IDbDataParameter> parameters = new()
-                        //{
-                        //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.SAVE_KEY, DbType.String),
-                        //    _dbmanager.CreateParameter("@Id", oSaveUserInfo.Id, DbType.Guid),
-                        //    _dbmanager.CreateParameter("@FullName", oSaveUserInfo.FullName, DbType.String),
-                        //    _dbmanager.CreateParameter("@UserName", oSaveUserInfo.UserName, DbType.String),
-                        //    _dbmanager.CreateParameter("@Password", oSaveUserInfo.Password, DbType.String),
-                        //    _dbmanager.CreateParameter("@SaltKey", oSaveUserInfo.SaltKey, DbType.String),
-                        //    _dbmanager.CreateParameter("@Email", oSaveUserInfo.Email, DbType.String),
-                        //    _dbmanager.CreateParameter("@RoleId", oSaveUserInfo.RoleId, DbType.Guid),
-                        //    _dbmanager.CreateParameter("@CreatedBy", oSaveUserInfo.CreatedBy, DbType.String),
-                        //    _dbmanager.CreateParameter("@CreatedDate", oSaveUserInfo.CreatedDate, DbType.DateTime),
-                        //    _dbmanager.CreateParameter("@UpdatedBy", DBNull.Value, DbType.String),
-                        //    _dbmanager.CreateParameter("@UpdatedDate", DBNull.Value, DbType.DateTime),
-                        //    _dbmanager.CreateParameter("@IsActive", oSaveUserInfo.IsActive, DbType.Boolean)
-                        //};
+                            //object? refreshTokenValue = oNewAppUser.RefreshToken;
+                            //object? refreshTokenExpiryTimeValue = oNewAppUser.RefreshTokenExpiryTime;
+                            //List<IDbDataParameter> parameters = new()
+                            //{
+                            //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.SAVE_KEY, DbType.String),
+                            //    _dbmanager.CreateParameter("@Id", oNewAppUser.Id, DbType.Guid),
+                            //    _dbmanager.CreateParameter("@AppUserProfileId", oNewAppUser.AppUserProfileId, DbType.Guid),
+                            //    _dbmanager.CreateParameter("@UserName", oNewAppUser.UserName, DbType.String),
+                            //    _dbmanager.CreateParameter("@Password", oNewAppUser.Password, DbType.String),
+                            //    _dbmanager.CreateParameter("@SaltKey", oNewAppUser.SaltKey, DbType.String),
+                            //    _dbmanager.CreateParameter("@RefreshToken", refreshTokenValue, (DbType)(refreshTokenValue??DBNull.Value)),
+                            //    _dbmanager.CreateParameter("@RefreshTokenExpiryTime", refreshTokenExpiryTimeValue, (DbType)(refreshTokenExpiryTimeValue??DBNull.Value)),
+                            //    _dbmanager.CreateParameter("@CreatedBy", oNewAppUser.CreatedBy, DbType.String),
+                            //    _dbmanager.CreateParameter("@CreatedDate", oNewAppUser.CreatedDate, DbType.DateTime),
+                            //    _dbmanager.CreateParameter("@UpdatedBy", DBNull.Value, DbType.String),
+                            //    _dbmanager.CreateParameter("@UpdatedDate", DBNull.Value, DbType.DateTime),
+                            //    _dbmanager.CreateParameter("@IsActive", oNewAppUser.IsActive, DbType.Boolean)
+                            //};
 
-                        //int isSave = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
+                            //int isSave = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_APP_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
 
-                        //request.Id = Convert.ToString(oSaveUserInfo.Id);
-                        //_securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
-                        //return isSave > 0
-                        //? new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request }
-                        //: new DataResponse { Success = false, Message = ConstantSupplier.REG_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                        #endregion
+                            //request.Id = Convert.ToString(oNewAppUser.Id);
+                            //if (!isSave.Equals(1))
+                            //{
+                            //    _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(oNewAppUser, Formatting.Indented)));
+                            //}
+
+                            //oDataResponse =  isSave > 0
+                            //? new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oNewAppUser }
+                            //: new DataResponse { Success = false, Message = ConstantSupplier.CREATE_APP_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                            #endregion
+
+                            break;
 
                         case ConstantSupplier.UPDATE_KEY:
                             oExistAppUser = await _context.AppUsers.FirstOrDefaultAsync(x => (x.Id == new Guid(request.Id)) && (x.UserName.Trim().ToLower()) == request.UserName.Trim().ToLower());
 
                             if (Utilities.IsNotNull(oExistAppUser))
                             {
-                                //_securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(oldUser, Formatting.Indented)));
-                                //oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_USER, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
-                                //return oDataResponse;
                                 oExistAppUser.AppUserProfileId = new Guid(request.AppUserProfileId);
                                 oExistAppUser.UserName = request.UserName;
                                 oExistAppUser.SaltKey = saltKey;
@@ -531,9 +568,44 @@ namespace SB.Security.Service
                                 oExistAppUser.UpdatedBy = request.CreateUpdatedBy;
                                 oExistAppUser.UpdatedDate = DateTime.UtcNow;
                                 oExistAppUser.IsActive = request.IsActive;
+
+                                #region EF Codeblock of saving data
                                 await _context.SaveChangesAsync();
                                 await oTrasaction.CommitAsync();
                                 oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.UPDATE_APP_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
+                                #endregion
+
+                                #region ADO.NET Codeblock of updating data
+                                //object? refreshTokenValue = request.RefreshToken;
+                                //object? refreshTokenExpiryTimeValue = request.RefreshTokenExpiryTime;
+                                //List<IDbDataParameter> parameters = new()
+                                //{
+                                //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.UPDATE_KEY, DbType.String),
+                                //    _dbmanager.CreateParameter("@Id", request.Id, DbType.Guid),
+                                //    _dbmanager.CreateParameter("@AppUserProfileId", request.AppUserProfileId, DbType.Guid),
+                                //    _dbmanager.CreateParameter("@UserName", request.UserName, DbType.String),
+                                //    _dbmanager.CreateParameter("@SaltKey", saltKey, DbType.String),
+                                //    _dbmanager.CreateParameter("@Password", BCryptNet.HashPassword(request.Password, saltKey), DbType.String),
+                                //    _dbmanager.CreateParameter("@RefreshToken", refreshTokenValue, (DbType)(refreshTokenValue??DBNull.Value)),
+                                //    _dbmanager.CreateParameter("@RefreshTokenExpiryTime", refreshTokenExpiryTimeValue, (DbType)(refreshTokenExpiryTimeValue??DBNull.Value)),
+                                //    _dbmanager.CreateParameter("@CreatedBy", oExistAppUser.CreatedBy, DbType.String),
+                                //    _dbmanager.CreateParameter("@CreatedDate", oExistAppUser.CreatedDate, DbType.DateTime),
+                                //    _dbmanager.CreateParameter("@UpdatedBy", request.CreateUpdatedBy, DbType.String),
+                                //    _dbmanager.CreateParameter("@UpdatedDate", DateTime.UtcNow, DbType.DateTime),
+                                //    _dbmanager.CreateParameter("@IsActive", request.IsActive, DbType.Boolean)
+                                //};
+
+                                //int isUpdate = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_APP_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
+
+                                //if (!isUpdate.Equals(1))
+                                //{
+                                //    _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(oExistAppUser, Formatting.Indented)));
+                                //}
+
+                                //oDataResponse = isUpdate > 0
+                                //? new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oExistAppUser }
+                                //: new DataResponse { Success = false, Message = ConstantSupplier.CREATE_APP_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                                #endregion
                             }
                             else
                             {
@@ -541,32 +613,6 @@ namespace SB.Security.Service
                             }
                             break;
 
-                            #region ADO.NET Codeblock of updating data
-                            //List<IDbDataParameter> upParameters = new()
-                            //{
-                            //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.UPDATE_KEY, DbType.String),
-                            //    _dbmanager.CreateParameter("@Id", dbUserInfo.Id, DbType.Guid),
-                            //    _dbmanager.CreateParameter("@FullName", dbUserInfo.FullName, DbType.String),
-                            //    _dbmanager.CreateParameter("@UserName", dbUserInfo.UserName, DbType.String),
-                            //    _dbmanager.CreateParameter("@Password", DBNull.Value, DbType.String),
-                            //    _dbmanager.CreateParameter("@SaltKey", DBNull.Value, DbType.String),
-                            //    _dbmanager.CreateParameter("@Email", dbUserInfo.Email, DbType.String),
-                            //    _dbmanager.CreateParameter("@RoleId", dbUserInfo.RoleId, DbType.Guid),
-                            //    _dbmanager.CreateParameter("@CreatedBy", DBNull.Value, DbType.String),
-                            //    _dbmanager.CreateParameter("@CreatedDate", DBNull.Value, DbType.DateTime),
-                            //    _dbmanager.CreateParameter("@UpdatedBy", dbUserInfo.UpdatedBy, DbType.String),
-                            //    _dbmanager.CreateParameter("@UpdatedDate", dbUserInfo.UpdatedDate, DbType.DateTime)
-                            //    _dbmanager.CreateParameter("@IsActive", oSaveUserInfo.IsActive, DbType.Boolean)
-                            //};
-
-                            //int isUpdate = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, upParameters.ToArray());
-
-                            ////_securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
-
-                            //return isUpdate > 0
-                            //? new DataResponse { Success = true, Message = ConstantSupplier.REG_USER_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request }
-                            //: new DataResponse { Success = false, Message = ConstantSupplier.REG_USER_UPDATE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                            #endregion
                     }
                     return oDataResponse;
 

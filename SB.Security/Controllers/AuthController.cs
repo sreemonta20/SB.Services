@@ -34,12 +34,12 @@ namespace SB.Security.Controllers
         #endregion
 
         #region All authentication related methods
-        // POST api/User/login
+        /// POST api/User/login
         /// <summary>
         /// This method authenticate user credential.
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>object</returns>
+        /// <returns><see cref="Task{object}"/></returns>
         [AllowAnonymous]
         [HttpPost]
         [Route(ConstantSupplier.POST_AUTH_ROUTE_NAME)]
@@ -76,7 +76,7 @@ namespace SB.Security.Controllers
         /// refresh token and the new refresh token is saved against the user in DB.
         /// </summary>
         /// <param name="refreshTokenReq"></param>
-        /// <returns></returns>
+        /// <returns><see cref="Task{object}"/></returns>
         [AllowAnonymous]
         [HttpPost]
         [Route(ConstantSupplier.REFRESH_TOKEN_ROUTE_NAME)]
@@ -123,7 +123,7 @@ namespace SB.Security.Controllers
         /// It invalidates the refresh token.
         /// </summary>
         /// <param name="userToken"></param>
-        /// <returns></returns>
+        /// <returns><see cref="Task{object}"/></returns>
         [AllowAnonymous]
         [HttpGet]
         [Route(ConstantSupplier.REVOKE_ROUTE_NAME)]

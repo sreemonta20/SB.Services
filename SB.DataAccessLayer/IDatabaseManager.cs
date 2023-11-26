@@ -24,5 +24,6 @@ namespace SB.DataAccessLayer
         Task<object> UpdateWithTransactionAsync(string? commandText, CommandType commandType, IDbDataParameter[] parameters);
         Task<object> UpdateWithTransactionAsync(string? commandText, CommandType commandType, IsolationLevel isolationLevel, IDbDataParameter[] parameters);
         Task<object> DeleteAsync(string? commandText, CommandType commandType, IDbDataParameter[]? parameters = null);
+        //IDbDataParameter CreateParameter(string v, object? refreshTokenValue, object value);
     }
 }

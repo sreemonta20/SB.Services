@@ -190,6 +190,15 @@
         public const string SERVICE_GETALLMENUBYUSERID_RES_MSG = "GetAllMenuByUserIdAsync (Role Menu service) method response is: \n{0}\n";
         public const string GETALLMENUBYUSERID_RES_MSG = "GetAllMenuByUserId api method response is: \n{0}\n";
 
+        //api/RoleMenu/GetAllUserMenuPagingWithSearchTerm
+        public const string GETALL_USER_MENU_PAGING_SEARCH_STARTED_INFO_MSG = "GetAllUserMenuPagingWithSearchTerm api method started.\n";
+        public const string GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG = "GetAllUserMenuPagingWithSearchTerm api method request is: \n{0}\n";
+        public const string GETALL_USER_MENU_PAGING_SEARCH_EXCEPTION_MSG = "GetAllUserMenuPagingWithSearchTerm Exception below:: \n{0}\n";
+        public const string GETALL_USER_MENU_PAGING_SEARCH_INNER_EXCEPTION_MSG = "GetAllUserMenuPagingWithSearchTerm Inner Exception below:: \n{0}\n";
+        public const string SERVICE_GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG = "GetAllUserMenuPagingWithSearchAsync (RoleMenu service) method request is: \n{0}\n";
+        public const string SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG = "GetAllUserMenuPagingWithSearchAsync (RoleMenu service) method response is: \n{0}\n";
+        public const string GETALL_USER_MENU_PAGING_SEARCH_RES_MSG = "GetAllUserMenuPagingWithSearchTerm api method response is: \n{0}\n";
+
         //api/RoleMenu/getAllParentMenus
         public const string GET_ALL_PARENT_MENUS_STARTED_INFO_MSG = "GetAllParentMenus api method started.\n";
         public const string GET_ALL_PARENT_MENUS_REQ_MSG = "GetAllParentMenus api method request is: \n{0}\n";
@@ -199,13 +208,7 @@
         public const string SERVICE_GET_ALL_PARENT_MENUS_RES_MSG = "GetAllParentMenusAsync (Role Menu service) method response is: \n{0}\n";
         public const string GET_ALL_PARENT_MENUS_RES_MSG = "GetAllParentMenus api method response is: \n{0}\n";
 
-        //api/RoleMenu/GetAllUserMenuPagingWithSearch
-        public const string GETALL_USER_MENU_PAGING_SEARCH_STARTED_INFO_MSG = "GetAllUserMenuPagingWithSearch api method started.\n";
-        public const string GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG = "GetAllUserMenuPagingWithSearch api method request is: \n{0}\n";
-        public const string GETALL_USER_MENU_PAGING_SEARCH_EXCEPTION_MSG = "GetAllUserMenuPagingWithSearch Exception below:: \n{0}\n";
-        public const string SERVICE_GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG = "GetAllUserMenuPagingWithSearchAsync (RoleMenu service) method request is: \n{0}\n";
-        public const string SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG = "GetAllUserMenuPagingWithSearchAsync (RoleMenu service) method response is: \n{0}\n";
-        public const string GETALL_USER_MENU_PAGING_SEARCH_RES_MSG = "GetAllUserMenuPagingWithSearch api method response is: \n{0}\n";
+        
         #endregion
 
         #region Auth Controller
@@ -274,8 +277,14 @@
         public const string POST_SAVE_UPDATE_ROLE_ROUTE_NAME = "createUpdateRole";
         public const string DELETE_ROLE_ROUTE_NAME = "deleteRole";
         public const string GET_ALL_MENU_BY_USER_ID_ROUTE_NAME = "getAllMenuByUserId";
+        public const string GET_ALL_USER_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME = "getAllUserMenuPagingWithSearchTerm";
         public const string GET_ALL_PARENT_MENUS_ROUTE_NAME = "getAllParentMenus";
+
         public const string GETALL_USER_MENU_PAGING_SEARCH_SP_NAME = "SP_GetAllUserMenuPagingWithSearch";
+
+        public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_SUCCESS_MSG = "User menu list retrieved successfully.";
+        public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_FAILED_MSG = "Retrieving user menu list failed.";
+        public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG = "Retrieving user menu list is found empty.";
         #endregion
 
         #region Role Menu Service
@@ -297,6 +306,8 @@
         public const string GET_APP_USER_ROLE_SUCCESS = "Fetching app user role details successful";
         public const string GET_APP_USER_ROLE_FAILED = "Fetching app user role details failed.";
 
+        
+
         public const string GET_GET_ALL_MENU_BY_USER_ID_SP_NAME = "SP_GetAllUserMenuByUserId";
         #endregion
 
@@ -311,7 +322,8 @@
         #region SP
         public const string GET_USER_BY_ID_SP_NAME = "SP_GetUserById";
         public const string GET_ALL_USER_SP_NAME = "SP_GetAllUser";
-        public const string POST_SAVE_UPDATE_USER_SP_NAME = "SP_SaveUpdateUser";
+        public const string POST_SAVE_UPDATE_APP_USER_PROFILE_SP_NAME = "SP_SaveUpdateAppUserProfile";
+        public const string POST_SAVE_UPDATE_APP_USER_SP_NAME = "SP_SaveUpdateAppUser";
         public const string DELETE_USER_SP_NAME = "SP_DeleteUser";
         #endregion
 

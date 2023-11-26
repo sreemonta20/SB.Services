@@ -21,18 +21,20 @@ namespace SB.Security.Persistence
 
         public virtual DbSet<AppUserRole>? AppUserRoles { get; set; }
         public virtual DbSet<AppUserProfile>? AppUserProfiles { get; set; }
+        public virtual DbSet<AppUser>? AppUsers { get; set; }
         public virtual DbSet<AppUserMenu>? AppUserMenus { get; set; }
         public virtual DbSet<AppUserRoleMenu>? AppUserRoleMenus { get; set; }
-        public DbSet<AppUser> AppUsers { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Define primary keys
             modelBuilder.Entity<AppUserRole>().HasKey(x => x.Id);
-            modelBuilder.Entity<AppUserMenu>().HasKey(x => x.Id);
             modelBuilder.Entity<AppUserProfile>().HasKey(x => x.Id);
-            modelBuilder.Entity<AppUserRoleMenu>().HasKey(x => x.Id);
             modelBuilder.Entity<AppUser>().HasKey(x => x.Id);
+            modelBuilder.Entity<AppUserMenu>().HasKey(x => x.Id);
+            modelBuilder.Entity<AppUserRoleMenu>().HasKey(x => x.Id);
+            
 
             modelBuilder.Entity<AppUserRole>(entity =>
             {
@@ -107,7 +109,7 @@ namespace SB.Security.Persistence
                     .HasConstraintName("FK_AppUserRoleMenus_AppUserRole");
                 entity.HasOne(x => x.AppUserMenu)
                     .WithMany(x => x.AppUserRoleMenus)
-                    .HasForeignKey(x => x.AppUserRoleId)
+                    .HasForeignKey(x => x.AppUserMenuId)
                     .HasConstraintName("FK_AppUserRoleMenus_AppUserMenu");
             });
 
@@ -120,12 +122,11 @@ namespace SB.Security.Persistence
                 entity.Property(x => x.SaltKey).HasMaxLength(255);
                 entity.Property(x => x.RefreshToken).HasMaxLength(255);
                 entity.Property(x => x.RefreshTokenExpiryTime).HasColumnType("datetime");
-                //entity.Property(x => x.LastLoginAttemptAt).HasColumnType("datetime");
-                //entity.Property(x => x.LoginFailedAttemptsCount).HasColumnName("LoginFailedAttemptsCount");
                 entity.Property(x => x.IsActive).HasColumnName("IsActive");
                 entity.HasOne(x => x.AppUserProfile)
-                    .WithOne(x => x.AppUser)
-                    .HasForeignKey<AppUserProfile>(x => x.Id);
+                    .WithOne(p => p.AppUser)
+                    .HasForeignKey<AppUser>(x => x.AppUserProfileId)
+                    .HasConstraintName("FK_AppUser_AppUserProfiles");
             });
 
             modelBuilder.Entity<AppUserRole>().HasData(
@@ -190,7 +191,6 @@ namespace SB.Security.Persistence
                       SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
                       RefreshToken = null,
                       RefreshTokenExpiryTime = null,
-                      //LoginFailedAttemptsCount = 0,
                       CreatedBy = null,
                       CreatedDate = DateTime.UtcNow,
                       UpdatedBy = null,
@@ -206,7 +206,6 @@ namespace SB.Security.Persistence
                       SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
                       RefreshToken = null,
                       RefreshTokenExpiryTime = null,
-                      //LoginFailedAttemptsCount = 0,
                       CreatedBy = null,
                       CreatedDate = DateTime.UtcNow,
                       UpdatedBy = null,

@@ -221,12 +221,16 @@ namespace SB.Security.Controllers
         }
 
         #endregion
+
+        #region Role Menu realted all methods
         // GET api/RoleMenu/getAllMenuByUserId
 
         /// <summary>
-        /// It used to get all user roles.
+        /// It used to get all user menu and their access permission by a specific user
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// <see cref="Task{object}"/>
+        /// </returns>
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_MENU_BY_USER_ID_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
@@ -258,12 +262,60 @@ namespace SB.Security.Controllers
             return response;
         }
 
+        // GET api/RoleMenu/getAllUserMenuPagingWithSearchTerm
+
+        /// <summary>
+        /// It used to get all user menu based on the search text or term.
+        /// </summary>
+        /// <returns>
+        /// <see cref="Task{object}"/>
+        /// </returns>
+        [HttpGet]
+        [Route(ConstantSupplier.GET_ALL_USER_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME)]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
+        public async Task<object> GetAllUserMenuPagingWithSearchTerm([FromQuery] string param)
+        {
+            _securityLogService.LogInfo(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_STARTED_INFO_MSG);
+            DataResponse response;
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(param, Formatting.Indented)));
+            try
+            {
+                #region EF Codeblock
+                dynamic? paramRequest = JsonConvert.DeserializeObject(param);
+                PagingSearchFilter? oPagingSearchFilter = JsonConvert.DeserializeObject<PagingSearchFilter>(paramRequest[0].ToString());
+                PagingResult<AppUserMenu>? usermenuList = await _roleMenuService.GetAllUserMenuPagingWithSearchAsync(oPagingSearchFilter);
+                if (Utilities.IsNull(usermenuList))
+                {
+                    return new DataResponse { Success = false, Message = ConstantSupplier.GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                }
+                response = new DataResponse { Success = false, Message = ConstantSupplier.GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = usermenuList };
+                #endregion
+            }
+            catch (Exception Ex)
+            {
+                _securityLogService.LogError(String.Format(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(String.Format(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                return new DataResponse
+                {
+                    Success = false,
+                    Message = Ex.Message,
+                    MessageType = Enum.EnumResponseType.Error,
+                    ResponseCode = (int)HttpStatusCode.InternalServerError,
+                    Result = null
+                };
+            }
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            return response;
+        }
+
         // GET api/RoleMenu/getAllParentMenus
 
         /// <summary>
         /// It used to get all parent menu list.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// <see cref="Task{object}"/>
+        /// </returns>
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_PARENT_MENUS_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
@@ -292,7 +344,7 @@ namespace SB.Security.Controllers
             _securityLogService.LogInfo(String.Format(ConstantSupplier.GET_ALL_PARENT_MENUS_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
+        #endregion
 
-        
     }
 }

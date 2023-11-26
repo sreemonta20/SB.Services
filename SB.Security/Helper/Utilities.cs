@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using SB.Security.Models.Response;
+using SB.Security.Service;
 using System.Collections;
 using System.Data;
 using System.Linq.Dynamic.Core;
@@ -190,6 +192,18 @@ namespace SB.Security.Helper
             return list == null || list.Count == 0;
         }
 
+        public static DataResponse FailedResponse<T>(T data, ISecurityLogService securityLogService, int responseCode, DataResponse? response = null, string message = "", string logMessage = "")
+        {
+            DataResponse? finalResponse;
+            finalResponse = Utilities.IsNotNull(response) ? new DataResponse { Success = response.Success, Message = String.IsNullOrWhiteSpace(message) ? response.Message : message, MessageType = response.MessageType, ResponseCode = response.ResponseCode, Result = data } :
+               new DataResponse { Success = false, Message = string.IsNullOrWhiteSpace(message) ? ConstantSupplier.FAILED_MSG : message, MessageType = Enum.EnumResponseType.Error, ResponseCode = responseCode, Result = null };
+            if (!string.IsNullOrWhiteSpace(logMessage))
+            {
+                securityLogService.LogError(string.Format(logMessage, JsonConvert.SerializeObject(finalResponse, Formatting.Indented)));
+            }
+
+            return finalResponse;
+        }
 
     }
 }

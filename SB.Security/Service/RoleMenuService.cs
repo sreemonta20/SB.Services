@@ -57,6 +57,12 @@ namespace SB.Security.Service
         #endregion
 
         #region Role related methods
+        /// <summary>
+        /// It used to get all user roles.
+        /// </summary>
+        /// <returns>
+        /// <see cref="Task{DataResponse}"/>
+        /// </returns>
         public async Task<DataResponse> GetAllRolesAsync()
         {
             DataResponse? oDataResponse;
@@ -83,6 +89,13 @@ namespace SB.Security.Service
             
         }
 
+        /// <summary>
+        /// It used to get all user roles using pagination
+        /// </summary>
+        /// <param name="paramRequest"></param>
+        /// <returns>
+        /// <see cref="Task{DataResponse}"/>
+        /// </returns>
         public async Task<DataResponse> GetAllRolesPaginationAsync(PaginationFilter paramRequest)
         {
             DataResponse? oDataResponse;
@@ -110,6 +123,13 @@ namespace SB.Security.Service
             
         }
 
+        /// <summary>
+        /// It used to get a role by roleId.
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns>
+        /// <see cref="Task{DataResponse}"/>
+        /// </returns>
         public async Task<DataResponse> GetRoleByIdAsync(string roleId)
         {
             DataResponse? oDataResponse;
@@ -136,6 +156,13 @@ namespace SB.Security.Service
             
         }
 
+        /// <summary>
+        /// It used to create and update role based on supplied <see cref="RoleSaveUpdateRequest"/> request model.
+        /// </summary>
+        /// <param name="roleSaveUpdateRequest"></param>
+        /// <returns>
+        /// <see cref="Task{DataResponse}"/>
+        /// </returns>
         public async Task<DataResponse> SaveUpdateRoleAsync(RoleSaveUpdateRequest? roleSaveUpdateRequest)
         {
             DataResponse? oDataResponse = null;
@@ -212,6 +239,14 @@ namespace SB.Security.Service
             }
             
         }
+
+        /// <summary>
+        /// It used to delete a role. Delete can be happen either simply making the IsActive false or delete command. It is decided based on user settings in appsettings.json.
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns>
+        /// <see cref="Task{DataResponse}"/>
+        /// </returns>
         public async Task<DataResponse> DeleteRoleAsync(string roleId)
         {
             DataResponse? oDataResponse = null;
@@ -267,6 +302,45 @@ namespace SB.Security.Service
         #region All UserMenu related methods
 
         /// <summary>
+        /// It used to get all user menu and their access permission by a specific user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>
+        /// <see cref="Task{DataResponse}"/>
+        /// </returns>
+        public async Task<DataResponse> GetAllMenuByUserIdAsync(string? userId)
+        {
+            DataResponse? oDataResponse;
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_REQ_MSG, JsonConvert.SerializeObject(userId, Formatting.Indented)));
+
+            try
+            {
+
+                List<IDbDataParameter> parameters = new()
+                {
+                    _dbmanager.CreateParameter("@UserId", new Guid(userId), DbType.Guid)
+                };
+
+                string userMenus = (string)await _dbmanager.GetScalarValueAsync(ConstantSupplier.GET_GET_ALL_MENU_BY_USER_ID_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+
+                if (String.IsNullOrWhiteSpace(userMenus))
+                {
+                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_MENU_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                }
+                else
+                {
+                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_MENU_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userMenus };
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return oDataResponse;
+        }
+
+        /// <summary>
         /// <para>ADO.NET Codeblock: GetAllUserMenuPagingWithSearchAsync</para> 
         /// This service method used to get a list of user menu with access permission based on the supplied searchterm, sortcolumnname, sortcolumndirection, page number, and page size.
         /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
@@ -307,46 +381,11 @@ namespace SB.Security.Service
         }
 
         /// <summary>
-        /// It used to get all user menu and their access permission by a specific user
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns>DataResponse</returns>
-        public async Task<DataResponse> GetAllMenuByUserIdAsync(string? userId)
-        {
-            DataResponse? oDataResponse;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_REQ_MSG, JsonConvert.SerializeObject(userId, Formatting.Indented)));
-            
-            try
-            {
-
-                List<IDbDataParameter> parameters = new()
-                {
-                    _dbmanager.CreateParameter("@UserId", new Guid(userId), DbType.Guid)
-                };
-
-                string userMenus = (string)await _dbmanager.GetScalarValueAsync(ConstantSupplier.GET_GET_ALL_MENU_BY_USER_ID_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
-
-                if (String.IsNullOrWhiteSpace(userMenus))
-                {
-                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_MENU_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
-                }
-                else
-                {
-                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_MENU_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userMenus };
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return oDataResponse;
-        }
-
-        /// <summary>
         /// It used to get all parent menu based on what child menu can be created.
         /// </summary>
-        /// <returns>DataResponse</returns>
+        /// <returns>
+        /// <see cref="Task{DataResponse}"/>
+        /// </returns>
         public async Task<DataResponse> GetAllParentMenusAsync()
         {
             DataResponse? oDataResponse;

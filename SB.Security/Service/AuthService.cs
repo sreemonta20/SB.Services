@@ -206,7 +206,7 @@ namespace SB.Security.Service
             object? nullValue = null;
             try
             {
-                if (request != null)
+                if (Utilities.IsNotNull(request))
                 {
 
                     AppUser? oExistAppUser = await _context.AppUsers.FirstOrDefaultAsync(x => x.UserName == request.UserName && x.IsActive == true);
@@ -234,20 +234,20 @@ namespace SB.Security.Service
                                             dataResponse = new DataResponse { Success = true, Message = ConstantSupplier.AUTH_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oTokenResult };
                                             return dataResponse;
                                         }
-                                        return FailedResponse(nullValue, dataResponse, ConstantSupplier.AUTH_FAILED, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                                        return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, dataResponse, ConstantSupplier.AUTH_FAILED, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
                                     }
-                                    return FailedResponse(nullValue, dataResponse, ConstantSupplier.AUTH_FAILED, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, dataResponse, ConstantSupplier.AUTH_FAILED, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
                                 }
-                                return FailedResponse(nullValue, null, ConstantSupplier.AUTH_FAILED, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                                return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.AUTH_FAILED, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
                             }
-                            return FailedResponse(nullValue, null, ConstantSupplier.AUTH_FAILED, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                            return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.AUTH_FAILED, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
                         }
-                        return FailedResponse(nullValue, null, ConstantSupplier.INVALID_USER_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                        return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.INVALID_USER_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
                     }
 
-                    return FailedResponse(nullValue, null, ConstantSupplier.AUTH_INVALID_CREDENTIAL, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.AUTH_INVALID_CREDENTIAL, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
                 }
-                return FailedResponse(nullValue, null, ConstantSupplier.AUTH_FAILED, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.UnprocessableEntity, null, ConstantSupplier.AUTH_FAILED, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
 
             }
             catch (Exception)
@@ -330,7 +330,7 @@ namespace SB.Security.Service
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REFRESHTOKEN_REQ_MSG, JsonConvert.SerializeObject(refreshTokenReq, Formatting.Indented)));
             try
             {
-                if (refreshTokenReq != null)
+                if (Utilities.IsNotNull(refreshTokenReq))
                 {
                     string? accessToken = refreshTokenReq?.Access_Token;
                     string? refreshToken = refreshTokenReq?.Refresh_Token;
@@ -392,13 +392,13 @@ namespace SB.Security.Service
                                 oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.REFRESHTOKEN_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oTokenResult };
                                 return oDataResponse;
                             }
-                            return FailedResponse(nullValue, oDataResponse, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG);
+                            return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, oDataResponse, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG);
                         }
-                        return FailedResponse(nullValue, oDataResponse, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG);
+                        return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, oDataResponse, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG);
                     }
-                    return FailedResponse(nullValue, null, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG);
+                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG);
                 }
-                return FailedResponse(nullValue, null, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG);
+                return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.UnprocessableEntity, null, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG, ConstantSupplier.SERVICE_REFRESHTOKEN_FAILED_MSG);
             }
             catch (Exception)
             {
@@ -456,7 +456,7 @@ namespace SB.Security.Service
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REVOKE_REQ_MSG, JsonConvert.SerializeObject(userToken, Formatting.Indented)));
             try
             {
-                if (userToken != null)
+                if (Utilities.IsNotNull(userToken))
                 {
                     ClaimsPrincipal principal = _tokenService.GetPrincipalFromExpiredToken(userToken);
                     string? username = principal?.Claims?.Where(x => x.Type == "UserName")?.FirstOrDefault()?.Value; 
@@ -567,17 +567,17 @@ namespace SB.Security.Service
 
         }
 
-        public DataResponse FailedResponse<T>(T data, DataResponse? response = null, string message = "", string logMessage = "")
-        {
-            DataResponse? finalResponse;
-            finalResponse = Utilities.IsNotNull(response) ? new DataResponse { Success = response.Success, Message = String.IsNullOrWhiteSpace(message) ? response.Message : message, MessageType = response.MessageType, ResponseCode = response.ResponseCode, Result = data } :
-               new DataResponse { Success = false, Message = string.IsNullOrWhiteSpace(message) ? ConstantSupplier.FAILED_MSG : message, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-            if (!string.IsNullOrWhiteSpace(logMessage))
-            {
-                _securityLogService.LogError(string.Format(logMessage, JsonConvert.SerializeObject(finalResponse, Formatting.Indented)));
-            }
+        //public DataResponse FailedResponse<T>(T data, int responseCode, DataResponse? response = null, string message = "", string logMessage = "")
+        //{
+        //    DataResponse? finalResponse;
+        //    finalResponse = Utilities.IsNotNull(response) ? new DataResponse { Success = response.Success, Message = String.IsNullOrWhiteSpace(message) ? response.Message : message, MessageType = response.MessageType, ResponseCode = response.ResponseCode, Result = data } :
+        //       new DataResponse { Success = false, Message = string.IsNullOrWhiteSpace(message) ? ConstantSupplier.FAILED_MSG : message, MessageType = Enum.EnumResponseType.Error, ResponseCode = responseCode, Result = null };
+        //    if (!string.IsNullOrWhiteSpace(logMessage))
+        //    {
+        //        _securityLogService.LogError(string.Format(logMessage, JsonConvert.SerializeObject(finalResponse, Formatting.Indented)));
+        //    }
 
-            return finalResponse;
-        }
+        //    return finalResponse;
+        //}
     }
 }
