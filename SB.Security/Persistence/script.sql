@@ -1,6 +1,6 @@
 USE [SecurityDB]
 GO
-/****** Object:  UserDefinedFunction [dbo].[GetChildMenus]    Script Date: 26/11/2023 8:28:22 PM ******/
+/****** Object:  UserDefinedFunction [dbo].[GetChildMenus]    Script Date: 12/24/2023 2:21:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -47,159 +47,43 @@ BEGIN
     )
 END
 GO
-/****** Object:  Table [dbo].[__EFMigrationsHistory]    Script Date: 26/11/2023 8:28:22 PM ******/
+/****** Object:  StoredProcedure [dbo].[GetUserMenuInitialData]    Script Date: 12/24/2023 2:21:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[__EFMigrationsHistory](
-	[MigrationId] [nvarchar](150) NOT NULL,
-	[ProductVersion] [nvarchar](32) NOT NULL,
- CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY CLUSTERED 
-(
-	[MigrationId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
+--EXEC GetUserMenuInitialData
+CREATE PROCEDURE [dbo].[GetUserMenuInitialData]
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @PMJson NVARCHAR(MAX),
+			@CCJson NVARCHAR(MAX),
+			@RLJson NVARCHAR(MAX),
+			@RLCJson NVARCHAR(MAX),
+			@IconJson NVARCHAR(MAX),
+			@DDIJson NVARCHAR(MAX),
+			@result NVARCHAR(MAX);
+
+
+    SET @PMJson = (SELECT [Id] id, [Name] name FROM AppUserMenus WHERE [Name] IS NOT NULL FOR JSON AUTO);
+
+	SET @CCJson = (SELECT CssClass id, CssClass name FROM AppUserMenus  WHERE [CssClass] IS NOT NULL FOR JSON AUTO);
+
+	SET @RLJson = (SELECT RouteLink id, RouteLink name FROM AppUserMenus  WHERE [RouteLink] IS NOT NULL FOR JSON AUTO);
+
+	SET @RLCJson = (SELECT RouteLinkClass id, RouteLinkClass name FROM AppUserMenus  WHERE [RouteLinkClass] IS NOT NULL FOR JSON AUTO);
+
+	SET @IconJson = (SELECT Icon id, Icon name FROM AppUserMenus  WHERE [Icon] IS NOT NULL FOR JSON AUTO);
+
+	SET @DDIJson = (SELECT DropdownIcon id, DropdownIcon name FROM AppUserMenus  WHERE [DropdownIcon] IS NOT NULL FOR JSON AUTO);
+
+	SELECT @PMJson AS parentMenu, @CCJson AS cssClass, @RLJson AS routeLink, @RLCJson AS routeLinkClass, @IconJson AS icon, @DDIJson AS dropdownIcon
+	FOR JSON PATH, WITHOUT_ARRAY_WRAPPER;
+END;
 GO
-/****** Object:  Table [dbo].[AppUserMenus]    Script Date: 26/11/2023 8:28:22 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[AppUserMenus](
-	[Id] [uniqueidentifier] NOT NULL,
-	[Name] [nvarchar](100) NULL,
-	[IsHeader] [bit] NULL,
-	[CssClass] [nvarchar](100) NULL,
-	[RouteLink] [nvarchar](255) NULL,
-	[RouteLinkClass] [nvarchar](200) NULL,
-	[Icon] [nvarchar](100) NULL,
-	[Remark] [nvarchar](255) NULL,
-	[ParentId] [uniqueidentifier] NULL,
-	[DropdownIcon] [nvarchar](100) NULL,
-	[SerialNo] [int] NULL,
-	[CreatedBy] [nvarchar](max) NULL,
-	[CreatedDate] [datetime] NULL,
-	[UpdatedBy] [nvarchar](max) NULL,
-	[UpdatedDate] [datetime] NULL,
-	[IsActive] [bit] NULL,
- CONSTRAINT [PK_AppUserMenus] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[AppUserProfiles]    Script Date: 26/11/2023 8:28:22 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[AppUserProfiles](
-	[Id] [uniqueidentifier] NOT NULL,
-	[FullName] [nvarchar](200) NULL,
-	[Address] [nvarchar](200) NULL,
-	[Email] [nvarchar](200) NULL,
-	[AppUserRoleId] [uniqueidentifier] NULL,
-	[CreatedBy] [nvarchar](max) NULL,
-	[CreatedDate] [datetime] NULL,
-	[UpdatedBy] [nvarchar](max) NULL,
-	[UpdatedDate] [datetime] NULL,
-	[IsActive] [bit] NULL,
- CONSTRAINT [PK_AppUserProfiles] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[AppUserRoleMenus]    Script Date: 26/11/2023 8:28:22 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[AppUserRoleMenus](
-	[Id] [uniqueidentifier] NOT NULL,
-	[AppUserRoleId] [uniqueidentifier] NULL,
-	[AppUserMenuId] [uniqueidentifier] NULL,
-	[IsView] [bit] NULL,
-	[IsCreate] [bit] NULL,
-	[IsUpdate] [bit] NULL,
-	[IsDelete] [bit] NULL,
-	[CreatedBy] [nvarchar](max) NULL,
-	[CreatedDate] [datetime] NULL,
-	[UpdatedBy] [nvarchar](max) NULL,
-	[UpdatedDate] [datetime] NULL,
-	[IsActive] [bit] NULL,
- CONSTRAINT [PK_AppUserRoleMenus] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[AppUserRoles]    Script Date: 26/11/2023 8:28:22 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[AppUserRoles](
-	[Id] [uniqueidentifier] NOT NULL,
-	[RoleName] [nvarchar](50) NULL,
-	[Description] [nvarchar](100) NULL,
-	[CreatedBy] [nvarchar](max) NULL,
-	[CreatedDate] [datetime] NULL,
-	[UpdatedBy] [nvarchar](max) NULL,
-	[UpdatedDate] [datetime] NULL,
-	[IsActive] [bit] NULL,
- CONSTRAINT [PK_AppUserRoles] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[AppUsers]    Script Date: 26/11/2023 8:28:22 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[AppUsers](
-	[Id] [uniqueidentifier] NOT NULL,
-	[AppUserProfileId] [uniqueidentifier] NULL,
-	[UserName] [nvarchar](100) NULL,
-	[Password] [nvarchar](255) NULL,
-	[SaltKey] [nvarchar](255) NULL,
-	[RefreshToken] [nvarchar](255) NULL,
-	[RefreshTokenExpiryTime] [datetime] NULL,
-	[CreatedBy] [nvarchar](max) NULL,
-	[CreatedDate] [datetime2](7) NULL,
-	[UpdatedBy] [nvarchar](max) NULL,
-	[UpdatedDate] [datetime2](7) NULL,
-	[IsActive] [bit] NULL,
- CONSTRAINT [PK_AppUsers] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[AppUserProfiles]  WITH CHECK ADD  CONSTRAINT [FK_AppUserProfiles_AppUserRole] FOREIGN KEY([AppUserRoleId])
-REFERENCES [dbo].[AppUserRoles] ([Id])
-GO
-ALTER TABLE [dbo].[AppUserProfiles] CHECK CONSTRAINT [FK_AppUserProfiles_AppUserRole]
-GO
-ALTER TABLE [dbo].[AppUserRoleMenus]  WITH CHECK ADD  CONSTRAINT [FK_AppUserRoleMenus_AppUserMenu] FOREIGN KEY([AppUserMenuId])
-REFERENCES [dbo].[AppUserMenus] ([Id])
-GO
-ALTER TABLE [dbo].[AppUserRoleMenus] CHECK CONSTRAINT [FK_AppUserRoleMenus_AppUserMenu]
-GO
-ALTER TABLE [dbo].[AppUserRoleMenus]  WITH CHECK ADD  CONSTRAINT [FK_AppUserRoleMenus_AppUserRole] FOREIGN KEY([AppUserRoleId])
-REFERENCES [dbo].[AppUserRoles] ([Id])
-GO
-ALTER TABLE [dbo].[AppUserRoleMenus] CHECK CONSTRAINT [FK_AppUserRoleMenus_AppUserRole]
-GO
-ALTER TABLE [dbo].[AppUsers]  WITH CHECK ADD  CONSTRAINT [FK_AppUser_AppUserProfiles] FOREIGN KEY([AppUserProfileId])
-REFERENCES [dbo].[AppUserProfiles] ([Id])
-GO
-ALTER TABLE [dbo].[AppUsers] CHECK CONSTRAINT [FK_AppUser_AppUserProfiles]
-GO
-/****** Object:  StoredProcedure [dbo].[SP_DeleteUser]    Script Date: 26/11/2023 8:28:22 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_DeleteUser]    Script Date: 12/24/2023 2:21:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -231,7 +115,7 @@ BEGIN
 	END
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUser]    Script Date: 26/11/2023 8:28:22 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUser]    Script Date: 12/24/2023 2:21:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -266,7 +150,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserList]    Script Date: 26/11/2023 8:28:22 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUserList]    Script Date: 12/24/2023 2:21:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -335,7 +219,7 @@ BEGIN
 	EXEC(@QUERY)
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserMenuByUserId]    Script Date: 26/11/2023 8:28:22 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUserMenuByUserId]    Script Date: 12/24/2023 2:21:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -419,7 +303,7 @@ DECLARE @JsonMenu NVARCHAR(MAX),
     SELECT @JsonMenu AS JsonMenu;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserMenuPagingWithSearch]    Script Date: 26/11/2023 8:28:22 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUserMenuPagingWithSearch]    Script Date: 12/24/2023 2:21:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -429,7 +313,7 @@ GO
 -- Create date: 25.04.2023
 -- Description:	Get all user menu list using paging with search
 -- =============================================
---EXEC SP_GetAllUserMenuPagingWithSearch '','','',1,1
+--EXEC SP_GetAllUserMenuPagingWithSearch '','','',1,10
 --EXEC SP_GetAllUserMenuPagingWithSearch 'nav-icon fas fa-cog','Icon','ASC',1,2
 --EXEC SP_GetAllUserMenuPagingWithSearch 'User','','ASC',1,2
 CREATE PROCEDURE [dbo].[SP_GetAllUserMenuPagingWithSearch]
@@ -492,7 +376,7 @@ BEGIN
 	EXEC(@QUERY)
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserPagingSearch]    Script Date: 26/11/2023 8:28:22 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUserPagingSearch]    Script Date: 12/24/2023 2:21:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -527,7 +411,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetMenuHierarchyByMenuId]    Script Date: 26/11/2023 8:28:22 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetMenuHierarchyByMenuId]    Script Date: 12/24/2023 2:21:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -570,7 +454,7 @@ BEGIN
 	ON AUMGround.[ParentId] = AUMLevel.[Id]
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetUserById]    Script Date: 26/11/2023 8:28:22 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetUserById]    Script Date: 12/24/2023 2:21:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -596,7 +480,7 @@ BEGIN
 	WHERE AUP.Id = @Id
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_SaveUpdateAppUser]    Script Date: 26/11/2023 8:28:22 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_SaveUpdateAppUser]    Script Date: 12/24/2023 2:21:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -641,7 +525,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_SaveUpdateAppUserProfile]    Script Date: 26/11/2023 8:28:22 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_SaveUpdateAppUserProfile]    Script Date: 12/24/2023 2:21:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -682,5 +566,4 @@ BEGIN
         RAISERROR('Invalid action flag. Must be either ''Save'' or ''Update''.', 16, 1);
     END
 END
-
 GO
