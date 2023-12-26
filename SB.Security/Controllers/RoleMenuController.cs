@@ -308,6 +308,45 @@ namespace SB.Security.Controllers
             return response;
         }
 
+        // GET api/RoleMenu/getUserMenuInitialData
+
+        /// <summary>
+        /// This method used to get all list data, which are needed to be loaded during the user form initialization.
+        /// </summary>
+        /// <returns>
+        /// <see cref="Task{object}"/>
+        /// </returns>
+        [HttpGet]
+        [Route(ConstantSupplier.GET_USER_MENU_INITIAL_DATA_ROUTE_NAME)]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
+        public async Task<object> GetUserMenuInitialData()
+        {
+            _securityLogService.LogInfo(ConstantSupplier.GETUSERMENUINITIALDATA_STARTED_INFO_MSG);
+            DataResponse response;
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.GETUSERMENUINITIALDATA_REQ_MSG, ConstantSupplier.NOT_APPLICABLE));
+            try
+            {
+                #region ADO.NET Codeblock
+                response = await _roleMenuService.GetUserMenuInitialDataAsync();
+                #endregion
+            }
+            catch (Exception Ex)
+            {
+                _securityLogService.LogError(String.Format(ConstantSupplier.GETUSERMENUINITIALDATA_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(String.Format(ConstantSupplier.GETUSERMENUINITIALDATA_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                return new DataResponse
+                {
+                    Success = false,
+                    Message = Ex.Message,
+                    MessageType = Enum.EnumResponseType.Error,
+                    ResponseCode = (int)HttpStatusCode.InternalServerError,
+                    Result = null
+                };
+            }
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.GETUSERMENUINITIALDATA_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            return response;
+        }
+
         // GET api/RoleMenu/getAllParentMenus
 
         /// <summary>

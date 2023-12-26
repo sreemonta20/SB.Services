@@ -47,24 +47,32 @@ BEGIN
     )
 END
 GO
-/****** Object:  StoredProcedure [dbo].[GetUserMenuInitialData]    Script Date: 12/24/2023 2:21:57 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetUserMenuInitialData]    Script Date: 12/24/2023 2:21:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
---EXEC GetUserMenuInitialData
-CREATE PROCEDURE [dbo].[GetUserMenuInitialData]
+--EXEC SP_GetUserMenuInitialData
+CREATE PROCEDURE [dbo].[SP_GetUserMenuInitialData]
 AS
 BEGIN
     SET NOCOUNT ON;
+	CREATE TABLE #UserMenuInitialDataTable (
+        parentMenu XML,
+        cssClass XML,
+		routeLink XML,
+		routeLinkClass XML,
+		icon XML,
+		dropdownIcon XML
+    );
 
-    DECLARE @PMJson NVARCHAR(MAX),
-			@CCJson NVARCHAR(MAX),
-			@RLJson NVARCHAR(MAX),
-			@RLCJson NVARCHAR(MAX),
-			@IconJson NVARCHAR(MAX),
-			@DDIJson NVARCHAR(MAX),
-			@result NVARCHAR(MAX);
+    DECLARE @PMJson XML,
+			@CCJson XML,
+			@RLJson XML,
+			@RLCJson XML,
+			@IconJson XML,
+			@DDIJson XML,
+			@result XML;
 
 
     SET @PMJson = (SELECT [Id] id, [Name] name FROM AppUserMenus WHERE [Name] IS NOT NULL FOR JSON AUTO);
@@ -79,8 +87,14 @@ BEGIN
 
 	SET @DDIJson = (SELECT DropdownIcon id, DropdownIcon name FROM AppUserMenus  WHERE [DropdownIcon] IS NOT NULL FOR JSON AUTO);
 
-	SELECT @PMJson AS parentMenu, @CCJson AS cssClass, @RLJson AS routeLink, @RLCJson AS routeLinkClass, @IconJson AS icon, @DDIJson AS dropdownIcon
-	FOR JSON PATH, WITHOUT_ARRAY_WRAPPER;
+	INSERT INTO #UserMenuInitialDataTable (parentMenu, cssClass, routeLink, routeLinkClass, icon, dropdownIcon)
+    SELECT @PMJson, @CCJson, @RLJson, @RLCJson, @IconJson, @DDIJson
+
+	SET @result = (SELECT * FROM #UserMenuInitialDataTable  FOR JSON PATH, WITHOUT_ARRAY_WRAPPER);
+
+	DROP TABLE #UserMenuInitialDataTable;
+
+	SELECT @result AS result;
 END;
 GO
 /****** Object:  StoredProcedure [dbo].[SP_DeleteUser]    Script Date: 12/24/2023 2:21:57 PM ******/

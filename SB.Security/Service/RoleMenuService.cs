@@ -381,6 +381,35 @@ namespace SB.Security.Service
         }
 
         /// <summary>
+        /// This method used to get all list data, which are needed to be loaded during the user form initialization.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<DataResponse> GetUserMenuInitialDataAsync()
+        {
+            DataResponse? oDataResponse;
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETUSERMENUINITIALDATA_REQ_MSG, ConstantSupplier.NOT_APPLICABLE));
+
+            try
+            {
+                string userMenuMgtFormInitialData = (string)await _dbmanager.GetScalarValueAsync(ConstantSupplier.GET_USER_MENU_INITIAL_DATA_SP_NAME, CommandType.StoredProcedure);
+
+                if (String.IsNullOrWhiteSpace(userMenuMgtFormInitialData))
+                {
+                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_USER_MENU_FORM_INITIAL_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETUSERMENUINITIALDATA_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    return oDataResponse;
+                }
+                oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_LOAD_USER_MENU_FORM_INITIAL_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userMenuMgtFormInitialData };
+                return oDataResponse;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
+        }
+
+        /// <summary>
         /// It used to get all parent menu based on what child menu can be created.
         /// </summary>
         /// <returns>
