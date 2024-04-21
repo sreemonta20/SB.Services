@@ -219,7 +219,23 @@
         public const string SERVICE_GET_ALL_PARENT_MENUS_RES_MSG = "GetAllParentMenusAsync (Role Menu service) method response is: \n{0}\n";
         public const string GET_ALL_PARENT_MENUS_RES_MSG = "GetAllParentMenus api method response is: \n{0}\n";
 
-        
+        //api/RoleMenu/saveUpdateUserMenu
+        public const string SAVE_UPDATE_USER_MENU_STARTED_INFO_MSG = "SaveUpdateUserMenu api method started.\n";
+        public const string SAVE_UPDATE_USER_MENU_REQ_MSG = "SaveUpdateUserMenu api method request is: \n{0}\n";
+        public const string SAVE_UPDATE_USER_MENU_EXCEPTION_MSG = "SaveUpdateUserMenu Exception below:: \n{0}\n";
+        public const string SAVE_UPDATE_USER_MENU_INNER_EXCEPTION_MSG = "SaveUpdateUserMenu Inner Exception below:: \n{0}\n";
+        public const string SERVICE_SAVE_UPDATE_USER_MENU_REQ_MSG = "SaveUpdateUserMenuAsync (Role Menu service) method request is: \n{0}\n";
+        public const string SERVICE_SAVE_UPDATE_USER_MENU_RES_MSG = "SaveUpdateUserMenuAsync (Role Menu service) method response is: \n{0}\n";
+        public const string SAVE_UPDATE_USER_MENU_RES_MSG = "SaveUpdateUserMenu api method response is: \n{0}\n";
+
+        //api/RoleMenu/deleteUserMenu
+        public const string DELETE_APP_USER_MENU_STARTED_INFO_MSG = "DeleteUserMenu api method started.\n";
+        public const string DELETE_APP_USER_MENU_REQ_MSG = "DeleteUserMenu api method request is: \n{0}\n";
+        public const string DELETE_APP_USER_MENU_EXCEPTION_MSG = "DeleteUserMenu Exception below:: \n{0}\n";
+        public const string DELETE_APP_USER_MENU_INNER_EXCEPTION_MSG = "DeleteUserMenu Inner Exception below:: \n{0}\n";
+        public const string SERVICE_DELETE_APP_USER_MENU_REQ_MSG = "DeleteUserMenuAsync (Role Menu service) method request is: \n{0}\n";
+        public const string SERVICE_DELETE_APP_USER_MENU_RES_MSG = "DeleteUserMenuAsync (Role Menu service) method response is: \n{0}\n";
+        public const string DELETE_APP_USER_MENU_RES_MSG = "DeleteUserMenu api method response is: \n{0}\n";
         #endregion
 
         #region Auth Controller
@@ -297,6 +313,9 @@
         public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_SUCCESS_MSG = "User menu list retrieved successfully.";
         public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_FAILED_MSG = "Retrieving user menu list failed.";
         public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG = "Retrieving user menu list is found empty.";
+
+        public const string POST_SAVE_UPDATE_USER_MENU_ROUTE_NAME = "saveUpdateUserMenu";
+        public const string DELETE_USER_MENU_ROUTE_NAME = "deleteUserMenu";
         #endregion
 
         #region Role Menu Service
@@ -310,7 +329,7 @@
         public const string SUCCESS_PARENT_MENU_DATA = "Fething parent menu successful!";
         public const string GET_ALL_ROLES_PAGINATION_FOUND = "List of Roles retrieved successfully.";
         public const string GET_ALL_ROLES_PAGINATION_NOT_FOUND = "Empty roles.";
-        public const string EXIST_ROLE = "There is a role with same name. Try different.";
+        public const string EXIST_ROLE = "There is a role with same name. Activate it or try different.";
         public const string USER_ROLE_SAVE_SUCCESS = "saving user role success!";
         public const string USER_ROLE_UPDATE_SUCCESS = "Updating user role success!";
         public const string NOT_EXIST_ROLE = "There is no role with such name.";
@@ -319,11 +338,23 @@
         public const string GET_APP_USER_ROLE_FAILED = "Fetching app user role details failed.";
         public const string NO_USER_MENU_FORM_INITIAL_DATA = "User menu form initialized data not found. You can proceed.";
         public const string SUCCESS_LOAD_USER_MENU_FORM_INITIAL_DATA = "User menu form initialized data retieved successfully.";
+        public const string EXIST_USER_MENU_WITH_SAME_NAME = "There is a user menu with same name. Activate it or try different.";
+        public const string EXIST_USER_MENU = "User menu exist. Activate it or try different.";
+        public const string USER_MENU_SAVE_SUCCESS = "User menu is created successfully!";
+        public const string USER_MENU_UPDATE_SUCCESS = "User menu is updated successfully!";
+        public const string NOT_EXIST_USER_MENU = "There is no such user menu exist.";
+        public const string DELETE_USER_MENU_SUCCESS = "User menu is successfully removed";
 
 
 
         public const string GET_GET_ALL_MENU_BY_USER_ID_SP_NAME = "SP_GetAllUserMenuByUserId";
         public const string GET_USER_MENU_INITIAL_DATA_SP_NAME = "SP_GetUserMenuInitialData";
+
+        public const string POST_SAVE_UPDATE_USER_MENU_SP_NAME = "SP_CreateUpdateAppUserMenu";
+        public const string DELETE_USER_MENU_SP_NAME = "SP_DeleteAppUserMenu";
+
+        public const string DELETE_APP_USER_MENU_SUCCESS = "User menu is successfully removed";
+        public const string NOT_EXIST_APP_USER_MENU = "There is no user menu with such name.";
         #endregion
 
         #region Data Analytics Controller

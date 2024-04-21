@@ -22,6 +22,8 @@ namespace SB.Security.Service
         Task<PagingResult<AppUserMenu>> GetAllUserMenuPagingWithSearchAsync(PagingSearchFilter oPagingSearchFilter);
         Task<DataResponse> GetUserMenuInitialDataAsync();
         Task<DataResponse> GetAllParentMenusAsync();
-        
+        Task<DataResponse> SaveUpdateAppUserMenuAsync(AppUserMenuRequest request);
+        Task<DataResponse> DeleteAppUserMenuAsync(string menuId);
+
     }
 }

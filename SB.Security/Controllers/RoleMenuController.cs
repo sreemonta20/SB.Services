@@ -383,6 +383,80 @@ namespace SB.Security.Controllers
             _securityLogService.LogInfo(String.Format(ConstantSupplier.GET_ALL_PARENT_MENUS_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
+
+        // POST api/RoleMenu/saveUpdateUserMenu
+        /// <summary>
+        /// It used to create and update role based on supplied <see cref="AppUserMenuRequest"/> request model.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>
+        /// <see cref="Task{object}"/>
+        /// </returns>
+        [HttpPost]
+        [Route(ConstantSupplier.POST_SAVE_UPDATE_USER_MENU_ROUTE_NAME)]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
+        public async Task<object> SaveUpdateAppUserMenuAsync(AppUserMenuRequest request)
+        {
+            DataResponse response;
+            _securityLogService.LogInfo(ConstantSupplier.SAVE_UPDATE_USER_MENU_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SAVE_UPDATE_USER_MENU_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            try
+            {
+                response = await _roleMenuService.SaveUpdateAppUserMenuAsync(request);
+            }
+            catch (Exception Ex)
+            {
+                _securityLogService.LogError(String.Format(ConstantSupplier.SAVE_UPDATE_USER_MENU_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(String.Format(ConstantSupplier.SAVE_UPDATE_USER_MENU_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                return new DataResponse
+                {
+                    Success = false,
+                    Message = Ex.Message,
+                    MessageType = Enum.EnumResponseType.Error,
+                    ResponseCode = (int)HttpStatusCode.InternalServerError,
+                    Result = null
+                };
+            }
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SAVE_UPDATE_USER_MENU_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            return response;
+        }
+
+        // DELETE api/RoleMenu/deleteAppUserMenu
+
+        /// <summary>
+        /// It used to delete a user menu. Delete can be happen either simply making the IsActive false or delete command. It is decided based on user settings in appsettings.json.
+        /// </summary>
+        /// <returns>
+        /// <see cref="Task{object}"/>
+        /// </returns>
+        [HttpGet]
+        [Route(ConstantSupplier.DELETE_USER_MENU_ROUTE_NAME)]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
+        public async Task<object> DeleteAppUserMenu([FromQuery] string menuId)
+        {
+            DataResponse response;
+            _securityLogService.LogInfo(ConstantSupplier.DELETE_APP_USER_MENU_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.DELETE_APP_USER_MENU_REQ_MSG, JsonConvert.SerializeObject(menuId, Formatting.Indented)));
+            try
+            {
+                response = await _roleMenuService.DeleteAppUserMenuAsync(menuId);
+            }
+            catch (Exception Ex)
+            {
+                _securityLogService.LogError(String.Format(ConstantSupplier.DELETE_APP_USER_MENU_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(String.Format(ConstantSupplier.DELETE_APP_USER_MENU_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                return new DataResponse
+                {
+                    Success = false,
+                    Message = Ex.Message,
+                    MessageType = Enum.EnumResponseType.Error,
+                    ResponseCode = (int)HttpStatusCode.InternalServerError,
+                    Result = null
+                };
+            }
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            return response;
+        }
         #endregion
 
     }

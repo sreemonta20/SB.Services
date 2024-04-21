@@ -67,7 +67,7 @@ namespace SB.Security.Service
         {
             DataResponse? oDataResponse;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALLROLES_REQ_MSG, JsonConvert.SerializeObject(null, Formatting.Indented)));
-            
+
             try
             {
                 List<AppUserRole>? oAppUserRoleList = await _context.AppUserRoles.OrderByDescending(x => x.RoleName).ToListAsync();
@@ -86,7 +86,7 @@ namespace SB.Security.Service
             {
                 throw;
             }
-            
+
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace SB.Security.Service
                 oAppUserRoleList = await Utilities.GetPagingResult(oIQueryableAppUserRole, paramRequest.PageNumber, paramRequest.PageSize);
                 if (Utilities.IsNotNull(oAppUserRoleList) && oAppUserRoleList.Items.Any())
                 {
-                    oDataResponse =  new DataResponse { Success = true, Message = ConstantSupplier.GET_ALL_ROLES_PAGINATION_FOUND, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oAppUserRoleList };
+                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.GET_ALL_ROLES_PAGINATION_FOUND, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oAppUserRoleList };
                 }
                 else
                 {
@@ -120,7 +120,7 @@ namespace SB.Security.Service
             {
                 throw;
             }
-            
+
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace SB.Security.Service
         {
             DataResponse? oDataResponse;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETROLEBYID_REQ_MSG, JsonConvert.SerializeObject(roleId, Formatting.Indented)));
-            
+
             try
             {
                 AppUserRole? oAppUserRole = await _context.AppUserRoles.FirstOrDefaultAsync(u => u.Id == new Guid(roleId) && u.IsActive == true);
@@ -153,7 +153,7 @@ namespace SB.Security.Service
             {
                 throw;
             }
-            
+
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace SB.Security.Service
                             roleSaveUpdateRequest.Id = Convert.ToString(oExistAppUserRole.Id);
                             oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.USER_ROLE_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = roleSaveUpdateRequest };
                         }
-                        
+
                         break;
                     case ConstantSupplier.UPDATE_KEY:
                         oExistAppUserRole = await _context.AppUserRoles.FirstOrDefaultAsync(u => u.Id == new Guid(roleSaveUpdateRequest.Id));
@@ -225,7 +225,7 @@ namespace SB.Security.Service
                             oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_ROLE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = roleSaveUpdateRequest };
                             _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
                         }
-                        
+
                         break;
                     default:
                         break;
@@ -237,7 +237,7 @@ namespace SB.Security.Service
                 oTrasaction.Rollback();
                 throw;
             }
-            
+
         }
 
         /// <summary>
@@ -258,9 +258,9 @@ namespace SB.Security.Service
                 if (oExistAppUserRole != null)
                 {
                     IEnumerable<AppUserRoleMenu> oAppUserRoleMenuList = from obj in _context?.AppUserRoleMenus
-                                                                  where obj.Id == oExistAppUserRole.Id && obj.IsActive == oExistAppUserRole.IsActive
-                                                                  orderby obj.CreatedDate descending
-                                                                  select obj;
+                                                                        where obj.AppUserRoleId == oExistAppUserRole.Id && obj.IsActive == oExistAppUserRole.IsActive
+                                                                        orderby obj.CreatedDate descending
+                                                                        select obj;
                     if (_appSettings.IsUserDelate)
                     {
                         _context?.AppUserRoleMenus?.RemoveRange(oAppUserRoleMenuList);
@@ -295,7 +295,7 @@ namespace SB.Security.Service
             {
                 throw;
             }
-            
+
         }
         #endregion
 
@@ -406,7 +406,7 @@ namespace SB.Security.Service
             {
                 throw;
             }
-            
+
         }
 
         /// <summary>
@@ -419,7 +419,7 @@ namespace SB.Security.Service
         {
             DataResponse? oDataResponse;
             _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GET_ALL_PARENT_MENUS_REQ_MSG, JsonConvert.SerializeObject(ConstantSupplier.NOT_APPLICABLE, Formatting.Indented)));
-            
+
             try
             {
                 List<(Guid? Id, string? Name)>? parentMenuList = new List<(Guid? Id, string? Name)>();
@@ -453,7 +453,231 @@ namespace SB.Security.Service
             return oDataResponse;
         }
 
-        
+        /// <summary>
+        /// It used to create and update role based on supplied <see cref="AppUserMenuRequest"/> request model.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>
+        /// <see cref="Task{object}"/>
+        /// </returns>
+        public async Task<DataResponse> SaveUpdateAppUserMenuAsync(AppUserMenuRequest? request)
+        {
+            DataResponse? oDataResponse = null;
+            AppUserMenu? oExistAppUserMenu = null;
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
+            try
+            {
+                switch (request?.ActionName)
+                {
+                    case ConstantSupplier.SAVE_KEY:
+                        AppUserMenu oAppUserMenu = new()
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = request.Name,
+                            IsHeader = request.IsHeader,
+                            CssClass = request.CssClass,
+                            RouteLink = request.RouteLink,
+                            RouteLinkClass = request.RouteLinkClass,
+                            Icon = request.Icon,
+                            Remark = request.Remark,
+                            ParentId = new Guid(request.ParentId),
+                            DropdownIcon = request.DropdownIcon,
+                            SerialNo = request.SerialNo,
+                            CreatedBy = request.CreateUpdateBy,
+                            CreatedDate = DateTime.UtcNow,
+                            IsActive = request.IsActive
+                        };
+
+                        oExistAppUserMenu = await _context.AppUserMenus.FirstOrDefaultAsync(um => um.Name.ToLower() == request.Name.ToLower());
+                        if (Utilities.IsNotNull(oExistAppUserMenu) && !String.IsNullOrEmpty(Convert.ToString(oExistAppUserMenu.Id)))
+                        {
+                            oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_USER_MENU_WITH_SAME_NAME, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                            return oDataResponse;
+                        }
+                        else
+                        {
+                            #region EF
+                            //await _context.AppUserMenus.AddAsync(oAppUserMenu);
+                            //await _context.SaveChangesAsync();
+                            //await oTrasaction.CommitAsync();
+                            //request.Id = Convert.ToString(oAppUserMenu.Id);
+                            #endregion
+
+                            #region ADO.NET
+                            List<IDbDataParameter> parameters = new()
+                            {
+                                _dbmanager.CreateParameter("@ActionName", ConstantSupplier.SAVE_KEY, DbType.String),
+                                _dbmanager.CreateParameter("@Id", oAppUserMenu.Id, DbType.Guid),
+                                _dbmanager.CreateParameter("@Name", oAppUserMenu.Name, DbType.String),
+                                _dbmanager.CreateParameter("@IsHeader", oAppUserMenu.IsHeader, DbType.Boolean),
+                                _dbmanager.CreateParameter("@CssClass", oAppUserMenu.CssClass, DbType.String),
+                                _dbmanager.CreateParameter("@RouteLink", oAppUserMenu.RouteLink, DbType.String),
+                                _dbmanager.CreateParameter("@RouteLinkClass", oAppUserMenu.RouteLinkClass, DbType.String),
+                                _dbmanager.CreateParameter("@Icon", oAppUserMenu.Icon, DbType.String),
+                                _dbmanager.CreateParameter("@Remark", oAppUserMenu.Remark, DbType.String),
+                                _dbmanager.CreateParameter("@ParentId", oAppUserMenu.ParentId, DbType.Guid),
+                                _dbmanager.CreateParameter("@DropdownIcon", oAppUserMenu.DropdownIcon, DbType.String),
+                                _dbmanager.CreateParameter("@SerialNo", oAppUserMenu.SerialNo, DbType.String),
+                                _dbmanager.CreateParameter("@DropdownIcon", oAppUserMenu.DropdownIcon, DbType.String),
+                                _dbmanager.CreateParameter("@CreatedBy", oAppUserMenu.CreatedBy, DbType.String),
+                                _dbmanager.CreateParameter("@CreatedDate", oAppUserMenu.CreatedDate, DbType.DateTime),
+                                _dbmanager.CreateParameter("@UpdatedBy", DBNull.Value, DbType.String),
+                                _dbmanager.CreateParameter("@UpdatedDate", DBNull.Value, DbType.DateTime),
+                                _dbmanager.CreateParameter("@IsActive", oAppUserMenu.IsActive, DbType.Boolean)
+                            };
+
+                            int rowAffected = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_MENU_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
+
+                            request.Id = Convert.ToString(oAppUserMenu.Id);
+                            if (rowAffected.Equals(0))
+                            {
+                                oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_USER_MENU, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.Found, Result = request };
+                                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                                return oDataResponse;
+                            }
+                            #endregion
+
+                            oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.USER_MENU_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.Created, Result = request };
+                        }
+
+                        break;
+                    case ConstantSupplier.UPDATE_KEY:
+                        oExistAppUserMenu = await _context.AppUserMenus.FindAsync(new Guid(request.Id));
+                        if (Utilities.IsNull(oExistAppUserMenu))
+                        {
+                            oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_USER_MENU, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = request };
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                            return oDataResponse;
+                        }
+                        else
+                        {
+                            #region EF
+                            oExistAppUserMenu.Name = request.Name;
+                            oExistAppUserMenu.IsHeader = request.IsHeader;
+                            oExistAppUserMenu.CssClass = request.CssClass;
+                            oExistAppUserMenu.RouteLink = request.RouteLink;
+                            oExistAppUserMenu.RouteLinkClass = request.RouteLinkClass;
+                            oExistAppUserMenu.Icon = request.Icon;
+                            oExistAppUserMenu.Remark = request.Remark;
+                            oExistAppUserMenu.ParentId = new Guid(request.ParentId);
+                            oExistAppUserMenu.DropdownIcon = request.DropdownIcon;
+                            oExistAppUserMenu.SerialNo = request.SerialNo;
+                            oExistAppUserMenu.UpdatedBy = request.CreateUpdateBy;
+                            oExistAppUserMenu.UpdatedDate = DateTime.UtcNow;
+                            oExistAppUserMenu.IsActive = request.IsActive;
+
+                            await _context.SaveChangesAsync();
+                            await oTrasaction.CommitAsync();
+                            #endregion
+
+                            #region ADO.NET
+                            List<IDbDataParameter> parameters = new()
+                            {
+                                _dbmanager.CreateParameter("@ActionName", ConstantSupplier.UPDATE_KEY, DbType.String),
+                                _dbmanager.CreateParameter("@Id", new Guid(request.Id), DbType.Guid),
+                                _dbmanager.CreateParameter("@Name", request.Name, DbType.String),
+                                _dbmanager.CreateParameter("@IsHeader", request.IsHeader, DbType.Boolean),
+                                _dbmanager.CreateParameter("@CssClass", request.CssClass, DbType.String),
+                                _dbmanager.CreateParameter("@RouteLink", request.RouteLink, DbType.String),
+                                _dbmanager.CreateParameter("@RouteLinkClass", request.RouteLinkClass, DbType.String),
+                                _dbmanager.CreateParameter("@Icon", request.Icon, DbType.String),
+                                _dbmanager.CreateParameter("@Remark", request.Remark, DbType.String),
+                                _dbmanager.CreateParameter("@ParentId", request.ParentId, DbType.Guid),
+                                _dbmanager.CreateParameter("@DropdownIcon", request.DropdownIcon, DbType.String),
+                                _dbmanager.CreateParameter("@SerialNo", request.SerialNo, DbType.String),
+                                _dbmanager.CreateParameter("@DropdownIcon", request.DropdownIcon, DbType.String),
+                                _dbmanager.CreateParameter("@CreatedBy", DBNull.Value, DbType.String),
+                                _dbmanager.CreateParameter("@CreatedDate", DBNull.Value, DbType.DateTime),
+                                _dbmanager.CreateParameter("@UpdatedBy", request.CreateUpdateBy, DbType.String),
+                                _dbmanager.CreateParameter("@UpdatedDate", DateTime.UtcNow, DbType.DateTime),
+                                _dbmanager.CreateParameter("@IsActive", request.IsActive, DbType.Boolean)
+                            };
+
+                            int rowAffected = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_USER_MENU_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
+
+                            if (rowAffected.Equals(0))
+                            {
+                                oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_USER_MENU, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = request };
+                                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                                return oDataResponse;
+                            }
+                            #endregion
+
+                            oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.USER_MENU_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
+                        }
+
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            catch (Exception)
+            {
+                oTrasaction.Rollback();
+                throw;
+            }
+            return oDataResponse;
+        }
+
+        /// <summary>
+        /// It used to delete a user menu. Delete can be happen either simply making the IsActive false or delete command. It is decided based on user settings in appsettings.json.
+        /// </summary>
+        /// <param name="menuId"></param>
+        /// <returns>
+        /// <see cref="Task{DataResponse}"/>
+        /// </returns>
+        public async Task<DataResponse> DeleteAppUserMenuAsync(string menuId)
+        {
+            DataResponse? oDataResponse = null;
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_REQ_MSG, JsonConvert.SerializeObject(menuId, Formatting.Indented)));
+            using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
+            try
+            {
+                AppUserMenu? oExistAppUserMenu = await _context.AppUserMenus.FindAsync(new Guid(menuId));
+                if (Utilities.IsNotNull(oExistAppUserMenu))
+                {
+                    IEnumerable<AppUserRoleMenu> oAppUserRoleMenuList = from obj in _context?.AppUserRoleMenus
+                                                                        where obj.AppUserMenuId == oExistAppUserMenu.Id && obj.IsActive == oExistAppUserMenu.IsActive
+                                                                        orderby obj.CreatedDate descending
+                                                                        select obj;
+                    if (_appSettings.IsUserDelate)
+                    {
+                        _context?.AppUserRoleMenus?.RemoveRange(oAppUserRoleMenuList);
+                        _context?.AppUserMenus.Remove(oExistAppUserMenu);
+                        await _context?.SaveChangesAsync();
+                        await oTrasaction.CommitAsync();
+                    }
+                    else
+                    {
+                        foreach (var oAppUserRoleMenu in oAppUserRoleMenuList)
+                        {
+                            oAppUserRoleMenu.IsActive = false;
+                            _context.Entry(oAppUserRoleMenu).State = EntityState.Modified;
+                        }
+                        oExistAppUserMenu.IsActive = false;
+                        _context.Entry(oExistAppUserMenu).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+                        await oTrasaction.CommitAsync();
+                    }
+                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.DELETE_APP_USER_MENU_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = menuId };
+                    _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                }
+                else
+                {
+                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_APP_USER_MENU, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                }
+                return oDataResponse;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
         #endregion
     }
 }
