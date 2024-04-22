@@ -321,6 +321,7 @@
         #region Role Menu Service
         public const string SAVE_KEY = "Save";
         public const string UPDATE_KEY = "Update";
+        public const string ERROR_DELETE_MSG = "We are experiencing a problem. {0} cannot be removed at this moment.";
         public const string NO_ROLE_DATA = "No user role data found";
         public const string SUCCESS_ROLE_DATA = "Fething Role data successful!";
         public const string NO_MENU_DATA = "No menu data found";
@@ -354,7 +355,10 @@
         public const string DELETE_USER_MENU_SP_NAME = "SP_DeleteAppUserMenu";
 
         public const string DELETE_APP_USER_MENU_SUCCESS = "User menu is successfully removed";
+        public const string EXIST_BUT_DEACTIVATED_APP_USER_MENU = "The user menu is already deactivated.";
         public const string NOT_EXIST_APP_USER_MENU = "There is no user menu with such name.";
+        public const string DELETE_APP_USER_MENU_BUT_EXIST_ROLE_MENU = "This User menu already used for a role";
+
         #endregion
 
         #region Data Analytics Controller

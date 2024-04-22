@@ -636,47 +636,91 @@ namespace SB.Security.Service
             using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
             try
             {
-                AppUserMenu? oExistAppUserMenu = await _context.AppUserMenus.FindAsync(new Guid(menuId));
+                //AppUserMenu? oExistAppUserMenu = await _context.AppUserMenus.FindAsync(new Guid(menuId));
+                AppUserMenu? oExistAppUserMenu = await _context.AppUserMenus.FirstOrDefaultAsync(um => um.Id == new Guid(menuId));
                 if (Utilities.IsNotNull(oExistAppUserMenu))
                 {
-                    IEnumerable<AppUserRoleMenu> oAppUserRoleMenuList = from obj in _context?.AppUserRoleMenus
-                                                                        where obj.AppUserMenuId == oExistAppUserMenu.Id && obj.IsActive == oExistAppUserMenu.IsActive
-                                                                        orderby obj.CreatedDate descending
-                                                                        select obj;
-                    if (_appSettings.IsUserDelate)
+                    if (oExistAppUserMenu.IsActive.Equals(true))
                     {
-                        _context?.AppUserRoleMenus?.RemoveRange(oAppUserRoleMenuList);
-                        _context?.AppUserMenus.Remove(oExistAppUserMenu);
-                        await _context?.SaveChangesAsync();
-                        await oTrasaction.CommitAsync();
+                        #region EF
+                        IEnumerable<AppUserRoleMenu> oAppUserRoleMenuList = from obj in _context?.AppUserRoleMenus
+                                                                            where obj.AppUserMenuId == oExistAppUserMenu.Id && obj.IsActive == oExistAppUserMenu.IsActive
+                                                                            orderby obj.CreatedDate descending
+                                                                            select obj;
+                        if (oAppUserRoleMenuList.Any())
+                        {
+                            oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.DELETE_APP_USER_MENU_BUT_EXIST_ROLE_MENU, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                            _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                            return oDataResponse;
+                        }
+                        else
+                        {
+                            if (_appSettings.IsUserDelate)
+                            {
+                                _context?.AppUserRoleMenus?.RemoveRange(oAppUserRoleMenuList);
+                                _context?.AppUserMenus.Remove(oExistAppUserMenu);
+                                await _context?.SaveChangesAsync();
+                                await oTrasaction.CommitAsync();
+                            }
+                            else
+                            {
+                                oExistAppUserMenu.IsActive = false;
+                                await _context.SaveChangesAsync();
+                                await oTrasaction.CommitAsync();
+                            }
+                        }
+                        oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.DELETE_APP_USER_MENU_SUCCESS, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.OK, Result = menuId };
+                        _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                        #endregion
+
+                        #region ADO.NET
+                        List<IDbDataParameter> parameters = new()
+                        {
+                            _dbmanager.CreateParameter("@IsDelete", _appSettings.IsUserDelate, DbType.Boolean),
+                            _dbmanager.CreateParameter("@MenuId", menuId, DbType.String)
+                        };
+                        string result = (string)await _dbmanager.GetScalarValueAsync(ConstantSupplier.DELETE_USER_MENU_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+                        SPResponseRequest sPResponseRequest = JsonConvert.DeserializeObject<SPResponseRequest>(result);
+                        if (Utilities.IsNotNull(sPResponseRequest))
+                        {
+                            if (!string.IsNullOrWhiteSpace(sPResponseRequest.success) && Convert.ToBoolean(sPResponseRequest.success).Equals(true))
+                            {
+                                oDataResponse = new DataResponse { Success = true, Message = sPResponseRequest.message, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = menuId };
+                                //_securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                            }
+                            else
+                            {
+                                oDataResponse = new DataResponse { Success = false, Message = sPResponseRequest.message, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                                _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                                return oDataResponse;
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception(string.Format(ConstantSupplier.ERROR_DELETE_MSG, "Menu"));
+                        }
+                        #endregion
                     }
                     else
                     {
-                        foreach (var oAppUserRoleMenu in oAppUserRoleMenuList)
-                        {
-                            oAppUserRoleMenu.IsActive = false;
-                            _context.Entry(oAppUserRoleMenu).State = EntityState.Modified;
-                        }
-                        oExistAppUserMenu.IsActive = false;
-                        _context.Entry(oExistAppUserMenu).State = EntityState.Modified;
-                        await _context.SaveChangesAsync();
-                        await oTrasaction.CommitAsync();
+                        oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_BUT_DEACTIVATED_APP_USER_MENU, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                        _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                        return oDataResponse;
                     }
-                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.DELETE_APP_USER_MENU_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = menuId };
-                    _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
                 }
                 else
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_APP_USER_MENU, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
                     _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    return oDataResponse;
                 }
-                return oDataResponse;
+                
             }
             catch (Exception)
             {
                 throw;
             }
-
+            return oDataResponse;
         }
         #endregion
     }
