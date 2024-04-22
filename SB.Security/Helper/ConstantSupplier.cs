@@ -358,6 +358,8 @@
         public const string EXIST_BUT_DEACTIVATED_APP_USER_MENU = "The user menu is already deactivated.";
         public const string NOT_EXIST_APP_USER_MENU = "There is no user menu with such name.";
         public const string DELETE_APP_USER_MENU_BUT_EXIST_ROLE_MENU = "This User menu already used for a role";
+        public const string DELETE_APP_USER_MENU_INACTIVATED_SUCCESS = "User menu is successfully inactivated";
+        public const string DELETE_APP_USER_MENU_REMOVED_SUCCESS = "User menu is successfully removed";
 
         #endregion
 

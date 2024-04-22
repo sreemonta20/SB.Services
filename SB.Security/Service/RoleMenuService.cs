@@ -643,34 +643,32 @@ namespace SB.Security.Service
                     if (oExistAppUserMenu.IsActive.Equals(true))
                     {
                         #region EF
-                        IEnumerable<AppUserRoleMenu> oAppUserRoleMenuList = from obj in _context?.AppUserRoleMenus
-                                                                            where obj.AppUserMenuId == oExistAppUserMenu.Id && obj.IsActive == oExistAppUserMenu.IsActive
-                                                                            orderby obj.CreatedDate descending
-                                                                            select obj;
-                        if (oAppUserRoleMenuList.Any())
-                        {
-                            oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.DELETE_APP_USER_MENU_BUT_EXIST_ROLE_MENU, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                            _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
-                            return oDataResponse;
-                        }
-                        else
-                        {
-                            if (_appSettings.IsUserDelate)
-                            {
-                                _context?.AppUserRoleMenus?.RemoveRange(oAppUserRoleMenuList);
-                                _context?.AppUserMenus.Remove(oExistAppUserMenu);
-                                await _context?.SaveChangesAsync();
-                                await oTrasaction.CommitAsync();
-                            }
-                            else
-                            {
-                                oExistAppUserMenu.IsActive = false;
-                                await _context.SaveChangesAsync();
-                                await oTrasaction.CommitAsync();
-                            }
-                        }
-                        oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.DELETE_APP_USER_MENU_SUCCESS, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.OK, Result = menuId };
-                        _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                        //IEnumerable<AppUserRoleMenu> oAppUserRoleMenuList = from obj in _context?.AppUserRoleMenus
+                        //                                                    where obj.AppUserMenuId == oExistAppUserMenu.Id && obj.IsActive == oExistAppUserMenu.IsActive
+                        //                                                    orderby obj.CreatedDate descending
+                        //                                                    select obj;
+                        //if (!oAppUserRoleMenuList.Any())
+                        //{
+                        //    if (_appSettings.IsUserDelate)
+                        //    {
+                        //        _context?.AppUserMenus.Remove(oExistAppUserMenu);
+                        //        await _context?.SaveChangesAsync();
+                        //        await oTrasaction.CommitAsync();
+                        //    }
+                        //    else
+                        //    {
+                        //        oExistAppUserMenu.IsActive = false;
+                        //        await _context.SaveChangesAsync();
+                        //        await oTrasaction.CommitAsync();
+                        //    }
+                        //    oDataResponse = new DataResponse { Success = true, Message = _appSettings.IsUserDelate? ConstantSupplier.DELETE_APP_USER_MENU_REMOVED_SUCCESS : ConstantSupplier.DELETE_APP_USER_MENU_INACTIVATED_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = menuId };
+                        //}
+                        //else
+                        //{
+                        //    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.DELETE_APP_USER_MENU_BUT_EXIST_ROLE_MENU, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                        //    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                        //    return oDataResponse;
+                        //}
                         #endregion
 
                         #region ADO.NET
@@ -683,10 +681,9 @@ namespace SB.Security.Service
                         SPResponseRequest sPResponseRequest = JsonConvert.DeserializeObject<SPResponseRequest>(result);
                         if (Utilities.IsNotNull(sPResponseRequest))
                         {
-                            if (!string.IsNullOrWhiteSpace(sPResponseRequest.success) && Convert.ToBoolean(sPResponseRequest.success).Equals(true))
+                            if (Utilities.IsNotNull(sPResponseRequest.success) && Convert.ToBoolean(sPResponseRequest.success).Equals(true))
                             {
                                 oDataResponse = new DataResponse { Success = true, Message = sPResponseRequest.message, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = menuId };
-                                //_securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
                             }
                             else
                             {

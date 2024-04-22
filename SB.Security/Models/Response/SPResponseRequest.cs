@@ -4,6 +4,6 @@
     {
         public string message { get; set; }
         public int rowcount { get; set; }
-        public string success { get; set; }
+        public bool success { get; set; }
     }
 }
