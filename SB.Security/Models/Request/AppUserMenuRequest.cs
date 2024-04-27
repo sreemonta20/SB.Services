@@ -6,6 +6,8 @@
         public string? Id { get; set; }
         public string? Name { get; set; }
         public bool? IsHeader { get; set; }
+        public bool? IsModule { get; set; }
+        public bool? IsComponent { get; set; }
         public string? CssClass { get; set; }
         public string? RouteLink { get; set; }
         public string? RouteLinkClass { get; set; }

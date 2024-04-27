@@ -7,6 +7,7 @@ namespace SB.Security.Models.Configuration
     /// </summary>
     public class AppSettings
     {
+        public string? AppDB { get; set; }
         public ConnectionStrings? ConnectionStrings { get; set; }
         public string? ConnectionProvider { get; set; }
         public double AccessTokenExpireTime { get; set; }

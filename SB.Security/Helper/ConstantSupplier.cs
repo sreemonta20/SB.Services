@@ -6,6 +6,10 @@
     public class ConstantSupplier
     {
         #region Common Constants
+        public const string SQLSERVER = "SqlServer";
+        public const string ORACLE = "Oracle";
+        public const string ODBC = "Odbc";
+        public const string OLEDB = "Oledb";
         public const string CTRLER_ROUTE_PATH_NAME = "api/[controller]";
         public const string REQUIRED_PARAMETER_NOT_EMPTY = "Required Parameters Should Not Empty Or Null";
         public const string REQ_OR_DATA_NULL = "Request is found null or data not found";

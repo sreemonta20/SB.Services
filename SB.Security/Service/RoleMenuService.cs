@@ -476,6 +476,8 @@ namespace SB.Security.Service
                             Id = Guid.NewGuid(),
                             Name = request.Name,
                             IsHeader = request.IsHeader,
+                            IsModule = request.IsModule,
+                            IsComponent = request.IsComponent,
                             CssClass = request.CssClass,
                             RouteLink = request.RouteLink,
                             RouteLinkClass = request.RouteLinkClass,
@@ -512,6 +514,8 @@ namespace SB.Security.Service
                                 _dbmanager.CreateParameter("@Id", oAppUserMenu.Id, DbType.Guid),
                                 _dbmanager.CreateParameter("@Name", oAppUserMenu.Name, DbType.String),
                                 _dbmanager.CreateParameter("@IsHeader", oAppUserMenu.IsHeader, DbType.Boolean),
+                                _dbmanager.CreateParameter("@IsModule", oAppUserMenu.IsModule, DbType.Boolean),
+                                _dbmanager.CreateParameter("@IsComponent", oAppUserMenu.IsComponent, DbType.Boolean),
                                 _dbmanager.CreateParameter("@CssClass", oAppUserMenu.CssClass, DbType.String),
                                 _dbmanager.CreateParameter("@RouteLink", oAppUserMenu.RouteLink, DbType.String),
                                 _dbmanager.CreateParameter("@RouteLinkClass", oAppUserMenu.RouteLinkClass, DbType.String),
@@ -554,22 +558,24 @@ namespace SB.Security.Service
                         else
                         {
                             #region EF
-                            oExistAppUserMenu.Name = request.Name;
-                            oExistAppUserMenu.IsHeader = request.IsHeader;
-                            oExistAppUserMenu.CssClass = request.CssClass;
-                            oExistAppUserMenu.RouteLink = request.RouteLink;
-                            oExistAppUserMenu.RouteLinkClass = request.RouteLinkClass;
-                            oExistAppUserMenu.Icon = request.Icon;
-                            oExistAppUserMenu.Remark = request.Remark;
-                            oExistAppUserMenu.ParentId = new Guid(request.ParentId);
-                            oExistAppUserMenu.DropdownIcon = request.DropdownIcon;
-                            oExistAppUserMenu.SerialNo = request.SerialNo;
-                            oExistAppUserMenu.UpdatedBy = request.CreateUpdateBy;
-                            oExistAppUserMenu.UpdatedDate = DateTime.UtcNow;
-                            oExistAppUserMenu.IsActive = request.IsActive;
+                            //oExistAppUserMenu.Name = request.Name;
+                            //oExistAppUserMenu.IsHeader = request.IsHeader;
+                            //oExistAppUserMenu.IsModule = request.IsModule;
+                            //oExistAppUserMenu.IsComponent = request.IsComponent;
+                            //oExistAppUserMenu.CssClass = request.CssClass;
+                            //oExistAppUserMenu.RouteLink = request.RouteLink;
+                            //oExistAppUserMenu.RouteLinkClass = request.RouteLinkClass;
+                            //oExistAppUserMenu.Icon = request.Icon;
+                            //oExistAppUserMenu.Remark = request.Remark;
+                            //oExistAppUserMenu.ParentId = new Guid(request.ParentId);
+                            //oExistAppUserMenu.DropdownIcon = request.DropdownIcon;
+                            //oExistAppUserMenu.SerialNo = request.SerialNo;
+                            //oExistAppUserMenu.UpdatedBy = request.CreateUpdateBy;
+                            //oExistAppUserMenu.UpdatedDate = DateTime.UtcNow;
+                            //oExistAppUserMenu.IsActive = request.IsActive;
 
-                            await _context.SaveChangesAsync();
-                            await oTrasaction.CommitAsync();
+                            //await _context.SaveChangesAsync();
+                            //await oTrasaction.CommitAsync();
                             #endregion
 
                             #region ADO.NET
@@ -579,6 +585,8 @@ namespace SB.Security.Service
                                 _dbmanager.CreateParameter("@Id", new Guid(request.Id), DbType.Guid),
                                 _dbmanager.CreateParameter("@Name", request.Name, DbType.String),
                                 _dbmanager.CreateParameter("@IsHeader", request.IsHeader, DbType.Boolean),
+                                _dbmanager.CreateParameter("@IsModule", request.IsModule, DbType.Boolean),
+                                _dbmanager.CreateParameter("@IsComponent", request.IsComponent, DbType.Boolean),
                                 _dbmanager.CreateParameter("@CssClass", request.CssClass, DbType.String),
                                 _dbmanager.CreateParameter("@RouteLink", request.RouteLink, DbType.String),
                                 _dbmanager.CreateParameter("@RouteLinkClass", request.RouteLinkClass, DbType.String),

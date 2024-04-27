@@ -1,6 +1,6 @@
 USE [SecurityDB]
 GO
-/****** Object:  UserDefinedFunction [dbo].[GetChildMenus]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  UserDefinedFunction [dbo].[GetChildMenus]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -19,6 +19,8 @@ BEGIN
 			 AUM.[Id]
             ,AUM.[Name]
 			,AUM.[IsHeader]
+			,AUM.[IsModule]
+			,AUM.[IsComponent]
 			,AUM.[CssClass]
 			,AUM.[RouteLink]
 			,AUM.[RouteLinkClass]
@@ -47,21 +49,7 @@ BEGIN
     )
 END
 GO
-/****** Object:  Table [dbo].[__EFMigrationsHistory]    Script Date: 4/22/2024 9:19:49 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[__EFMigrationsHistory](
-	[MigrationId] [nvarchar](150) NOT NULL,
-	[ProductVersion] [nvarchar](32) NOT NULL,
- CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY CLUSTERED 
-(
-	[MigrationId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[AppUserMenus]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  Table [dbo].[AppUserMenus]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -70,6 +58,8 @@ CREATE TABLE [dbo].[AppUserMenus](
 	[Id] [uniqueidentifier] NOT NULL,
 	[Name] [nvarchar](100) NULL,
 	[IsHeader] [bit] NULL,
+	[IsModule] [bit] NULL,
+	[IsComponent] [bit] NULL,
 	[CssClass] [nvarchar](100) NULL,
 	[RouteLink] [nvarchar](255) NULL,
 	[RouteLinkClass] [nvarchar](200) NULL,
@@ -89,7 +79,7 @@ CREATE TABLE [dbo].[AppUserMenus](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AppUserProfiles]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  Table [dbo].[AppUserProfiles]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -111,7 +101,7 @@ CREATE TABLE [dbo].[AppUserProfiles](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AppUserRoleMenus]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  Table [dbo].[AppUserRoleMenus]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -135,7 +125,7 @@ CREATE TABLE [dbo].[AppUserRoleMenus](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AppUserRoles]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  Table [dbo].[AppUserRoles]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -155,7 +145,7 @@ CREATE TABLE [dbo].[AppUserRoles](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AppUsers]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  Table [dbo].[AppUsers]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -179,7 +169,7 @@ CREATE TABLE [dbo].[AppUsers](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SecurityLog]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  Table [dbo].[SecurityLog]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -218,7 +208,7 @@ REFERENCES [dbo].[AppUserProfiles] ([Id])
 GO
 ALTER TABLE [dbo].[AppUsers] CHECK CONSTRAINT [FK_AppUser_AppUserProfiles]
 GO
-/****** Object:  StoredProcedure [dbo].[SP_CreateUpdateAppUserMenu]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_CreateUpdateAppUserMenu]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -234,6 +224,8 @@ CREATE PROCEDURE [dbo].[SP_CreateUpdateAppUserMenu]
     @Id					UNIQUEIDENTIFIER,
     @Name				NVARCHAR(100),
     @IsHeader			BIT,
+	@IsModule			BIT,
+	@IsComponent		BIT,
 	@CssClass			NVARCHAR(100),
 	@RouteLink			NVARCHAR(255),
 	@RouteLinkClass		NVARCHAR(200),
@@ -260,8 +252,8 @@ BEGIN
 		END
 		ELSE
 		BEGIN
-			INSERT INTO AppUserMenus (Id, Name, IsHeader, CssClass, RouteLink, RouteLinkClass, Icon, Remark, ParentId, DropdownIcon, SerialNo, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate, IsActive)
-			VALUES (@Id, @Name, @IsHeader, @CssClass, @RouteLink, @RouteLinkClass, @Icon, @Remark, @ParentId, @DropdownIcon, @SerialNo, @CreatedBy, GETUTCDATE(), NULL, NULL, @IsActive);
+			INSERT INTO AppUserMenus (Id, Name, IsHeader, IsModule, IsComponent, CssClass, RouteLink, RouteLinkClass, Icon, Remark, ParentId, DropdownIcon, SerialNo, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate, IsActive)
+			VALUES (@Id, @Name, @IsHeader, @IsModule, @IsComponent, @CssClass, @RouteLink, @RouteLinkClass, @Icon, @Remark, @ParentId, @DropdownIcon, @SerialNo, @CreatedBy, GETUTCDATE(), NULL, NULL, @IsActive);
 
 			SELECT @@ROWCOUNT AS 'RowsAffected';
 		END
@@ -271,7 +263,7 @@ BEGIN
     BEGIN
 		IF EXISTS (SELECT 1 FROM AppUserMenus WHERE Id = @Id)
 		BEGIN
-			UPDATE AppUserMenus SET Name = @Name, IsHeader = @IsHeader, CssClass = @CssClass, RouteLink = @RouteLink,
+			UPDATE AppUserMenus SET Name = @Name, IsHeader = @IsHeader,  IsModule = @IsModule, IsComponent = @IsComponent, CssClass = @CssClass, RouteLink = @RouteLink,
 			RouteLinkClass = @RouteLinkClass, Icon = @Icon, Remark = @Remark, ParentId = @ParentId,DropdownIcon = @DropdownIcon,
 			SerialNo = @SerialNo,UpdatedBy = @UpdatedBy,UpdatedDate = GETUTCDATE(),IsActive = @IsActive
 			WHERE [Id] = @Id;
@@ -289,7 +281,7 @@ BEGIN
     END
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_DeleteAppUserMenu]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_DeleteAppUserMenu]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -349,7 +341,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_DeleteUser]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_DeleteUser]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -381,7 +373,7 @@ BEGIN
 	END
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUser]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUser]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -416,7 +408,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserList]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUserList]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -485,7 +477,7 @@ BEGIN
 	EXEC(@QUERY)
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserMenuByUserId]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUserMenuByUserId]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -536,6 +528,8 @@ DECLARE @JsonMenu NVARCHAR(MAX),
          AUM.[Id]
 		,AUM.[Name]
 		,AUM.[IsHeader]
+		,AUM.[IsModule]
+		,AUM.[IsComponent]
 		,AUM.[CssClass]
 		,AUM.[RouteLink]
 		,AUM.[RouteLinkClass]
@@ -569,7 +563,7 @@ DECLARE @JsonMenu NVARCHAR(MAX),
     SELECT @JsonMenu AS JsonMenu;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserMenuPagingWithSearch]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUserMenuPagingWithSearch]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -593,7 +587,7 @@ BEGIN
 	DECLARE @QUERY AS VARCHAR(MAX)='',@ORDER_QUERY AS VARCHAR(MAX)='',@CONDITIONS AS VARCHAR(MAX)='',
 	@PAGINATION AS VARCHAR(MAX)=''
 
-	SET @QUERY='SELECT AUM.Id, AUM.Name,AUM.IsHeader,AUM.CssClass,AUM.RouteLink,AUM.RouteLinkClass,AUM.Icon,AUM.Remark,
+	SET @QUERY='SELECT AUM.Id, AUM.Name,AUM.IsHeader,AUM.IsModule,AUM.IsComponent,AUM.CssClass,AUM.RouteLink,AUM.RouteLinkClass,AUM.Icon,AUM.Remark,
 	AUM.ParentId,AUM.DropdownIcon,AUM.SerialNo,AUM.CreatedBy,AUM.CreatedDate,AUM.UpdatedBy,AUM.UpdatedDate,AUM.IsActive
 	FROM AppUserMenus AUM '
 
@@ -642,7 +636,7 @@ BEGIN
 	EXEC(@QUERY)
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserPagingSearch]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllUserPagingSearch]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -677,7 +671,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetMenuHierarchyByMenuId]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetMenuHierarchyByMenuId]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -699,28 +693,28 @@ BEGIN
 
 	WITH UserMenuCTE AS
 	(
-	     Select	[Id],[Name],[IsHeader] ,[CssClass] ,[RouteLink] ,[RouteLinkClass] ,[Icon] ,[ParentId]
+	     Select	[Id],[Name],[IsHeader] ,[IsModule] ,[IsComponent] ,[CssClass] ,[RouteLink] ,[RouteLinkClass] ,[Icon] ,[ParentId]
 			,[DropdownIcon],[SerialNo] ,[CreatedBy] ,[CreatedDate],[UpdatedBy],[UpdatedDate],[IsActive]
 		 From [AppUserMenus]
 		 Where [Id] = @MenuId
     
 		 UNION ALL
     
-		 Select	AUM.[Id],AUM.[Name],AUM.[IsHeader] ,AUM.[CssClass] ,AUM.[RouteLink] ,AUM.[RouteLinkClass] ,AUM.[Icon] ,AUM.[ParentId]
+		 Select	AUM.[Id],AUM.[Name],AUM.[IsHeader] ,AUM.[IsModule] ,AUM.[IsComponent] ,AUM.[CssClass] ,AUM.[RouteLink] ,AUM.[RouteLinkClass] ,AUM.[Icon] ,AUM.[ParentId]
 			,AUM.[DropdownIcon],AUM.[SerialNo] ,AUM.[CreatedBy] ,AUM.[CreatedDate],AUM.[UpdatedBy],AUM.[UpdatedDate],AUM.[IsActive]
 		 From [AppUserMenus] AUM
 		 JOIN UserMenuCTE AUMC
 		 ON AUM.[Id] = AUMC.[ParentId]
 	)
 
-	Select AUMGround.[Id],AUMGround.[Name],AUMGround.[IsHeader] ,AUMGround.[CssClass] ,AUMGround.[RouteLink] ,AUMGround.[RouteLinkClass] ,AUMGround.[Icon], 
+	Select AUMGround.[Id],AUMGround.[Name],AUMGround.[IsHeader] ,AUMGround.[IsModule], AUMGround.[IsComponent] , AUMGround.[CssClass] ,AUMGround.[RouteLink] ,AUMGround.[RouteLinkClass] ,AUMGround.[Icon], 
 	ISNULL(AUMLevel.[Name], 'No Parent') as ParentName
 	From UserMenuCTE AUMGround
 	LEFT Join UserMenuCTE AUMLevel
 	ON AUMGround.[ParentId] = AUMLevel.[Id]
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetUserById]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetUserById]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -746,7 +740,7 @@ BEGIN
 	WHERE AUP.Id = @Id
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetUserMenuInitialData]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetUserMenuInitialData]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -756,47 +750,119 @@ CREATE PROCEDURE [dbo].[SP_GetUserMenuInitialData]
 AS
 BEGIN
     SET NOCOUNT ON;
-	CREATE TABLE #UserMenuInitialDataTable (
+    CREATE TABLE #UserMenuInitialDataTable
+    (
         parentMenu XML,
         cssClass XML,
-		routeLink XML,
-		routeLinkClass XML,
-		icon XML,
-		dropdownIcon XML
+        routeLink XML,
+        routeLinkClass XML,
+        icon XML,
+        dropdownIcon XML
     );
 
     DECLARE @PMJson XML,
-			@CCJson XML,
-			@RLJson XML,
-			@RLCJson XML,
-			@IconJson XML,
-			@DDIJson XML,
-			@result XML;
+            @CCJson XML,
+            @RLJson XML,
+            @RLCJson XML,
+            @IconJson XML,
+            @DDIJson XML,
+            @result XML;
 
 
-    SET @PMJson = (SELECT [Id] id, [Name] name FROM AppUserMenus WHERE [Name] IS NOT NULL FOR JSON AUTO);
+    SET @PMJson =
+    (
+        SELECT [Id] id,
+               [Name] + CASE
+                            WHEN [IsHeader] = 1
+                                 AND [IsModule] = 0
+                                 AND [IsComponent] = 0 THEN
+                                ' (Header Menu)'
+                            WHEN [IsHeader] = 0
+                                 AND [IsModule] = 1
+                                 AND [IsComponent] = 0 THEN
+                                ' (Module Menu)'
+                            ELSE
+                                ' (Business Menu)'
+                        END AS name
+        FROM AppUserMenus
+        WHERE [Name] IS NOT NULL
+        FOR JSON AUTO
+    );
 
-	SET @CCJson = (SELECT CssClass id, CssClass name FROM AppUserMenus  WHERE [CssClass] IS NOT NULL FOR JSON AUTO);
+    SET @CCJson =
+    (
+        SELECT CssClass id,
+               CssClass name
+        FROM AppUserMenus
+        WHERE [CssClass] IS NOT NULL
+        FOR JSON AUTO
+    );
 
-	SET @RLJson = (SELECT RouteLink id, RouteLink name FROM AppUserMenus  WHERE [RouteLink] IS NOT NULL FOR JSON AUTO);
+    SET @RLJson =
+    (
+        SELECT RouteLink id,
+               RouteLink name
+        FROM AppUserMenus
+        WHERE [RouteLink] IS NOT NULL
+        FOR JSON AUTO
+    );
 
-	SET @RLCJson = (SELECT RouteLinkClass id, RouteLinkClass name FROM AppUserMenus  WHERE [RouteLinkClass] IS NOT NULL FOR JSON AUTO);
+    SET @RLCJson =
+    (
+        SELECT RouteLinkClass id,
+               RouteLinkClass name
+        FROM AppUserMenus
+        WHERE [RouteLinkClass] IS NOT NULL
+        FOR JSON AUTO
+    );
 
-	SET @IconJson = (SELECT Icon id, Icon name FROM AppUserMenus  WHERE [Icon] IS NOT NULL FOR JSON AUTO);
+    SET @IconJson =
+    (
+        SELECT Icon id,
+               Icon name
+        FROM AppUserMenus
+        WHERE [Icon] IS NOT NULL
+        FOR JSON AUTO
+    );
 
-	SET @DDIJson = (SELECT DropdownIcon id, DropdownIcon name FROM AppUserMenus  WHERE [DropdownIcon] IS NOT NULL FOR JSON AUTO);
+    SET @DDIJson =
+    (
+        SELECT DropdownIcon id,
+               DropdownIcon name
+        FROM AppUserMenus
+        WHERE [DropdownIcon] IS NOT NULL
+        FOR JSON AUTO
+    );
 
-	INSERT INTO #UserMenuInitialDataTable (parentMenu, cssClass, routeLink, routeLinkClass, icon, dropdownIcon)
-    SELECT @PMJson, @CCJson, @RLJson, @RLCJson, @IconJson, @DDIJson
+    INSERT INTO #UserMenuInitialDataTable
+    (
+        parentMenu,
+        cssClass,
+        routeLink,
+        routeLinkClass,
+        icon,
+        dropdownIcon
+    )
+    SELECT @PMJson,
+           @CCJson,
+           @RLJson,
+           @RLCJson,
+           @IconJson,
+           @DDIJson
 
-	SET @result = (SELECT * FROM #UserMenuInitialDataTable  FOR JSON PATH, WITHOUT_ARRAY_WRAPPER);
+    SET @result =
+    (
+        SELECT *
+        FROM #UserMenuInitialDataTable
+        FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+    );
 
-	DROP TABLE #UserMenuInitialDataTable;
+    DROP TABLE #UserMenuInitialDataTable;
 
-	SELECT @result AS result;
+    SELECT @result AS result;
 END;
 GO
-/****** Object:  StoredProcedure [dbo].[SP_SaveUpdateAppUser]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_SaveUpdateAppUser]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -841,7 +907,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_SaveUpdateAppUserProfile]    Script Date: 4/22/2024 9:19:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_SaveUpdateAppUserProfile]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
