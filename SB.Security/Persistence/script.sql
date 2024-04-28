@@ -281,6 +281,72 @@ BEGIN
     END
 END
 GO
+/****** Object:  StoredProcedure [dbo].[SP_CreateUpdateAppUserRoleMenu]    Script Date: 4/28/2024 5:26:58 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Sreemonta Bhowmik
+-- Create date: 28.04.2024
+-- Description:	This SP is used to assign application user menus to a role or update the application user menus to a certain role.
+-- =============================================
+CREATE PROCEDURE [dbo].[SP_CreateUpdateAppUserRoleMenu]
+	-- Add the parameters for the stored procedure here
+	@ActionName			VARCHAR(10), --Save Update
+    @Id					UNIQUEIDENTIFIER,
+    @AppUserRoleId		UNIQUEIDENTIFIER,
+    @AppUserMenuId		UNIQUEIDENTIFIER,
+    @IsView				BIT,
+    @IsCreate			BIT,
+    @IsUpdate			BIT,
+    @IsDelete			BIT,
+    @CreatedBy			NVARCHAR(MAX),
+	@CreatedDate		DATETIME2(7),
+	@UpdatedBy			NVARCHAR(MAX),
+	@UpdatedDate		DATETIME2(7),
+    @IsActive			BIT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+	IF @ActionName = 'Save' -- Save
+    BEGIN
+		IF NOT EXISTS (SELECT 1 FROM [dbo].[AppUserRoleMenus] WHERE [Id] = @Id)
+		BEGIN
+			SELECT 0 AS 'RowsAffected';
+		END
+		ELSE
+		BEGIN
+			INSERT INTO [dbo].[AppUserRoleMenus] ([Id],[AppUserRoleId],[AppUserMenuId], [IsView], [IsCreate],[IsUpdate],[IsDelete],[CreatedBy],[CreatedDate],[UpdatedBy],[UpdatedDate],[IsActive]) 
+			VALUES (@Id,@AppUserRoleId,@AppUserMenuId,@IsView,@IsCreate,@IsUpdate,@IsDelete,@CreatedBy,GETUTCDATE(), NULL, NULL, @IsActive);
+
+			SELECT @@ROWCOUNT AS 'RowsAffected';
+		END
+        
+    END
+	ELSE IF @ActionName = 'Update' -- Update
+    BEGIN
+		IF EXISTS (SELECT 1 FROM [dbo].[AppUserRoleMenus] WHERE [Id] = @Id)
+		BEGIN
+			UPDATE [dbo].[AppUserRoleMenus] SET [AppUserRoleId] = @AppUserRoleId,[AppUserMenuId] = @AppUserMenuId,[IsView] = @IsView,[IsCreate] = @IsCreate,
+					[IsUpdate] = @IsUpdate,[IsDelete] = @IsDelete,[UpdatedBy] = @UpdatedBy,[UpdatedDate] = GETUTCDATE(),[IsActive] = @IsActive
+			WHERE [Id] = @Id;
+		
+			SELECT @@ROWCOUNT AS 'RowsAffected';
+		END
+		ELSE
+		BEGIN
+			SELECT 0 AS 'RowsAffected';
+		END
+    END
+    ELSE
+    BEGIN
+        RAISERROR('Invalid action flag. Must be either ''Save'' or ''Update''.', 16, 1);
+    END
+END
+GO
 /****** Object:  StoredProcedure [dbo].[SP_DeleteAppUserMenu]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -757,7 +823,8 @@ BEGIN
         routeLink XML,
         routeLinkClass XML,
         icon XML,
-        dropdownIcon XML
+        dropdownIcon XML,
+		nextMenuSlNo INT
     );
 
     DECLARE @PMJson XML,
@@ -766,8 +833,8 @@ BEGIN
             @RLCJson XML,
             @IconJson XML,
             @DDIJson XML,
-            @result XML;
-
+            @result XML,
+			@nextMenuSlNo INT;
 
     SET @PMJson =
     (
@@ -834,6 +901,8 @@ BEGIN
         FOR JSON AUTO
     );
 
+	SET @nextMenuSlNo = (SELECT  MAX(SerialNo)  AS SerialNo FROM AppUserMenus)
+
     INSERT INTO #UserMenuInitialDataTable
     (
         parentMenu,
@@ -841,14 +910,16 @@ BEGIN
         routeLink,
         routeLinkClass,
         icon,
-        dropdownIcon
+        dropdownIcon,
+		nextMenuSlNo
     )
     SELECT @PMJson,
            @CCJson,
            @RLJson,
            @RLCJson,
            @IconJson,
-           @DDIJson
+           @DDIJson,
+		   @nextMenuSlNo
 
     SET @result =
     (
