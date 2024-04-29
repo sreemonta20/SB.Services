@@ -309,10 +309,10 @@
         public const string DELETE_ROLE_ROUTE_NAME = "deleteRole";
         public const string GET_ALL_MENU_BY_USER_ID_ROUTE_NAME = "getAllMenuByUserId";
         public const string GET_ALL_USER_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME = "getAllUserMenuPagingWithSearchTerm";
-        public const string GET_USER_MENU_INITIAL_DATA_ROUTE_NAME = "getUserMenuInitialData";
+        public const string GET_USER_MENU_INITIAL_DATA_ROUTE_NAME = "getAppUserRoleMenuInitialData";
         public const string GET_ALL_PARENT_MENUS_ROUTE_NAME = "getAllParentMenus";
 
-        public const string GETALL_USER_MENU_PAGING_SEARCH_SP_NAME = "SP_GetAllUserMenuPagingWithSearch";
+        public const string GETALL_USER_MENU_PAGING_SEARCH_SP_NAME = "SP_GetAllAppUserMenusPagingWithSearch";
 
         public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_SUCCESS_MSG = "User menu list retrieved successfully.";
         public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_FAILED_MSG = "Retrieving user menu list failed.";
@@ -352,8 +352,8 @@
 
 
 
-        public const string GET_GET_ALL_MENU_BY_USER_ID_SP_NAME = "SP_GetAllUserMenuByUserId";
-        public const string GET_USER_MENU_INITIAL_DATA_SP_NAME = "SP_GetUserMenuInitialData";
+        public const string GET_GET_ALL_MENU_BY_USER_ID_SP_NAME = "SP_GetAllAppUserMenusByUserId";
+        public const string GET_USER_MENU_INITIAL_DATA_SP_NAME = "SP_GetAppUserRoleMenuInitialData";
 
         public const string POST_SAVE_UPDATE_USER_MENU_SP_NAME = "SP_CreateUpdateAppUserMenu";
         public const string DELETE_USER_MENU_SP_NAME = "SP_DeleteAppUserMenu";
@@ -376,11 +376,11 @@
         #endregion
 
         #region SP
-        public const string GET_USER_BY_ID_SP_NAME = "SP_GetUserById";
-        public const string GET_ALL_USER_SP_NAME = "SP_GetAllUser";
+        public const string GET_USER_BY_ID_SP_NAME = "SP_GetAppUserProfileById";
+        public const string GET_ALL_USER_SP_NAME = "SP_GetAllAppUserProfiles";
         public const string POST_SAVE_UPDATE_APP_USER_PROFILE_SP_NAME = "SP_SaveUpdateAppUserProfile";
         public const string POST_SAVE_UPDATE_APP_USER_SP_NAME = "SP_SaveUpdateAppUser";
-        public const string DELETE_USER_SP_NAME = "SP_DeleteUser";
+        public const string DELETE_USER_SP_NAME = "SP_DeleteAppUserProfile";
         #endregion
 
     }

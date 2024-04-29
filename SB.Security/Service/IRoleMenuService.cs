@@ -20,7 +20,7 @@ namespace SB.Security.Service
         Task<DataResponse> DeleteRoleAsync(string roleId);
         Task<DataResponse> GetAllMenuByUserIdAsync(string? userId);
         Task<PagingResult<AppUserMenu>> GetAllUserMenuPagingWithSearchAsync(PagingSearchFilter oPagingSearchFilter);
-        Task<DataResponse> GetUserMenuInitialDataAsync();
+        Task<DataResponse> GetAppUserRoleMenuInitialDataAsync();
         Task<DataResponse> GetAllParentMenusAsync();
         Task<DataResponse> SaveUpdateAppUserMenuAsync(AppUserMenuRequest request);
         Task<DataResponse> DeleteAppUserMenuAsync(string menuId);

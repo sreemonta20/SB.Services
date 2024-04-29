@@ -407,7 +407,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_DeleteUser]    Script Date: 4/27/2024 8:28:37 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_DeleteAppUserProfile]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -417,8 +417,8 @@ GO
 -- Create date: 26.04.2023
 -- Description:	Delete a user
 -- =============================================
---EXEC SP_DeleteUser '10BB4212-AC20-4AC5-A3F6-B5FFF08338C8'
-CREATE PROCEDURE [dbo].[SP_DeleteUser]
+--EXEC SP_DeleteAppUserProfile '10BB4212-AC20-4AC5-A3F6-B5FFF08338C8'
+CREATE PROCEDURE [dbo].[SP_DeleteAppUserProfile]
 (
    @Id			UNIQUEIDENTIFIER,
    @IsDelete	BIT
@@ -439,7 +439,7 @@ BEGIN
 	END
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUser]    Script Date: 4/27/2024 8:28:37 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserProfiles]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -449,11 +449,11 @@ GO
 -- Create date: 25.04.2023
 -- Description:	Get all users
 -- =============================================
---EXEC SP_GetAllUser 1, 1
---EXEC SP_GetAllUser 2, 1
---EXEC SP_GetAllUser 1, 2
---EXEC SP_GetAllUser 2, 2
-CREATE PROCEDURE [dbo].[SP_GetAllUser] 
+--EXEC SP_GetAllAppUserProfiles 1, 1
+--EXEC SP_GetAllAppUserProfiles 2, 1
+--EXEC SP_GetAllAppUserProfiles 1, 2
+--EXEC SP_GetAllAppUserProfiles 2, 2
+CREATE PROCEDURE [dbo].[SP_GetAllAppUserProfiles] 
 	@PageIndex INT, @PageSize INT
 	--, @GetTotal BIT, @TotalRecords INT OUTPUT 
 AS
@@ -474,7 +474,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserList]    Script Date: 4/27/2024 8:28:37 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserProfileList]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -484,8 +484,8 @@ GO
 -- Create date: 25.04.2023
 -- Description:	Get all users list
 -- =============================================
---EXEC SP_GetAllUserList 's','Id','ASC',1,2
-CREATE     PROCEDURE [dbo].[SP_GetAllUserList]
+--EXEC SP_GetAllAppUserProfileList 's','Id','ASC',1,2
+CREATE     PROCEDURE [dbo].[SP_GetAllAppUserProfileList]
 @SearchTerm AS VARCHAR(50)='',
 @SortColumnName AS VARCHAR(50)='',
 @SortColumnDirection AS VARCHAR(50)='',
@@ -543,7 +543,7 @@ BEGIN
 	EXEC(@QUERY)
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserMenuByUserId]    Script Date: 4/27/2024 8:28:37 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserMenusByUserId]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -553,9 +553,9 @@ GO
 -- Create date: 14.07.2023
 -- Description: To generate parent menu.
 -- =============================================
---EXEC SP_GetAllUserMenuByUserId 'C047D662-9F0E-4358-B323-15EC3081312C'
---EXEC SP_GetAllUserMenuByUserId 'EFEDC118-3459-4C2E-9158-AD69196A59E0'
-CREATE PROCEDURE [dbo].[SP_GetAllUserMenuByUserId]
+--EXEC SP_GetAllAppUserMenusByUserId 'C047D662-9F0E-4358-B323-15EC3081312C'
+--EXEC SP_GetAllAppUserMenusByUserId 'EFEDC118-3459-4C2E-9158-AD69196A59E0'
+CREATE PROCEDURE [dbo].[SP_GetAllAppUserMenusByUserId]
 @UserId				UNIQUEIDENTIFIER
 AS
 BEGIN
@@ -629,7 +629,7 @@ DECLARE @JsonMenu NVARCHAR(MAX),
     SELECT @JsonMenu AS JsonMenu;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserMenuPagingWithSearch]    Script Date: 4/27/2024 8:28:37 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserMenusPagingWithSearch]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -639,10 +639,10 @@ GO
 -- Create date: 25.04.2023
 -- Description:	Get all user menu list using paging with search
 -- =============================================
---EXEC SP_GetAllUserMenuPagingWithSearch '','','',1,10
---EXEC SP_GetAllUserMenuPagingWithSearch 'nav-icon fas fa-cog','Icon','ASC',1,2
---EXEC SP_GetAllUserMenuPagingWithSearch 'User','','ASC',1,2 
-CREATE PROCEDURE [dbo].[SP_GetAllUserMenuPagingWithSearch]
+--EXEC SP_GetAllAppUserMenusPagingWithSearch '','','',1,10
+--EXEC SP_GetAllAppUserMenusPagingWithSearch 'nav-icon fas fa-cog','Icon','ASC',1,2
+--EXEC SP_GetAllAppUserMenusPagingWithSearch 'User','','ASC',1,2 
+CREATE PROCEDURE [dbo].[SP_GetAllAppUserMenusPagingWithSearch]
 @SearchTerm AS VARCHAR(50)='',
 @SortColumnName AS VARCHAR(50)='',
 @SortColumnDirection AS VARCHAR(50)='',
@@ -702,13 +702,13 @@ BEGIN
 	EXEC(@QUERY)
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllUserPagingSearch]    Script Date: 4/27/2024 8:28:37 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserProfilesPagingSearch]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
---EXEC SP_GetAllUserPagingSearch 's', 1, 10, ''
-CREATE PROCEDURE [dbo].[SP_GetAllUserPagingSearch]
+--EXEC SP_GetAllAppUserProfilesPagingSearch 's', 1, 10, ''
+CREATE PROCEDURE [dbo].[SP_GetAllAppUserProfilesPagingSearch]
       @SearchTerm VARCHAR(100) = ''
       ,@PageIndex INT = 1
       ,@PageSize INT = 10
@@ -737,7 +737,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetMenuHierarchyByMenuId]    Script Date: 4/27/2024 8:28:37 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAppUserMenuHierarchyByMenuId]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -747,9 +747,9 @@ GO
 -- Create date: 28.07.2023
 -- Description: To generate parent menu.
 -- =============================================
---EXEC SP_GetMenuHierarchyByMenuId '60AADC18-6B91-4CEE-ACE7-97700B685C98'
---EXEC SP_GetMenuHierarchyByMenuId '52F916CC-6C4D-4B4F-B884-4E89F1489B8D'
-CREATE PROCEDURE [dbo].[SP_GetMenuHierarchyByMenuId] 
+--EXEC SP_GetAppUserMenuHierarchyByMenuId '60AADC18-6B91-4CEE-ACE7-97700B685C98'
+--EXEC SP_GetAppUserMenuHierarchyByMenuId '52F916CC-6C4D-4B4F-B884-4E89F1489B8D'
+CREATE PROCEDURE [dbo].[SP_GetAppUserMenuHierarchyByMenuId] 
 	@MenuId				UNIQUEIDENTIFIER
 AS
 BEGIN
@@ -780,7 +780,7 @@ BEGIN
 	ON AUMGround.[ParentId] = AUMLevel.[Id]
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetUserById]    Script Date: 4/27/2024 8:28:37 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAppUserProfileById]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -790,8 +790,8 @@ GO
 -- Create date: 24.04.2023
 -- Description:	Get user details by supplying ID
 -- =============================================
---EXEC SP_GetUserById 'D670A7BA-F10D-4241-8230-6CD8E0A2B7C0'
-CREATE PROCEDURE [dbo].[SP_GetUserById] 
+--EXEC SP_GetAppUserProfileById 'D670A7BA-F10D-4241-8230-6CD8E0A2B7C0'
+CREATE PROCEDURE [dbo].[SP_GetAppUserProfileById] 
 	-- Add the parameters for the stored procedure here
 	@Id UNIQUEIDENTIFIER
 AS
@@ -806,35 +806,46 @@ BEGIN
 	WHERE AUP.Id = @Id
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetUserMenuInitialData]    Script Date: 4/27/2024 8:28:37 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAppUserRoleMenuInitialData]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
---EXEC SP_GetUserMenuInitialData
-CREATE PROCEDURE [dbo].[SP_GetUserMenuInitialData]
+--EXEC SP_GetAppUserRoleMenuInitialData
+CREATE PROCEDURE [dbo].[SP_GetAppUserRoleMenuInitialData]
 AS
 BEGIN
     SET NOCOUNT ON;
-    CREATE TABLE #UserMenuInitialDataTable
+    CREATE TABLE #AppUserRoleMenuInitTBL
     (
-        parentMenu XML,
-        cssClass XML,
-        routeLink XML,
-        routeLinkClass XML,
-        icon XML,
-        dropdownIcon XML,
-		nextMenuSlNo INT
+		userRoles		XML,
+        parentMenu		XML,
+        cssClass		XML,
+        routeLink		XML,
+        routeLinkClass	XML,
+        icon			XML,
+        dropdownIcon	XML,
+		nextMenuSlNo	INT
     );
 
-    DECLARE @PMJson XML,
-            @CCJson XML,
-            @RLJson XML,
-            @RLCJson XML,
-            @IconJson XML,
-            @DDIJson XML,
-            @result XML,
-			@nextMenuSlNo INT;
+    DECLARE @URJson			XML,
+			@PMJson			XML,
+            @CCJson			XML,
+            @RLJson			XML,
+            @RLCJson		XML,
+            @IconJson		XML,
+            @DDIJson		XML,
+            @result			XML,
+			@nextMenuSlNo	INT;
+
+	SET @URJson =
+    (
+        SELECT [Id] id,
+               [RoleName] name
+        FROM AppUserRoles
+        WHERE [RoleName] IS NOT NULL
+        FOR JSON AUTO
+    );
 
     SET @PMJson =
     (
@@ -903,8 +914,9 @@ BEGIN
 
 	SET @nextMenuSlNo = (SELECT  MAX(SerialNo)  AS SerialNo FROM AppUserMenus)
 
-    INSERT INTO #UserMenuInitialDataTable
+    INSERT INTO #AppUserRoleMenuInitTBL
     (
+		userRoles,
         parentMenu,
         cssClass,
         routeLink,
@@ -913,7 +925,8 @@ BEGIN
         dropdownIcon,
 		nextMenuSlNo
     )
-    SELECT @PMJson,
+    SELECT @URJson,
+		   @PMJson,
            @CCJson,
            @RLJson,
            @RLCJson,
@@ -924,14 +937,16 @@ BEGIN
     SET @result =
     (
         SELECT *
-        FROM #UserMenuInitialDataTable
+        FROM #AppUserRoleMenuInitTBL
         FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
     );
 
-    DROP TABLE #UserMenuInitialDataTable;
+    DROP TABLE #AppUserRoleMenuInitTBL;
 
     SELECT @result AS result;
 END;
+
+
 GO
 /****** Object:  StoredProcedure [dbo].[SP_SaveUpdateAppUser]    Script Date: 4/27/2024 8:28:37 PM ******/
 SET ANSI_NULLS ON
@@ -1018,5 +1033,73 @@ BEGIN
     BEGIN
         RAISERROR('Invalid action flag. Must be either ''Save'' or ''Update''.', 16, 1);
     END
+END
+GO
+/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserRoleMenusPagingWithSearch]    Script Date: 4/29/2024 9:22:19 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Sreemonta Bhowmik
+-- Create date: 25.04.2023
+-- Description:	Get all user role menu list using paging with search
+-- =============================================
+--EXEC SP_GetAllAppUserRoleMenusPagingWithSearch '','','',1,10
+--EXEC SP_GetAllAppUserRoleMenusPagingWithSearch 'User','','ASC',1,2
+--EXEC SP_GetAllAppUserRoleMenusPagingWithSearch 'Admin','','ASC',1,2 
+CREATE PROCEDURE [dbo].[SP_GetAllAppUserRoleMenusPagingWithSearch]
+@SearchTerm AS VARCHAR(50)='',
+@SortColumnName AS VARCHAR(50)='',
+@SortColumnDirection AS VARCHAR(50)='',
+@PageIndex AS INT=0,
+@PageSize AS INT=10
+AS
+BEGIN
+	DECLARE @QUERY AS VARCHAR(MAX)='',@ORDER_QUERY AS VARCHAR(MAX)='',@CONDITIONS AS VARCHAR(MAX)='',
+	@PAGINATION AS VARCHAR(MAX)=''
+
+	SET @QUERY='SELECT AURM.Id  AS AppUserRoleMenuId, AURM.AppUserRoleId, AUR.RoleName, AURM.AppUserMenuId, AUM.Name AS [MenuName],AURM.IsView,AURM.IsCreate,AURM.IsUpdate,AURM.IsDelete,AURM.CreatedBy,AURM.CreatedDate,AURM.UpdatedBy,AURM.UpdatedDate,AURM.IsActive
+	FROM AppUserRoleMenus AURM 
+	INNER JOIN AppUserRoles AUR ON AUR.Id = AURM.AppUserRoleId
+	INNER JOIN AppUserMenus AUM ON AUM.Id = AURM.AppUserMenuId'
+
+	-- SEARCH OPERATION
+	IF(ISNULL(@SearchTerm,'')<>'')
+	BEGIN
+		IF(ISDATE(@SearchTerm)=1) 
+			SET @CONDITIONS=' WHERE CAST(CreatedBy AS DATE)=CAST('+@SearchTerm+'AS DATE)'
+		ELSE
+		BEGIN
+			SET @CONDITIONS='
+			WHERE
+			AURM.Id LIKE ''%'+@SearchTerm+'%''
+			OR AUR.RoleName LIKE ''%'+@SearchTerm+'%''
+			OR AUM.Name LIKE ''%'+@SearchTerm+'%''
+		'
+		END
+	END
+
+	-- SORT OPERATION
+	IF(ISNULL(@SortColumnName,'')<>'' AND ISNULL(@SortColumnDirection,'')<>'')
+	BEGIN
+		SET @ORDER_QUERY=' ORDER BY '+@SortColumnName+' '+@SortColumnDirection
+	END
+	ELSE SET @ORDER_QUERY=' ORDER BY AURM.Id ASC'
+
+	-- PAGINATION OPERATION
+	IF(@PageSize>0)
+	BEGIN
+		SET @PAGINATION=' OFFSET '+(CAST(((@PageIndex-1)*@PageSize) AS varchar(10)))+' ROWS
+		FETCH NEXT '+(CAST(@PageSize AS varchar(10)))+' ROWS ONLY'
+	END
+
+	IF(@CONDITIONS<>'') SET @QUERY+=@CONDITIONS
+	IF(@ORDER_QUERY<>'') SET @QUERY+=@ORDER_QUERY
+	IF(@PAGINATION<>'') SET @QUERY+=@PAGINATION
+
+	--PRINT(@CONDITIONS)
+	PRINT(@QUERY)
+	EXEC(@QUERY)
 END
 GO

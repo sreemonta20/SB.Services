@@ -308,7 +308,7 @@ namespace SB.Security.Controllers
             return response;
         }
 
-        // GET api/RoleMenu/getUserMenuInitialData
+        // GET api/RoleMenu/getAppUserRoleMenuInitialData
 
         /// <summary>
         /// This method used to get all list data, which are needed to be loaded during the user form initialization.
@@ -319,7 +319,7 @@ namespace SB.Security.Controllers
         [HttpGet]
         [Route(ConstantSupplier.GET_USER_MENU_INITIAL_DATA_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<object> GetUserMenuInitialData()
+        public async Task<object> GetAppUserRoleMenuInitialData()
         {
             _securityLogService.LogInfo(ConstantSupplier.GETUSERMENUINITIALDATA_STARTED_INFO_MSG);
             DataResponse response;
@@ -327,7 +327,7 @@ namespace SB.Security.Controllers
             try
             {
                 #region ADO.NET Codeblock
-                response = await _roleMenuService.GetUserMenuInitialDataAsync();
+                response = await _roleMenuService.GetAppUserRoleMenuInitialDataAsync();
                 #endregion
             }
             catch (Exception Ex)
