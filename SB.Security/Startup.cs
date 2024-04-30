@@ -305,7 +305,7 @@ namespace SB.Security
                     services.AddDbContext<SecurityDBContext>(options => options.UseSqlServer(appSettings?.ConnectionStrings?.ProdSqlConnectionString));
 
                     // Register Dapper in the service collection
-                    services.AddScoped<IDbConnection>(coptions => new SqlConnection(appSettings?.ConnectionStrings?.ProdSqlConnectionString));
+                    services.AddTransient<IDbConnection>(coptions => new SqlConnection(appSettings?.ConnectionStrings?.ProdSqlConnectionString));
                     break;
                 case ConstantSupplier.ORACLE:
                     // Configure Entity Framework with Oracle

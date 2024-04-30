@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Dapper;
+using MailKit.Search;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
@@ -16,7 +18,9 @@ using SB.Security.Persistence;
 using System;
 using System.Collections.Immutable;
 using System.Data;
+using System.Drawing.Printing;
 using System.Net;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SB.Security.Service
 {
@@ -28,12 +32,22 @@ namespace SB.Security.Service
     {
         #region Variable declaration & constructor initialization
         public IConfiguration _configuration;
-        //private readonly SBSecurityDBContext _context;
-        private readonly SecurityDBContext _context;
+        
         private readonly IEmailService _emailService;
         private readonly AppSettings? _appSettings;
         private readonly ISecurityLogService _securityLogService;
+        /// <summary>
+        /// ADO.NET Database manager
+        /// </summary>
         private readonly IDatabaseManager _dbmanager;
+        /// <summary>
+        /// Entity Framework Database context
+        /// </summary>
+        private readonly SecurityDBContext _context;
+        /// <summary>
+        /// Dapper Database connection
+        /// </summary>
+        private readonly IDbConnection _dbConnection;
 
         /// <summary>
         /// 
@@ -44,15 +58,17 @@ namespace SB.Security.Service
         /// <param name="options"></param>
         /// <param name="securityLogService"></param>
         public RoleMenuService(IConfiguration config, SecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options,
-        ISecurityLogService securityLogService, IDatabaseManager dbManager)
+        ISecurityLogService securityLogService, IDatabaseManager dbManager, IDbConnection dbConnection)
         {
             _configuration = config;
-            _context = context;
             _emailService = emailService;
             _appSettings = options.Value;
             _securityLogService = securityLogService;
             _dbmanager = dbManager;
             _dbmanager.InitializeDatabase(_appSettings?.ConnectionStrings?.ProdSqlConnectionString, _appSettings?.ConnectionProvider);
+            _context = context;
+            _dbConnection = dbConnection;
+
         }
         #endregion
 
@@ -719,13 +735,53 @@ namespace SB.Security.Service
                     _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
                     return oDataResponse;
                 }
-                
+
             }
             catch (Exception)
             {
                 throw;
             }
             return oDataResponse;
+        }
+        #endregion
+
+        #region All AppUserRoleMenu related methods
+        public async Task<PagingResult<AppUserRoleMenuResponse>?> GetAllAppUserRoleMenusPagingWithSearchAsync(PagingSearchFilter paramRequest)
+        {
+            try
+            {
+                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+                var parameters = new
+                {
+                    SearchTerm = paramRequest.SearchTerm?? "",
+                    SortColumnName = paramRequest.SortColumnName ?? "",
+                    SortColumnDirection = paramRequest.SortColumnDirection ?? "",
+                    PageIndex = paramRequest.PageNumber,
+                    PageSize = paramRequest.PageSize
+                };
+
+                var results = await _dbConnection.QueryAsync<AppUserRoleMenuResponse>(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_SP_NAME, parameters,commandType: CommandType.StoredProcedure);
+                if (results.Any())
+                {
+                    foreach (var result in results)
+                    {
+                        result.IsView = result.IsView ?? false;
+                        result.IsCreate = result.IsCreate ?? false;
+                        result.IsUpdate = result.IsUpdate ?? false;
+                        result.IsDelete = result.IsDelete ?? false;
+                    }
+                    PagingResult<AppUserRoleMenuResponse>? oAppUserRoleMenuResult = Utilities.GetPagingResult(results.ToList(), paramRequest.PageNumber, paramRequest.PageSize);
+                    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(oAppUserRoleMenuResult, Formatting.Indented)));
+                    return oAppUserRoleMenuResult;
+                }
+
+                return null;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
         #endregion
     }

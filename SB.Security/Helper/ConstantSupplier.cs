@@ -240,6 +240,15 @@
         public const string SERVICE_DELETE_APP_USER_MENU_REQ_MSG = "DeleteUserMenuAsync (Role Menu service) method request is: \n{0}\n";
         public const string SERVICE_DELETE_APP_USER_MENU_RES_MSG = "DeleteUserMenuAsync (Role Menu service) method response is: \n{0}\n";
         public const string DELETE_APP_USER_MENU_RES_MSG = "DeleteUserMenu api method response is: \n{0}\n";
+
+        //api/RoleMenu/getAllAppUserRoleMenuPagingWithSearchTerm
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_STARTED_INFO_MSG = "GetAllAppUserRoleMenuPagingWithSearchTerm api method started.\n";
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG = "GetAllAppUserRoleMenuPagingWithSearchTerm api method request is: \n{0}\n";
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_EXCEPTION_MSG = "GetAllAppUserRoleMenuPagingWithSearchTerm Exception below:: \n{0}\n";
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_INNER_EXCEPTION_MSG = "GetAllAppUserRoleMenuPagingWithSearchTerm Inner Exception below:: \n{0}\n";
+        public const string SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG = "GetAllAppUserRoleMenusPagingWithSearchAsync (RoleMenu service) method request is: \n{0}\n";
+        public const string SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG = "GetAllAppUserRoleMenusPagingWithSearchAsync (RoleMenu service) method response is: \n{0}\n";
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG = "GetAllAppUserRoleMenuPagingWithSearchTerm api method response is: \n{0}\n";
         #endregion
 
         #region Auth Controller
@@ -320,6 +329,14 @@
 
         public const string POST_SAVE_UPDATE_USER_MENU_ROUTE_NAME = "saveUpdateUserMenu";
         public const string DELETE_USER_MENU_ROUTE_NAME = "deleteUserMenu";
+
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME = "getAllAppUserRoleMenuPagingWithSearchTerm";
+
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_SP_NAME = "SP_GetAllAppUserRoleMenusPagingWithSearch";
+
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RESULT_SUCCESS_MSG = "App user role menu list retrieved successfully.";
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RESULT_FAILED_MSG = "Retrieving app user role menu list failed.";
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG = "Retrieving app user role menu list is found empty.";
         #endregion
 
         #region Role Menu Service

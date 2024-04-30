@@ -1059,7 +1059,7 @@ BEGIN
 	DECLARE @QUERY AS VARCHAR(MAX)='',@ORDER_QUERY AS VARCHAR(MAX)='',@CONDITIONS AS VARCHAR(MAX)='',
 	@PAGINATION AS VARCHAR(MAX)=''
 
-	SET @QUERY='SELECT AURM.Id  AS AppUserRoleMenuId, AURM.AppUserRoleId, AUR.RoleName, AURM.AppUserMenuId, AUM.Name AS [MenuName],AURM.IsView,AURM.IsCreate,AURM.IsUpdate,AURM.IsDelete,AURM.CreatedBy,AURM.CreatedDate,AURM.UpdatedBy,AURM.UpdatedDate,AURM.IsActive
+	SET @QUERY='SELECT AURM.Id  AS Id, AURM.AppUserRoleId, AUR.RoleName, AURM.AppUserMenuId, AUM.Name AS [MenuName],AURM.IsView,AURM.IsCreate,AURM.IsUpdate,AURM.IsDelete,AURM.CreatedBy,AURM.CreatedDate,AURM.UpdatedBy,AURM.UpdatedDate,AURM.IsActive
 	FROM AppUserRoleMenus AURM 
 	INNER JOIN AppUserRoles AUR ON AUR.Id = AURM.AppUserRoleId
 	INNER JOIN AppUserMenus AUM ON AUM.Id = AURM.AppUserMenuId'
