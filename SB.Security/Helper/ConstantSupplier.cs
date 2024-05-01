@@ -328,7 +328,7 @@
         public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG = "Retrieving user menu list is found empty.";
 
         public const string POST_SAVE_UPDATE_USER_MENU_ROUTE_NAME = "saveUpdateUserMenu";
-        public const string DELETE_USER_MENU_ROUTE_NAME = "deleteUserMenu";
+        public const string DELETE_USER_MENU_ROUTE_NAME = "deleteAppUserMenu";
 
         public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME = "getAllAppUserRoleMenuPagingWithSearchTerm";
 

@@ -349,16 +349,21 @@ namespace SB.Security.Middlewares
                 "/api/Auth/revoke",
                 "/api/User/getAllUsers",
                 "/api/User/getUserbyId",
-                "/api/User/registerUser",
-                "/api/User/deleteUser",
+                "/api/User/createUpdateAppUserProfile",
+                "/api/User/deletAppUserProfile",
+                "/api/User/createUpdateAppUser",
                 "/api/RoleMenu/getAllRoles",
                 "/api/RoleMenu/getAllRolesPagination",
                 "/api/RoleMenu/getRoleById",
-                "/api/RoleMenu/saveUpdateRole",
+                "/api/RoleMenu/createUpdateRole",
                 "/api/RoleMenu/deleteRole",
-                "/api/RoleMenu/getAllUserMenuPagingWithSearch",
+                "/api/RoleMenu/getAllUserMenuPagingWithSearchTerm",
                 "/api/RoleMenu/getAllMenuByUserId",
-                "/api/RoleMenu/getAllParentMenus"
+                "api/RoleMenu/getAppUserRoleMenuInitialData",
+                "/api/RoleMenu/getAllParentMenus",
+                "/api/RoleMenu/saveUpdateUserMenu",
+                "/api/RoleMenu/deleteAppUserMenu",
+                "/api/RoleMenu/getAllAppUserRoleMenuPagingWithSearchTerm"
             };
             return excludeURL;
         }
