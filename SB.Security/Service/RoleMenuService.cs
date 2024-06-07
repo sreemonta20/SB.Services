@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Dapper;
+using MailKit.Search;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
@@ -16,7 +18,9 @@ using SB.Security.Persistence;
 using System;
 using System.Collections.Immutable;
 using System.Data;
+using System.Drawing.Printing;
 using System.Net;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SB.Security.Service
 {
@@ -28,12 +32,22 @@ namespace SB.Security.Service
     {
         #region Variable declaration & constructor initialization
         public IConfiguration _configuration;
-        //private readonly SBSecurityDBContext _context;
-        private readonly SecurityDBContext _context;
+        
         private readonly IEmailService _emailService;
         private readonly AppSettings? _appSettings;
         private readonly ISecurityLogService _securityLogService;
+        /// <summary>
+        /// ADO.NET Database manager
+        /// </summary>
         private readonly IDatabaseManager _dbmanager;
+        /// <summary>
+        /// Entity Framework Database context
+        /// </summary>
+        private readonly SecurityDBContext _context;
+        /// <summary>
+        /// Dapper Database connection
+        /// </summary>
+        private readonly IDbConnection _dbConnection;
 
         /// <summary>
         /// 
@@ -44,15 +58,17 @@ namespace SB.Security.Service
         /// <param name="options"></param>
         /// <param name="securityLogService"></param>
         public RoleMenuService(IConfiguration config, SecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options,
-        ISecurityLogService securityLogService, IDatabaseManager dbManager)
+        ISecurityLogService securityLogService, IDatabaseManager dbManager, IDbConnection dbConnection)
         {
             _configuration = config;
-            _context = context;
             _emailService = emailService;
             _appSettings = options.Value;
             _securityLogService = securityLogService;
             _dbmanager = dbManager;
             _dbmanager.InitializeDatabase(_appSettings?.ConnectionStrings?.ProdSqlConnectionString, _appSettings?.ConnectionProvider);
+            _context = context;
+            _dbConnection = dbConnection;
+
         }
         #endregion
 
@@ -384,7 +400,7 @@ namespace SB.Security.Service
         /// This method used to get all list data, which are needed to be loaded during the user form initialization.
         /// </summary>
         /// <returns></returns>
-        public async Task<DataResponse> GetUserMenuInitialDataAsync()
+        public async Task<DataResponse> GetAppUserRoleMenuInitialDataAsync()
         {
             DataResponse? oDataResponse;
             _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETUSERMENUINITIALDATA_REQ_MSG, ConstantSupplier.NOT_APPLICABLE));
@@ -476,6 +492,8 @@ namespace SB.Security.Service
                             Id = Guid.NewGuid(),
                             Name = request.Name,
                             IsHeader = request.IsHeader,
+                            IsModule = request.IsModule,
+                            IsComponent = request.IsComponent,
                             CssClass = request.CssClass,
                             RouteLink = request.RouteLink,
                             RouteLinkClass = request.RouteLinkClass,
@@ -512,6 +530,8 @@ namespace SB.Security.Service
                                 _dbmanager.CreateParameter("@Id", oAppUserMenu.Id, DbType.Guid),
                                 _dbmanager.CreateParameter("@Name", oAppUserMenu.Name, DbType.String),
                                 _dbmanager.CreateParameter("@IsHeader", oAppUserMenu.IsHeader, DbType.Boolean),
+                                _dbmanager.CreateParameter("@IsModule", oAppUserMenu.IsModule, DbType.Boolean),
+                                _dbmanager.CreateParameter("@IsComponent", oAppUserMenu.IsComponent, DbType.Boolean),
                                 _dbmanager.CreateParameter("@CssClass", oAppUserMenu.CssClass, DbType.String),
                                 _dbmanager.CreateParameter("@RouteLink", oAppUserMenu.RouteLink, DbType.String),
                                 _dbmanager.CreateParameter("@RouteLinkClass", oAppUserMenu.RouteLinkClass, DbType.String),
@@ -554,22 +574,24 @@ namespace SB.Security.Service
                         else
                         {
                             #region EF
-                            oExistAppUserMenu.Name = request.Name;
-                            oExistAppUserMenu.IsHeader = request.IsHeader;
-                            oExistAppUserMenu.CssClass = request.CssClass;
-                            oExistAppUserMenu.RouteLink = request.RouteLink;
-                            oExistAppUserMenu.RouteLinkClass = request.RouteLinkClass;
-                            oExistAppUserMenu.Icon = request.Icon;
-                            oExistAppUserMenu.Remark = request.Remark;
-                            oExistAppUserMenu.ParentId = new Guid(request.ParentId);
-                            oExistAppUserMenu.DropdownIcon = request.DropdownIcon;
-                            oExistAppUserMenu.SerialNo = request.SerialNo;
-                            oExistAppUserMenu.UpdatedBy = request.CreateUpdateBy;
-                            oExistAppUserMenu.UpdatedDate = DateTime.UtcNow;
-                            oExistAppUserMenu.IsActive = request.IsActive;
+                            //oExistAppUserMenu.Name = request.Name;
+                            //oExistAppUserMenu.IsHeader = request.IsHeader;
+                            //oExistAppUserMenu.IsModule = request.IsModule;
+                            //oExistAppUserMenu.IsComponent = request.IsComponent;
+                            //oExistAppUserMenu.CssClass = request.CssClass;
+                            //oExistAppUserMenu.RouteLink = request.RouteLink;
+                            //oExistAppUserMenu.RouteLinkClass = request.RouteLinkClass;
+                            //oExistAppUserMenu.Icon = request.Icon;
+                            //oExistAppUserMenu.Remark = request.Remark;
+                            //oExistAppUserMenu.ParentId = new Guid(request.ParentId);
+                            //oExistAppUserMenu.DropdownIcon = request.DropdownIcon;
+                            //oExistAppUserMenu.SerialNo = request.SerialNo;
+                            //oExistAppUserMenu.UpdatedBy = request.CreateUpdateBy;
+                            //oExistAppUserMenu.UpdatedDate = DateTime.UtcNow;
+                            //oExistAppUserMenu.IsActive = request.IsActive;
 
-                            await _context.SaveChangesAsync();
-                            await oTrasaction.CommitAsync();
+                            //await _context.SaveChangesAsync();
+                            //await oTrasaction.CommitAsync();
                             #endregion
 
                             #region ADO.NET
@@ -579,6 +601,8 @@ namespace SB.Security.Service
                                 _dbmanager.CreateParameter("@Id", new Guid(request.Id), DbType.Guid),
                                 _dbmanager.CreateParameter("@Name", request.Name, DbType.String),
                                 _dbmanager.CreateParameter("@IsHeader", request.IsHeader, DbType.Boolean),
+                                _dbmanager.CreateParameter("@IsModule", request.IsModule, DbType.Boolean),
+                                _dbmanager.CreateParameter("@IsComponent", request.IsComponent, DbType.Boolean),
                                 _dbmanager.CreateParameter("@CssClass", request.CssClass, DbType.String),
                                 _dbmanager.CreateParameter("@RouteLink", request.RouteLink, DbType.String),
                                 _dbmanager.CreateParameter("@RouteLinkClass", request.RouteLinkClass, DbType.String),
@@ -711,13 +735,53 @@ namespace SB.Security.Service
                     _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
                     return oDataResponse;
                 }
-                
+
             }
             catch (Exception)
             {
                 throw;
             }
             return oDataResponse;
+        }
+        #endregion
+
+        #region All AppUserRoleMenu related methods
+        public async Task<PagingResult<AppUserRoleMenuResponse>?> GetAllAppUserRoleMenusPagingWithSearchAsync(PagingSearchFilter paramRequest)
+        {
+            try
+            {
+                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+                var parameters = new
+                {
+                    SearchTerm = paramRequest.SearchTerm?? "",
+                    SortColumnName = paramRequest.SortColumnName ?? "",
+                    SortColumnDirection = paramRequest.SortColumnDirection ?? "",
+                    PageIndex = paramRequest.PageNumber,
+                    PageSize = paramRequest.PageSize
+                };
+
+                var results = await _dbConnection.QueryAsync<AppUserRoleMenuResponse>(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_SP_NAME, parameters,commandType: CommandType.StoredProcedure);
+                if (results.Any())
+                {
+                    foreach (var result in results)
+                    {
+                        result.IsView = result.IsView ?? false;
+                        result.IsCreate = result.IsCreate ?? false;
+                        result.IsUpdate = result.IsUpdate ?? false;
+                        result.IsDelete = result.IsDelete ?? false;
+                    }
+                    PagingResult<AppUserRoleMenuResponse>? oAppUserRoleMenuResult = Utilities.GetPagingResult(results.ToList(), paramRequest.PageNumber, paramRequest.PageSize);
+                    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(oAppUserRoleMenuResult, Formatting.Indented)));
+                    return oAppUserRoleMenuResult;
+                }
+
+                return null;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
         #endregion
     }

@@ -22,6 +22,11 @@ using System.Security;
 using System.Text;
 using System.Text.Json.Serialization;
 using SB.DataAccessLayer;
+using Microsoft.Data.SqlClient;
+using System.Data;
+using System.Data.OracleClient;
+using System.Data.Odbc;
+using System.Data.OleDb;
 
 namespace SB.Security
 {
@@ -54,10 +59,8 @@ namespace SB.Security
             #endregion
 
             #region Registers the given security db context as a service into the services
-            //services.AddDbContext<SBSecurityDBContext>(options =>
-            //options.UseSqlServer(appSettings?.ConnectionStrings?.ProdSqlConnectionString));
-            services.AddDbContext<SecurityDBContext>(options =>
-            options.UseSqlServer(appSettings?.ConnectionStrings?.ProdSqlConnectionString));
+            RegisterDatabase(services, appSettings);
+
             #endregion
 
             #region Email Configuration
@@ -154,7 +157,7 @@ namespace SB.Security
             services.AddHttpContextAccessor();
 
             #region Dependency Injection added into service
-            
+
             services.AddTransient<ISecurityLogService, SecurityLogService>();
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IDataAnalyticsService, DataAnalyticsService>();
@@ -244,6 +247,7 @@ namespace SB.Security
             #endregion
         }
 
+        
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
@@ -290,6 +294,43 @@ namespace SB.Security
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static void RegisterDatabase(IServiceCollection services, AppSettings? appSettings)
+        {
+            switch (appSettings?.AppDB)
+            {
+                case ConstantSupplier.SQLSERVER:
+                    // Configure Entity Framework with SQL Server
+                    services.AddDbContext<SecurityDBContext>(options => options.UseSqlServer(appSettings?.ConnectionStrings?.ProdSqlConnectionString));
+
+                    // Register Dapper in the service collection
+                    services.AddTransient<IDbConnection>(coptions => new SqlConnection(appSettings?.ConnectionStrings?.ProdSqlConnectionString));
+                    break;
+                case ConstantSupplier.ORACLE:
+                    // Configure Entity Framework with Oracle
+                    services.AddDbContext<SecurityDBContext>(options => options.UseOracle(appSettings?.ConnectionStrings?.ProdOracleConnectionString));
+
+                    // Register Dapper in the service collection
+                    services.AddScoped<IDbConnection>(coptions => new OracleConnection(appSettings?.ConnectionStrings?.ProdOracleConnectionString));
+                    break;
+
+                case ConstantSupplier.ODBC:
+                    // Configure Entity Framework with Odbc
+                    services.AddDbContext<SecurityDBContext>(options => options.UseJetOdbc(appSettings?.ConnectionStrings?.ProdOdbcConnectionString));
+
+                    // Register Dapper in the service collection
+                    services.AddScoped<IDbConnection>(coptions => new OdbcConnection(appSettings?.ConnectionStrings?.ProdOdbcConnectionString));
+                    break;
+
+                case ConstantSupplier.OLEDB:
+                    // Configure Entity Framework with Oledb
+                    services.AddDbContext<SecurityDBContext>(options => options.UseJetOleDb(appSettings?.ConnectionStrings?.ProdOledbConnectionString));
+
+                    // Register Dapper in the service collection
+                    services.AddScoped<IDbConnection>(coptions => new OleDbConnection(appSettings?.ConnectionStrings?.ProdOledbConnectionString));
+                    break;
+            }
         }
         #endregion
     }
