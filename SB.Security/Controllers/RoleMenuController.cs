@@ -154,7 +154,7 @@ namespace SB.Security.Controllers
         /// <returns>
         /// <see cref="Task{object}"/>
         /// </returns>
-        [HttpGet]
+        [HttpPost]
         [Route(ConstantSupplier.POST_SAVE_UPDATE_ROLE_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
         public async Task<object> CreateUpdateRole(RoleSaveUpdateRequest roleSaveUpdateRequest)
@@ -270,6 +270,7 @@ namespace SB.Security.Controllers
         /// <returns>
         /// <see cref="Task{object}"/>
         /// </returns>
+        [AllowAnonymous]
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_USER_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
@@ -281,14 +282,15 @@ namespace SB.Security.Controllers
             try
             {
                 #region EF Codeblock
-                dynamic? paramRequest = JsonConvert.DeserializeObject(param);
-                PagingSearchFilter? oPagingSearchFilter = JsonConvert.DeserializeObject<PagingSearchFilter>(paramRequest[0].ToString());
+                //dynamic? paramRequest = JsonConvert.DeserializeObject(param);
+                //PagingSearchFilter? oPagingSearchFilter = JsonConvert.DeserializeObject<PagingSearchFilter>(paramRequest[0].ToString());
+                PagingSearchFilter? oPagingSearchFilter = JsonConvert.DeserializeObject<PagingSearchFilter>(param);
                 PagingResult<AppUserMenu>? usermenuList = await _roleMenuService.GetAllUserMenuPagingWithSearchAsync(oPagingSearchFilter);
                 if (Utilities.IsNull(usermenuList))
                 {
                     return new DataResponse { Success = false, Message = ConstantSupplier.GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
                 }
-                response = new DataResponse { Success = false, Message = ConstantSupplier.GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = usermenuList };
+                response = new DataResponse { Success = true, Message = ConstantSupplier.GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_SUCCESS_MSG, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.Found, Result = usermenuList };
                 #endregion
             }
             catch (Exception Ex)

@@ -354,11 +354,12 @@ namespace SB.Security.Middlewares
                 "/api/RoleMenu/getAllRoles",
                 "/api/RoleMenu/getAllRolesPagination",
                 "/api/RoleMenu/getRoleById",
-                "/api/RoleMenu/saveUpdateRole",
+                "/api/RoleMenu/createUpdateRole",
                 "/api/RoleMenu/deleteRole",
                 "/api/RoleMenu/getAllUserMenuPagingWithSearch",
                 "/api/RoleMenu/getAllMenuByUserId",
-                "/api/RoleMenu/getAllParentMenus"
+                "/api/RoleMenu/getAllParentMenus",
+                "/api/RoleMenu/getAllUserMenuPagingWithSearchTerm",
             };
             return excludeURL;
         }

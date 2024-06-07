@@ -174,7 +174,7 @@ namespace SB.Security.Service
                 switch (roleSaveUpdateRequest.ActionName)
                 {
                     case ConstantSupplier.SAVE_KEY:
-                        UserRole oUserRole = new()
+                        AppUserRole oAppUserRole = new()
                         {
                             Id = Guid.NewGuid(),
                             RoleName = roleSaveUpdateRequest.RoleName,
@@ -192,10 +192,10 @@ namespace SB.Security.Service
                         }
                         else
                         {
-                            await _context.AppUserRoles.AddAsync(oExistAppUserRole);
+                            await _context.AppUserRoles.AddAsync(oAppUserRole);
                             await _context.SaveChangesAsync();
                             await oTrasaction.CommitAsync();
-                            roleSaveUpdateRequest.Id = Convert.ToString(oExistAppUserRole.Id);
+                            roleSaveUpdateRequest.Id = Convert.ToString(oAppUserRole.Id);
                             oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.USER_ROLE_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = roleSaveUpdateRequest };
                         }
 

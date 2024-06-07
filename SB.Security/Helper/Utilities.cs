@@ -121,7 +121,7 @@ namespace SB.Security.Helper
             return result;
         }
 
-        public static List<T> ConvertDataTable<T>(DataTable dt)
+        public static List<T> ConvertDataTable<T>(DataTable dt) where T : new()
         {
             List<T> data = new();
             foreach (DataRow row in dt.Rows)
@@ -131,34 +131,107 @@ namespace SB.Security.Helper
             }
             return data;
         }
-        private static T GetItem<T>(DataRow dr)
-        {
-            Type temp = typeof(T);
-            T obj = Activator.CreateInstance<T>();
+        //private static T GetItem<T>(DataRow dr)
+        //{
+        //    Type temp = typeof(T);
+        //    T obj = Activator.CreateInstance<T>();
 
-            foreach (DataColumn column in dr.Table.Columns)
+        //    foreach (DataColumn column in dr.Table.Columns)
+        //    {
+        //        foreach (PropertyInfo pro in temp.GetProperties())
+        //        {
+        //            if (pro.Name == column.ColumnName)
+        //            {
+        //                var type = Nullable.GetUnderlyingType(pro.PropertyType) ?? pro.PropertyType;
+        //                if ((type.Name == "DateTime") && dr[column.ColumnName].Equals(DBNull.Value))
+        //                {
+        //                    continue;
+        //                }else if ((type.Name == "String") && dr[column.ColumnName].Equals(DBNull.Value))
+        //                {
+        //                    continue;
+        //                }
+
+        //                pro.SetValue(obj, dr[column.ColumnName].Equals(DBNull.Value) ? string.Empty : dr[column.ColumnName], null);
+        //            }
+        //            else
+        //            {
+        //                continue;
+        //            }
+        //        }
+        //    }
+        //    return obj;
+        //}
+
+        private static T GetItem<T>(DataRow row) where T : new()
+        {
+            T obj = new T();
+            foreach (DataColumn column in row.Table.Columns)
             {
-                foreach (PropertyInfo pro in temp.GetProperties())
+                PropertyInfo? prop = obj.GetType().GetProperty(column.ColumnName);
+                if (prop != null && row[column] != DBNull.Value)
                 {
-                    if (pro.Name == column.ColumnName)
+                    object value = row[column];
+
+                    if (prop.PropertyType == typeof(string))
                     {
-                        var type = Nullable.GetUnderlyingType(pro.PropertyType) ?? pro.PropertyType;
-                        if ((type.Name == "DateTime") && dr[column.ColumnName].Equals(DBNull.Value))
+                        prop.SetValue(obj, value.ToString(), null);
+                    }
+                    else if (prop.PropertyType == typeof(Guid?) || prop.PropertyType == typeof(Guid))
+                    {
+                        Guid guidValue;
+                        if (Guid.TryParse(value.ToString(), out guidValue))
                         {
-                            continue;
+                            prop.SetValue(obj, guidValue, null);
                         }
-                     
-                        pro.SetValue(obj, dr[column.ColumnName].Equals(DBNull.Value) ? string.Empty : dr[column.ColumnName], null);
+                        else
+                        {
+                            prop.SetValue(obj, null, null);
+                        }
+                    }
+                    else if (prop.PropertyType == typeof(bool?))
+                    {
+                        bool boolValue;
+                        if (bool.TryParse(value.ToString(), out boolValue))
+                        {
+                            prop.SetValue(obj, boolValue, null);
+                        }
+                        else
+                        {
+                            prop.SetValue(obj, null, null);
+                        }
+                    }
+                    else if (prop.PropertyType == typeof(int?))
+                    {
+                        int intValue;
+                        if (int.TryParse(value.ToString(), out intValue))
+                        {
+                            prop.SetValue(obj, intValue, null);
+                        }
+                        else
+                        {
+                            prop.SetValue(obj, null, null);
+                        }
+                    }
+                    else if (prop.PropertyType == typeof(DateTime?))
+                    {
+                        DateTime dateTimeValue;
+                        if (DateTime.TryParse(value.ToString(), out dateTimeValue))
+                        {
+                            prop.SetValue(obj, dateTimeValue, null);
+                        }
+                        else
+                        {
+                            prop.SetValue(obj, null, null);
+                        }
                     }
                     else
                     {
-                        continue;
+                        prop.SetValue(obj, Convert.ChangeType(value, prop.PropertyType), null);
                     }
                 }
             }
             return obj;
         }
-
         public static bool IsNullOrEmpty(this IEnumerable enumerable)
         {
             if (enumerable is null) return true;
