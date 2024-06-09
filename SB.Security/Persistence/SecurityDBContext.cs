@@ -47,6 +47,9 @@ namespace SB.Security.Persistence
                 entity.Property(x => x.UpdatedBy).HasColumnName("UpdatedBy");
                 entity.Property(x => x.IsActive).HasColumnName("IsActive");
                 entity.Property(x => x.UpdatedDate).HasColumnType("datetime");
+                entity.ToTable(x => x.HasTrigger("TRG_InsertAppUserRoles"));
+                entity.ToTable(x => x.HasTrigger("TRG_UpdateAppUserRoles"));
+                entity.ToTable(x => x.HasTrigger("TRG_DeleteAppUserRoles"));
             });
 
             modelBuilder.Entity<AppUserMenu>(entity =>
@@ -71,6 +74,9 @@ namespace SB.Security.Persistence
                 entity.Property(x => x.UpdatedBy).HasColumnName("UpdatedBy");
                 entity.Property(x => x.IsActive).HasColumnName("IsActive");
                 entity.Property(x => x.UpdatedDate).HasColumnType("datetime");
+                entity.ToTable(x => x.HasTrigger("TRG_InsertAppUserMenus"));
+                entity.ToTable(x => x.HasTrigger("TRG_UpdateAppUserMenus"));
+                entity.ToTable(x => x.HasTrigger("TRG_DeleteAppUserMenus"));
             });
 
             modelBuilder.Entity<AppUserProfile>(entity =>
@@ -89,6 +95,9 @@ namespace SB.Security.Persistence
                     .WithMany(p => p.AppUserProfiles)
                     .HasForeignKey(d => d.AppUserRoleId)
                     .HasConstraintName("FK_AppUserProfiles_AppUserRole");
+                entity.ToTable(x => x.HasTrigger("TRG_InsertAppUserProfiles"));
+                entity.ToTable(x => x.HasTrigger("TRG_UpdateAppUserProfiles"));
+                entity.ToTable(x => x.HasTrigger("TRG_DeleteAppUserProfiles"));
             });
 
             modelBuilder.Entity<AppUserRoleMenu>(entity =>
@@ -113,6 +122,9 @@ namespace SB.Security.Persistence
                     .WithMany(x => x.AppUserRoleMenus)
                     .HasForeignKey(x => x.AppUserMenuId)
                     .HasConstraintName("FK_AppUserRoleMenus_AppUserMenu");
+                entity.ToTable(x => x.HasTrigger("TRG_InsertAppUserRoleMenus"));
+                entity.ToTable(x => x.HasTrigger("TRG_UpdateAppUserRoleMenus"));
+                entity.ToTable(x => x.HasTrigger("TRG_DeleteAppUserRoleMenus"));
             });
 
             modelBuilder.Entity<AppUser>(entity =>
@@ -129,10 +141,13 @@ namespace SB.Security.Persistence
                     .WithOne(p => p.AppUser)
                     .HasForeignKey<AppUser>(x => x.AppUserProfileId)
                     .HasConstraintName("FK_AppUser_AppUserProfiles");
+                entity.ToTable(x => x.HasTrigger("TRG_InsertAppUsers"));
+                entity.ToTable(x => x.HasTrigger("TRG_UpdateAppUsers"));
+                entity.ToTable(x => x.HasTrigger("TRG_DeleteAppUsers"));
             });
 
             modelBuilder.Entity<AppUserRole>().HasData(
-                  new UserRole()
+                  new AppUserRole()
                   {
                       Id = new Guid("1B15CE5A-56B3-4EB9-8286-6E27F770B0DA"),
                       RoleName = ConstantSupplier.ADMIN,
@@ -143,7 +158,7 @@ namespace SB.Security.Persistence
                       UpdatedDate = DateTime.UtcNow,
                       IsActive = true
                   },
-                  new UserRole()
+                  new AppUserRole()
                   {
                       Id = new Guid("10A9E9E7-CB24-4816-9B94-9DB275A40EDD"),
                       RoleName = ConstantSupplier.USER,

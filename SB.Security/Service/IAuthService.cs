@@ -8,7 +8,6 @@ namespace SB.Security.Service
     /// </summary>
     public interface IAuthService
     {
-        //Task<DataResponse> AuthenticateUserAsync(LoginRequest? request);
         Task<DataResponse> AuthenticateUserAsync(LoginRequest? request);
         Task<DataResponse> RefreshTokenAsync(RefreshTokenRequest? refreshTokenReq);
         Task<DataResponse> RevokeAsync(string userName);

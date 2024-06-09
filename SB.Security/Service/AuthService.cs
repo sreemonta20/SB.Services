@@ -14,6 +14,7 @@ using SB.Security.Models.Request;
 using SB.Security.Models.Response;
 using SB.Security.Persistence;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Security.Claims;
 using BCryptNet = BCrypt.Net.BCrypt;
@@ -25,7 +26,6 @@ namespace SB.Security.Service
         #region Variable declaration & constructor initialization
 
         public IConfiguration _configuration;
-        //private readonly SBSecurityDBContext _context;
         private readonly SecurityDBContext _context;
         private readonly IEmailService _emailService;
         private readonly AppSettings? _appSettings;
@@ -36,13 +36,16 @@ namespace SB.Security.Service
 
 
         /// <summary>
-        /// 
+        /// Public Constructor
         /// </summary>
         /// <param name="config"></param>
         /// <param name="context"></param>
         /// <param name="emailService"></param>
         /// <param name="options"></param>
         /// <param name="securityLogService"></param>
+        /// <param name="dbManager"></param>
+        /// <param name="tokenService"></param>
+        /// <param name="roleMenuService"></param>
         public AuthService(IConfiguration config, SecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options,
         ISecurityLogService securityLogService, IDatabaseManager dbManager, ITokenService tokenService, IRoleMenuService roleMenuService)
         {
@@ -190,6 +193,7 @@ namespace SB.Security.Service
         //}
         #endregion
 
+
         /// <summary>
         /// <para>EF Codeblock: AuthenticateUserAsync</para> 
         /// This method authenticate user credential. It checks user name and then password. In between the checking, if client attempts consecutive 
@@ -198,7 +202,7 @@ namespace SB.Security.Service
         /// next 1 min. This method ensures the unique username for all the user records.
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>DataResponse</returns>
+        /// <returns><see cref="Task{DataResponse}"/></returns>
         public async Task<DataResponse> AuthenticateUserAsync(LoginRequest? request)
         {
             DataResponse dataResponse;
@@ -227,7 +231,7 @@ namespace SB.Security.Service
                                     dataResponse = await UpdateRefreshToken(oExistAppUser);
                                     if (Utilities.IsNotNull(dataResponse))
                                     {
-                                        dataResponse = await _roleMenuService.GetAllMenuByUserIdAsync(oAppUserProfile.Id.ToString());
+                                        dataResponse = await _roleMenuService.GetAllAppUserMenuByUserIdAsync(oAppUserProfile.Id.ToString());
                                         if (Utilities.IsNotNull(dataResponse) && (dataResponse.ResponseCode == 200))
                                         {
                                             oTokenResult.userMenus = Convert.ToString(dataResponse.Result);
@@ -322,7 +326,7 @@ namespace SB.Security.Service
         /// This method used to validate refresh token, renew a jwt token.  
         /// </summary>
         /// <param name="refreshTokenReq"></param>
-        /// <returns>DataResponse</returns>
+        /// <returns><see cref="Task{DataResponse}"/></returns>
         public async Task<DataResponse> RefreshTokenAsync(RefreshTokenRequest? refreshTokenReq)
         {
             DataResponse oDataResponse;
@@ -347,18 +351,6 @@ namespace SB.Security.Service
                         return oDataResponse;
                     }
 
-                    //var query = from user in  _context.AppUsers
-                    //            join userProfile in _context.AppUserProfiles on user.AppUserProfileId equals userProfile.Id
-                    //            where user.UserName == username && user.IsActive == true && userProfile.IsActive == true
-                    //            select new
-                    //            {
-                    //                Id = Convert.ToString(userProfile.Id),
-                    //                FullName = userProfile.FullName,
-                    //                UserName = user.UserName,
-                    //                Email = userProfile.Email,
-                    //                UserRole = userProfile.AppUserRoleId.ToString(),
-                    //                CreatedDate = userProfile.CreatedDate
-                    //            };
 
                     User? oUser = await _context.AppUsers
                                             .Join(_context.AppUserProfiles,
@@ -385,7 +377,7 @@ namespace SB.Security.Service
                         oDataResponse = await UpdateRefreshToken(oLoginUser);
                         if (Utilities.IsNotNull(oDataResponse))
                         {
-                            oDataResponse = await _roleMenuService.GetAllMenuByUserIdAsync(oLoginUser.AppUserProfileId.ToString());
+                            oDataResponse = await _roleMenuService.GetAllAppUserMenuByUserIdAsync(oLoginUser.AppUserProfileId.ToString());
                             if (Utilities.IsNotNull(oDataResponse) && (oDataResponse.ResponseCode == 200))
                             {
                                 oTokenResult.userMenus = Convert.ToString(oDataResponse.Result);
@@ -449,7 +441,7 @@ namespace SB.Security.Service
         /// If renewing refresh token failed then it revokes the current user from loggedin  any longer.
         /// </summary>
         /// <param name="userToken"></param>
-        /// <returns>DataResponse</returns>
+        /// <returns><see cref="Task{DataResponse}"/></returns>
         public async Task<DataResponse> RevokeAsync(string? userToken)
         {
             DataResponse? oDataResponse;
@@ -518,18 +510,27 @@ namespace SB.Security.Service
         /// </summary>
         /// <param name="request"></param>
         /// <param name="user"></param>
-        /// <returns></returns>
-        private async Task<SendResponse> SendEmail(LoginRequest? request, UserInfo? user)
+        /// <returns><see cref="Task{SendResponse}"/></returns>
+        private async Task<SendResponse> SendEmail(LoginRequest? request, AppUser? user)
         {
             SendResponse response;
             try
             {
-                string body = _emailService.PopulateBody("EmailTemplates/emailblocknotice.htm", user.UserName,
+                //string? userEmail = _context?.AppUserProfiles?.SingleOrDefault(u => u.Id == user.AppUserProfileId && u.IsActive == true)?.Email;
+
+                string body = _emailService.PopulateBody("EmailTemplates/emailblocknotice.htm", user?.UserName,
                                         "User management", "https://localhost:4200/",
                                         "Please check your username and password. Please wait for mentioned time to re-login");
-                Message message = new() { To = user.Email, Name = request.UserName, Subject = "Email Blocked", Body = body };
-                response = await _emailService.SendEmailAsync(_appSettings.EmailConfiguration, message);
-
+                string? email = _context?.AppUserProfiles?.Where(u => u.Id == user.AppUserProfileId && u.IsActive == true)?.SingleOrDefault()?.Email;
+                if (!Utilities.IsNullOrEmpty(email))
+                {
+                    Message message = new() { To = email, Name = request?.UserName, Subject = "Email Blocked", Body = body };
+                    response = await _emailService.SendEmailAsync(_appSettings.EmailConfiguration, message);
+                }
+                else
+                {
+                    return new() { ErrorMessages = new List<string> { "No valid email address found" }, MessageId="" };
+                }
             }
             catch (Exception)
             {
@@ -538,6 +539,11 @@ namespace SB.Security.Service
             return response;
         }
 
+        /// <summary>
+        /// This method is used to update the refresh token and expiry token date field in application user table.
+        /// </summary>
+        /// <param name="oAppUser"></param>
+        /// <returns><see cref="Task{SendResponse}"/></returns>
         private async Task<DataResponse> UpdateRefreshToken(AppUser? oAppUser)
         {
             using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
@@ -567,17 +573,5 @@ namespace SB.Security.Service
 
         }
 
-        //public DataResponse FailedResponse<T>(T data, int responseCode, DataResponse? response = null, string message = "", string logMessage = "")
-        //{
-        //    DataResponse? finalResponse;
-        //    finalResponse = Utilities.IsNotNull(response) ? new DataResponse { Success = response.Success, Message = String.IsNullOrWhiteSpace(message) ? response.Message : message, MessageType = response.MessageType, ResponseCode = response.ResponseCode, Result = data } :
-        //       new DataResponse { Success = false, Message = string.IsNullOrWhiteSpace(message) ? ConstantSupplier.FAILED_MSG : message, MessageType = Enum.EnumResponseType.Error, ResponseCode = responseCode, Result = null };
-        //    if (!string.IsNullOrWhiteSpace(logMessage))
-        //    {
-        //        _securityLogService.LogError(string.Format(logMessage, JsonConvert.SerializeObject(finalResponse, Formatting.Indented)));
-        //    }
-
-        //    return finalResponse;
-        //}
     }
 }

@@ -252,7 +252,7 @@
         #endregion
 
         #region Auth Controller
-        public const string POST_AUTH_ROUTE_NAME = "login";
+        public const string POST_AUTH_ROUTE_NAME = "authenticateUser";
         public const string REFRESH_TOKEN_ROUTE_NAME = "refreshToken";
         public const string REVOKE_ROUTE_NAME = "revoke";
         #endregion
@@ -274,10 +274,10 @@
         #endregion
 
         #region User Controller
-        public const string GET_ALL_APP_USER_PROFILE_ROUTE_NAME = "getAllUsers";
-        public const string GET_APP_USER_PROFILE_ROUTE_NAME = "getUserbyId";
+        public const string GET_ALL_APP_USER_PROFILE_ROUTE_NAME = "getAllAppUserProfile";
+        public const string GET_APP_USER_PROFILE_ROUTE_NAME = "getAppUserProfileById";
         public const string POST_APP_USER_PROFILE_ROUTE_NAME = "createUpdateAppUserProfile";
-        public const string DEL_APP_USER_PROFILE_ROUTE_NAME = "deletAppUserProfile";
+        public const string DEL_APP_USER_PROFILE_ROUTE_NAME = "deleteAppUserProfile";
         public const string POST_APP_USER_ROUTE_NAME = "createUpdateAppUser";
         #endregion
 
@@ -311,13 +311,13 @@
         #endregion
 
         #region Role Menu Controller
-        public const string GET_ALL_ROLES_ROUTE_NAME = "getAllRoles";
-        public const string GET_ALL_ROLES_PAGINATION_ROUTE_NAME = "getAllRolesPagination";
-        public const string GET_ROLE_BY_ID_ROUTE_NAME = "getRoleById";
-        public const string POST_SAVE_UPDATE_ROLE_ROUTE_NAME = "createUpdateRole";
-        public const string DELETE_ROLE_ROUTE_NAME = "deleteRole";
-        public const string GET_ALL_MENU_BY_USER_ID_ROUTE_NAME = "getAllMenuByUserId";
-        public const string GET_ALL_USER_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME = "getAllUserMenuPagingWithSearchTerm";
+        public const string GET_ALL_ROLES_ROUTE_NAME = "getAllAppUserRoles";
+        public const string GET_ALL_ROLES_PAGINATION_ROUTE_NAME = "getAllAppUserRolesPagination";
+        public const string GET_ROLE_BY_ID_ROUTE_NAME = "getAppUserRolesById";
+        public const string POST_SAVE_UPDATE_ROLE_ROUTE_NAME = "createUpdateAppUserRole";
+        public const string DELETE_ROLE_ROUTE_NAME = "deleteAppUserRole";
+        public const string GET_ALL_MENU_BY_USER_ID_ROUTE_NAME = "getAllAppUserMenuByUserId";
+        public const string GET_ALL_USER_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME = "getAllAppUserMenuPagingWithSearch";
         public const string GET_USER_MENU_INITIAL_DATA_ROUTE_NAME = "getAppUserRoleMenuInitialData";
         public const string GET_ALL_PARENT_MENUS_ROUTE_NAME = "getAllParentMenus";
 
@@ -327,10 +327,10 @@
         public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_FAILED_MSG = "Retrieving user menu list failed.";
         public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG = "Retrieving user menu list is found empty.";
 
-        public const string POST_SAVE_UPDATE_USER_MENU_ROUTE_NAME = "saveUpdateUserMenu";
+        public const string POST_SAVE_UPDATE_USER_MENU_ROUTE_NAME = "createUpdateAppUserMenu";
         public const string DELETE_USER_MENU_ROUTE_NAME = "deleteAppUserMenu";
 
-        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME = "getAllAppUserRoleMenuPagingWithSearchTerm";
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME = "getAllAppUserRoleMenusPagingWithSearch";
 
         public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_SP_NAME = "SP_GetAllAppUserRoleMenusPagingWithSearch";
 

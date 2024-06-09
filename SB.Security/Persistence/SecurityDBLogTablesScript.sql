@@ -6,6 +6,8 @@ CREATE TABLE [dbo].[AppUserMenusLog](
 	[AppUserMenuId] [uniqueidentifier] NOT NULL,
 	[Name] [nvarchar](100) NULL,
 	[IsHeader] [bit] NULL,
+	[IsModule] [bit] NULL,
+	[IsComponent] [bit] NULL,
 	[CssClass] [nvarchar](100) NULL,
 	[RouteLink] [nvarchar](255) NULL,
 	[RouteLinkClass] [nvarchar](200) NULL,

@@ -20,6 +20,7 @@ using System.Collections.Immutable;
 using System.Data;
 using System.Drawing.Printing;
 using System.Net;
+using static Dapper.SqlMapper;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SB.Security.Service
@@ -72,14 +73,14 @@ namespace SB.Security.Service
         }
         #endregion
 
-        #region Role related methods
+        #region AppUserRole related methods
         /// <summary>
         /// It used to get all user roles.
         /// </summary>
         /// <returns>
         /// <see cref="Task{DataResponse}"/>
         /// </returns>
-        public async Task<DataResponse> GetAllRolesAsync()
+        public async Task<DataResponse> GetAllAppUserRolesAsync()
         {
             DataResponse? oDataResponse;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALLROLES_REQ_MSG, JsonConvert.SerializeObject(null, Formatting.Indented)));
@@ -112,7 +113,7 @@ namespace SB.Security.Service
         /// <returns>
         /// <see cref="Task{DataResponse}"/>
         /// </returns>
-        public async Task<DataResponse> GetAllRolesPaginationAsync(PaginationFilter paramRequest)
+        public async Task<DataResponse> GetAllAppUserRolesPaginationAsync(PaginationFilter paramRequest)
         {
             DataResponse? oDataResponse;
             PagingResult<AppUserRole>? oAppUserRoleList = null;
@@ -146,7 +147,7 @@ namespace SB.Security.Service
         /// <returns>
         /// <see cref="Task{DataResponse}"/>
         /// </returns>
-        public async Task<DataResponse> GetRoleByIdAsync(string roleId)
+        public async Task<DataResponse> GetAppUserRolesByIdAsync(string roleId)
         {
             DataResponse? oDataResponse;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETROLEBYID_REQ_MSG, JsonConvert.SerializeObject(roleId, Formatting.Indented)));
@@ -179,7 +180,7 @@ namespace SB.Security.Service
         /// <returns>
         /// <see cref="Task{DataResponse}"/>
         /// </returns>
-        public async Task<DataResponse> SaveUpdateRoleAsync(RoleSaveUpdateRequest? roleSaveUpdateRequest)
+        public async Task<DataResponse> CreateUpdateAppUserRoleAsync(RoleSaveUpdateRequest? roleSaveUpdateRequest)
         {
             DataResponse? oDataResponse = null;
             AppUserRole? oExistAppUserRole = null;
@@ -220,20 +221,17 @@ namespace SB.Security.Service
                         oExistAppUserRole = await _context.AppUserRoles.FirstOrDefaultAsync(u => u.Id == new Guid(roleSaveUpdateRequest.Id));
                         if (oExistAppUserRole != null)
                         {
+                            
                             oExistAppUserRole.RoleName = roleSaveUpdateRequest.RoleName;
                             oExistAppUserRole.Description = roleSaveUpdateRequest.Description;
                             oExistAppUserRole.UpdatedBy = roleSaveUpdateRequest.CreateUpdateBy;
                             oExistAppUserRole.UpdatedDate = DateTime.UtcNow;
                             oExistAppUserRole.IsActive = roleSaveUpdateRequest.IsActive;
 
-                            _context.Entry(oExistAppUserRole).Property("RoleName").IsModified = true;
-                            _context.Entry(oExistAppUserRole).Property("Description").IsModified = true;
-                            _context.Entry(oExistAppUserRole).Property("UpdatedBy").IsModified = true;
-                            _context.Entry(oExistAppUserRole).Property("UpdatedDate").IsModified = true;
-                            _context.Entry(oExistAppUserRole).Property("IsActive").IsModified = true;
-
+                            _context.AppUserRoles.Update(oExistAppUserRole);
                             await _context.SaveChangesAsync();
                             await oTrasaction.CommitAsync();
+                            
                             oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.USER_ROLE_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = roleSaveUpdateRequest };
                         }
                         else
@@ -263,7 +261,7 @@ namespace SB.Security.Service
         /// <returns>
         /// <see cref="Task{DataResponse}"/>
         /// </returns>
-        public async Task<DataResponse> DeleteRoleAsync(string roleId)
+        public async Task<DataResponse> DeleteAppUserRoleAsync(string roleId)
         {
             DataResponse? oDataResponse = null;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_DELETEROLE_REQ_MSG, JsonConvert.SerializeObject(roleId, Formatting.Indented)));
@@ -289,11 +287,11 @@ namespace SB.Security.Service
                         foreach (var oAppUserRoleMenu in oAppUserRoleMenuList)
                         {
                             oAppUserRoleMenu.IsActive = false;
-                            _context.Entry(oAppUserRoleMenu).State = EntityState.Modified;
-                            //_context.SaveChanges();
+                            //_context.Entry(oAppUserRoleMenu).State = EntityState.Modified;
+                            _context.SaveChangesAsync();
                         }
                         oExistAppUserRole.IsActive = false;
-                        _context.Entry(oExistAppUserRole).State = EntityState.Modified;
+                        //_context.Entry(oExistAppUserRole).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                         await oTrasaction.CommitAsync();
                     }
@@ -315,55 +313,15 @@ namespace SB.Security.Service
         }
         #endregion
 
-        #region All UserMenu related methods
-
+        #region All AppUserMenu related methods
         /// <summary>
-        /// It used to get all user menu and their access permission by a specific user
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns>
-        /// <see cref="Task{DataResponse}"/>
-        /// </returns>
-        public async Task<DataResponse> GetAllMenuByUserIdAsync(string? userId)
-        {
-            DataResponse? oDataResponse;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_REQ_MSG, JsonConvert.SerializeObject(userId, Formatting.Indented)));
-
-            try
-            {
-
-                List<IDbDataParameter> parameters = new()
-                {
-                    _dbmanager.CreateParameter("@UserId", new Guid(userId), DbType.Guid)
-                };
-
-                string userMenus = (string)await _dbmanager.GetScalarValueAsync(ConstantSupplier.GET_GET_ALL_MENU_BY_USER_ID_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
-
-                if (String.IsNullOrWhiteSpace(userMenus))
-                {
-                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_MENU_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
-                }
-                else
-                {
-                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_MENU_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userMenus };
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return oDataResponse;
-        }
-
-        /// <summary>
-        /// <para>ADO.NET Codeblock: GetAllUserMenuPagingWithSearchAsync</para> 
+        /// <para>ADO.NET Codeblock: GetAllAppUserMenuPagingWithSearchAsync</para> 
         /// This service method used to get a list of user menu with access permission based on the supplied searchterm, sortcolumnname, sortcolumndirection, page number, and page size.
         /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
         /// </summary>
         /// <param name="paramRequest"></param>
         /// <returns>PageResult<![CDATA[<T>]]></returns>
-        public async Task<PagingResult<AppUserMenu>?> GetAllUserMenuPagingWithSearchAsync(PagingSearchFilter paramRequest)
+        public async Task<PagingResult<AppUserMenu>?> GetAllAppUserMenuPagingWithSearchAsync(PagingSearchFilter paramRequest)
         {
             try
             {
@@ -397,69 +355,35 @@ namespace SB.Security.Service
         }
 
         /// <summary>
-        /// This method used to get all list data, which are needed to be loaded during the user form initialization.
+        /// It used to get all user menu and their access permission by a specific user
         /// </summary>
-        /// <returns></returns>
-        public async Task<DataResponse> GetAppUserRoleMenuInitialDataAsync()
-        {
-            DataResponse? oDataResponse;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETUSERMENUINITIALDATA_REQ_MSG, ConstantSupplier.NOT_APPLICABLE));
-
-            try
-            {
-                string userMenuMgtFormInitialData = (string)await _dbmanager.GetScalarValueAsync(ConstantSupplier.GET_USER_MENU_INITIAL_DATA_SP_NAME, CommandType.StoredProcedure);
-
-                if (String.IsNullOrWhiteSpace(userMenuMgtFormInitialData))
-                {
-                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_USER_MENU_FORM_INITIAL_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETUSERMENUINITIALDATA_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
-                    return oDataResponse;
-                }
-                oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_LOAD_USER_MENU_FORM_INITIAL_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userMenuMgtFormInitialData };
-                return oDataResponse;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-        }
-
-        /// <summary>
-        /// It used to get all parent menu based on what child menu can be created.
-        /// </summary>
+        /// <param name="userId"></param>
         /// <returns>
         /// <see cref="Task{DataResponse}"/>
         /// </returns>
-        public async Task<DataResponse> GetAllParentMenusAsync()
+        public async Task<DataResponse> GetAllAppUserMenuByUserIdAsync(string? userId)
         {
             DataResponse? oDataResponse;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GET_ALL_PARENT_MENUS_REQ_MSG, JsonConvert.SerializeObject(ConstantSupplier.NOT_APPLICABLE, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_REQ_MSG, JsonConvert.SerializeObject(userId, Formatting.Indented)));
 
             try
             {
-                List<(Guid? Id, string? Name)>? parentMenuList = new List<(Guid? Id, string? Name)>();
-                List<AppUserMenu>? oAppUserMenuList = await _context.AppUserMenus.ToListAsync();
 
-                foreach (AppUserMenu oAppUserMenu in oAppUserMenuList)
+                List<IDbDataParameter> parameters = new()
                 {
-                    if (String.IsNullOrEmpty(oAppUserMenu.ParentId.ToString()))
-                    {
-                        parentMenuList.Add((oAppUserMenu.Id, oAppUserMenu?.Name));
-                    }
-                    else if (parentMenuList.Any(x => x.Id == oAppUserMenu.ParentId))
-                    {
-                        continue;
-                    }
-                }
-                if (parentMenuList.IsNullOrEmpty())
+                    _dbmanager.CreateParameter("@UserId", new Guid(userId), DbType.Guid)
+                };
+
+                string userMenus = (string)await _dbmanager.GetScalarValueAsync(ConstantSupplier.GET_GET_ALL_MENU_BY_USER_ID_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+
+                if (String.IsNullOrWhiteSpace(userMenus))
                 {
-                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_PARENT_MENU_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GET_ALL_PARENT_MENUS_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_MENU_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
                 }
                 else
                 {
-                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_PARENT_MENU_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = parentMenuList };
+                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_MENU_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userMenus };
                 }
             }
             catch (Exception)
@@ -476,7 +400,7 @@ namespace SB.Security.Service
         /// <returns>
         /// <see cref="Task{object}"/>
         /// </returns>
-        public async Task<DataResponse> SaveUpdateAppUserMenuAsync(AppUserMenuRequest? request)
+        public async Task<DataResponse> CreateUpdateAppUserMenuAsync(AppUserMenuRequest? request)
         {
             DataResponse? oDataResponse = null;
             AppUserMenu? oExistAppUserMenu = null;
@@ -743,9 +667,83 @@ namespace SB.Security.Service
             }
             return oDataResponse;
         }
+
+        /// <summary>
+        /// It used to get all parent menu based on what child menu can be created.
+        /// </summary>
+        /// <returns>
+        /// <see cref="Task{DataResponse}"/>
+        /// </returns>
+        public async Task<DataResponse> GetAllParentMenusAsync()
+        {
+            DataResponse? oDataResponse;
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GET_ALL_PARENT_MENUS_REQ_MSG, JsonConvert.SerializeObject(ConstantSupplier.NOT_APPLICABLE, Formatting.Indented)));
+
+            try
+            {
+                List<(Guid? Id, string? Name)>? parentMenuList = new List<(Guid? Id, string? Name)>();
+                List<AppUserMenu>? oAppUserMenuList = await _context.AppUserMenus.ToListAsync();
+
+                foreach (AppUserMenu oAppUserMenu in oAppUserMenuList)
+                {
+                    if (String.IsNullOrEmpty(oAppUserMenu.ParentId.ToString()))
+                    {
+                        parentMenuList.Add((oAppUserMenu.Id, oAppUserMenu?.Name));
+                    }
+                    else if (parentMenuList.Any(x => x.Id == oAppUserMenu.ParentId))
+                    {
+                        continue;
+                    }
+                }
+                if (parentMenuList.IsNullOrEmpty())
+                {
+                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_PARENT_MENU_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GET_ALL_PARENT_MENUS_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                }
+                else
+                {
+                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_PARENT_MENU_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = parentMenuList };
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return oDataResponse;
+        }
         #endregion
 
         #region All AppUserRoleMenu related methods
+        /// <summary>
+        /// This method used to get all list data, which are needed to be loaded during the user form initialization.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<DataResponse> GetAppUserRoleMenuInitialDataAsync()
+        {
+            DataResponse? oDataResponse;
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETUSERMENUINITIALDATA_REQ_MSG, ConstantSupplier.NOT_APPLICABLE));
+
+            try
+            {
+                string userMenuMgtFormInitialData = (string)await _dbmanager.GetScalarValueAsync(ConstantSupplier.GET_USER_MENU_INITIAL_DATA_SP_NAME, CommandType.StoredProcedure);
+
+                if (String.IsNullOrWhiteSpace(userMenuMgtFormInitialData))
+                {
+                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_USER_MENU_FORM_INITIAL_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETUSERMENUINITIALDATA_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    return oDataResponse;
+                }
+                oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_LOAD_USER_MENU_FORM_INITIAL_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userMenuMgtFormInitialData };
+                return oDataResponse;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+
         public async Task<PagingResult<AppUserRoleMenuResponse>?> GetAllAppUserRoleMenusPagingWithSearchAsync(PagingSearchFilter paramRequest)
         {
             try

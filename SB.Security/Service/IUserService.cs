@@ -11,13 +11,19 @@ namespace SB.Security.Service
     /// </summary>
     public interface IUserService
     {
-        Task<PageResult<AppUserProfile>> GetAllUserAsync(PaginationFilter paramRequest);
-        Task<PagingResult<AppUserProfile>> GetAllUserExtnAsync(PaginationFilter paramRequest);
-        Task<PagingResult<AppUserProfile>?> GetAllUserAdoAsync(PaginationFilter paramRequest);
-        Task<DataResponse> GetUserByIdAsync(string id);
-        Task<DataResponse> GetUserByIdAdoAsync(string id);
+        #region AppUser related methods
+        Task<DataResponse> CreateUpdateAppUserAsync(AppUserRequest request);
+        #endregion
+
+        #region AppUserProfile related methods
+        Task<PageResult<AppUserProfile>> GetAllAppUserProfileAsync(PaginationFilter paramRequest);
+        Task<PagingResult<AppUserProfile>> GetAllAppUserProfileExtnAsync(PaginationFilter paramRequest);
+        Task<PagingResult<AppUserProfile>?> GetAllAppUserProfileAdoAsync(PaginationFilter paramRequest);
+        Task<DataResponse> GetAppUserProfileByIdAsync(string id);
+        Task<DataResponse> GetAppUserProfileByIdAdoAsync(string id);
         Task<DataResponse> CreateUpdateAppUserProfileAsync(AppUserProfileRegisterRequest request);
         Task<DataResponse> DeleteAppUserProfileAsync(string id);
-        Task<DataResponse> CreateUpdateAppUserAsync(AppUserRequest request);
+        #endregion
+        
     }
 }

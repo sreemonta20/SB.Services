@@ -34,7 +34,7 @@ namespace SB.Security.Controllers
         #endregion
 
         #region All authentication related methods
-        /// POST api/User/login
+        /// POST api/Auth/authenticateUser
         /// <summary>
         /// This method authenticate user credential.
         /// </summary>
@@ -44,7 +44,7 @@ namespace SB.Security.Controllers
         [HttpPost]
         [Route(ConstantSupplier.POST_AUTH_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<object> Login([FromBody] LoginRequest request)
+        public async Task<object> AuthenticateUserAsync([FromBody] LoginRequest request)
         {
             _securityLogService.LogInfo(ConstantSupplier.LOGIN_STARTED_INFO_MSG);
             _securityLogService.LogInfo(String.Format(ConstantSupplier.LOGIN_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
@@ -70,6 +70,7 @@ namespace SB.Security.Controllers
             return response;
         }
 
+        /// POST api/Auth/refreshToken
         /// <summary>
         /// Refresh token api endpoint, which gets the user information from the expired access token and validates 
         /// the refresh token against the user. Once the validation is successful, we generate a new access token and 
@@ -84,7 +85,7 @@ namespace SB.Security.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<object> RefreshToken([FromBody] RefreshTokenRequest refreshTokenReq)
+        public async Task<object> RefreshTokenAsync([FromBody] RefreshTokenRequest refreshTokenReq)
         {
             _securityLogService.LogInfo(ConstantSupplier.REFRESHTOKEN_STARTED_INFO_MSG);
             _securityLogService.LogInfo(String.Format(ConstantSupplier.REFRESHTOKEN_REQ_MSG, JsonConvert.SerializeObject(refreshTokenReq, Formatting.Indented)));
@@ -119,6 +120,7 @@ namespace SB.Security.Controllers
             return response;
         }
 
+        /// POST api/Auth/revoke
         /// <summary>
         /// It invalidates the refresh token.
         /// </summary>
@@ -128,7 +130,7 @@ namespace SB.Security.Controllers
         [HttpGet]
         [Route(ConstantSupplier.REVOKE_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<object> Revoke([FromQuery] string userToken)
+        public async Task<object> RevokeAsync([FromQuery] string userToken)
         {
             _securityLogService.LogInfo(ConstantSupplier.REVOKE_STARTED_INFO_MSG);
             _securityLogService.LogInfo(String.Format(ConstantSupplier.REVOKE_STARTED_INFO_MSG, JsonConvert.SerializeObject(userToken, Formatting.Indented)));

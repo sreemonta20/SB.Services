@@ -46,7 +46,7 @@ namespace SB.Security.Service
         private readonly IDatabaseManager _dbmanager;
 
         /// <summary>
-        /// 
+        /// Public Constructor
         /// </summary>
         /// <param name="config"></param>
         /// <param name="context"></param>
@@ -65,16 +65,185 @@ namespace SB.Security.Service
         }
         #endregion
 
-        #region All service methods
+        #region AppUser related methods
+        /// <summary>
+        /// <para>EF And ADO.NET Codeblocks: CreateUpdateAppUserAsync</para>
+        /// <br>This method is used to create or update application user for getting user credential to use the application. Also it creates salt key to save</br> 
+        /// <br>the password with proper hasing during the creating and updating the application user.</br>
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<DataResponse> CreateUpdateAppUserAsync(AppUserRequest request)
+        {
+            DataResponse? oDataResponse = null;
+            AppUser? oExistAppUser = null;
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
+            try
+            {
+                string saltKey = BCryptNet.GenerateSalt(13);
+                if (request != null)
+                {
+                    switch (request.ActionName)
+                    {
+                        case ConstantSupplier.SAVE_KEY:
+                            oExistAppUser = await _context.AppUsers.FirstOrDefaultAsync(x => (x.UserName.Trim().ToLower()) == request.UserName.Trim().ToLower());
+                            if (Utilities.IsNotNull(oExistAppUser))
+                            {
+                                _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_RES_MSG, JsonConvert.SerializeObject(oExistAppUser, Formatting.Indented)));
+                                oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_APP_USER, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
+                                return oDataResponse;
+                            }
+
+
+                            AppUser oNewAppUser = new()
+                            {
+                                Id = Guid.NewGuid(),
+                                AppUserProfileId = new Guid(request.AppUserProfileId),
+                                UserName = request.UserName,
+                                Password = BCryptNet.HashPassword(request.Password, saltKey),
+                                SaltKey = saltKey,
+                                RefreshToken = null,
+                                RefreshTokenExpiryTime = null,
+                                CreatedBy = request.CreateUpdatedBy,
+                                CreatedDate = DateTime.UtcNow,
+                                IsActive = request.IsActive
+                            };
+
+                            #region EF Codeblock of saving data
+                            await _context.AppUsers.AddAsync(oNewAppUser);
+                            int isSave = await _context.SaveChangesAsync();
+                            await oTrasaction.CommitAsync();
+
+                            request.Id = Convert.ToString(oNewAppUser.Id);
+                            if (!isSave.Equals(1))
+                            {
+                                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(oNewAppUser, Formatting.Indented)));
+                            }
+
+                            oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oNewAppUser };
+
+                            #endregion
+
+                            #region ADO.NET Codeblock of saving data
+                            //object? refreshTokenValue = oNewAppUser.RefreshToken;
+                            //object? refreshTokenExpiryTimeValue = oNewAppUser.RefreshTokenExpiryTime;
+                            //List<IDbDataParameter> parameters = new()
+                            //{
+                            //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.SAVE_KEY, DbType.String),
+                            //    _dbmanager.CreateParameter("@Id", oNewAppUser.Id, DbType.Guid),
+                            //    _dbmanager.CreateParameter("@AppUserProfileId", oNewAppUser.AppUserProfileId, DbType.Guid),
+                            //    _dbmanager.CreateParameter("@UserName", oNewAppUser.UserName, DbType.String),
+                            //    _dbmanager.CreateParameter("@Password", oNewAppUser.Password, DbType.String),
+                            //    _dbmanager.CreateParameter("@SaltKey", oNewAppUser.SaltKey, DbType.String),
+                            //    _dbmanager.CreateParameter("@RefreshToken", refreshTokenValue, (DbType)(refreshTokenValue??DBNull.Value)),
+                            //    _dbmanager.CreateParameter("@RefreshTokenExpiryTime", refreshTokenExpiryTimeValue, (DbType)(refreshTokenExpiryTimeValue??DBNull.Value)),
+                            //    _dbmanager.CreateParameter("@CreatedBy", oNewAppUser.CreatedBy, DbType.String),
+                            //    _dbmanager.CreateParameter("@CreatedDate", oNewAppUser.CreatedDate, DbType.DateTime),
+                            //    _dbmanager.CreateParameter("@UpdatedBy", DBNull.Value, DbType.String),
+                            //    _dbmanager.CreateParameter("@UpdatedDate", DBNull.Value, DbType.DateTime),
+                            //    _dbmanager.CreateParameter("@IsActive", oNewAppUser.IsActive, DbType.Boolean)
+                            //};
+
+                            //int isSave = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_APP_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
+
+                            //request.Id = Convert.ToString(oNewAppUser.Id);
+                            //if (!isSave.Equals(1))
+                            //{
+                            //    _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(oNewAppUser, Formatting.Indented)));
+                            //}
+
+                            //oDataResponse =  isSave > 0
+                            //? new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oNewAppUser }
+                            //: new DataResponse { Success = false, Message = ConstantSupplier.CREATE_APP_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                            #endregion
+
+                            break;
+
+                        case ConstantSupplier.UPDATE_KEY:
+                            oExistAppUser = await _context.AppUsers.FirstOrDefaultAsync(x => (x.Id == new Guid(request.Id)) && (x.UserName.Trim().ToLower()) == request.UserName.Trim().ToLower());
+
+                            if (Utilities.IsNotNull(oExistAppUser))
+                            {
+                                oExistAppUser.AppUserProfileId = new Guid(request.AppUserProfileId);
+                                oExistAppUser.UserName = request.UserName;
+                                oExistAppUser.SaltKey = saltKey;
+                                oExistAppUser.Password = BCryptNet.HashPassword(request.Password, saltKey);
+                                oExistAppUser.RefreshToken = null;
+                                oExistAppUser.RefreshTokenExpiryTime = null;
+                                oExistAppUser.UpdatedBy = request.CreateUpdatedBy;
+                                oExistAppUser.UpdatedDate = DateTime.UtcNow;
+                                oExistAppUser.IsActive = request.IsActive;
+
+                                #region EF Codeblock of saving data
+                                await _context.SaveChangesAsync();
+                                await oTrasaction.CommitAsync();
+                                oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.UPDATE_APP_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
+                                #endregion
+
+                                #region ADO.NET Codeblock of updating data
+                                //object? refreshTokenValue = request.RefreshToken;
+                                //object? refreshTokenExpiryTimeValue = request.RefreshTokenExpiryTime;
+                                //List<IDbDataParameter> parameters = new()
+                                //{
+                                //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.UPDATE_KEY, DbType.String),
+                                //    _dbmanager.CreateParameter("@Id", request.Id, DbType.Guid),
+                                //    _dbmanager.CreateParameter("@AppUserProfileId", request.AppUserProfileId, DbType.Guid),
+                                //    _dbmanager.CreateParameter("@UserName", request.UserName, DbType.String),
+                                //    _dbmanager.CreateParameter("@SaltKey", saltKey, DbType.String),
+                                //    _dbmanager.CreateParameter("@Password", BCryptNet.HashPassword(request.Password, saltKey), DbType.String),
+                                //    _dbmanager.CreateParameter("@RefreshToken", refreshTokenValue, (DbType)(refreshTokenValue??DBNull.Value)),
+                                //    _dbmanager.CreateParameter("@RefreshTokenExpiryTime", refreshTokenExpiryTimeValue, (DbType)(refreshTokenExpiryTimeValue??DBNull.Value)),
+                                //    _dbmanager.CreateParameter("@CreatedBy", oExistAppUser.CreatedBy, DbType.String),
+                                //    _dbmanager.CreateParameter("@CreatedDate", oExistAppUser.CreatedDate, DbType.DateTime),
+                                //    _dbmanager.CreateParameter("@UpdatedBy", request.CreateUpdatedBy, DbType.String),
+                                //    _dbmanager.CreateParameter("@UpdatedDate", DateTime.UtcNow, DbType.DateTime),
+                                //    _dbmanager.CreateParameter("@IsActive", request.IsActive, DbType.Boolean)
+                                //};
+
+                                //int isUpdate = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_APP_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
+
+                                //if (!isUpdate.Equals(1))
+                                //{
+                                //    _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(oExistAppUser, Formatting.Indented)));
+                                //}
+
+                                //oDataResponse = isUpdate > 0
+                                //? new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oExistAppUser }
+                                //: new DataResponse { Success = false, Message = ConstantSupplier.CREATE_APP_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                                #endregion
+                            }
+                            else
+                            {
+                                oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.UPDATE_APP_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
+                            }
+                            break;
+
+                    }
+                    return oDataResponse;
+
+                }
+                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.CREATE_UPDATE_APP_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return oDataResponse;
+        }
+        #endregion
+
+        #region AppUserProfile related methods
 
         /// <summary>
-        /// <para>EF Codeblock: GetAllUserAsync</para> 
+        /// <para>EF Codeblock: GetAllAppUserProfileAsync</para> 
         /// This service method used to get a list users based on the supplied page number and page size.
         /// <br/> And retriving result as PageResult<![CDATA[<T>]]>.
         /// </summary>
         /// <param name="paramRequest"></param>
         /// <returns>PageResult<![CDATA[<T>]]></returns>
-        public async Task<PageResult<AppUserProfile>> GetAllUserAsync(PaginationFilter paramRequest)
+        public async Task<PageResult<AppUserProfile>> GetAllAppUserProfileAsync(PaginationFilter paramRequest)
         {
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
             try
@@ -103,13 +272,42 @@ namespace SB.Security.Service
         }
 
         /// <summary>
-        /// <para>ADO.NET Codeblock: GetAllUserAdoAsync</para> 
+        /// <para>EF Codeblock: GetAllAppUserProfileExtnAsync</para> 
+        /// This service method used to get a list users based on the supplied page number and page size.
+        /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
+        /// </summary>
+        /// <param name="paramRequest"></param>
+        /// <returns>PagingResult<![CDATA[<T>]]></returns>
+        public async Task<PagingResult<AppUserProfile>> GetAllAppUserProfileExtnAsync(PaginationFilter paramRequest)
+        {
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+            try
+            {
+                IQueryable<AppUserProfile>? source = (from user in _context?.AppUserProfiles?.OrderBy(a => a.CreatedDate) select user).AsQueryable();
+                PagingResult<AppUserProfile> result = await Utilities.GetPagingResult(source, paramRequest.PageNumber, paramRequest.PageSize);
+
+                if (Utilities.IsNull(result) && !result.Items.Any())
+                {
+                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
+                }
+
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        /// <summary>
+        /// <para>ADO.NET Codeblock: GetAllAppUserProfileAdoAsync</para> 
         /// This service method used to get a list users based on the supplied page number and page size.
         /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
         /// </summary>
         /// <param name="paramRequest"></param>
         /// <returns>PageResult<![CDATA[<T>]]></returns>
-        public async Task<PagingResult<AppUserProfile>?> GetAllUserAdoAsync(PaginationFilter paramRequest)
+        public async Task<PagingResult<AppUserProfile>?> GetAllAppUserProfileAdoAsync(PaginationFilter paramRequest)
         {
             PagingResult<AppUserProfile>? result = null;
             _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
@@ -141,43 +339,12 @@ namespace SB.Security.Service
         }
 
         /// <summary>
-        /// <para>EF Codeblock: GetAllUserExtnAsync</para> 
-        /// This service method used to get a list users based on the supplied page number and page size.
-        /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
-        /// </summary>
-        /// <param name="paramRequest"></param>
-        /// <returns>PagingResult<![CDATA[<T>]]></returns>
-        public async Task<PagingResult<AppUserProfile>> GetAllUserExtnAsync(PaginationFilter paramRequest)
-        {
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-            try
-            {
-                IQueryable<AppUserProfile>? source = (from user in _context?.AppUserProfiles?.OrderBy(a => a.CreatedDate) select user).AsQueryable();
-                PagingResult<AppUserProfile> result = await Utilities.GetPagingResult(source, paramRequest.PageNumber, paramRequest.PageSize);
-
-                if (Utilities.IsNull(result) && !result.Items.Any())
-                {
-                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
-                }
-
-                return result;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-        }
-
-        
-
-        /// <summary>
-        /// <para>EF Codeblock: GetUserByIdAsync</para> 
+        /// <para>EF Codeblock: GetAppUserProfileByIdAsync</para> 
         /// This service method used to get a specific user details by supplying user id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns>DataResponse</returns>
-        public async Task<DataResponse> GetUserByIdAsync(string id)
+        public async Task<DataResponse> GetAppUserProfileByIdAsync(string id)
         {
             DataResponse oDataResponse;
             _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
@@ -203,12 +370,12 @@ namespace SB.Security.Service
         }
 
         /// <summary>
-        /// <para>ADO.NET Codeblock: GetUserByIdAdoAsync</para> 
+        /// <para>ADO.NET Codeblock: GetAppUserProfileByIdAdoAsync</para> 
         /// <para>This service method used to get a specific user details by supplying user id.</para> 
         /// </summary>
         /// <param name="id"></param>
         /// <returns>DataResponse</returns>
-        public async Task<DataResponse> GetUserByIdAdoAsync(string id)
+        public async Task<DataResponse> GetAppUserProfileByIdAdoAsync(string id)
         {
             DataResponse oDataResponse;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
@@ -460,172 +627,7 @@ namespace SB.Security.Service
             
         }
 
-        /// <summary>
-        /// <para>EF And ADO.NET Codeblocks: CreateUpdateAppUserAsync</para>
-        /// <br>This method is used to create or update application user for getting user credential to use the application. Also it creates salt key to save</br> 
-        /// <br>the password with proper hasing during the creating and updating the application user.</br>
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public async Task<DataResponse> CreateUpdateAppUserAsync(AppUserRequest request)
-        {
-            DataResponse? oDataResponse = null;
-            AppUser? oExistAppUser = null;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
-            using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
-            try
-            {
-                string saltKey = BCryptNet.GenerateSalt(13);
-                if (request != null)
-                {
-                    switch (request.ActionName)
-                    {
-                        case ConstantSupplier.SAVE_KEY:
-                            oExistAppUser = await _context.AppUsers.FirstOrDefaultAsync(x => (x.UserName.Trim().ToLower()) == request.UserName.Trim().ToLower());
-                            if (Utilities.IsNotNull(oExistAppUser))
-                            {
-                                _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_RES_MSG, JsonConvert.SerializeObject(oExistAppUser, Formatting.Indented)));
-                                oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_APP_USER, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
-                                return oDataResponse;
-                            }
-
-
-                            AppUser oNewAppUser = new()
-                            {
-                                Id = Guid.NewGuid(),
-                                AppUserProfileId = new Guid(request.AppUserProfileId),
-                                UserName = request.UserName,
-                                Password = BCryptNet.HashPassword(request.Password, saltKey),
-                                SaltKey = saltKey,
-                                RefreshToken = null,
-                                RefreshTokenExpiryTime = null,
-                                CreatedBy = request.CreateUpdatedBy,
-                                CreatedDate = DateTime.UtcNow,
-                                IsActive = request.IsActive
-                            };
-
-                            #region EF Codeblock of saving data
-                            await _context.AppUsers.AddAsync(oNewAppUser);
-                            int isSave = await _context.SaveChangesAsync();
-                            await oTrasaction.CommitAsync();
-
-                            request.Id = Convert.ToString(oNewAppUser.Id);
-                            if (!isSave.Equals(1))
-                            {
-                                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(oNewAppUser, Formatting.Indented)));
-                            }
-
-                            oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oNewAppUser };
-
-                            #endregion
-
-                            #region ADO.NET Codeblock of saving data
-                            //object? refreshTokenValue = oNewAppUser.RefreshToken;
-                            //object? refreshTokenExpiryTimeValue = oNewAppUser.RefreshTokenExpiryTime;
-                            //List<IDbDataParameter> parameters = new()
-                            //{
-                            //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.SAVE_KEY, DbType.String),
-                            //    _dbmanager.CreateParameter("@Id", oNewAppUser.Id, DbType.Guid),
-                            //    _dbmanager.CreateParameter("@AppUserProfileId", oNewAppUser.AppUserProfileId, DbType.Guid),
-                            //    _dbmanager.CreateParameter("@UserName", oNewAppUser.UserName, DbType.String),
-                            //    _dbmanager.CreateParameter("@Password", oNewAppUser.Password, DbType.String),
-                            //    _dbmanager.CreateParameter("@SaltKey", oNewAppUser.SaltKey, DbType.String),
-                            //    _dbmanager.CreateParameter("@RefreshToken", refreshTokenValue, (DbType)(refreshTokenValue??DBNull.Value)),
-                            //    _dbmanager.CreateParameter("@RefreshTokenExpiryTime", refreshTokenExpiryTimeValue, (DbType)(refreshTokenExpiryTimeValue??DBNull.Value)),
-                            //    _dbmanager.CreateParameter("@CreatedBy", oNewAppUser.CreatedBy, DbType.String),
-                            //    _dbmanager.CreateParameter("@CreatedDate", oNewAppUser.CreatedDate, DbType.DateTime),
-                            //    _dbmanager.CreateParameter("@UpdatedBy", DBNull.Value, DbType.String),
-                            //    _dbmanager.CreateParameter("@UpdatedDate", DBNull.Value, DbType.DateTime),
-                            //    _dbmanager.CreateParameter("@IsActive", oNewAppUser.IsActive, DbType.Boolean)
-                            //};
-
-                            //int isSave = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_APP_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
-
-                            //request.Id = Convert.ToString(oNewAppUser.Id);
-                            //if (!isSave.Equals(1))
-                            //{
-                            //    _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(oNewAppUser, Formatting.Indented)));
-                            //}
-
-                            //oDataResponse =  isSave > 0
-                            //? new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oNewAppUser }
-                            //: new DataResponse { Success = false, Message = ConstantSupplier.CREATE_APP_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                            #endregion
-
-                            break;
-
-                        case ConstantSupplier.UPDATE_KEY:
-                            oExistAppUser = await _context.AppUsers.FirstOrDefaultAsync(x => (x.Id == new Guid(request.Id)) && (x.UserName.Trim().ToLower()) == request.UserName.Trim().ToLower());
-
-                            if (Utilities.IsNotNull(oExistAppUser))
-                            {
-                                oExistAppUser.AppUserProfileId = new Guid(request.AppUserProfileId);
-                                oExistAppUser.UserName = request.UserName;
-                                oExistAppUser.SaltKey = saltKey;
-                                oExistAppUser.Password = BCryptNet.HashPassword(request.Password, saltKey);
-                                oExistAppUser.RefreshToken = null;
-                                oExistAppUser.RefreshTokenExpiryTime = null;
-                                oExistAppUser.UpdatedBy = request.CreateUpdatedBy;
-                                oExistAppUser.UpdatedDate = DateTime.UtcNow;
-                                oExistAppUser.IsActive = request.IsActive;
-
-                                #region EF Codeblock of saving data
-                                await _context.SaveChangesAsync();
-                                await oTrasaction.CommitAsync();
-                                oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.UPDATE_APP_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
-                                #endregion
-
-                                #region ADO.NET Codeblock of updating data
-                                //object? refreshTokenValue = request.RefreshToken;
-                                //object? refreshTokenExpiryTimeValue = request.RefreshTokenExpiryTime;
-                                //List<IDbDataParameter> parameters = new()
-                                //{
-                                //    _dbmanager.CreateParameter("@ActionName", ConstantSupplier.UPDATE_KEY, DbType.String),
-                                //    _dbmanager.CreateParameter("@Id", request.Id, DbType.Guid),
-                                //    _dbmanager.CreateParameter("@AppUserProfileId", request.AppUserProfileId, DbType.Guid),
-                                //    _dbmanager.CreateParameter("@UserName", request.UserName, DbType.String),
-                                //    _dbmanager.CreateParameter("@SaltKey", saltKey, DbType.String),
-                                //    _dbmanager.CreateParameter("@Password", BCryptNet.HashPassword(request.Password, saltKey), DbType.String),
-                                //    _dbmanager.CreateParameter("@RefreshToken", refreshTokenValue, (DbType)(refreshTokenValue??DBNull.Value)),
-                                //    _dbmanager.CreateParameter("@RefreshTokenExpiryTime", refreshTokenExpiryTimeValue, (DbType)(refreshTokenExpiryTimeValue??DBNull.Value)),
-                                //    _dbmanager.CreateParameter("@CreatedBy", oExistAppUser.CreatedBy, DbType.String),
-                                //    _dbmanager.CreateParameter("@CreatedDate", oExistAppUser.CreatedDate, DbType.DateTime),
-                                //    _dbmanager.CreateParameter("@UpdatedBy", request.CreateUpdatedBy, DbType.String),
-                                //    _dbmanager.CreateParameter("@UpdatedDate", DateTime.UtcNow, DbType.DateTime),
-                                //    _dbmanager.CreateParameter("@IsActive", request.IsActive, DbType.Boolean)
-                                //};
-
-                                //int isUpdate = await _dbmanager.InsertExecuteScalarTransAsync(ConstantSupplier.POST_SAVE_UPDATE_APP_USER_SP_NAME, CommandType.StoredProcedure, IsolationLevel.ReadCommitted, parameters.ToArray());
-
-                                //if (!isUpdate.Equals(1))
-                                //{
-                                //    _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(oExistAppUser, Formatting.Indented)));
-                                //}
-
-                                //oDataResponse = isUpdate > 0
-                                //? new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oExistAppUser }
-                                //: new DataResponse { Success = false, Message = ConstantSupplier.CREATE_APP_USER_SAVE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                                #endregion
-                            }
-                            else
-                            {
-                                oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.UPDATE_APP_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
-                            }
-                            break;
-
-                    }
-                    return oDataResponse;
-
-                }
-                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
-                oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.CREATE_UPDATE_APP_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return oDataResponse;
-        }
+        
         #endregion
     }
 }

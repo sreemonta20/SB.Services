@@ -13,18 +13,26 @@ namespace SB.Security.Service
     public interface IRoleMenuService
     {
 
-        Task<DataResponse> GetAllRolesAsync();
-        Task<DataResponse> GetAllRolesPaginationAsync(PaginationFilter paramRequest);
-        Task<DataResponse> GetRoleByIdAsync(string roleId);
-        Task<DataResponse> SaveUpdateRoleAsync(RoleSaveUpdateRequest roleSaveUpdateRequest);
-        Task<DataResponse> DeleteRoleAsync(string roleId);
-        Task<DataResponse> GetAllMenuByUserIdAsync(string? userId);
-        Task<PagingResult<AppUserMenu>> GetAllUserMenuPagingWithSearchAsync(PagingSearchFilter oPagingSearchFilter);
-        Task<DataResponse> GetAppUserRoleMenuInitialDataAsync();
-        Task<DataResponse> GetAllParentMenusAsync();
-        Task<DataResponse> SaveUpdateAppUserMenuAsync(AppUserMenuRequest request);
+        #region AppUserRole related methods
+        Task<DataResponse> GetAllAppUserRolesAsync();
+        Task<DataResponse> GetAllAppUserRolesPaginationAsync(PaginationFilter paramRequest);
+        Task<DataResponse> GetAppUserRolesByIdAsync(string roleId);
+        Task<DataResponse> CreateUpdateAppUserRoleAsync(RoleSaveUpdateRequest roleSaveUpdateRequest);
+        Task<DataResponse> DeleteAppUserRoleAsync(string roleId);
+        #endregion
+
+        #region AppUserMenu related methods
+        Task<PagingResult<AppUserMenu>> GetAllAppUserMenuPagingWithSearchAsync(PagingSearchFilter oPagingSearchFilter);
+        Task<DataResponse> GetAllAppUserMenuByUserIdAsync(string? userId);
+        Task<DataResponse> CreateUpdateAppUserMenuAsync(AppUserMenuRequest request);
         Task<DataResponse> DeleteAppUserMenuAsync(string menuId);
+        Task<DataResponse> GetAllParentMenusAsync();
+        #endregion
+
+        #region AppUserRoleMenu related methods
+        Task<DataResponse> GetAppUserRoleMenuInitialDataAsync();
         Task<PagingResult<AppUserRoleMenuResponse>> GetAllAppUserRoleMenusPagingWithSearchAsync(PagingSearchFilter paramRequest);
+        #endregion
 
     }
 }

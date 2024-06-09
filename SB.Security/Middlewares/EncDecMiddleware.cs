@@ -344,31 +344,26 @@ namespace SB.Security.Middlewares
         {
             List<string> excludeURL = new()
             {
-                "/api/Auth/login",
+                "/api/Auth/authenticateUser",
                 "/api/Auth/refreshtoken",
                 "/api/Auth/revoke",
-                "/api/User/getAllUsers",
-                "/api/User/getUserbyId",
-                "/api/User/createUpdateAppUserProfile",
-                "/api/User/deletAppUserProfile",
                 "/api/User/createUpdateAppUser",
-                "/api/RoleMenu/getAllRoles",
-                "/api/RoleMenu/getAllRolesPagination",
-                "/api/RoleMenu/getRoleById",
-                "/api/RoleMenu/createUpdateRole",
-                "/api/RoleMenu/deleteRole",
-                "/api/RoleMenu/getAllUserMenuPagingWithSearchTerm",
-                "/api/RoleMenu/getAllMenuByUserId",
-<<<<<<< HEAD
+                "/api/User/getAllAppUserProfile",
+                "/api/User/getAppUserProfileById",
+                "/api/User/createUpdateAppUserProfile",
+                "/api/User/deleteAppUserProfile",
+                "/api/RoleMenu/getAllAppUserRoles",
+                "/api/RoleMenu/getAllAppUserRolesPagination",
+                "/api/RoleMenu/getAppUserRolesById",
+                "/api/RoleMenu/createUpdateAppUserRole",
+                "/api/RoleMenu/deleteAppUserRole",
+                "/api/RoleMenu/getAllAppUserMenuPagingWithSearch",
+                "/api/RoleMenu/getAllAppUserMenuByUserId",
                 "/api/RoleMenu/getAllParentMenus",
-                "/api/RoleMenu/getAllUserMenuPagingWithSearchTerm",
-=======
-                "api/RoleMenu/getAppUserRoleMenuInitialData",
-                "/api/RoleMenu/getAllParentMenus",
-                "/api/RoleMenu/saveUpdateUserMenu",
+                "/api/RoleMenu/createUpdateAppUserMenu",
                 "/api/RoleMenu/deleteAppUserMenu",
-                "/api/RoleMenu/getAllAppUserRoleMenuPagingWithSearchTerm"
->>>>>>> 41ea00595fd956bee65937771c3b16f1c5811f77
+                "api/RoleMenu/getAppUserRoleMenuInitialData",
+                "/api/RoleMenu/getAllAppUserRoleMenusPagingWithSearch"
             };
             return excludeURL;
         }
