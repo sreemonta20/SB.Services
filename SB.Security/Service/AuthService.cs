@@ -21,6 +21,9 @@ using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace SB.Security.Service
 {
+    /// <summary>
+    /// It implements <see cref="IAuthService"/> where all the methods inclduing login or user authentication, refresh token, and revoke user from loggedin.
+    /// </summary>
     public class AuthService : IAuthService
     {
         #region Variable declaration & constructor initialization
@@ -554,8 +557,8 @@ namespace SB.Security.Service
                 {
                     oExistAppUser.RefreshToken = oAppUser.RefreshToken;
                     oExistAppUser.RefreshTokenExpiryTime = oAppUser.RefreshTokenExpiryTime;
-                    _context.Entry(oExistAppUser).Property("RefreshToken").IsModified = true;
-                    _context.Entry(oExistAppUser).Property("RefreshTokenExpiryTime").IsModified = true;
+                    oExistAppUser.UpdatedBy = Convert.ToString(oAppUser.AppUserProfileId);
+                    oExistAppUser.UpdatedDate = DateTime.UtcNow;
                     await _context.SaveChangesAsync();
                     await oTrasaction.CommitAsync();
 

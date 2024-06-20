@@ -64,8 +64,14 @@
         public const string LOG_INFO_APPEND_LINE_END = "**********************************************************************";
         #endregion
 
-        #region Auth Log
-        //api/Auth/login
+        #region Auth Controller
+        public const string POST_AUTH_ROUTE_NAME = "authenticateUser";
+        public const string REFRESH_TOKEN_ROUTE_NAME = "refreshToken";
+        public const string REVOKE_ROUTE_NAME = "revoke";
+        #endregion
+
+        #region Auth Methods Execution Log
+        //api/Auth/authenticateUser
         public const string LOGIN_STARTED_INFO_MSG = "Login api method started.\n";
         public const string LOGIN_REQ_MSG = "Login api method request is: \n{0}\n";
         public const string LOGIN_EXCEPTION_MSG = "Exception is: \t\t\t{0}\nResponse is: \n{1}\n";
@@ -74,7 +80,7 @@
         public const string SERVICE_LOGIN_RES_MSG = "Authenticate (User service) method response is: \n{0}\n";
         public const string LOGIN_RES_MSG = "Login api method response is: \n{0}\n";
 
-        //api/Auth/refreshtoken
+        //api/Auth/refreshToken
         public const string REFRESHTOKEN_STARTED_INFO_MSG = "RefreshToken api method started.\n";
         public const string REFRESHTOKEN_REQ_MSG = "RefreshToken api method request is: \n{0}\n";
         public const string REFRESHTOKEN_FAILED_MSG = "Exception is: \t\t\t{0}\nResponse is: \n{1}\n";
@@ -95,22 +101,55 @@
         public const string SERVICE_REVOKE_RES_MSG = "Revoke (User service) method response is: \n{0}\n";
         #endregion
 
-        #region User Log
-        //api/User/getAllUsers
-        public const string GETALL_STARTED_INFO_MSG = "GetAllUsers api method started.\n";
-        public const string GETALL_REQ_MSG = "GetAllUsers api method request is: \n{0}\n";
-        public const string GETALL_EXCEPTION_MSG = "GetAllUsers Exception below:: \n{0}\n";
-        public const string SERVICE_GETALL_REQ_MSG = "GetAllUsers (User service) method request is: \n{0}\n";
-        public const string SERVICE_GETALL_RES_MSG = "GetAllUsers (User service) method error response is: \n{0}\n";
-        public const string GETALL_RES_MSG = "GetAllUsers api method response is: \n{0}\n";
+        #region Auth Service
+        public const string AUTH_FAILED = "Authentation failed. Please try again later";
+        public const string AUTH_INVALID_CREDENTIAL = "Invalid credential";
+        public const string AUTH_SUCCESS = "Authentation success!";
+        public const string AUTH_FAILED_ATTEMPT = "Your account was blocked for a {0} minutes, please try again later.";
+        public const string INVALID_USER_MSG = "User might be invalid or inactive. Please contact with administrator.";
 
-        //api/User/getUserbyId
-        public const string GETBYID_STARTED_INFO_MSG = "GetUserbyId api method started.\n";
-        public const string GETBYID_REQ_MSG = "GetUserbyId api method request is: \n{0}\n";
-        public const string GETBYID_EXCEPTION_MSG = "GetUserbyId Exception below:: \n{0}\n";
-        public const string SERVICE_GETBYID_REQ_MSG = "GetUserbyId (User service) method request is: \n{0}\n";
-        public const string SERVICE_GETBYID_RES_MSG = "GetUserbyId (User service) method error response is: \n{0}\n";
-        public const string GETBYID_RES_MSG = "GetUserbyId api method response is: \n{0}\n";
+        public const string REFRESHTOKEN_FAILED = "Refreshing token failed. Please try again later";
+        public const string REFRESHTOKEN_INVALID_CREDENTIAL = "Invalid refresh token credential";
+        public const string REFRESHTOKEN_SUCCESS = "Refreshing token success!";
+        public const string NULL_TOKEN = "Token is null";
+
+        public const string REVOKE_USER_FAILED = "Revoking user failed. Please try again later";
+        public const string REVOKE_USER_SUCCESS = "Revoking user success!";
+        #endregion
+
+        #region User Controller
+        public const string GET_ALL_APP_USER_PROFILE_ROUTE_NAME = "getAllAppUserProfile";
+        public const string GET_APP_USER_PROFILE_ROUTE_NAME = "getAppUserProfileById";
+        public const string POST_APP_USER_PROFILE_ROUTE_NAME = "createUpdateAppUserProfile";
+        public const string DEL_APP_USER_PROFILE_ROUTE_NAME = "deleteAppUserProfile";
+        public const string POST_APP_USER_ROUTE_NAME = "createUpdateAppUser";
+        #endregion
+
+        #region User Methods Execution Log
+        //api/User/createUpdateAppUser
+        public const string SAVEUP_APP_USER_STARTED_INFO_MSG = "CreateUpdateAppUser api method started.\n";
+        public const string SAVEUP_APP_USER_REQ_MSG = "CreateUpdateAppUser api method request is: \n{0}\n";
+        public const string SAVEUP_APP_USER_EXCEPTION_MSG = "CreateUpdateAppUser Exception below:: \n{0}\n";
+        public const string SERVICE_SAVEUP_APP_USER_REQ_MSG = "CreateUpdateAppUser (User service) method request is: \n{0}\n";
+        public const string SERVICE_SAVEUP_APP_USER_RES_MSG = "CreateUpdateAppUser (User service) method response is: \n{0}\n";
+        public const string SAVEUP_APP_USER_RES_MSG = "CreateUpdateAppUser api method response is: \n{0}\n";
+        public const string SAVEUP_APP_USER_FAILED_RES_MSG = "CreateUpdateAppUser Failed (User service) : api method response is: \n{0}\n";
+
+        //api/User/getAllAppUserProfile
+        public const string GETALL_STARTED_INFO_MSG = "GetAllAppUserProfile api method started.\n";
+        public const string GETALL_REQ_MSG = "GetAllAppUserProfile api method request is: \n{0}\n";
+        public const string GETALL_EXCEPTION_MSG = "GetAllAppUserProfile Exception below:: \n{0}\n";
+        public const string SERVICE_GETALL_REQ_MSG = "GetAllAppUserProfile (User service) method request is: \n{0}\n";
+        public const string SERVICE_GETALL_RES_MSG = "GetAllAppUserProfile (User service) method error response is: \n{0}\n";
+        public const string GETALL_RES_MSG = "GetAllAppUserProfile api method response is: \n{0}\n";
+
+        //api/User/getAppUserProfileById
+        public const string GETBYID_STARTED_INFO_MSG = "GetAppUserProfileById api method started.\n";
+        public const string GETBYID_REQ_MSG = "GetAppUserProfileById api method request is: \n{0}\n";
+        public const string GETBYID_EXCEPTION_MSG = "GetAppUserProfileById Exception below:: \n{0}\n";
+        public const string SERVICE_GETBYID_REQ_MSG = "GetAppUserProfileById (User service) method request is: \n{0}\n";
+        public const string SERVICE_GETBYID_RES_MSG = "GetAppUserProfileById (User service) method error response is: \n{0}\n";
+        public const string GETBYID_RES_MSG = "GetAppUserProfileById api method response is: \n{0}\n";
 
         //api/User/createUpdateAppUserProfile
         public const string SAVEUP_APP_USER_PROFILE_STARTED_INFO_MSG = "CreateUpdateAppUserProfile api method started.\n";
@@ -121,27 +160,78 @@
         public const string SAVEUP_APP_USER_PROFILE_RES_MSG = "CreateUpdateAppUserProfile api method response is: \n{0}\n";
         public const string SAVEUP_APP_USER_PROFILE_FAILED_RES_MSG = "CreateUpdateAppUserProfile Failed (User service) : api method response is: \n{0}\n";
 
-        //api/User/deletAppUserProfile
-        public const string DEL_APP_USER_PROFILE_STARTED_INFO_MSG = "DeleteUser api method started.\n";
-        public const string DEL_APP_USER_PROFILE_REQ_MSG = "DeleteUser api method request is: \n{0}\n";
-        public const string DEL_APP_USER_PROFILE_EXCEPTION_MSG = "DeleteUser Exception below:: \n{0}\n";
-        public const string SERVICE_DEL_APP_USER_PROFILE_REQ_MSG = "DeleteUser (User service) method request is: \n{0}\n";
-        public const string SERVICE_DEL_APP_USER_PROFILE_RES_MSG = "DeleteUser (User service) method response is: \n{0}\n";
-        public const string DEL_APP_USER_PROFILE_RES_MSG = "DeleteUser api method response is: \n{0}\n";
-        public const string DEL_APP_USER_PROFILE_FAILED_RES_MSG = "DeleteUser Failed (User service) : api method response is: \n{0}\n";
+        //api/User/deleteAppUserProfile
+        public const string DEL_APP_USER_PROFILE_STARTED_INFO_MSG = "DeleteAppUserProfile api method started.\n";
+        public const string DEL_APP_USER_PROFILE_REQ_MSG = "DeleteAppUserProfile api method request is: \n{0}\n";
+        public const string DEL_APP_USER_PROFILE_EXCEPTION_MSG = "DeleteAppUserProfile Exception below:: \n{0}\n";
+        public const string SERVICE_DEL_APP_USER_PROFILE_REQ_MSG = "DeleteAppUserProfile (User service) method request is: \n{0}\n";
+        public const string SERVICE_DEL_APP_USER_PROFILE_RES_MSG = "DeleteAppUserProfile (User service) method response is: \n{0}\n";
+        public const string DEL_APP_USER_PROFILE_RES_MSG = "DeleteAppUserProfile api method response is: \n{0}\n";
+        public const string DEL_APP_USER_PROFILE_FAILED_RES_MSG = "DeleteAppUserProfile Failed (User service) : api method response is: \n{0}\n";
 
-        //api/User/createUpdateAppUser
-        public const string SAVEUP_APP_USER_STARTED_INFO_MSG = "CreateUpdateAppUser api method started.\n";
-        public const string SAVEUP_APP_USER_REQ_MSG = "CreateUpdateAppUser api method request is: \n{0}\n";
-        public const string SAVEUP_APP_USER_EXCEPTION_MSG = "CreateUpdateAppUser Exception below:: \n{0}\n";
-        public const string SERVICE_SAVEUP_APP_USER_REQ_MSG = "CreateUpdateAppUser (User service) method request is: \n{0}\n";
-        public const string SERVICE_SAVEUP_APP_USER_RES_MSG = "CreateUpdateAppUser (User service) method response is: \n{0}\n";
-        public const string SAVEUP_APP_USER_RES_MSG = "CreateUpdateAppUser api method response is: \n{0}\n";
-        public const string SAVEUP_APP_USER_FAILED_RES_MSG = "CreateUpdateAppUser Failed (User service) : api method response is: \n{0}\n";
+
 
         #endregion
 
-        #region RoleMenu Log
+        #region User Service
+        public const string ADMIN = "Admin";
+        public const string USER = "User";
+
+        public const string GET_APP_USER_PROFILE_LIST_SUCCESS = "Fetching user list successful";
+        public const string GET_APP_USER_PROFILE_LIST_FAILED = "Fetching user list failed.";
+
+        public const string GET_APP_USER_PROFILE_SUCCESS = "Fetching user details successful";
+        public const string GET_APP_USER_PROFILE_FAILED = "Fetching user details failed.";
+
+        public const string EXIST_APP_USER_PROFILE = "User profile is already exist. Try unique one or activate/update it.";
+        public const string CREATE_APP_USER_PROFILE_SAVE_SUCCESS = "Creating user profile success!";
+        public const string CREATE_APP_USER_PROFILE_SAVE_FAILED = "Creating user profile failed. Please try again later";
+        public const string UPDATE_APP_USER_PROFILE_SUCCESS = "Updating user profile success!";
+        public const string UPDATE_APP_USER_PROFILE_FAILED = "Updating user profile failed. Please try again later";
+        public const string CREATE_UPDATE_APP_USER_PROFILE_FAILED = "Creating/updating user profile failed. Please try again later";
+
+        public const string DELETE_APP_USER_PROFILE_SUCCESS = "User profile deleted successfully";
+        public const string DELETE_APP_USER_PROFILE_FAILED = "Deletion profile of user failed!. Please try again later";
+
+        public const string EXIST_APP_USER = "User is already exist. Try unique username or activate/update it.";
+        public const string CREATE_APP_USER_SAVE_SUCCESS = "Creating user success!";
+        public const string CREATE_APP_USER_SAVE_FAILED = "Creating user failed. Please try again later";
+        public const string UPDATE_APP_USER_SUCCESS = "Updating user success!";
+        public const string UPDATE_APP_USER_FAILED = "Updating user failed. Please try again later";
+        public const string CREATE_UPDATE_APP_USER_FAILED = "Creating/updating user failed. Please try again later";
+
+        #endregion
+
+        #region Role Menu Controller
+        public const string GET_ALL_ROLES_ROUTE_NAME = "getAllAppUserRoles";
+        public const string GET_ALL_ROLES_PAGINATION_ROUTE_NAME = "getAllAppUserRolesPagination";
+        public const string GET_ROLE_BY_ID_ROUTE_NAME = "getAppUserRolesById";
+        public const string POST_SAVE_UPDATE_ROLE_ROUTE_NAME = "createUpdateAppUserRole";
+        public const string DELETE_ROLE_ROUTE_NAME = "deleteAppUserRole";
+        public const string GET_ALL_MENU_BY_USER_ID_ROUTE_NAME = "getAllAppUserMenuByUserId";
+        public const string GET_ALL_USER_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME = "getAllAppUserMenuPagingWithSearch";
+        public const string GET_USER_MENU_INITIAL_DATA_ROUTE_NAME = "getAppUserRoleMenuInitialData";
+        public const string GET_ALL_PARENT_MENUS_ROUTE_NAME = "getAllParentMenus";
+
+        public const string GETALL_USER_MENU_PAGING_SEARCH_SP_NAME = "SP_GetAllAppUserMenusPagingWithSearch";
+
+        public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_SUCCESS_MSG = "User menu list retrieved successfully.";
+        public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_FAILED_MSG = "Retrieving user menu list failed.";
+        public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG = "Retrieving user menu list is found empty.";
+
+        public const string POST_SAVE_UPDATE_USER_MENU_ROUTE_NAME = "createUpdateAppUserMenu";
+        public const string DELETE_USER_MENU_ROUTE_NAME = "deleteAppUserMenu";
+
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME = "getAllAppUserRoleMenusPagingWithSearch";
+
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_SP_NAME = "SP_GetAllAppUserRoleMenusPagingWithSearch";
+
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RESULT_SUCCESS_MSG = "App user role menu list retrieved successfully.";
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RESULT_FAILED_MSG = "Retrieving app user role menu list failed.";
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG = "Retrieving app user role menu list is found empty.";
+        #endregion
+
+        #region RoleMenu Execution Log
         //api/RoleMenu/getAllRoles
         public const string GETALLROLES_STARTED_INFO_MSG = "GetAllRoles api method started.\n";
         public const string GETALLROLES_REQ_MSG = "GetAllRoles api method request is: \n{0}\n";
@@ -249,94 +339,6 @@
         public const string SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG = "GetAllAppUserRoleMenusPagingWithSearchAsync (RoleMenu service) method request is: \n{0}\n";
         public const string SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG = "GetAllAppUserRoleMenusPagingWithSearchAsync (RoleMenu service) method response is: \n{0}\n";
         public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG = "GetAllAppUserRoleMenuPagingWithSearchTerm api method response is: \n{0}\n";
-        #endregion
-
-        #region Auth Controller
-        public const string POST_AUTH_ROUTE_NAME = "authenticateUser";
-        public const string REFRESH_TOKEN_ROUTE_NAME = "refreshToken";
-        public const string REVOKE_ROUTE_NAME = "revoke";
-        #endregion
-
-        #region Auth Service
-        public const string AUTH_FAILED = "Authentation failed. Please try again later";
-        public const string AUTH_INVALID_CREDENTIAL = "Invalid credential";
-        public const string AUTH_SUCCESS = "Authentation success!";
-        public const string AUTH_FAILED_ATTEMPT = "Your account was blocked for a {0} minutes, please try again later.";
-        public const string INVALID_USER_MSG = "User might be invalid or inactive. Please contact with administrator.";
-
-        public const string REFRESHTOKEN_FAILED = "Refreshing token failed. Please try again later";
-        public const string REFRESHTOKEN_INVALID_CREDENTIAL = "Invalid refresh token credential";
-        public const string REFRESHTOKEN_SUCCESS = "Refreshing token success!";
-        public const string NULL_TOKEN = "Token is null";
-
-        public const string REVOKE_USER_FAILED = "Revoking user failed. Please try again later";
-        public const string REVOKE_USER_SUCCESS = "Revoking user success!";
-        #endregion
-
-        #region User Controller
-        public const string GET_ALL_APP_USER_PROFILE_ROUTE_NAME = "getAllAppUserProfile";
-        public const string GET_APP_USER_PROFILE_ROUTE_NAME = "getAppUserProfileById";
-        public const string POST_APP_USER_PROFILE_ROUTE_NAME = "createUpdateAppUserProfile";
-        public const string DEL_APP_USER_PROFILE_ROUTE_NAME = "deleteAppUserProfile";
-        public const string POST_APP_USER_ROUTE_NAME = "createUpdateAppUser";
-        #endregion
-
-        #region User Service
-        public const string ADMIN = "Admin";
-        public const string USER = "User";
-
-        public const string GET_APP_USER_PROFILE_LIST_SUCCESS = "Fetching user list successful";
-        public const string GET_APP_USER_PROFILE_LIST_FAILED = "Fetching user list failed.";
-
-        public const string GET_APP_USER_PROFILE_SUCCESS = "Fetching user details successful";
-        public const string GET_APP_USER_PROFILE_FAILED = "Fetching user details failed.";
-        
-        public const string EXIST_APP_USER_PROFILE = "User profile is already exist. Try unique one or activate/update it.";
-        public const string CREATE_APP_USER_PROFILE_SAVE_SUCCESS = "Creating user profile success!";
-        public const string CREATE_APP_USER_PROFILE_SAVE_FAILED = "Creating user profile failed. Please try again later";
-        public const string UPDATE_APP_USER_PROFILE_SUCCESS = "Updating user profile success!";
-        public const string UPDATE_APP_USER_PROFILE_FAILED = "Updating user profile failed. Please try again later";
-        public const string CREATE_UPDATE_APP_USER_PROFILE_FAILED = "Creating/updating user profile failed. Please try again later";
-
-        public const string DELETE_APP_USER_PROFILE_SUCCESS = "User profile deleted successfully";
-        public const string DELETE_APP_USER_PROFILE_FAILED = "Deletion profile of user failed!. Please try again later";
-
-        public const string EXIST_APP_USER = "User is already exist. Try unique username or activate/update it.";
-        public const string CREATE_APP_USER_SAVE_SUCCESS = "Creating user success!";
-        public const string CREATE_APP_USER_SAVE_FAILED = "Creating user failed. Please try again later";
-        public const string UPDATE_APP_USER_SUCCESS = "Updating user success!";
-        public const string UPDATE_APP_USER_FAILED = "Updating user failed. Please try again later";
-        public const string CREATE_UPDATE_APP_USER_FAILED = "Creating/updating user failed. Please try again later";
-
-        #endregion
-
-        #region Role Menu Controller
-        public const string GET_ALL_ROLES_ROUTE_NAME = "getAllAppUserRoles";
-        public const string GET_ALL_ROLES_PAGINATION_ROUTE_NAME = "getAllAppUserRolesPagination";
-        public const string GET_ROLE_BY_ID_ROUTE_NAME = "getAppUserRolesById";
-        public const string POST_SAVE_UPDATE_ROLE_ROUTE_NAME = "createUpdateAppUserRole";
-        public const string DELETE_ROLE_ROUTE_NAME = "deleteAppUserRole";
-        public const string GET_ALL_MENU_BY_USER_ID_ROUTE_NAME = "getAllAppUserMenuByUserId";
-        public const string GET_ALL_USER_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME = "getAllAppUserMenuPagingWithSearch";
-        public const string GET_USER_MENU_INITIAL_DATA_ROUTE_NAME = "getAppUserRoleMenuInitialData";
-        public const string GET_ALL_PARENT_MENUS_ROUTE_NAME = "getAllParentMenus";
-
-        public const string GETALL_USER_MENU_PAGING_SEARCH_SP_NAME = "SP_GetAllAppUserMenusPagingWithSearch";
-
-        public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_SUCCESS_MSG = "User menu list retrieved successfully.";
-        public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_FAILED_MSG = "Retrieving user menu list failed.";
-        public const string GET_ALL_USER_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG = "Retrieving user menu list is found empty.";
-
-        public const string POST_SAVE_UPDATE_USER_MENU_ROUTE_NAME = "createUpdateAppUserMenu";
-        public const string DELETE_USER_MENU_ROUTE_NAME = "deleteAppUserMenu";
-
-        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME = "getAllAppUserRoleMenusPagingWithSearch";
-
-        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_SP_NAME = "SP_GetAllAppUserRoleMenusPagingWithSearch";
-
-        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RESULT_SUCCESS_MSG = "App user role menu list retrieved successfully.";
-        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RESULT_FAILED_MSG = "Retrieving app user role menu list failed.";
-        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG = "Retrieving app user role menu list is found empty.";
         #endregion
 
         #region Role Menu Service

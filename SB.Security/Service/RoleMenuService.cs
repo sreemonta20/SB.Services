@@ -26,8 +26,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 namespace SB.Security.Service
 {
     /// <summary>
-    /// includes all the asynchronous methods for role and menu operation incuding the user GetAllRoles, GetAllRoles using pagination, specific role by id, save or update role, and delete role. 
-    /// It implements  <see cref="IRoleMenuService"/>.
+    /// It implements <see cref="IRoleMenuService"/> all the asynchronous methods for role and menu operation incuding the user GetAllRoles, GetAllRoles using pagination, specific role by id, save or update role, and delete role. 
     /// </summary>
     public class RoleMenuService : IRoleMenuService
     {

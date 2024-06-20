@@ -10,7 +10,7 @@ using System.Text;
 namespace SB.Security.Service
 {
     /// <summary>
-    /// It implements <see cref="ITokenService"/> where all the methods inclduing generation of jwt token, refresh token, and getting claim principals are defined.
+    /// It implements <see cref="ITokenService"/> all the methods inclduing generation of jwt token, refresh token, and getting claim principals are defined.
     /// </summary>
     public class TokenService : ITokenService
     {

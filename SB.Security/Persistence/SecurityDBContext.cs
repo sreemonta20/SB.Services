@@ -318,12 +318,12 @@ namespace SB.Security.Persistence
                   new AppUserMenu()
                   {
                       Id = new Guid("60AADC18-6B91-4CEE-ACE7-97700B685C98"),
-                      Name = "User",
+                      Name = "User Role",
                       IsHeader = false,
                       IsModule = false,
                       IsComponent = true,
                       CssClass = "nav-item",
-                      RouteLink = "/business/security/user",
+                      RouteLink = "/business/security/appuserrole",
                       RouteLinkClass = "nav-link",
                       Icon = "far fa-circle nav-icon",
                       Remark = "Navigation Item",
