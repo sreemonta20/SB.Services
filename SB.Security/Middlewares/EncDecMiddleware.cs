@@ -347,11 +347,6 @@ namespace SB.Security.Middlewares
                 "/api/Auth/authenticateUser",
                 "/api/Auth/refreshtoken",
                 "/api/Auth/revoke",
-                "/api/User/createUpdateAppUser",
-                "/api/User/getAllAppUserProfile",
-                "/api/User/getAppUserProfileById",
-                "/api/User/createUpdateAppUserProfile",
-                "/api/User/deleteAppUserProfile",
                 "/api/RoleMenu/getAllAppUserRoles",
                 "/api/RoleMenu/getAllAppUserRolesPagination",
                 "/api/RoleMenu/getAppUserRolesById",
@@ -359,11 +354,16 @@ namespace SB.Security.Middlewares
                 "/api/RoleMenu/deleteAppUserRole",
                 "/api/RoleMenu/getAllAppUserMenuPagingWithSearch",
                 "/api/RoleMenu/getAllAppUserMenuByUserId",
-                "/api/RoleMenu/getAllParentMenus",
                 "/api/RoleMenu/createUpdateAppUserMenu",
                 "/api/RoleMenu/deleteAppUserMenu",
-                "api/RoleMenu/getAppUserRoleMenuInitialData",
-                "/api/RoleMenu/getAllAppUserRoleMenusPagingWithSearch"
+                "/api/RoleMenu/getAllParentMenus",
+                "/api/RoleMenu/getAppUserRoleMenuInitialData",
+                "/api/RoleMenu/getAllAppUserRoleMenusPagingWithSearch",
+                "/api/User/createUpdateAppUser",
+                "/api/User/getAllAppUserProfile",
+                "/api/User/getAppUserProfileById",
+                "/api/User/createUpdateAppUserProfile",
+                "/api/User/deleteAppUserProfile"
             };
             return excludeURL;
         }

@@ -83,7 +83,7 @@ namespace SB.Security.Controllers
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_ROLES_PAGINATION_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<object> GetAllAppUserRolesPaginationAsync(int pageNo = 0, int pageSize = 0)
+        public async Task<object> GetAllAppUserRolesPaginationAsync(int pageNumber = 0, int pageSize = 0)
         {
             DataResponse response;
             _securityLogService.LogInfo(ConstantSupplier.GETALLROLES_STARTED_INFO_MSG);
@@ -91,7 +91,7 @@ namespace SB.Security.Controllers
             try
             {
                 #region EF Codeblock
-                response = await _roleMenuService.GetAllAppUserRolesPaginationAsync(new PaginationFilter(pageNo, pageSize));
+                response = await _roleMenuService.GetAllAppUserRolesPaginationAsync(new PaginationFilter(pageNumber, pageSize));
                 #endregion
             }
             catch (Exception Ex)
