@@ -115,20 +115,50 @@ namespace SB.Security.Service
         public async Task<DataResponse> GetAllAppUserRolesPaginationAsync(PaginationFilter paramRequest)
         {
             DataResponse? oDataResponse;
-            PagingResult<AppUserRole>? oAppUserRoleList = null;
+            //PagingResult<AppUserRole>? oAppUserRoleList = null;
+            PagingResult<AppUserRoleResponse>? oAppUserRoleResponseList = null; 
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
             try
             {
-                IQueryable<AppUserRole> oIQueryableAppUserRole = (from userRole in _context?.AppUserRoles?.OrderBy(a => a.CreatedDate) select userRole).AsQueryable();
-                oAppUserRoleList = await Utilities.GetPagingResult(oIQueryableAppUserRole, paramRequest.PageNumber, paramRequest.PageSize);
-                if (Utilities.IsNotNull(oAppUserRoleList) && oAppUserRoleList.Items.Any())
+                //IQueryable<AppUserRole> oIQueryableAppUserRole = (from userRole in _context?.AppUserRoles?.OrderBy(a => a.CreatedDate) select userRole).AsQueryable();
+                //oAppUserRoleList = await Utilities.GetPagingResult(oIQueryableAppUserRole, paramRequest.PageNumber, paramRequest.PageSize);
+                //if (Utilities.IsNotNull(oAppUserRoleList) && oAppUserRoleList.Items.Any())
+                //{
+                //    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.GET_ALL_ROLES_PAGINATION_FOUND, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oAppUserRoleList };
+                //}
+                //else
+                //{
+                //    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_ALL_ROLES_PAGINATION_NOT_FOUND, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = oAppUserRoleList };
+                //    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_RES_MSG, JsonConvert.SerializeObject(oAppUserRoleList, Formatting.Indented)));
+                //}
+                IQueryable<AppUserRoleResponse> oIQueryableAppUserRoleResponse = (from userRole in _context.AppUserRoles
+                                                                                  join createdByUser in _context?.AppUserProfiles on userRole.CreatedBy equals createdByUser.Id.ToString() into createdByGroup
+                                                                                  from createdByUser in createdByGroup.DefaultIfEmpty()
+                                                                                  join updatedByUser in _context.AppUserProfiles on userRole.UpdatedBy equals updatedByUser.Id.ToString() into updatedByGroup
+                                                                                  from updatedByUser in updatedByGroup.DefaultIfEmpty()
+                                                                                  orderby userRole.CreatedDate
+                                                                                  select new AppUserRoleResponse
+                                                                                  {
+                                                                                      Id= userRole.Id,
+                                                                                      RoleName =userRole.RoleName,
+                                                                                      Description = userRole.Description,
+                                                                                      CreatedBy = userRole.CreatedBy,
+                                                                                      CreatedByName = createdByUser.FullName,
+                                                                                      CreatedDate = userRole.CreatedDate,
+                                                                                      UpdatedBy = userRole.UpdatedBy,
+                                                                                      UpdatedByName = updatedByUser.FullName,
+                                                                                      UpdatedDate = userRole.UpdatedDate,
+                                                                                      IsActive = userRole.IsActive
+                                                                                  }).AsQueryable();
+                oAppUserRoleResponseList = await Utilities.GetPagingResult(oIQueryableAppUserRoleResponse, paramRequest.PageNumber, paramRequest.PageSize);
+                if (Utilities.IsNotNull(oAppUserRoleResponseList) && oAppUserRoleResponseList.Items.Any())
                 {
-                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.GET_ALL_ROLES_PAGINATION_FOUND, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oAppUserRoleList };
+                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.GET_ALL_ROLES_PAGINATION_FOUND, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oAppUserRoleResponseList };
                 }
                 else
                 {
-                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_ALL_ROLES_PAGINATION_NOT_FOUND, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = oAppUserRoleList };
-                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_RES_MSG, JsonConvert.SerializeObject(oAppUserRoleList, Formatting.Indented)));
+                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_ALL_ROLES_PAGINATION_NOT_FOUND, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = oAppUserRoleResponseList };
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_RES_MSG, JsonConvert.SerializeObject(oAppUserRoleResponseList, Formatting.Indented)));
                 }
                 return oDataResponse;
             }
