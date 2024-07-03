@@ -234,7 +234,7 @@ namespace SB.Security.Controllers
         #region AppUserMenu related all http methods
         // GET api/RoleMenu/getAllAppUserMenuPagingWithSearch 
         /// <summary>
-        /// It used to get all user menu based on the search text or term.
+        /// It used to get all user menu based on the search text or term.Sample param:{"SearchTerm":"Admin","SortColumnName":"","SortColumnDirection":"ASC","PageNumber":1,"PageSize":10}
         /// </summary>
         /// <returns>
         /// <see cref="Task{object}"/>
@@ -252,6 +252,8 @@ namespace SB.Security.Controllers
                 #region ADO.NET Codeblock
                 //dynamic? paramRequest = JsonConvert.DeserializeObject(param);
                 //PagingSearchFilter? oPagingSearchFilter = JsonConvert.DeserializeObject<PagingSearchFilter>(paramRequest[0].ToString());
+                //dynamic? paramRequest = JsonConvert.DeserializeObject(param);
+                //PagingSearchFilter? oPagingSearchFilter = JsonConvert.DeserializeObject<PagingSearchFilter>(paramRequest.ToString());
                 PagingSearchFilter? oPagingSearchFilter = JsonConvert.DeserializeObject<PagingSearchFilter>(param);
                 PagingResult<AppUserMenu>? usermenuList = await _roleMenuService.GetAllAppUserMenuPagingWithSearchAsync(oPagingSearchFilter);
                 if (Utilities.IsNull(usermenuList))

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Asn1.X9;
 using SB.DataAccessLayer;
 using SB.EmailService.Service;
@@ -358,16 +359,27 @@ namespace SB.Security.Service
                 List<AppUserMenu>? oAppUserMenuList;
                 List<IDbDataParameter> parameters = new()
                 {
+                    _dbmanager.CreateParameter("@PageNumber", paramRequest.PageNumber, DbType.Int32),
+                    _dbmanager.CreateParameter("@PageSize", paramRequest.PageSize, DbType.Int32),
                     _dbmanager.CreateParameter("@SearchTerm", paramRequest.SearchTerm, DbType.String),
                     _dbmanager.CreateParameter("@SortColumnName", paramRequest.SortColumnName, DbType.String),
-                    _dbmanager.CreateParameter("@SortColumnDirection", paramRequest.SortColumnDirection, DbType.String),
-                    _dbmanager.CreateParameter("@PageIndex", paramRequest.PageNumber, DbType.Int32),
-                    _dbmanager.CreateParameter("@PageSize", paramRequest.PageSize, DbType.Int32)
+                    _dbmanager.CreateParameter("@SortColumnDirection", paramRequest.SortColumnDirection, DbType.String)
+                    //_dbmanager.CreateParameter("@PageIndex", paramRequest.PageNumber, DbType.Int32),
+                    //_dbmanager.CreateParameter("@PageSize", paramRequest.PageSize, DbType.Int32)
                 };
                 DataTable oDataTable = await _dbmanager.GetDataTableAsync(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
 
                 if (Utilities.IsNotNull(oDataTable) && oDataTable.Rows.Count > 0)
                 {
+                    JObject jsonObject = JObject.Parse(oDataTable.Rows[0][0].ToString());
+
+                    // Optionally, parse the Items property separately if it is a string containing JSON
+                    string itemsString = jsonObject["Items"].ToString();
+                    JArray itemsArray = JArray.Parse(itemsString);
+                    jsonObject["Items"] = itemsArray;
+
+                    // Output the JSON object
+                    Console.WriteLine(jsonObject.ToString());
                     oAppUserMenuList = Utilities.ConvertDataTable<AppUserMenu>(oDataTable);
 
                     PagingResult<AppUserMenu>? oAppUserMenuResult = Utilities.GetPagingResult(oAppUserMenuList, paramRequest.PageNumber, paramRequest.PageSize);
