@@ -356,7 +356,6 @@ namespace SB.Security.Service
             try
             {
                 _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-                List<AppUserMenu>? oAppUserMenuList;
                 List<IDbDataParameter> parameters = new()
                 {
                     _dbmanager.CreateParameter("@PageNumber", paramRequest.PageNumber, DbType.Int32),
@@ -364,28 +363,36 @@ namespace SB.Security.Service
                     _dbmanager.CreateParameter("@SearchTerm", paramRequest.SearchTerm, DbType.String),
                     _dbmanager.CreateParameter("@SortColumnName", paramRequest.SortColumnName, DbType.String),
                     _dbmanager.CreateParameter("@SortColumnDirection", paramRequest.SortColumnDirection, DbType.String)
-                    //_dbmanager.CreateParameter("@PageIndex", paramRequest.PageNumber, DbType.Int32),
-                    //_dbmanager.CreateParameter("@PageSize", paramRequest.PageSize, DbType.Int32)
                 };
-                DataTable oDataTable = await _dbmanager.GetDataTableAsync(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
 
-                if (Utilities.IsNotNull(oDataTable) && oDataTable.Rows.Count > 0)
-                {
-                    JObject jsonObject = JObject.Parse(oDataTable.Rows[0][0].ToString());
+                //DataTable oDataTable = await _dbmanager.GetDataTableAsync(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
 
+                //if (Utilities.IsNotNull(oDataTable) && oDataTable.Rows.Count > 0)
+                //{
+                //    oAppUserMenuList = Utilities.ConvertDataTable<AppUserMenu>(oDataTable);
+
+                //    PagingResult<AppUserMenu>? oAppUserMenuResult = Utilities.GetPagingResult(oAppUserMenuList, paramRequest.PageNumber, paramRequest.PageSize);
+                //    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(oAppUserMenuResult, Formatting.Indented)));
+                //    return oAppUserMenuResult;
+                //}
+
+                object result = await _dbmanager.GetScalarValueAsync(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+                if (Utilities.IsNotNull(result)) {
+                    JObject? oJObject = JObject.Parse(result.ToString());
                     // Optionally, parse the Items property separately if it is a string containing JSON
-                    string itemsString = jsonObject["Items"].ToString();
-                    JArray itemsArray = JArray.Parse(itemsString);
-                    jsonObject["Items"] = itemsArray;
+                    string oItems = oJObject["Items"].ToString();
+                    JArray oJArray = JArray.Parse(oItems);
+                    oJObject["Items"] = oJArray;
 
-                    // Output the JSON object
-                    Console.WriteLine(jsonObject.ToString());
-                    oAppUserMenuList = Utilities.ConvertDataTable<AppUserMenu>(oDataTable);
+                    string correctedJsonString = oJObject.ToString();
 
-                    PagingResult<AppUserMenu>? oAppUserMenuResult = Utilities.GetPagingResult(oAppUserMenuList, paramRequest.PageNumber, paramRequest.PageSize);
+                    // Deserialize the JSON string into PagingResult<AppUserMenu>
+                    PagingResult<AppUserMenu>? oAppUserMenuResult = JsonConvert.DeserializeObject<PagingResult<AppUserMenu>>(correctedJsonString);
+                    //_securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, correctedJsonString));
                     _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(oAppUserMenuResult, Formatting.Indented)));
                     return oAppUserMenuResult;
                 }
+
                 return null;
             }
             catch (Exception)
