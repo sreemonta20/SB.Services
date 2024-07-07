@@ -376,18 +376,13 @@ namespace SB.Security.Service
                 //    return oAppUserMenuResult;
                 //}
 
-                object result = await _dbmanager.GetScalarValueAsync(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
-                if (Utilities.IsNotNull(result)) {
-                    JObject? oJObject = JObject.Parse(result.ToString());
-                    // Optionally, parse the Items property separately if it is a string containing JSON
-                    string oItems = oJObject["Items"].ToString();
-                    JArray oJArray = JArray.Parse(oItems);
-                    oJObject["Items"] = oJArray;
-
-                    string correctedJsonString = oJObject.ToString();
+                object dbResult = await _dbmanager.GetScalarValueAsync(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+                if (Utilities.IsNotNull(dbResult))
+                {
+                    string resultJStr = Utilities.ConvertJObjectToJsonString(dbResult, "Items");
 
                     // Deserialize the JSON string into PagingResult<AppUserMenu>
-                    PagingResult<AppUserMenu>? oAppUserMenuResult = JsonConvert.DeserializeObject<PagingResult<AppUserMenu>>(correctedJsonString);
+                    PagingResult<AppUserMenu>? oAppUserMenuResult = JsonConvert.DeserializeObject<PagingResult<AppUserMenu>>(resultJStr);
                     //_securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, correctedJsonString));
                     _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(oAppUserMenuResult, Formatting.Indented)));
                     return oAppUserMenuResult;
@@ -402,6 +397,7 @@ namespace SB.Security.Service
 
         }
 
+        
         /// <summary>
         /// It used to get all user menu and their access permission by a specific user
         /// </summary>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SB.Security.Models.Response;
 using SB.Security.Service;
 using System.Collections;
@@ -276,6 +277,17 @@ namespace SB.Security.Helper
             }
 
             return finalResponse;
+        }
+        public static string ConvertJObjectToJsonString(object inputValue, string itemName)
+        {
+            JObject? oJObject = JObject.Parse(inputValue.ToString());
+            // Optionally, parse the Items property separately if it is a string containing JSON
+            string oItems = oJObject[itemName].ToString();
+            JArray oJArray = JArray.Parse(oItems);
+            oJObject[itemName] = oJArray;
+
+            string jsonString = oJObject.ToString();
+            return jsonString;
         }
 
     }
