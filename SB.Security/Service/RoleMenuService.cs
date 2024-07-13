@@ -761,7 +761,9 @@ namespace SB.Security.Service
         /// <summary>
         /// This method used to get all list data, which are needed to be loaded during the user form initialization.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// <see cref="Task{DataResponse}"/>
+        /// </returns>
         public async Task<DataResponse> GetAppUserRoleMenuInitialDataAsync()
         {
             DataResponse? oDataResponse;

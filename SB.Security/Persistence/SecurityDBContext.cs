@@ -20,21 +20,31 @@ namespace SB.Security.Persistence
 
 
         public virtual DbSet<AppUserRole>? AppUserRoles { get; set; }
+        public virtual DbSet<AppUserRoleLog>? AppUserRoleLog { get; set; }
         public virtual DbSet<AppUserProfile>? AppUserProfiles { get; set; }
+        public virtual DbSet<AppUserProfileLog>? AppUserProfileLog { get; set; }
         public virtual DbSet<AppUser>? AppUsers { get; set; }
+        public virtual DbSet<AppUserLog>? AppUserLog { get; set; }
         public virtual DbSet<AppUserMenu>? AppUserMenus { get; set; }
+        public virtual DbSet<AppUserMenuLog>? AppUserMenuLog { get; set; }
         public virtual DbSet<AppUserRoleMenu>? AppUserRoleMenus { get; set; }
-        
+        public virtual DbSet<AppUserRoleMenuLog>? AppUserRoleMenuLog { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Define primary keys
             modelBuilder.Entity<AppUserRole>().HasKey(x => x.Id);
+            modelBuilder.Entity<AppUserRoleLog>().HasKey(x => x.Id);
             modelBuilder.Entity<AppUserProfile>().HasKey(x => x.Id);
+            modelBuilder.Entity<AppUserProfileLog>().HasKey(x => x.Id);
             modelBuilder.Entity<AppUser>().HasKey(x => x.Id);
+            modelBuilder.Entity<AppUserLog>().HasKey(x => x.Id);
             modelBuilder.Entity<AppUserMenu>().HasKey(x => x.Id);
+            modelBuilder.Entity<AppUserMenuLog>().HasKey(x => x.Id);
             modelBuilder.Entity<AppUserRoleMenu>().HasKey(x => x.Id);
-            
+            modelBuilder.Entity<AppUserRoleMenuLog>().HasKey(x => x.Id);
+
 
             modelBuilder.Entity<AppUserRole>(entity =>
             {
@@ -45,11 +55,26 @@ namespace SB.Security.Persistence
                 entity.Property(x => x.CreatedBy).HasColumnName("CreatedBy");
                 entity.Property(x => x.CreatedDate).HasColumnType("datetime");
                 entity.Property(x => x.UpdatedBy).HasColumnName("UpdatedBy");
-                entity.Property(x => x.IsActive).HasColumnName("IsActive");
                 entity.Property(x => x.UpdatedDate).HasColumnType("datetime");
+                entity.Property(x => x.IsActive).HasColumnName("IsActive");
                 entity.ToTable(x => x.HasTrigger("TRG_InsertAppUserRoles"));
                 entity.ToTable(x => x.HasTrigger("TRG_UpdateAppUserRoles"));
                 entity.ToTable(x => x.HasTrigger("TRG_DeleteAppUserRoles"));
+            });
+
+            modelBuilder.Entity<AppUserRoleLog>(entity =>
+            {
+                entity.Property(x => x.Id).HasColumnName("Id");
+                entity.Property(x => x.AppUserRoleId).HasColumnName("AppUserRoleId");
+                entity.Property(x => x.RoleName).HasMaxLength(50);
+                entity.Property(x => x.Description).HasMaxLength(100);
+                entity.Property(x => x.CreatedBy).HasColumnName("CreatedBy");
+                entity.Property(x => x.CreatedDate).HasColumnType("datetime");
+                entity.Property(x => x.UpdatedBy).HasColumnName("UpdatedBy");
+                entity.Property(x => x.UpdatedDate).HasColumnType("datetime");
+                entity.Property(x => x.IsActive).HasColumnName("IsActive");
+                entity.Property(x => x.PerformedUser).HasColumnName("PerformedUser");
+                entity.Property(x => x.Action).HasColumnName("Action");
             });
 
             modelBuilder.Entity<AppUserMenu>(entity =>
@@ -72,11 +97,37 @@ namespace SB.Security.Persistence
                 entity.Property(x => x.CreatedBy).HasColumnName("CreatedBy");
                 entity.Property(x => x.CreatedDate).HasColumnType("datetime");
                 entity.Property(x => x.UpdatedBy).HasColumnName("UpdatedBy");
-                entity.Property(x => x.IsActive).HasColumnName("IsActive");
                 entity.Property(x => x.UpdatedDate).HasColumnType("datetime");
+                entity.Property(x => x.IsActive).HasColumnName("IsActive");
                 entity.ToTable(x => x.HasTrigger("TRG_InsertAppUserMenus"));
                 entity.ToTable(x => x.HasTrigger("TRG_UpdateAppUserMenus"));
                 entity.ToTable(x => x.HasTrigger("TRG_DeleteAppUserMenus"));
+            });
+
+            modelBuilder.Entity<AppUserMenuLog>(entity =>
+            {
+                entity.Property(x => x.Id).HasColumnName("Id");
+                entity.Property(x => x.AppUserMenuId).HasColumnName("AppUserMenuId");
+                entity.Property(x => x.Name).HasMaxLength(100);
+                entity.Property(x => x.IsHeader).HasColumnName("IsHeader");
+                entity.Property(x => x.IsModule).HasColumnName("IsModule");
+                entity.Property(x => x.IsComponent).HasColumnName("IsComponent");
+                entity.Property(x => x.CssClass).HasMaxLength(100);
+                entity.Property(x => x.RouteLink).HasMaxLength(255);
+                entity.Property(x => x.RouteLinkClass).HasMaxLength(200);
+                entity.Property(x => x.Icon).HasMaxLength(100);
+                entity.Property(x => x.Remark).HasMaxLength(255);
+                entity.Property(x => x.ParentId).HasColumnName("ParentId");
+                entity.Property(x => x.DropdownIcon).HasMaxLength(100);
+                entity.Property(x => x.SerialNo).HasColumnName("SerialNo");
+                entity.Property(x => x.Remark).HasMaxLength(255);
+                entity.Property(x => x.CreatedBy).HasColumnName("CreatedBy");
+                entity.Property(x => x.CreatedDate).HasColumnType("datetime");
+                entity.Property(x => x.UpdatedBy).HasColumnName("UpdatedBy");
+                entity.Property(x => x.UpdatedDate).HasColumnType("datetime");
+                entity.Property(x => x.IsActive).HasColumnName("IsActive");
+                entity.Property(x => x.PerformedUser).HasColumnName("PerformedUser");
+                entity.Property(x => x.Action).HasColumnName("Action");
             });
 
             modelBuilder.Entity<AppUserProfile>(entity =>
@@ -98,6 +149,23 @@ namespace SB.Security.Persistence
                 entity.ToTable(x => x.HasTrigger("TRG_InsertAppUserProfiles"));
                 entity.ToTable(x => x.HasTrigger("TRG_UpdateAppUserProfiles"));
                 entity.ToTable(x => x.HasTrigger("TRG_DeleteAppUserProfiles"));
+            });
+
+            modelBuilder.Entity<AppUserProfileLog>(entity =>
+            {
+                entity.Property(x => x.Id).HasColumnName("Id");
+                entity.Property(x => x.AppUserProfileId).HasColumnName("AppUserProfileId");
+                entity.Property(x => x.FullName).HasMaxLength(200);
+                entity.Property(x => x.Address).HasMaxLength(200);
+                entity.Property(x => x.Email).HasMaxLength(200);
+                entity.Property(x => x.AppUserRoleId).HasColumnName("AppUserRoleId");
+                entity.Property(x => x.CreatedBy).HasColumnName("CreatedBy");
+                entity.Property(x => x.CreatedDate).HasColumnType("datetime");
+                entity.Property(x => x.UpdatedBy).HasColumnName("UpdatedBy");
+                entity.Property(x => x.UpdatedDate).HasColumnType("datetime");
+                entity.Property(x => x.IsActive).HasColumnName("IsActive");
+                entity.Property(x => x.PerformedUser).HasColumnName("PerformedUser");
+                entity.Property(x => x.Action).HasColumnName("Action");
             });
 
             modelBuilder.Entity<AppUserRoleMenu>(entity =>
@@ -127,6 +195,25 @@ namespace SB.Security.Persistence
                 entity.ToTable(x => x.HasTrigger("TRG_DeleteAppUserRoleMenus"));
             });
 
+            modelBuilder.Entity<AppUserRoleMenuLog>(entity =>
+            {
+                entity.Property(x => x.Id).HasColumnName("Id");
+                entity.Property(x => x.AppUserRoleMenuId).HasColumnName("AppUserRoleMenuId");
+                entity.Property(x => x.AppUserRoleId).HasColumnName("AppUserRoleId");
+                entity.Property(x => x.AppUserMenuId).HasColumnName("AppUserMenuId");
+                entity.Property(x => x.IsView).HasColumnName("IsView");
+                entity.Property(x => x.IsCreate).HasColumnName("IsCreate");
+                entity.Property(x => x.IsUpdate).HasColumnName("IsUpdate");
+                entity.Property(x => x.IsDelete).HasColumnName("IsDelete");
+                entity.Property(x => x.CreatedBy).HasColumnName("CreatedBy");
+                entity.Property(x => x.CreatedDate).HasColumnType("datetime");
+                entity.Property(x => x.UpdatedBy).HasColumnName("UpdatedBy");
+                entity.Property(x => x.UpdatedDate).HasColumnType("datetime");
+                entity.Property(x => x.IsActive).HasColumnName("IsActive");
+                entity.Property(x => x.PerformedUser).HasColumnName("PerformedUser");
+                entity.Property(x => x.Action).HasColumnName("Action");
+            });
+
             modelBuilder.Entity<AppUser>(entity =>
             {
                 entity.Property(x => x.Id).HasColumnName("Id");
@@ -144,6 +231,21 @@ namespace SB.Security.Persistence
                 entity.ToTable(x => x.HasTrigger("TRG_InsertAppUsers"));
                 entity.ToTable(x => x.HasTrigger("TRG_UpdateAppUsers"));
                 entity.ToTable(x => x.HasTrigger("TRG_DeleteAppUsers"));
+            });
+
+            modelBuilder.Entity<AppUserLog>(entity =>
+            {
+                entity.Property(x => x.Id).HasColumnName("Id");
+                entity.Property(x => x.AppUserId).HasColumnName("AppUserId");
+                entity.Property(x => x.AppUserProfileId).HasColumnName("AppUserProfileId");
+                entity.Property(x => x.UserName).HasMaxLength(100);
+                entity.Property(x => x.Password).HasMaxLength(255);
+                entity.Property(x => x.SaltKey).HasMaxLength(255);
+                entity.Property(x => x.RefreshToken).HasMaxLength(255);
+                entity.Property(x => x.RefreshTokenExpiryTime).HasColumnType("datetime");
+                entity.Property(x => x.IsActive).HasColumnName("IsActive");
+                entity.Property(x => x.PerformedUser).HasColumnName("PerformedUser");
+                entity.Property(x => x.Action).HasColumnName("Action");
             });
 
             modelBuilder.Entity<AppUserRole>().HasData(

@@ -2,21 +2,21 @@
 
 namespace SB.Security.Models.Base
 {
-    /// <summary>
-    /// This class used to create and keep the Application user role records.
-    /// </summary>
-    public class AppUserRole
+    public class AppUserProfileLog
     {
         [Key]
         public Guid Id { get; set; }
-        public string? RoleName { get; set; }
-        public string? Description { get; set; }
+        public Guid AppUserProfileId { get; set; }
+        public string? FullName { get; set; }
+        public string? Address { get; set; }
+        public string? Email { get; set; }
+        public Guid? AppUserRoleId { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public bool? IsActive { get; set; }
-        public ICollection<AppUserProfile>? AppUserProfiles { get; set; }
-        public ICollection<AppUserRoleMenu>? AppUserRoleMenus { get; set; }
+        public string? PerformedUser { get; set; }
+        public string? Action { get; set; }
     }
 }

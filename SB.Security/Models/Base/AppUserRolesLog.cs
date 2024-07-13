@@ -3,12 +3,13 @@
 namespace SB.Security.Models.Base
 {
     /// <summary>
-    /// This class used to create and keep the Application user role records.
+    /// This class used to keep the track of records created, modified, deleted in AppUserRole. 
     /// </summary>
-    public class AppUserRole
+    public class AppUserRoleLog
     {
         [Key]
         public Guid Id { get; set; }
+        public Guid AppUserRoleId { get; set; }
         public string? RoleName { get; set; }
         public string? Description { get; set; }
         public string? CreatedBy { get; set; }
@@ -16,7 +17,8 @@ namespace SB.Security.Models.Base
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public bool? IsActive { get; set; }
-        public ICollection<AppUserProfile>? AppUserProfiles { get; set; }
-        public ICollection<AppUserRoleMenu>? AppUserRoleMenus { get; set; }
+        public string? PerformedUser { get; set; }
+        public string? Action { get; set; }
     }
+    
 }
