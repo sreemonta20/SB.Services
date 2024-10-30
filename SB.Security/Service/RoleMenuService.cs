@@ -772,14 +772,15 @@ namespace SB.Security.Service
             try
             {
                 string userMenuMgtFormInitialData = (string)await _dbmanager.GetScalarValueAsync(ConstantSupplier.GET_USER_MENU_INITIAL_DATA_SP_NAME, CommandType.StoredProcedure);
-
+                
                 if (String.IsNullOrWhiteSpace(userMenuMgtFormInitialData))
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_USER_MENU_FORM_INITIAL_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
                     _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETUSERMENUINITIALDATA_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
                     return oDataResponse;
                 }
-                oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_LOAD_USER_MENU_FORM_INITIAL_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = userMenuMgtFormInitialData };
+                InitialDataResponse? oInitialDataResponse = JsonConvert.DeserializeObject<InitialDataResponse>(userMenuMgtFormInitialData);
+                oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_LOAD_USER_MENU_FORM_INITIAL_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oInitialDataResponse };
                 return oDataResponse;
             }
             catch (Exception)
