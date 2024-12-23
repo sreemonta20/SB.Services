@@ -1,31 +1,3 @@
-//var builder = WebApplication.CreateBuilder(args);
-
-//// Add services to the container area start
-
-//builder.Services.AddControllers();
-//// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-//builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
-
-//var app = builder.Build();
-
-//// Add services to the container area end
-
-//// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
-
-//app.UseHttpsRedirection();
-
-//app.UseAuthorization();
-
-//app.MapControllers();
-
-//app.Run();
-
 using SB.Security.Helper;
 using SB.Security.Models.Configuration;
 using SB.Security.Service;
@@ -96,15 +68,6 @@ namespace SB.Security
                 Log.CloseAndFlush();
             }
         }
-
-        //public static IHostBuilder CreateHostBuilder(string[] args) =>
-        //    Host.CreateDefaultBuilder(args)
-        //        .ConfigureWebHostDefaults(webBuilder =>
-        //        {
-        //            webBuilder.UseKestrel();
-        //            webBuilder.UseStartup<Startup>();
-        //            webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
-        //        }).UseSerilog();
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)

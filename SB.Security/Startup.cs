@@ -67,13 +67,6 @@ namespace SB.Security
             services.AddScoped<IEmailService, EmailSender>();
             #endregion
 
-            //services.AddControllers().AddJsonOptions(options =>
-            //{
-            //    options.JsonSerializerOptions.PropertyNamingPolicy = null;
-            //    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-            //});
-
-            //services.AddControllers().AddNewtonsoftJson();
             services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
@@ -184,43 +177,7 @@ namespace SB.Security
 
 
             #region Configuring authorization middleware into the service
-            //If SB hosted on-premise and customer want to use default Identity 
-            //var key = Encoding.ASCII.GetBytes(appSettings.JWT.Key);
-            //services.AddAuthentication(x =>
-            //{
-            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            //}).AddJwtBearer(x =>
-            //{
-            //    x.Events = new JwtBearerEvents
-            //    {
-            //        OnTokenValidated = context =>
-            //        {
-            //            DateTime secretDate = DateTime.UtcNow.AddSeconds(appSettings.AccessTokenExpireTime);
-
-            //            if (DateTime.UtcNow.Subtract(secretDate).TotalSeconds > 0)
-            //            {
-            //                context.Response.Headers.Add(ConstantSupplier.AUTHORIZATION_TOKEN_HEADER_ADD_NAME_01,
-
-            //                    ConstantSupplier.AUTHORIZATION_TOKEN_HEADER_ADD_VALUE_01);
-            //            }
-
-            //            return Task.CompletedTask;
-            //        }
-            //    };
-            //    x.RequireHttpsMetadata = false;
-            //    x.SaveToken = true;
-            //    x.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuer = false,
-            //        ValidateAudience = false,
-            //        ClockSkew = TimeSpan.Zero,
-            //        ValidateIssuerSigningKey = true,
-            //        IssuerSigningKey = new SymmetricSecurityKey(key)
-            //    };
-            //});
-
+            
             var key = Encoding.ASCII.GetBytes(appSettings.JWT.Key);
             services.AddAuthentication(x =>
             {
