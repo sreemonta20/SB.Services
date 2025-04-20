@@ -31,4 +31,4 @@ msbuild.err
 msbuild.wrn
 /HCS.Security/Logs/*
 /.vs
-/SB.Security/Logs
+/SBERP.Security/Logs
