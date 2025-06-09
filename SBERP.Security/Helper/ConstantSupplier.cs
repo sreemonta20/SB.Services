@@ -7,6 +7,14 @@ namespace SBERP.Security.Helper
     /// </summary>
     public class ConstantSupplier
     {
+        #region Global Error Messages
+        public const string GLOBAL_ERR_AUTH_FAILED_NO_PERMISSION_MSG = "Authentication failed or user does not have permission to access this resource.";
+        public const string GLOBAL_ERR_INVALID_INPUT_STATE_MSG = "The request could not be processed due to invalid input or state.";
+        public const string GLOBAL_ERR_INVALID_OPERATION_MSG = "The requested operation is invalid or cannot be performed.";
+        public const string GLOBAL_ERR_RESOURCE_NOT_FOUND_MSG = "The requested resource was not found.";
+        public const string GLOBAL_ERR_UNEXPECTED_MSG = "An unexpected error occurred. Please try again later.";
+        #endregion
+
         #region Common Constants
         public const string SQLSERVER = "SqlServer";
         public const string ORACLE = "Oracle";
