@@ -10,6 +10,7 @@ using SBERP.Security.Models.Configuration;
 using SBERP.Security.Models.Request;
 using SBERP.Security.Models.Response;
 using SBERP.Security.Service;
+using StackExchange.Redis;
 using System.Net;
 
 namespace SBERP.Security.Controllers.v1
@@ -92,8 +93,8 @@ namespace SBERP.Security.Controllers.v1
         public async Task<object> GetAllAppUserRolesPaginationAsync(int pageNumber = 0, int pageSize = 0)
         {
             DataResponse response;
-            _securityLogService.LogInfo(ConstantSupplier.GETALLROLES_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLROLES_REQ_MSG, JsonConvert.SerializeObject(null, Formatting.Indented)));
+            _securityLogService.LogInfo(ConstantSupplier.GETALLROLESPAGINATION_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLROLESPAGINATION_REQ_MSG, JsonConvert.SerializeObject(null, Formatting.Indented)));
             try
             {
                 #region EF Codeblock
@@ -102,8 +103,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLROLES_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLROLES_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLROLESPAGINATION_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLROLESPAGINATION_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -113,7 +114,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLROLES_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLROLESPAGINATION_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
 
@@ -479,38 +480,33 @@ namespace SBERP.Security.Controllers.v1
             return response;
         }
 
-        // GET api/RoleMenu/getAllAppUserRoleMenusPagingWithSearch
+        // GET api/RoleMenu/getMenusByRoleId
+
         /// <summary>
-        /// It used to get all user menu based on the search text or term. Sample param:{"SearchTerm":"Admin","SortColumnName":"","SortColumnDirection":"ASC","PageNumber":1,"PageSize":10}
+        /// It used to get all active user menus by role id.
         /// </summary>
+        /// <param name="roleId"></param>
         /// <returns>
         /// <see cref="Task{object}"/>
         /// </returns>
         [HttpGet]
-        [Route(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME)]
+        [Route(ConstantSupplier.GET_MENUS_BY_ROLE_ID_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<object> GetAllAppUserRoleMenusPagingWithSearchAsync([FromQuery] string param)
+        public async Task<object> GetMenusByRoleIdAsync([FromQuery] string roleId)
         {
-            _securityLogService.LogInfo(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(ConstantSupplier.GETACTIVEMENUSBYROLEID_STARTED_INFO_MSG);
             DataResponse response;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(param, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETACTIVEMENUSBYROLEID_REQ_MSG, JsonConvert.SerializeObject(null, Formatting.Indented)));
             try
             {
                 #region ADO.NET Codeblock
-                dynamic? paramRequest = JsonConvert.DeserializeObject(param);
-                PagingSearchFilter? oPagingSearchFilter = JsonConvert.DeserializeObject<PagingSearchFilter>(paramRequest.ToString());
-                PagingResult<AppUserRoleMenuResponse>? appUserRoleMenuResponseList = await _roleMenuService.GetAllAppUserRoleMenusPagingWithSearchAsync(oPagingSearchFilter);
-                if (Utilities.IsNull(appUserRoleMenuResponseList))
-                {
-                    return new DataResponse { Success = false, Message = ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                }
-                response = new DataResponse { Success = false, Message = ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = appUserRoleMenuResponseList };
+                response = await _roleMenuService.GetMenusByRoleIdAsync(roleId);
                 #endregion
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETACTIVEMENUSBYROLEID_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETACTIVEMENUSBYROLEID_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -520,7 +516,107 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETACTIVEMENUSBYROLEID_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            return response;
+        }
+
+        // GET api/RoleMenu/getRoleMenusPagingWithSearch 
+        /// <summary>
+        /// This method used to get all role menu permissions based on the role id. Also based on search text role menu permission can be fetched.
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <param name="param"></param>
+        /// <returns>
+        /// <see cref="Task{object}"/>
+        /// </returns>
+        [HttpGet]
+        [Route(ConstantSupplier.GET_ALL_USER_ROLE_MENU_PAGING_WITH_SEARCH_ROUTE_NAME)]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
+        public async Task<object> GetRoleMenusPagingWithSearchAsync([FromQuery] Guid roleId, [FromQuery] string param)
+        {
+            DataResponse response;
+            _securityLogService.LogInfo(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(param, Formatting.Indented)));
+            try
+            {
+                PagingSearchFilter filter = JsonConvert.DeserializeObject<PagingSearchFilter>(param);
+
+                var result = await _roleMenuService.GetRoleMenusPagingWithSearchAsync(roleId, filter);
+
+                if (!Utilities.IsNull(result))
+                {
+                    return new DataResponse
+                    {
+                        Success = true,
+                        Message = ConstantSupplier.GET_ALL_USER_ROLE_MENU_PAGING_SEARCH_RESULT_SUCCESS_MSG,
+                        MessageType = Enum.EnumResponseType.Success,
+                        ResponseCode = StatusCodes.Status200OK,
+                        Result = result
+                    };
+                    
+                }
+
+                response = new DataResponse
+                {
+                    Success = false,
+                    Message = ConstantSupplier.GET_ALL_USER_ROLE_MENU_PAGING_SEARCH_RESULT_FAILED_MSG,
+                    MessageType = Enum.EnumResponseType.Error,
+                    ResponseCode = StatusCodes.Status404NotFound
+                };
+            }
+            catch (Exception Ex)
+            {
+                _securityLogService.LogError(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                response = new DataResponse
+                {
+                    Success = false,
+                    Message = Ex.Message,
+                    MessageType = Enum.EnumResponseType.Error,
+                    ResponseCode = (int)HttpStatusCode.InternalServerError,
+                    Result = null
+                };
+            }
             _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            return response;
+        }
+
+        // POST api/RoleMenu/saveUpdateRoleMenuBulk
+        /// <summary>
+        /// It used to create and update role based on supplied <see cref="AppUserMenuRequest"/> request model.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>
+        /// <see cref="Task{object}"/>
+        /// </returns>
+        [HttpPost]
+        [Route(ConstantSupplier.POST_SAVE_UPDATE_ROLE_MENU_BULK_ROUTE_NAME)]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
+        public async Task<object> SaveUpdateRoleMenuBulkAsync([FromBody] SaveRoleMenuRequest request)
+        {
+            DataResponse response;
+            _securityLogService.LogInfo(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            try
+            {
+                #region ADO.NET & EF Codeblock
+                response = await _roleMenuService.SaveUpdateRoleMenuBulkAsync(request);
+                #endregion
+            }
+            catch (Exception Ex)
+            {
+                _securityLogService.LogError(string.Format(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                return new DataResponse
+                {
+                    Success = false,
+                    Message = Ex.Message,
+                    MessageType = Enum.EnumResponseType.Error,
+                    ResponseCode = (int)HttpStatusCode.InternalServerError,
+                    Result = null
+                };
+            }
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
         #endregion

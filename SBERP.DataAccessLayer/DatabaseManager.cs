@@ -79,15 +79,37 @@ namespace SBERP.DataAccessLayer
 
         }
 
+        //public async Task<IDataReader> GetDataReaderAsync(string commandText, CommandType commandType, IDbDataParameter[] parameters)
+        //{
+        //    return await Task.Run(() =>
+        //    {
+        //        IDataReader? reader = null;
+        //        using IDbConnection connection = database.CreateConnection();
+        //        connection.Open();
+
+        //        IDbCommand command = database.CreateCommand(commandText, commandType, connection);
+        //        if (parameters != null)
+        //        {
+        //            foreach (IDbDataParameter parameter in parameters)
+        //            {
+        //                command.Parameters.Add(parameter);
+        //            }
+        //        }
+
+        //        reader = command.ExecuteReader();
+
+        //        return reader;
+        //    });
+
+        //}
         public async Task<IDataReader> GetDataReaderAsync(string commandText, CommandType commandType, IDbDataParameter[] parameters)
         {
             return await Task.Run(() =>
             {
-                IDataReader? reader = null;
-                using IDbConnection connection = database.CreateConnection();
+                IDbConnection connection = database.CreateConnection(); // Remove 'using' here
                 connection.Open();
-
                 IDbCommand command = database.CreateCommand(commandText, commandType, connection);
+
                 if (parameters != null)
                 {
                     foreach (IDbDataParameter parameter in parameters)
@@ -96,11 +118,10 @@ namespace SBERP.DataAccessLayer
                     }
                 }
 
-                reader = command.ExecuteReader();
-
+                // Use CommandBehavior.CloseConnection to close connection when reader is disposed
+                IDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);
                 return reader;
             });
-
         }
 
         public async Task<object> GetScalarValueAsync(string commandText, CommandType commandType, IDbDataParameter[]? parameters = null)
@@ -592,6 +613,39 @@ namespace SBERP.DataAccessLayer
                 }
             }
             return result;
+        }
+
+        public async Task<DataTable> ExecuteDataTableAsync(string commandText, CommandType commandType, IsolationLevel isolationLevel, IDbDataParameter[] parameters)
+        {
+            return await Task.Run(() =>
+            {
+                using (IDbConnection connection = database.CreateConnection())
+                {
+                    connection.Open();
+
+                    using (var transactionScope = connection.BeginTransaction(isolationLevel))
+                    using (var command = database.CreateCommand(commandText, commandType, connection))
+                    {
+                        command.CommandType = commandType;
+                        command.Transaction = transactionScope;
+
+                        if (parameters != null)
+                        {
+                            foreach (var parameter in parameters)
+                            {
+                                command.Parameters.Add(parameter);
+                            }
+                        }
+
+                        DataSet dataset = new();
+                        IDataAdapter dataAdaper = database.CreateAdapter(command);
+                        dataAdaper.Fill(dataset);
+
+                        transactionScope.Commit();
+                        return dataset.Tables[0];
+                    }
+                }
+            });
         }
     }
 }

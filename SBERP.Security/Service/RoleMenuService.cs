@@ -10,11 +10,13 @@ using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Asn1.X9;
 using SBERP.DataAccessLayer;
 using SBERP.EmailService.Service;
+using SBERP.Security.Enum;
 using SBERP.Security.Helper;
 using SBERP.Security.Models.Base;
 using SBERP.Security.Models.Configuration;
 using SBERP.Security.Models.Request;
 using SBERP.Security.Models.Response;
+using SBERP.Security.Models.ViewModel;
 using SBERP.Security.Persistence;
 using SSBERP.Security.Models.Base;
 using System;
@@ -78,7 +80,7 @@ namespace SBERP.Security.Service
 
         #region AppUserRole related methods
         /// <summary>
-        /// It used to get all user roles.
+        /// This method is used to get all user roles.
         /// </summary>
         /// <returns>
         /// <see cref="Task{DataResponse}"/>
@@ -110,7 +112,7 @@ namespace SBERP.Security.Service
         }
 
         /// <summary>
-        /// It used to get all user roles using pagination
+        /// This method is used to get all user roles using pagination
         /// </summary>
         /// <param name="paramRequest"></param>
         /// <returns>
@@ -119,22 +121,10 @@ namespace SBERP.Security.Service
         public async Task<DataResponse> GetAllAppUserRolesPaginationAsync(PaginationFilter paramRequest)
         {
             DataResponse? oDataResponse;
-            //PagingResult<AppUserRole>? oAppUserRoleList = null;
             PagingResult<AppUserRoleResponse>? oAppUserRoleResponseList = null; 
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
             try
             {
-                //IQueryable<AppUserRole> oIQueryableAppUserRole = (from userRole in _context?.AppUserRoles?.OrderBy(a => a.CreatedDate) select userRole).AsQueryable();
-                //oAppUserRoleList = await Utilities.GetPagingResult(oIQueryableAppUserRole, paramRequest.PageNumber, paramRequest.PageSize);
-                //if (Utilities.IsNotNull(oAppUserRoleList) && oAppUserRoleList.Items.Any())
-                //{
-                //    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.GET_ALL_ROLES_PAGINATION_FOUND, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oAppUserRoleList };
-                //}
-                //else
-                //{
-                //    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_ALL_ROLES_PAGINATION_NOT_FOUND, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = oAppUserRoleList };
-                //    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_RES_MSG, JsonConvert.SerializeObject(oAppUserRoleList, Formatting.Indented)));
-                //}
                 IQueryable<AppUserRoleResponse> oIQueryableAppUserRoleResponse = (from userRole in _context.AppUserRoles
                                                                                   join createdByUser in _context?.AppUserProfiles on userRole.CreatedBy equals createdByUser.Id.ToString() into createdByGroup
                                                                                   from createdByUser in createdByGroup.DefaultIfEmpty()
@@ -174,7 +164,7 @@ namespace SBERP.Security.Service
         }
 
         /// <summary>
-        /// It used to get a role by roleId.
+        /// This method is used to get a role by roleId.
         /// </summary>
         /// <param name="roleId"></param>
         /// <returns>
@@ -207,7 +197,7 @@ namespace SBERP.Security.Service
         }
 
         /// <summary>
-        /// It used to create and update role based on supplied <see cref="RoleSaveUpdateRequest"/> request model.
+        /// This method is used to create and update role based on supplied <see cref="RoleSaveUpdateRequest"/> request model.
         /// </summary>
         /// <param name="roleSaveUpdateRequest"></param>
         /// <returns>
@@ -288,7 +278,7 @@ namespace SBERP.Security.Service
         }
 
         /// <summary>
-        /// It used to delete a role. Delete can be happen either simply making the IsActive false or delete command. It is decided based on user settings in appsettings.json.
+        /// This method is used to delete a role. Delete can be happen either simply making the IsActive false or delete command. It is decided based on user settings in appsettings.json.
         /// </summary>
         /// <param name="roleId"></param>
         /// <returns>
@@ -349,7 +339,7 @@ namespace SBERP.Security.Service
         #region All AppUserMenu related methods
         /// <summary>
         /// <para>ADO.NET Codeblock: GetAllAppUserMenuPagingWithSearchAsync</para> 
-        /// This service method used to get a list of user menu with access permission based on the supplied searchterm, sortcolumnname, sortcolumndirection, page number, and page size.
+        /// This method is used to get a list of user menu with access permission based on the supplied searchterm, sortcolumnname, sortcolumndirection, page number, and page size.
         /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
         /// </summary>
         /// <param name="paramRequest"></param>
@@ -400,9 +390,9 @@ namespace SBERP.Security.Service
 
         }
 
-        
+
         /// <summary>
-        /// It used to get all user menu and their access permission by a specific user
+        /// This method is used to get all user menu and their access permission by a specific user
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>
@@ -441,7 +431,7 @@ namespace SBERP.Security.Service
         }
 
         /// <summary>
-        /// It used to create and update role based on supplied <see cref="AppUserMenuRequest"/> request model.
+        /// This method is used to create and update role based on supplied <see cref="AppUserMenuRequest"/> request model.
         /// </summary>
         /// <param name="request"></param>
         /// <returns>
@@ -466,6 +456,7 @@ namespace SBERP.Security.Service
                             IsModule = request.IsModule,
                             IsComponent = request.IsComponent,
                             CssClass = request.CssClass,
+                            IsRouteLink = request.IsRouteLink,
                             RouteLink = request.RouteLink,
                             RouteLinkClass = request.RouteLinkClass,
                             Icon = request.Icon,
@@ -504,14 +495,19 @@ namespace SBERP.Security.Service
                                 _dbmanager.CreateParameter("@IsModule", oAppUserMenu.IsModule, DbType.Boolean),
                                 _dbmanager.CreateParameter("@IsComponent", oAppUserMenu.IsComponent, DbType.Boolean),
                                 _dbmanager.CreateParameter("@CssClass", oAppUserMenu.CssClass, DbType.String),
+                                _dbmanager.CreateParameter("@IsRouteLink", oAppUserMenu.IsRouteLink, DbType.Boolean),
                                 _dbmanager.CreateParameter("@RouteLink", oAppUserMenu.RouteLink, DbType.String),
                                 _dbmanager.CreateParameter("@RouteLinkClass", oAppUserMenu.RouteLinkClass, DbType.String),
                                 _dbmanager.CreateParameter("@Icon", oAppUserMenu.Icon, DbType.String),
                                 _dbmanager.CreateParameter("@Remark", oAppUserMenu.Remark, DbType.String),
                                 _dbmanager.CreateParameter("@ParentId", oAppUserMenu.ParentId, DbType.Guid),
-                                _dbmanager.CreateParameter("@DropdownIcon", oAppUserMenu.DropdownIcon, DbType.String),
-                                _dbmanager.CreateParameter("@SerialNo", oAppUserMenu.SerialNo, DbType.String),
-                                _dbmanager.CreateParameter("@DropdownIcon", oAppUserMenu.DropdownIcon, DbType.String),
+                                //_dbmanager.CreateParameter("@DropdownIcon", oAppUserMenu.DropdownIcon, DbType.String),
+                                _dbmanager.CreateParameter(
+                                    "@DropdownIcon",
+                                    string.IsNullOrWhiteSpace(request.DropdownIcon) ? DBNull.Value : request.DropdownIcon,
+                                    DbType.String
+                                ),
+                                _dbmanager.CreateParameter("@SerialNo", oAppUserMenu.SerialNo, DbType.Int32),
                                 _dbmanager.CreateParameter("@CreatedBy", oAppUserMenu.CreatedBy, DbType.String),
                                 _dbmanager.CreateParameter("@CreatedDate", oAppUserMenu.CreatedDate, DbType.DateTime),
                                 _dbmanager.CreateParameter("@UpdatedBy", DBNull.Value, DbType.String),
@@ -575,14 +571,19 @@ namespace SBERP.Security.Service
                                 _dbmanager.CreateParameter("@IsModule", request.IsModule, DbType.Boolean),
                                 _dbmanager.CreateParameter("@IsComponent", request.IsComponent, DbType.Boolean),
                                 _dbmanager.CreateParameter("@CssClass", request.CssClass, DbType.String),
+                                _dbmanager.CreateParameter("@IsRouteLink", request.IsRouteLink, DbType.Boolean),
                                 _dbmanager.CreateParameter("@RouteLink", request.RouteLink, DbType.String),
                                 _dbmanager.CreateParameter("@RouteLinkClass", request.RouteLinkClass, DbType.String),
                                 _dbmanager.CreateParameter("@Icon", request.Icon, DbType.String),
                                 _dbmanager.CreateParameter("@Remark", request.Remark, DbType.String),
-                                _dbmanager.CreateParameter("@ParentId", request.ParentId, DbType.Guid),
-                                _dbmanager.CreateParameter("@DropdownIcon", request.DropdownIcon, DbType.String),
-                                _dbmanager.CreateParameter("@SerialNo", request.SerialNo, DbType.String),
-                                _dbmanager.CreateParameter("@DropdownIcon", request.DropdownIcon, DbType.String),
+                                _dbmanager.CreateParameter("@ParentId", new Guid(request.ParentId), DbType.Guid),
+                                //_dbmanager.CreateParameter("@DropdownIcon", request.DropdownIcon, DbType.String),
+                                _dbmanager.CreateParameter(
+                                    "@DropdownIcon",
+                                    string.IsNullOrWhiteSpace(request.DropdownIcon) ? DBNull.Value : request.DropdownIcon,
+                                    DbType.String
+                                ),
+                                _dbmanager.CreateParameter("@SerialNo", request.SerialNo, DbType.Int32),
                                 _dbmanager.CreateParameter("@CreatedBy", DBNull.Value, DbType.String),
                                 _dbmanager.CreateParameter("@CreatedDate", DBNull.Value, DbType.DateTime),
                                 _dbmanager.CreateParameter("@UpdatedBy", request.CreateUpdateBy, DbType.String),
@@ -618,7 +619,7 @@ namespace SBERP.Security.Service
         }
 
         /// <summary>
-        /// It used to delete a user menu. Delete can be happen either simply making the IsActive false or delete command. It is decided based on user settings in appsettings.json.
+        /// This method is used to delete a user menu. Delete can be happen either simply making the IsActive false or delete command. It is decided based on user settings in appsettings.json.
         /// </summary>
         /// <param name="menuId"></param>
         /// <returns>
@@ -716,7 +717,7 @@ namespace SBERP.Security.Service
         }
 
         /// <summary>
-        /// It used to get all parent menu based on what child menu can be created.
+        /// This method is used to get all parent menu based on what child menu can be created.
         /// </summary>
         /// <returns>
         /// <see cref="Task{DataResponse}"/>
@@ -762,7 +763,7 @@ namespace SBERP.Security.Service
 
         #region All AppUserRoleMenu related methods
         /// <summary>
-        /// This method used to get all list data, which are needed to be loaded during the user form initialization.
+        /// This method is used to get all list data, which are needed to be loaded during the user form initialization.
         /// </summary>
         /// <returns>
         /// <see cref="Task{DataResponse}"/>
@@ -799,32 +800,87 @@ namespace SBERP.Security.Service
 
         }
 
+        /// <summary>
+        /// This method is used to get all active user menus by role id.
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public async Task<DataResponse> GetMenusByRoleIdAsync(string roleId)
+        {
+            DataResponse? oDataResponse;
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETACTIVEMENUSBYROLEID_REQ_MSG, ConstantSupplier.NOT_APPLICABLE));
+            List<RoleMenuViewModel> oMenuList = new();
+            try
+            {
+                // Get the SQL query from Utilities class
+                string cmdTxt = Utilities.GetSqlQuery(ConstantSupplier.GET_ACTIVE_MENUS_BY_ROLE_ID);
 
-        public async Task<PagingResult<AppUserRoleMenuResponse>?> GetAllAppUserRoleMenusPagingWithSearchAsync(PagingSearchFilter paramRequest)
+                // Create parameters array for your generic method
+                IDbDataParameter[] parameters =
+                {
+                    new SqlParameter("@RoleId", new Guid(roleId))
+                };
+                using var reader = await _dbmanager.GetDataReaderAsync(cmdTxt, CommandType.Text, parameters);
+                while (reader.Read())
+                {
+                    oMenuList.Add(new RoleMenuViewModel
+                    {
+                        MenuId = reader.GetGuid(0),
+                        MenuName = reader.IsDBNull(1) ? null : reader.GetString(1),
+                        ParentName = reader.IsDBNull(2) ? null : reader.GetString(2),
+                        IsView = reader.IsDBNull(3) ? false : reader.GetBoolean(3),
+                        IsCreate = reader.IsDBNull(4) ? false : reader.GetBoolean(4),
+                        IsUpdate = reader.IsDBNull(5) ? false : reader.GetBoolean(5),
+                        IsDelete = reader.IsDBNull(6) ? false : reader.GetBoolean(6),
+                        IsActive = reader.IsDBNull(7) ? (bool?)null : reader.GetBoolean(7)
+                    });
+                }
+
+                if (oMenuList.Any())
+                {
+                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.SUCCESS_ACTIVE_MENU_BY_ROLE_DATA, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oMenuList };
+                }
+                else
+                {
+                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_ACTIVE_MENU_BY_ROLE_DATA, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_GETACTIVEMENUSBYROLEID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                }
+                return oDataResponse;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// This method is used to get all role menu permission belong to a specific role with paging and search.
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public async Task<PagingResult<AppUserRoleMenuResponse>?> GetRoleMenusPagingWithSearchAsync(Guid roleId, PagingSearchFilter filter)
         {
             try
             {
-                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-                var parameters = new
+                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(filter, Formatting.Indented)));
+                List<IDbDataParameter> parameters = new()
                 {
-                    SearchTerm = paramRequest.SearchTerm?? "",
-                    SortColumnName = paramRequest.SortColumnName ?? "",
-                    SortColumnDirection = paramRequest.SortColumnDirection ?? "",
-                    PageIndex = paramRequest.PageNumber,
-                    PageSize = paramRequest.PageSize
+                    _dbmanager.CreateParameter("@AppUserRoleId", roleId, DbType.Guid),
+                    _dbmanager.CreateParameter("@PageNumber", filter.PageNumber, DbType.Int32),
+                    _dbmanager.CreateParameter("@PageSize", filter.PageSize, DbType.Int32),
+                    _dbmanager.CreateParameter("@SearchTerm", filter.SearchTerm, DbType.String),
+                    _dbmanager.CreateParameter("@SortColumnName", filter.SortColumnName, DbType.String),
+                    _dbmanager.CreateParameter("@SortColumnDirection", filter.SortColumnDirection, DbType.String),
                 };
 
-                var results = await _dbConnection.QueryAsync<AppUserRoleMenuResponse>(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_SP_NAME, parameters,commandType: CommandType.StoredProcedure);
-                if (results.Any())
+                object dbResult = await _dbmanager.GetScalarValueAsync(ConstantSupplier.GET_ALL_ROLE_MENUS_BY_ROLE_ID_PAGING_SEARCH_SP_NAME,
+                    CommandType.StoredProcedure,
+                    parameters.ToArray());
+                if (Utilities.IsNotNull(dbResult))
                 {
-                    foreach (var result in results)
-                    {
-                        result.IsView = result.IsView ?? false;
-                        result.IsCreate = result.IsCreate ?? false;
-                        result.IsUpdate = result.IsUpdate ?? false;
-                        result.IsDelete = result.IsDelete ?? false;
-                    }
-                    PagingResult<AppUserRoleMenuResponse>? oAppUserRoleMenuResult = Utilities.GetPagingResult(results.ToList(), paramRequest.PageNumber, paramRequest.PageSize);
+                    string resultJStr = Utilities.ConvertJObjectToJsonString(dbResult, "Items");
+                    PagingResult<AppUserRoleMenuResponse>? oAppUserRoleMenuResult = JsonConvert.DeserializeObject<PagingResult<AppUserRoleMenuResponse>>(resultJStr);
                     _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(oAppUserRoleMenuResult, Formatting.Indented)));
                     return oAppUserRoleMenuResult;
                 }
@@ -837,6 +893,60 @@ namespace SBERP.Security.Service
             }
 
         }
+
+        /// <summary>
+        /// This method is used to save and update role menu bulk based on supplied <see cref="SaveRoleMenuRequest"/> request model.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<DataResponse> SaveUpdateRoleMenuBulkAsync(SaveRoleMenuRequest request)
+        {
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_APP_USER_ROLE_MENU_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+
+            try
+            {
+                string jsonData = JsonConvert.SerializeObject(request.Permissions);
+
+                List<IDbDataParameter> parameters = new()
+                {
+                    _dbmanager.CreateParameter("@AppUserRoleId", request.RoleId, DbType.Guid),
+                    _dbmanager.CreateParameter("@JsonData", jsonData, DbType.String),
+                    _dbmanager.CreateParameter("@UserId", request.UserId, DbType.String)
+                };
+
+                object? resultObj = await _dbmanager.GetScalarValueAsync(ConstantSupplier.POST_SAVE_UPDATE_ROLE_MENU_BULK_SP_NAME,
+                    CommandType.StoredProcedure,
+                    parameters.ToArray());
+
+                string? result = resultObj as string;
+
+                if (!string.Equals(result, "SUCCESS", StringComparison.OrdinalIgnoreCase))
+                {
+                    return new DataResponse
+                    {
+                        Success = false,
+                        Message = ConstantSupplier.USER_ROLE_MENU_CREATE_UPDATE_FAILED,
+                        MessageType = Enum.EnumResponseType.Error,
+                        ResponseCode = (int)HttpStatusCode.MultiStatus,
+                        Result = null
+                    };
+                }
+
+                return new DataResponse
+                {
+                    Success = true,
+                    Message = ConstantSupplier.USER_ROLE_MENU_CREATE_UPDATE_SUCCESS,
+                    MessageType = Enum.EnumResponseType.Success,
+                    ResponseCode = (int)HttpStatusCode.OK,
+                    Result = request
+                };
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         #endregion
     }
 }

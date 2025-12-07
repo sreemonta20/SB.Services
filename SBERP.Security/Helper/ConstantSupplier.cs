@@ -268,10 +268,19 @@ namespace SBERP.Security.Helper
         public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RESULT_SUCCESS_MSG = "App user role menu list retrieved successfully.";
         public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RESULT_FAILED_MSG = "Retrieving app user role menu list failed.";
         public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RESULT_EMPTY_MSG = "Retrieving app user role menu list is found empty.";
+
+        public const string GET_ALL_ACTIVE_ROLES_ROUTE_NAME = "getActiveRoles";
+        public const string GET_MENUS_BY_ROLE_ID_ROUTE_NAME = "getMenusByRoleId";
+
+        public const string GET_ALL_USER_ROLE_MENU_PAGING_WITH_SEARCH_ROUTE_NAME = "getRoleMenusPagingWithSearch";
+        public const string POST_SAVE_UPDATE_ROLE_MENU_BULK_ROUTE_NAME = "saveUpdateRoleMenuBulk";
+
+        public const string GET_ALL_USER_ROLE_MENU_PAGING_SEARCH_RESULT_SUCCESS_MSG = "Role menu permissions fetched successfully.";
+        public const string GET_ALL_USER_ROLE_MENU_PAGING_SEARCH_RESULT_FAILED_MSG = "Retrieving Role menu permissions failed.";
         #endregion
 
         #region RoleMenu Execution Log
-        //api/v1/RoleMenu/getAllRoles
+        //api/v1/RoleMenu/getAllAppUserRoles
         public const string GETALLROLES_STARTED_INFO_MSG = "GetAllRoles api method started.\n";
         public const string GETALLROLES_REQ_MSG = "GetAllRoles api method request is: \n{0}\n";
         public const string GETALLROLES_EXCEPTION_MSG = "GetAllRoles Exception below:: \n{0}\n";
@@ -289,7 +298,7 @@ namespace SBERP.Security.Helper
         public const string SERVICE_GETALLROLESPAGINATION_RES_MSG = "GetAllRolesPaginationAsync (Role Menu service) method response is: \n{0}\n";
         public const string GETALLROLESPAGINATION_RES_MSG = "GetAllRolesPagination api method response is: \n{0}\n";
 
-        //api/v1/RoleMenu/getRoleById
+        //api/v1/RoleMenu/getAppUserRolesById
         public const string GETROLEBYID_STARTED_INFO_MSG = "getRoleById api method started.\n";
         public const string GETROLEBYID_REQ_MSG = "getRoleById api method request is: \n{0}\n";
         public const string GETROLEBYID_EXCEPTION_MSG = "getRoleById Exception below:: \n{0}\n";
@@ -298,7 +307,7 @@ namespace SBERP.Security.Helper
         public const string SERVICE_GETROLEBYID_RES_MSG = "getRoleByIdAsync (Role Menu service) method response is: \n{0}\n";
         public const string GETROLEBYID_RES_MSG = "getRoleById api method response is: \n{0}\n";
 
-        //api/v1/RoleMenu/saveUpdateRole
+        //api/v1/RoleMenu/createUpdateAppUserRole
         public const string SAVEUPDATEROLE_STARTED_INFO_MSG = "SaveUpdateRole api method started.\n";
         public const string SAVEUPDATEROLE_REQ_MSG = "SaveUpdateRole api method request is: \n{0}\n";
         public const string SAVEUPDATEROLE_EXCEPTION_MSG = "SaveUpdateRole Exception below:: \n{0}\n";
@@ -307,7 +316,7 @@ namespace SBERP.Security.Helper
         public const string SERVICE_SAVEUPDATEROLE_RES_MSG = "SaveUpdateRoleAsync (Role Menu service) method response is: \n{0}\n";
         public const string SAVEUPDATEROLE_RES_MSG = "SaveUpdateRole api method response is: \n{0}\n";
 
-        //api/v1/RoleMenu/deleteRole
+        //api/v1/RoleMenu/deleteAppUserRole
         public const string DELETEROLE_STARTED_INFO_MSG = "DeleteRole api method started.\n";
         public const string DELETEROLE_REQ_MSG = "DeleteRole api method request is: \n{0}\n";
         public const string DELETEROLE_EXCEPTION_MSG = "DeleteRole Exception below:: \n{0}\n";
@@ -316,16 +325,7 @@ namespace SBERP.Security.Helper
         public const string SERVICE_DELETEROLE_RES_MSG = "DeleteRoleAsync (Role Menu service) method response is: \n{0}\n";
         public const string DELETEROLE_RES_MSG = "DeleteRole api method response is: \n{0}\n";
 
-        //api/v1/RoleMenu/getAllMenuByUserId
-        public const string GETALLMENUBYUSERID_STARTED_INFO_MSG = "GetAllMenuByUserId api method started.\n";
-        public const string GETALLMENUBYUSERID_REQ_MSG = "GetAllMenuByUserId api method request is: \n{0}\n";
-        public const string GETALLMENUBYUSERID_EXCEPTION_MSG = "GetAllMenuByUserId Exception below:: \n{0}\n";
-        public const string GETALLMENUBYUSERID_INNER_EXCEPTION_MSG = "GetAllMenuByUserId Inner Exception below:: \n{0}\n";
-        public const string SERVICE_GETALLMENUBYUSERID_REQ_MSG = "GetAllMenuByUserIdAsync (Role Menu service) method request is: \n{0}\n";
-        public const string SERVICE_GETALLMENUBYUSERID_RES_MSG = "GetAllMenuByUserIdAsync (Role Menu service) method response is: \n{0}\n";
-        public const string GETALLMENUBYUSERID_RES_MSG = "GetAllMenuByUserId api method response is: \n{0}\n";
-
-        //api/v1/RoleMenu/GetAllUserMenuPagingWithSearchTerm
+        //api/v1/RoleMenu/getAllAppUserMenuPagingWithSearch
         public const string GETALL_USER_MENU_PAGING_SEARCH_STARTED_INFO_MSG = "GetAllUserMenuPagingWithSearchTerm api method started.\n";
         public const string GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG = "GetAllUserMenuPagingWithSearchTerm api method request is: \n{0}\n";
         public const string GETALL_USER_MENU_PAGING_SEARCH_EXCEPTION_MSG = "GetAllUserMenuPagingWithSearchTerm Exception below:: \n{0}\n";
@@ -334,23 +334,14 @@ namespace SBERP.Security.Helper
         public const string SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG = "GetAllUserMenuPagingWithSearchAsync (RoleMenu service) method response is: \n{0}\n";
         public const string GETALL_USER_MENU_PAGING_SEARCH_RES_MSG = "GetAllUserMenuPagingWithSearchTerm api method response is: \n{0}\n";
 
-        //api/v1/RoleMenu/getUserMenuInitialData
-        public const string GETUSERMENUINITIALDATA_STARTED_INFO_MSG = "GetUserMenuInitialData api method started.\n";
-        public const string GETUSERMENUINITIALDATA_REQ_MSG = "GetUserMenuInitialData api method request is: \n{0}\n";
-        public const string GETUSERMENUINITIALDATA_EXCEPTION_MSG = "GetUserMenuInitialData Exception below:: \n{0}\n";
-        public const string GETUSERMENUINITIALDATA_INNER_EXCEPTION_MSG = "GetUserMenuInitialData Inner Exception below:: \n{0}\n";
-        public const string SERVICE_GETUSERMENUINITIALDATA_REQ_MSG = "GetUserMenuInitialDataAsync (Role Menu service) method request is: \n{0}\n";
-        public const string SERVICE_GETUSERMENUINITIALDATA_RES_MSG = "GetUserMenuInitialDataAsync (Role Menu service) method response is: \n{0}\n";
-        public const string GETUSERMENUINITIALDATA_RES_MSG = "GetUserMenuInitialData api method response is: \n{0}\n";
-
-        //api/v1/RoleMenu/getAllParentMenus
-        public const string GET_ALL_PARENT_MENUS_STARTED_INFO_MSG = "GetAllParentMenus api method started.\n";
-        public const string GET_ALL_PARENT_MENUS_REQ_MSG = "GetAllParentMenus api method request is: \n{0}\n";
-        public const string GET_ALL_PARENT_MENUS_EXCEPTION_MSG = "GetAllParentMenus Exception below:: \n{0}\n";
-        public const string GET_ALL_PARENT_MENUS_INNER_EXCEPTION_MSG = "GetAllParentMenus Inner Exception below:: \n{0}\n";
-        public const string SERVICE_GET_ALL_PARENT_MENUS_REQ_MSG = "GetAllParentMenusAsync (Role Menu service) method request is: \n{0}\n";
-        public const string SERVICE_GET_ALL_PARENT_MENUS_RES_MSG = "GetAllParentMenusAsync (Role Menu service) method response is: \n{0}\n";
-        public const string GET_ALL_PARENT_MENUS_RES_MSG = "GetAllParentMenus api method response is: \n{0}\n";
+        //api/v1/RoleMenu/getAllAppUserMenuByUserId
+        public const string GETALLMENUBYUSERID_STARTED_INFO_MSG = "GetAllMenuByUserId api method started.\n";
+        public const string GETALLMENUBYUSERID_REQ_MSG = "GetAllMenuByUserId api method request is: \n{0}\n";
+        public const string GETALLMENUBYUSERID_EXCEPTION_MSG = "GetAllMenuByUserId Exception below:: \n{0}\n";
+        public const string GETALLMENUBYUSERID_INNER_EXCEPTION_MSG = "GetAllMenuByUserId Inner Exception below:: \n{0}\n";
+        public const string SERVICE_GETALLMENUBYUSERID_REQ_MSG = "GetAllMenuByUserIdAsync (Role Menu service) method request is: \n{0}\n";
+        public const string SERVICE_GETALLMENUBYUSERID_RES_MSG = "GetAllMenuByUserIdAsync (Role Menu service) method response is: \n{0}\n";
+        public const string GETALLMENUBYUSERID_RES_MSG = "GetAllMenuByUserId api method response is: \n{0}\n";
 
         //api/v1/RoleMenu/saveUpdateUserMenu
         public const string SAVE_UPDATE_USER_MENU_STARTED_INFO_MSG = "SaveUpdateUserMenu api method started.\n";
@@ -370,14 +361,50 @@ namespace SBERP.Security.Helper
         public const string SERVICE_DELETE_APP_USER_MENU_RES_MSG = "DeleteUserMenuAsync (Role Menu service) method response is: \n{0}\n";
         public const string DELETE_APP_USER_MENU_RES_MSG = "DeleteUserMenu api method response is: \n{0}\n";
 
-        //api/v1/RoleMenu/getAllAppUserRoleMenuPagingWithSearchTerm
-        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_STARTED_INFO_MSG = "GetAllAppUserRoleMenuPagingWithSearchTerm api method started.\n";
-        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG = "GetAllAppUserRoleMenuPagingWithSearchTerm api method request is: \n{0}\n";
-        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_EXCEPTION_MSG = "GetAllAppUserRoleMenuPagingWithSearchTerm Exception below:: \n{0}\n";
-        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_INNER_EXCEPTION_MSG = "GetAllAppUserRoleMenuPagingWithSearchTerm Inner Exception below:: \n{0}\n";
-        public const string SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG = "GetAllAppUserRoleMenusPagingWithSearchAsync (RoleMenu service) method request is: \n{0}\n";
-        public const string SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG = "GetAllAppUserRoleMenusPagingWithSearchAsync (RoleMenu service) method response is: \n{0}\n";
-        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG = "GetAllAppUserRoleMenuPagingWithSearchTerm api method response is: \n{0}\n";
+        //api/v1/RoleMenu/getAllParentMenus
+        public const string GET_ALL_PARENT_MENUS_STARTED_INFO_MSG = "GetAllParentMenus api method started.\n";
+        public const string GET_ALL_PARENT_MENUS_REQ_MSG = "GetAllParentMenus api method request is: \n{0}\n";
+        public const string GET_ALL_PARENT_MENUS_EXCEPTION_MSG = "GetAllParentMenus Exception below:: \n{0}\n";
+        public const string GET_ALL_PARENT_MENUS_INNER_EXCEPTION_MSG = "GetAllParentMenus Inner Exception below:: \n{0}\n";
+        public const string SERVICE_GET_ALL_PARENT_MENUS_REQ_MSG = "GetAllParentMenusAsync (Role Menu service) method request is: \n{0}\n";
+        public const string SERVICE_GET_ALL_PARENT_MENUS_RES_MSG = "GetAllParentMenusAsync (Role Menu service) method response is: \n{0}\n";
+        public const string GET_ALL_PARENT_MENUS_RES_MSG = "GetAllParentMenus api method response is: \n{0}\n";
+
+        //api/v1/RoleMenu/getAppUserRoleMenuInitialData
+        public const string GETUSERMENUINITIALDATA_STARTED_INFO_MSG = "GetUserMenuInitialData api method started.\n";
+        public const string GETUSERMENUINITIALDATA_REQ_MSG = "GetUserMenuInitialData api method request is: \n{0}\n";
+        public const string GETUSERMENUINITIALDATA_EXCEPTION_MSG = "GetUserMenuInitialData Exception below:: \n{0}\n";
+        public const string GETUSERMENUINITIALDATA_INNER_EXCEPTION_MSG = "GetUserMenuInitialData Inner Exception below:: \n{0}\n";
+        public const string SERVICE_GETUSERMENUINITIALDATA_REQ_MSG = "GetUserMenuInitialDataAsync (Role Menu service) method request is: \n{0}\n";
+        public const string SERVICE_GETUSERMENUINITIALDATA_RES_MSG = "GetUserMenuInitialDataAsync (Role Menu service) method response is: \n{0}\n";
+        public const string GETUSERMENUINITIALDATA_RES_MSG = "GetUserMenuInitialData api method response is: \n{0}\n";
+
+        //api/v1/RoleMenu/getMenusByRoleId
+        public const string GETACTIVEMENUSBYROLEID_STARTED_INFO_MSG = "GetActiveMenusByRoleId api method started.\n";
+        public const string GETACTIVEMENUSBYROLEID_REQ_MSG = "GetActiveMenusByRoleId api method request is: \n{0}\n";
+        public const string GETACTIVEMENUSBYROLEID_EXCEPTION_MSG = "GetActiveMenusByRoleId Exception below:: \n{0}\n";
+        public const string GETACTIVEMENUSBYROLEID_INNER_EXCEPTION_MSG = "GetActiveMenusByRoleId Inner Exception below:: \n{0}\n";
+        public const string SERVICE_GETACTIVEMENUSBYROLEID_REQ_MSG = "GetActiveMenusByRoleId (Role Menu service) method request is: \n{0}\n";
+        public const string SERVICE_GETACTIVEMENUSBYROLEID_RES_MSG = "GetActiveMenusByRoleId (Role Menu service) method response is: \n{0}\n";
+        public const string GETACTIVEMENUSBYROLEID_RES_MSG = "GetActiveMenusByRoleId api method response is: \n{0}\n";
+
+        //api/v1/RoleMenu/getRoleMenusPagingWithSearch
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_STARTED_INFO_MSG = "GetRoleMenusPagingWithSearch api method started.\n";
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG = "GetRoleMenusPagingWithSearch api method request is: \n{0}\n";
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_EXCEPTION_MSG = "GetRoleMenusPagingWithSearch Exception below:: \n{0}\n";
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_INNER_EXCEPTION_MSG = "GetRoleMenusPagingWithSearch Inner Exception below:: \n{0}\n";
+        public const string SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG = "GetRoleMenusPagingWithSearchAsync (RoleMenu service) method request is: \n{0}\n";
+        public const string SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG = "GetRoleMenusPagingWithSearchAsync (RoleMenu service) method response is: \n{0}\n";
+        public const string GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG = "GetRoleMenusPagingWithSearch api method response is: \n{0}\n";
+
+        //api/v1/RoleMenu/saveUpdateRoleMenuBulk
+        public const string SAVE_UPDATE_APP_USER_ROLE_MENU_STARTED_INFO_MSG = "SaveUpdateRoleMenuBulk api method started.\n";
+        public const string SAVE_UPDATE_APP_USER_ROLE_MENU_REQ_MSG = "SaveUpdateRoleMenuBulk api method request is: \n{0}\n";
+        public const string SAVE_UPDATE_APP_USER_ROLE_MENU_EXCEPTION_MSG = "SaveUpdateRoleMenuBulk Exception below:: \n{0}\n";
+        public const string SAVE_UPDATE_APP_USER_ROLE_MENU_INNER_EXCEPTION_MSG = "SaveUpdateRoleMenuBulk Inner Exception below:: \n{0}\n";
+        public const string SERVICE_SAVE_UPDATE_APP_USER_ROLE_MENU_REQ_MSG = "SaveUpdateRoleMenuBulkAsync (Role Menu service) method request is: \n{0}\n";
+        public const string SERVICE_SAVE_UPDATE_APP_USER_ROLE_MENU_RES_MSG = "SaveUpdateRoleMenuBulkAsync (Role Menu service) method response is: \n{0}\n";
+        public const string SAVE_UPDATE_APP_USER_ROLE_MENU_RES_MSG = "SaveUpdateRoleMenuBulk api method response is: \n{0}\n";
         #endregion
 
         #region Role Menu Service
@@ -409,11 +436,14 @@ namespace SBERP.Security.Helper
         public const string DELETE_USER_MENU_SUCCESS = "User menu is successfully removed";
         public const string INVALID_USERNAME_MSG = "Invalid request: Username cannot be null or empty";
 
-        public const string GET_GET_ALL_MENU_BY_USER_ID_SP_NAME = "SP_GetAllAppUserMenusByUserId";
         public const string GET_USER_MENU_INITIAL_DATA_SP_NAME = "SP_GetAppUserRoleMenuInitialData";
-
+        public const string GET_GET_ALL_MENU_BY_USER_ID_SP_NAME = "SP_GetAllAppUserMenusByUserId";
         public const string POST_SAVE_UPDATE_USER_MENU_SP_NAME = "SP_CreateUpdateAppUserMenu";
         public const string DELETE_USER_MENU_SP_NAME = "SP_DeleteAppUserMenu";
+
+        public const string GET_ALL_ROLE_MENUS_BY_ROLE_ID_PAGING_SEARCH_SP_NAME = "SP_GetRoleMenusPagingWithSearch";
+        public const string POST_SAVE_UPDATE_ROLE_MENU_BULK_SP_NAME = "SP_SaveUpdateRoleMenuInBulk";
+
 
         public const string DELETE_APP_USER_MENU_SUCCESS = "User menu is successfully removed";
         public const string EXIST_BUT_DEACTIVATED_APP_USER_MENU = "The user menu is already deactivated.";
@@ -421,6 +451,12 @@ namespace SBERP.Security.Helper
         public const string DELETE_APP_USER_MENU_BUT_EXIST_ROLE_MENU = "This User menu already used for a role";
         public const string DELETE_APP_USER_MENU_INACTIVATED_SUCCESS = "User menu is successfully inactivated";
         public const string DELETE_APP_USER_MENU_REMOVED_SUCCESS = "User menu is successfully removed";
+
+        public const string NO_ACTIVE_MENU_BY_ROLE_DATA = "No active menu data found for the selected role";
+        public const string SUCCESS_ACTIVE_MENU_BY_ROLE_DATA = "Fething menu data successful!";
+
+        public const string USER_ROLE_MENU_CREATE_UPDATE_SUCCESS = "User role menu permission saved successfully!";
+        public const string USER_ROLE_MENU_CREATE_UPDATE_FAILED = "Saving user role menu permission failed!";
 
         #endregion
 
@@ -438,6 +474,11 @@ namespace SBERP.Security.Helper
         public const string POST_SAVE_UPDATE_APP_USER_PROFILE_SP_NAME = "SP_SaveUpdateAppUserProfile";
         public const string POST_SAVE_UPDATE_APP_USER_SP_NAME = "SP_SaveUpdateAppUser";
         public const string DELETE_USER_SP_NAME = "SP_DeleteAppUserProfile";
+        #endregion
+
+        #region Query Identifier
+        public const string GET_ACTIVE_ROLES = "GET_ACTIVE_ROLES";
+        public const string GET_ACTIVE_MENUS_BY_ROLE_ID = "GET_ACTIVE_MENUS_BY_ROLE_ID";
         #endregion
 
     }

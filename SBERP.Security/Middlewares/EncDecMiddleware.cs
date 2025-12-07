@@ -37,49 +37,6 @@ namespace SBERP.Security.Middlewares
             await _next(httpContext);
         }
 
-
-        //public async Task InvokeAsync(HttpContext httpContext)
-        //{
-        //    httpContext.Request.EnableBuffering();
-        //    if (httpContext.Request.Path.StartsWithSegments("/api/User/login") && httpContext.Request.Method == "POST")
-        //    {
-        //        string encryptedRequest = string.Empty;
-        //        using (var reader = new StreamReader(httpContext.Request.Body))
-        //        {
-        //            encryptedRequest = await reader.ReadToEndAsync();//.ReadToEndAsync() //reader.ReadToEnd()
-        //        }
-
-        //        string decryptedRequest = await DecryptObj(encryptedRequest);
-        //        httpContext.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(decryptedRequest));
-
-        //        httpContext.Request.ContentLength = decryptedRequest.Length;
-        //        httpContext.Request.ContentType = "application/json; charset=utf-8";
-
-        //    }
-        //    await _next.Invoke(httpContext);
-        //}
-
-        //public async Task InvokeAsync(HttpContext context)
-        //{
-        //    if (context.Request.Path.StartsWithSegments("/api/User/login") && context.Request.Method == "POST")
-        //    {
-        //        var request = context.Request;
-        //        var stream = request.Body;// At the begining it holding original request stream                    
-        //        var originalReader = new StreamReader(stream);
-        //        var originalContent = await originalReader.ReadToEndAsync(); // Reading first request
-
-        //        var decryptedRequest = await DecryptObj(originalContent);
-        //        var readingRequestBody = new RequstBodyReaderModel();
-        //        readingRequestBody.RequestRawData = decryptedRequest;
-        //        var json = JsonConvert.SerializeObject(readingRequestBody);
-        //        var requestData = Encoding.UTF8.GetBytes(json);
-        //        stream = new MemoryStream(requestData);
-        //        request.Body = stream;
-        //    }
-
-        //    await _next(context);
-        //}
-
         private Stream DecryptStream(Stream cipherStream)
         {
             Aes aes = GetEncryptionAlgorithm();
@@ -359,7 +316,9 @@ namespace SBERP.Security.Middlewares
                 "/api/v1/RoleMenu/deleteAppUserMenu",
                 "/api/v1/RoleMenu/getAllParentMenus",
                 "/api/v1/RoleMenu/getAppUserRoleMenuInitialData",
-                "/api/v1/RoleMenu/getAllAppUserRoleMenusPagingWithSearch",
+                "/api/v1/RoleMenu/getMenusByRoleId",
+                "/api/v1/RoleMenu/getRoleMenusPagingWithSearch",
+                "/api/v1/RoleMenu/saveUpdateRoleMenuBulk",
                 "/api/v1/User/createUpdateAppUser",
                 "/api/v1/User/getAllAppUserProfile",
                 "/api/v1/User/getAppUserProfileById",

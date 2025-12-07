@@ -31,7 +31,9 @@ namespace SBERP.Security.Service
 
         #region AppUserRoleMenu related methods
         Task<DataResponse> GetAppUserRoleMenuInitialDataAsync();
-        Task<PagingResult<AppUserRoleMenuResponse>> GetAllAppUserRoleMenusPagingWithSearchAsync(PagingSearchFilter paramRequest);
+        Task<DataResponse> GetMenusByRoleIdAsync(string roleId);
+        Task<PagingResult<AppUserRoleMenuResponse>?> GetRoleMenusPagingWithSearchAsync(Guid roleId, PagingSearchFilter filter);
+        Task<DataResponse> SaveUpdateRoleMenuBulkAsync(SaveRoleMenuRequest request);
         #endregion
 
     }

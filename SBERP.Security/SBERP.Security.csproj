@@ -12,6 +12,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Persistence\Functions.sql" />
+    <None Remove="Persistence\StoredProcedures.sql" />
+    <None Remove="Persistence\Triggers.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Persistence\Functions.sql" />
+    <EmbeddedResource Include="Persistence\StoredProcedures.sql" />
+    <EmbeddedResource Include="Persistence\Triggers.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AspNetCoreRateLimit" Version="5.0.0" />
     <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
     <PackageReference Include="Dapper" Version="2.1.35" />
@@ -25,6 +37,10 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Oracle.EntityFrameworkCore" Version="9.23.60" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Serilog.Enrichers.ClientInfo" Version="2.1.2" />
@@ -44,6 +60,12 @@
   <ItemGroup>
     <ProjectReference Include="..\SBERP.DataAccessLayer\SBERP.DataAccessLayer.csproj" />
     <ProjectReference Include="..\SBERP.EmailService\SBERP.EmailService.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

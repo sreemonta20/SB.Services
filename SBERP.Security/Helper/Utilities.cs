@@ -132,37 +132,7 @@ namespace SBERP.Security.Helper
             }
             return data;
         }
-        //private static T GetItem<T>(DataRow dr)
-        //{
-        //    Type temp = typeof(T);
-        //    T obj = Activator.CreateInstance<T>();
-
-        //    foreach (DataColumn column in dr.Table.Columns)
-        //    {
-        //        foreach (PropertyInfo pro in temp.GetProperties())
-        //        {
-        //            if (pro.Name == column.ColumnName)
-        //            {
-        //                var type = Nullable.GetUnderlyingType(pro.PropertyType) ?? pro.PropertyType;
-        //                if ((type.Name == "DateTime") && dr[column.ColumnName].Equals(DBNull.Value))
-        //                {
-        //                    continue;
-        //                }else if ((type.Name == "String") && dr[column.ColumnName].Equals(DBNull.Value))
-        //                {
-        //                    continue;
-        //                }
-
-        //                pro.SetValue(obj, dr[column.ColumnName].Equals(DBNull.Value) ? string.Empty : dr[column.ColumnName], null);
-        //            }
-        //            else
-        //            {
-        //                continue;
-        //            }
-        //        }
-        //    }
-        //    return obj;
-        //}
-
+        
         private static T GetItem<T>(DataRow row) where T : new()
         {
             T obj = new T();
@@ -266,18 +236,7 @@ namespace SBERP.Security.Helper
             return list == null || list.Count == 0;
         }
 
-        //public static DataResponse FailedResponse<T>(T data, ISecurityLogService securityLogService, int responseCode, DataResponse? response = null, string message = "", string logMessage = "")
-        //{
-        //    DataResponse? finalResponse;
-        //    finalResponse = Utilities.IsNotNull(response) ? new DataResponse { Success = response.Success, Message = String.IsNullOrWhiteSpace(message) ? response.Message : message, MessageType = response.MessageType, ResponseCode = response.ResponseCode, Result = data } :
-        //       new DataResponse { Success = false, Message = string.IsNullOrWhiteSpace(message) ? ConstantSupplier.FAILED_MSG : message, MessageType = Enum.EnumResponseType.Error, ResponseCode = responseCode, Result = null };
-        //    if (!string.IsNullOrWhiteSpace(logMessage))
-        //    {
-        //        securityLogService.LogError(string.Format(logMessage, JsonConvert.SerializeObject(finalResponse, Formatting.Indented)));
-        //    }
-
-        //    return finalResponse;
-        //}
+        
         public static DataResponse FailedResponse<T>(T data, ISecurityLogService securityLogService, int responseCode,
                                              DataResponse? response = null, string message = "", string logMessage = "")
         {
@@ -325,6 +284,32 @@ namespace SBERP.Security.Helper
 
             // Return true if the string is empty or whitespace, otherwise false
             return string.IsNullOrWhiteSpace(safeValue);
+        }
+
+        /// <summary>
+        /// Returns SQL query based on the provided query identifier
+        /// </summary>
+        /// <param name="queryIdentifier">The identifier for the SQL query</param>
+        /// <returns>SQL query string</returns>
+        /// <exception cref="ArgumentException">Thrown when query identifier is not found</exception>
+        public static string GetSqlQuery(string queryIdentifier)
+        {
+            return queryIdentifier switch
+            {
+                ConstantSupplier.GET_ACTIVE_ROLES => @"SELECT Id, RoleName, Description, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate, IsActive 
+                                FROM [dbo].[AppUserRoles] 
+                                WHERE IsActive = 1 
+                                ORDER BY ID DESC",
+
+                ConstantSupplier.GET_ACTIVE_MENUS_BY_ROLE_ID => @"SELECT m.Id, m.Name, p.Name AS ParentName, rm.IsView, rm.IsCreate, rm.IsUpdate, rm.IsDelete
+                                           FROM [dbo].[AppUserMenus] m
+                                           LEFT JOIN [dbo].[AppUserMenus] p ON m.ParentId = p.Id
+                                           LEFT JOIN [dbo].[AppUserRoleMenus] rm ON m.Id = rm.AppUserMenuId AND rm.AppUserRoleId = @RoleId AND rm.IsActive = 1
+                                           WHERE m.IsActive = 1 AND m.IsComponent = 1",
+
+
+                _ => throw new ArgumentException($"Query identifier '{queryIdentifier}' not found.", nameof(queryIdentifier))
+            };
         }
     }
 }
