@@ -16,9 +16,7 @@ namespace SBERP.Security.Service
         #endregion
 
         #region AppUserProfile related methods
-        Task<PageResult<AppUserProfile>> GetAllAppUserProfileAsync(PaginationFilter paramRequest);
-        Task<PagingResult<AppUserProfile>> GetAllAppUserProfileExtnAsync(PaginationFilter paramRequest);
-        Task<PagingResult<AppUserProfile>?> GetAllAppUserProfileAdoAsync(PaginationFilter paramRequest);
+        Task<PagingResult<AppUserProfileResponse>?> GetAllAppUserProfilePagingWithSearchAsync(PagingSearchFilter paramRequest);
         Task<DataResponse> GetAppUserProfileByIdAsync(string id);
         Task<DataResponse> GetAppUserProfileByIdAdoAsync(string id);
         Task<DataResponse> CreateUpdateAppUserProfileAsync(AppUserProfileRegisterRequest request);

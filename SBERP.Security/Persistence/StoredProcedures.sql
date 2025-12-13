@@ -133,38 +133,135 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserProfiles]    Script Date: 12/5/2025 11:40:01 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserProfilesPagingWithSearch]    Script Date: 12/14/2025 2:16:31 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
--- =============================================
--- Author:		Sreemonta Bhowmik
--- Create date: 25.04.2023
--- Description:	Get all users
--- =============================================
---EXEC SP_GetAllAppUserProfiles 1, 1
---EXEC SP_GetAllAppUserProfiles 2, 1
---EXEC SP_GetAllAppUserProfiles 1, 2
---EXEC SP_GetAllAppUserProfiles 2, 2
-CREATE PROCEDURE [dbo].[SP_GetAllAppUserProfiles] 
-	@PageIndex INT, @PageSize INT
-	--, @GetTotal BIT, @TotalRecords INT OUTPUT 
+--EXEC SP_GetAllAppUserProfilesPagingWithSearch 1,10,'','FullName','asc'
+CREATE PROCEDURE [dbo].[SP_GetAllAppUserProfilesPagingWithSearch]
+    @PageNumber INT,
+    @PageSize INT,
+    @SearchTerm VARCHAR(50) = '',
+    @SortColumnName VARCHAR(50) = '',
+    @SortColumnDirection VARCHAR(50) = ''
 AS
 BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	--SET NOCOUNT ON;
-	--SET @TotalRecords = 0  
-	--IF(@GetTotal = 1)  
-	--BEGIN  
-	--SELECT @TotalRecords = COUNT(Id) FROM UserInfo  
-	--END  
-	SET @PageIndex = (CASE WHEN @PageIndex = 0 THEN 1 ELSE @PageIndex END)
-	SELECT AUP.Id, AUP.FullName,AUP.Address,AUP.Email,AUP.AppUserRoleId,AUP.CreatedBy,AUP.CreatedDate,AUP.UpdatedBy,AUP.UpdatedDate,AUP.IsActive
-	FROM AppUserProfiles AUP
-	ORDER BY Id ASC OFFSET (@PageIndex-1)*@PageSize ROWS FETCH NEXT @PageSize ROWS ONLY  
-	RETURN 
+    SET NOCOUNT ON;
+
+    DECLARE @TotalRecords INT;
+    DECLARE @TotalPages INT;
+    DECLARE @Result XML;
+    DECLARE @Items XML;
+
+    CREATE TABLE #AppUserProfileTBL
+    (
+        [RowCount] INT,
+        [CurrentPage] INT,
+        [PageSize] INT,
+        [PageCount] INT,
+        [Items] XML
+    );
+
+    -- Calculate total records with the search term filter
+    SELECT @TotalRecords = COUNT(*)
+    FROM [dbo].[AppUserProfiles] AUP
+	LEFT JOIN [dbo].[AppUserRoles] AUR ON AUR.Id = AUP.AppUserRoleId
+    WHERE AUR.IsActive = 1
+          AND (
+                  @SearchTerm = ''
+                  OR AUP.[FullName] LIKE '%' + @SearchTerm + '%' 
+				  OR AUP.[Email] LIKE '%' + @SearchTerm + '%'
+				  OR AUR.[RoleName] LIKE '%' + @SearchTerm + '%'
+				  OR AUP.[Address] LIKE '%' + @SearchTerm + '%'
+              );
+
+    -- Calculate total pages
+    SET @TotalPages = CEILING(CAST(@TotalRecords AS FLOAT) / @PageSize);
+    WITH SortedAppUserProfiles AS
+    (
+        SELECT 
+            AUP.[Id],
+            AUP.[FullName],
+            AUP.[Address],
+            AUP.[Email],
+            AUP.[AppUserRoleId],
+			AUR.[RoleName],
+            AUP.[CreatedBy],
+			AUP.[CreatedDate],
+            AUP.[UpdatedBy],
+            AUP.[UpdatedDate],
+            AUP.[IsActive],
+            ROW_NUMBER() OVER 
+            (
+                ORDER BY 
+					CASE WHEN @SortColumnName = 'FullName' AND @SortColumnDirection = 'asc' THEN AUP.[FullName] END ASC,
+					CASE WHEN @SortColumnName = 'Address' AND @SortColumnDirection = 'asc' THEN AUP.[Address] END ASC,
+					CASE WHEN @SortColumnName = 'Email' AND @SortColumnDirection = 'asc' THEN AUP.[Email] END ASC,
+					CASE WHEN @SortColumnName = 'RoleName' AND @SortColumnDirection = 'asc' THEN AUR.[RoleName] END ASC,
+					CASE WHEN @SortColumnName = 'IsActive' AND @SortColumnDirection = 'asc' THEN AUP.[IsActive] END ASC,
+                    
+                    CASE WHEN @SortColumnName = 'FullName' AND @SortColumnDirection = 'desc' THEN AUP.[FullName] END DESC,
+					CASE WHEN @SortColumnName = 'Address' AND @SortColumnDirection = 'desc' THEN AUP.[Address] END DESC,
+					CASE WHEN @SortColumnName = 'Email' AND @SortColumnDirection = 'desc' THEN AUP.[Email] END DESC,
+					CASE WHEN @SortColumnName = 'RoleName' AND @SortColumnDirection = 'desc' THEN AUR.[RoleName] END DESC,
+					CASE WHEN @SortColumnName = 'IsActive' AND @SortColumnDirection = 'desc' THEN AUP.[IsActive] END DESC
+            ) AS RowNum
+        FROM 
+            [dbo].[AppUserProfiles] AUP
+	LEFT JOIN [dbo].[AppUserRoles] AUR ON AUR.Id = AUP.AppUserRoleId
+    WHERE AUR.IsActive = 1
+          AND (
+                  @SearchTerm = ''
+                  OR AUP.[FullName] LIKE '%' + @SearchTerm + '%' 
+				  OR AUP.[Email] LIKE '%' + @SearchTerm + '%'
+				  OR AUR.[RoleName] LIKE '%' + @SearchTerm + '%'
+				  OR AUP.[Address] LIKE '%' + @SearchTerm + '%'
+              )
+    )
+    SELECT @Items =
+    (
+        SELECT 
+            [Id],
+            [FullName],
+            [Address],
+            [Email],
+            [AppUserRoleId],
+			[RoleName],
+            [CreatedBy],
+			[CreatedDate],
+            [UpdatedBy],
+            [UpdatedDate],
+            [IsActive]
+        FROM 
+            SortedAppUserProfiles
+        WHERE 
+            RowNum BETWEEN (@PageNumber - 1) * @PageSize + 1 AND @PageNumber * @PageSize
+        FOR JSON AUTO
+    );
+
+    INSERT INTO #AppUserProfileTBL
+    (
+        [RowCount],
+        [CurrentPage],
+        [PageSize],
+        [PageCount],
+        [Items]
+    )
+    SELECT @TotalRecords,
+           @PageNumber,
+           @PageSize,
+           @TotalPages,
+           @Items;
+
+    SET @Result =
+    (
+        SELECT * FROM #AppUserProfileTBL FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+    );
+
+    DROP TABLE #AppUserProfileTBL;
+
+    SELECT @Result AS result;
 END
 
 GO
@@ -228,7 +325,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserMenusPagingWithSearch]    Script Date: 12/5/2025 11:42:13 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserMenusPagingWithSearch]    Script Date: 12/14/2025 2:48:38 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -238,7 +335,7 @@ GO
 --EXEC SP_GetAllAppUserMenusPagingWithSearch 1,5,'User','','ASC'
 --EXEC SP_GetAllAppUserMenusPagingWithSearch 1,5,'','','ASC'
 --EXEC SP_GetAllAppUserMenusPagingWithSearch 1,10,'','Name','asc'
-CREATE PROCEDURE [dbo].[SP_GetAllAppUserMenusPagingWithSearch]
+ALTER PROCEDURE [dbo].[SP_GetAllAppUserMenusPagingWithSearch]
     @PageNumber INT,
     @PageSize INT,
     @SearchTerm VARCHAR(50) = '',
@@ -265,8 +362,10 @@ BEGIN
     -- Calculate total records with the search term filter
     SELECT @TotalRecords = COUNT(*)
     FROM [dbo].[AppUserMenus]
-    WHERE IsActive = 1
-          AND (
+    WHERE 
+		  --IsActive = 1
+    --      AND 
+		      (
                   @SearchTerm = ''
                   OR [Name] LIKE '%' + @SearchTerm + '%'
               );
@@ -338,8 +437,9 @@ BEGIN
         FROM 
             [dbo].[AppUserMenus] am
         WHERE 
-            am.IsActive = 1
-            AND (
+            --am.IsActive = 1
+            --AND 
+			(
                 @SearchTerm = ''
                 OR am.[Name] LIKE '%' + @SearchTerm + '%'
             )

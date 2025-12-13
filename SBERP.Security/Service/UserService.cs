@@ -235,101 +235,39 @@ namespace SBERP.Security.Service
         #endregion
 
         #region AppUserProfile related methods
-
         /// <summary>
-        /// <para>EF Codeblock: GetAllAppUserProfileAsync</para> 
-        /// This service method used to get a list users based on the supplied page number and page size.
-        /// <br/> And retriving result as PageResult<![CDATA[<T>]]>.
+        /// <para>ADO.NET Codeblock: GetAllAppUserProfilePagingWithSearchAsync</para> 
+        /// This method is used to get a list of user profile based on the supplied searchterm, sortcolumnname, sortcolumndirection, page number, and page size.
+        /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>. 
         /// </summary>
         /// <param name="paramRequest"></param>
-        /// <returns>PageResult<![CDATA[<T>]]></returns>
-        public async Task<PageResult<AppUserProfile>> GetAllAppUserProfileAsync(PaginationFilter paramRequest)
+        /// <returns></returns>
+        public async Task<PagingResult<AppUserProfileResponse>?> GetAllAppUserProfilePagingWithSearchAsync(PagingSearchFilter paramRequest)
         {
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
             try
             {
-                int? count = await _context.AppUserProfiles.CountAsync();
-                List<AppUserProfile>? oAppUserProfileList = await _context.AppUserProfiles.OrderByDescending(x => x.CreatedDate).Skip((paramRequest.PageNumber - 1) * paramRequest.PageSize).Take(paramRequest.PageSize).ToListAsync();
-                PageResult<AppUserProfile> result = new()
+                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_PROFILE_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+                List<IDbDataParameter> parameters = new()
                 {
-                    Count = Convert.ToInt32(count),
-                    PageIndex = paramRequest.PageNumber > 0 ? paramRequest.PageNumber : 1,
-                    PageSize = 10,
-                    Items = oAppUserProfileList
+                    _dbmanager.CreateParameter("@PageNumber", paramRequest.PageNumber, DbType.Int32),
+                    _dbmanager.CreateParameter("@PageSize", paramRequest.PageSize, DbType.Int32),
+                    _dbmanager.CreateParameter("@SearchTerm", paramRequest.SearchTerm, DbType.String),
+                    _dbmanager.CreateParameter("@SortColumnName", paramRequest.SortColumnName, DbType.String),
+                    _dbmanager.CreateParameter("@SortColumnDirection", paramRequest.SortColumnDirection, DbType.String)
                 };
 
-                if (Utilities.IsNull(result) && !result.Items.Any())
+                object dbResult = await _dbmanager.GetScalarValueAsync(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+                if (Utilities.IsNotNull(dbResult))
                 {
-                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
+                    string resultJStr = Utilities.ConvertJObjectToJsonString(dbResult, "Items");
+
+                    // Deserialize the JSON string into PagingResult<AppUserProfile>
+                    PagingResult<AppUserProfileResponse>? oAppUserProfileResult = JsonConvert.DeserializeObject<PagingResult<AppUserProfileResponse>>(resultJStr);
+                    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_PROFILE_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(oAppUserProfileResult, Formatting.Indented)));
+                    return oAppUserProfileResult;
                 }
 
-                return result;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// <para>EF Codeblock: GetAllAppUserProfileExtnAsync</para> 
-        /// This service method used to get a list users based on the supplied page number and page size.
-        /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
-        /// </summary>
-        /// <param name="paramRequest"></param>
-        /// <returns>PagingResult<![CDATA[<T>]]></returns>
-        public async Task<PagingResult<AppUserProfile>> GetAllAppUserProfileExtnAsync(PaginationFilter paramRequest)
-        {
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-            try
-            {
-                IQueryable<AppUserProfile>? source = (from user in _context?.AppUserProfiles?.OrderBy(a => a.CreatedDate) select user).AsQueryable();
-                PagingResult<AppUserProfile> result = await Utilities.GetPagingResult(source, paramRequest.PageNumber, paramRequest.PageSize);
-
-                if (Utilities.IsNull(result) && !result.Items.Any())
-                {
-                    _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
-                }
-
-                return result;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-        }
-
-        /// <summary>
-        /// <para>ADO.NET Codeblock: GetAllAppUserProfileAdoAsync</para> 
-        /// This service method used to get a list users based on the supplied page number and page size.
-        /// <br/> And retriving result as PagingResult<![CDATA[<T>]]>.
-        /// </summary>
-        /// <param name="paramRequest"></param>
-        /// <returns>PageResult<![CDATA[<T>]]></returns>
-        public async Task<PagingResult<AppUserProfile>?> GetAllAppUserProfileAdoAsync(PaginationFilter paramRequest)
-        {
-            PagingResult<AppUserProfile>? result = null;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALL_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
-            try
-            {
-                List<AppUserProfile> oAppUserProfileList;
-                List<IDbDataParameter> parameters = new(){
-                _dbmanager.CreateParameter("@PageIndex", paramRequest.PageNumber, DbType.Int32),
-                _dbmanager.CreateParameter("@PageSize", paramRequest.PageSize, DbType.Int32)};
-
-                DataTable oDataTable = await _dbmanager.GetDataTableAsync(ConstantSupplier.GET_ALL_USER_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
-
-                if (Utilities.IsNotNull(oDataTable) && oDataTable.Rows.Count > 0)
-                {
-                    oAppUserProfileList = Utilities.ConvertDataTable<AppUserProfile>(oDataTable);
-                    result = Utilities.GetPagingResult(oAppUserProfileList, paramRequest.PageNumber, paramRequest.PageSize);
-                }
-                else
-                {
-                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GETALL_RES_MSG, JsonConvert.SerializeObject(string.Empty, Formatting.Indented)));
-                }
-                return result;
+                return null;
             }
             catch (Exception)
             {
@@ -347,10 +285,10 @@ namespace SBERP.Security.Service
         public async Task<DataResponse> GetAppUserProfileByIdAsync(string id)
         {
             DataResponse oDataResponse;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
             try
             {
-                AppUserProfile? oAppUserProfile = await _context.AppUserProfiles.FirstOrDefaultAsync(u => u.Id == new Guid(id) && u.IsActive == true);
+                AppUserProfile? oAppUserProfile = await _context.AppUserProfiles.FirstOrDefaultAsync(u => u.Id == new Guid(id));
 
                 if (oAppUserProfile != null)
                 {
@@ -359,7 +297,7 @@ namespace SBERP.Security.Service
                 else
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
                 }
                 return oDataResponse;
             }
@@ -378,12 +316,12 @@ namespace SBERP.Security.Service
         public async Task<DataResponse> GetAppUserProfileByIdAdoAsync(string id)
         {
             DataResponse oDataResponse;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
             try
             {
                 AppUserProfile? user;
                 List<IDbDataParameter> parameters = new() { _dbmanager.CreateParameter("@Id", new Guid(id), DbType.Guid) };
-                DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GET_USER_BY_ID_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
+                DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GET_USER_PROFILE_BY_ID_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
 
                 if (oDT != null && oDT.Rows.Count > 0)
                 {
@@ -393,7 +331,7 @@ namespace SBERP.Security.Service
                 else
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
                 }
                 return oDataResponse;
             }

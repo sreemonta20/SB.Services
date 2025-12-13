@@ -158,10 +158,15 @@ namespace SBERP.Security.Helper
 
         #region User Controller
         public const string GET_ALL_APP_USER_PROFILE_ROUTE_NAME = "getAllAppUserProfile";
+        public const string GET_ALL_USER_PROFILE_PAGING_WITH_SEARCH_TERM_ROUTE_NAME = "getAllAppUserProfilePagingWithSearch";
         public const string GET_APP_USER_PROFILE_ROUTE_NAME = "getAppUserProfileById";
         public const string POST_APP_USER_PROFILE_ROUTE_NAME = "createUpdateAppUserProfile";
         public const string DEL_APP_USER_PROFILE_ROUTE_NAME = "deleteAppUserProfile";
         public const string POST_APP_USER_ROUTE_NAME = "createUpdateAppUser";
+
+        public const string GET_ALL_USER_PROFILE_PAGING_SEARCH_RESULT_SUCCESS_MSG = "User profile list retrieved successfully.";
+        public const string GET_ALL_USER_PROFILE_PAGING_SEARCH_RESULT_FAILED_MSG = "Retrieving user profile list failed.";
+        public const string GET_ALL_USER_PROFILE_PAGING_SEARCH_RESULT_EMPTY_MSG = "Retrieving user profile list is found empty.";
         #endregion
 
         #region User Methods Execution Log
@@ -175,25 +180,28 @@ namespace SBERP.Security.Helper
         public const string SAVEUP_APP_USER_FAILED_RES_MSG = "CreateUpdateAppUser Failed (User service) : api method response is: \n{0}\n";
 
         //api/v1/User/getAllAppUserProfile
-        public const string GETALL_STARTED_INFO_MSG = "GetAllAppUserProfile api method started.\n";
-        public const string GETALL_REQ_MSG = "GetAllAppUserProfile api method request is: \n{0}\n";
-        public const string GETALL_EXCEPTION_MSG = "GetAllAppUserProfile Exception below:: \n{0}\n";
-        public const string SERVICE_GETALL_REQ_MSG = "GetAllAppUserProfile (User service) method request is: \n{0}\n";
-        public const string SERVICE_GETALL_RES_MSG = "GetAllAppUserProfile (User service) method error response is: \n{0}\n";
-        public const string GETALL_RES_MSG = "GetAllAppUserProfile api method response is: \n{0}\n";
+        public const string GETALL_USER_PROFILE_PAGING_SEARCH_STARTED_INFO_MSG = "GetAllAppUserProfile api method started.\n";
+        public const string GETALL_USER_PROFILE_PAGING_SEARCH_REQ_MSG = "GetAllAppUserProfile api method request is: \n{0}\n";
+        public const string GETALL_USER_PROFILE_PAGING_SEARCH_EXCEPTION_MSG = "GetAllAppUserProfile Exception below:: \n{0}\n";
+        public const string GETALL_USER_PROFILE_PAGING_SEARCH_INNER_EXCEPTION_MSG = "GetAllAppUserProfile Inner Exception below:: \n{0}\n";
+        public const string SERVICE_GETALL_USER_PROFILE_PAGING_SEARCH_REQ_MSG = "GetAllAppUserProfile (User service) method request is: \n{0}\n";
+        public const string SERVICE_GETALL_USER_PROFILE_PAGING_SEARCH_RES_MSG = "GetAllAppUserProfile (User service) method error response is: \n{0}\n";
+        public const string GETALL_USER_PROFILE_PAGING_SEARCH_RES_MSG = "GetAllAppUserProfile api method response is: \n{0}\n";
 
         //api/v1/User/getAppUserProfileById
-        public const string GETBYID_STARTED_INFO_MSG = "GetAppUserProfileById api method started.\n";
-        public const string GETBYID_REQ_MSG = "GetAppUserProfileById api method request is: \n{0}\n";
-        public const string GETBYID_EXCEPTION_MSG = "GetAppUserProfileById Exception below:: \n{0}\n";
-        public const string SERVICE_GETBYID_REQ_MSG = "GetAppUserProfileById (User service) method request is: \n{0}\n";
-        public const string SERVICE_GETBYID_RES_MSG = "GetAppUserProfileById (User service) method error response is: \n{0}\n";
-        public const string GETBYID_RES_MSG = "GetAppUserProfileById api method response is: \n{0}\n";
+        public const string GET_USER_PROFILE_BY_ID_STARTED_INFO_MSG = "GetAppUserProfileById api method started.\n";
+        public const string GET_USER_PROFILE_BY_ID_REQ_MSG = "GetAppUserProfileById api method request is: \n{0}\n";
+        public const string GET_USER_PROFILE_BY_ID_EXCEPTION_MSG = "GetAppUserProfileById Exception below:: \n{0}\n";
+        public const string GET_USER_PROFILE_BY_ID_INNER_EXCEPTION_MSG = "GetAppUserProfileById Inner Exception below:: \n{0}\n";
+        public const string SERVICE_GET_USER_PROFILE_BY_ID_REQ_MSG = "GetAppUserProfileById (User service) method request is: \n{0}\n";
+        public const string SERVICE_GET_USER_PROFILE_BY_ID_RES_MSG = "GetAppUserProfileById (User service) method error response is: \n{0}\n";
+        public const string GET_USER_PROFILE_BY_ID_RES_MSG = "GetAppUserProfileById api method response is: \n{0}\n";
 
         //api/v1/User/createUpdateAppUserProfile
         public const string SAVEUP_APP_USER_PROFILE_STARTED_INFO_MSG = "CreateUpdateAppUserProfile api method started.\n";
         public const string SAVEUP_APP_USER_PROFILE_REQ_MSG = "CreateUpdateAppUserProfile api method request is: \n{0}\n";
         public const string SAVEUP_APP_USER_PROFILE_EXCEPTION_MSG = "CreateUpdateAppUserProfile Exception below:: \n{0}\n";
+        public const string SAVEUP_APP_USER_PROFILE_INNER_EXCEPTION_MSG = "CreateUpdateAppUserProfile Inner Exception below:: \n{0}\n";
         public const string SERVICE_SAVEUP_APP_USER_PROFILE_REQ_MSG = "CreateUpdateAppUserProfile (User service) method request is: \n{0}\n";
         public const string SERVICE_SAVEUP_APP_USER_PROFILE_RES_MSG = "CreateUpdateAppUserProfile (User service) method response is: \n{0}\n";
         public const string SAVEUP_APP_USER_PROFILE_RES_MSG = "CreateUpdateAppUserProfile api method response is: \n{0}\n";
@@ -207,8 +215,6 @@ namespace SBERP.Security.Helper
         public const string SERVICE_DEL_APP_USER_PROFILE_RES_MSG = "DeleteAppUserProfile (User service) method response is: \n{0}\n";
         public const string DEL_APP_USER_PROFILE_RES_MSG = "DeleteAppUserProfile api method response is: \n{0}\n";
         public const string DEL_APP_USER_PROFILE_FAILED_RES_MSG = "DeleteAppUserProfile Failed (User service) : api method response is: \n{0}\n";
-
-
 
         #endregion
 
@@ -469,8 +475,8 @@ namespace SBERP.Security.Helper
         #endregion
 
         #region SP
-        public const string GET_USER_BY_ID_SP_NAME = "SP_GetAppUserProfileById";
-        public const string GET_ALL_USER_SP_NAME = "SP_GetAllAppUserProfiles";
+        public const string GETALL_USER_PROFILE_PAGING_SEARCH_SP_NAME = "SP_GetAllAppUserProfilesPagingWithSearch";
+        public const string GET_USER_PROFILE_BY_ID_SP_NAME = "SP_GetAppUserProfileById";
         public const string POST_SAVE_UPDATE_APP_USER_PROFILE_SP_NAME = "SP_SaveUpdateAppUserProfile";
         public const string POST_SAVE_UPDATE_APP_USER_SP_NAME = "SP_SaveUpdateAppUser";
         public const string DELETE_USER_SP_NAME = "SP_DeleteAppUserProfile";

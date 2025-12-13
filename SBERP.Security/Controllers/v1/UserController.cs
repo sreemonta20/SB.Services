@@ -77,70 +77,38 @@ namespace SBERP.Security.Controllers.v1
         #endregion
 
         #region AppUserProfile related all http methods
-
-        // GET api/User/getAllAppUserProfile
+        // GET api/RoleMenu/getAllAppUserProfilePagingWithSearch
         /// <summary>
-        /// This method used to get a list users based on the supplied page number and page size.
+        /// It used to get all user profile based on the search text or term.Sample param:{"SearchTerm":"Admin","SortColumnName":"","SortColumnDirection":"ASC","PageNumber":1,"PageSize":10}
         /// </summary>
-        /// <param name="pageNumber"></param>
-        /// <param name="pageSize"></param>
-        /// <returns>object</returns>
+        /// <param name="param"></param>
+        /// <returns>
+        /// <see cref="Task{object}"/>
+        /// </returns>
         [HttpGet]
-        [Route(ConstantSupplier.GET_ALL_APP_USER_PROFILE_ROUTE_NAME)]
+        [Route(ConstantSupplier.GET_ALL_USER_PROFILE_PAGING_WITH_SEARCH_TERM_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
-        public async Task<object> GetAllAppUserProfileAsync(int pageNumber, int pageSize)
+        public async Task<object> GetAllAppUserProfilePagingWithSearchAsync([FromQuery] string param)
         {
-            _securityLogService.LogInfo(ConstantSupplier.GETALL_STARTED_INFO_MSG);
-            PaginationFilter oPaginationFilter = new() { PageNumber = pageNumber, PageSize = pageSize };
+            _securityLogService.LogInfo(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_STARTED_INFO_MSG);
             DataResponse response;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETBYID_REQ_MSG, JsonConvert.SerializeObject(oPaginationFilter, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(param, Formatting.Indented)));
             try
             {
-
-                #region EF Codeblock
-                PageResult<AppUserProfile>? result = await _userService.GetAllAppUserProfileAsync(oPaginationFilter);
-                if (result != null && result.Count > 0)
-                {
-                    _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALL_RES_MSG, JsonConvert.SerializeObject(result, Formatting.Indented)));
-                    return response = new()
-                    {
-                        Success = true,
-                        Message = ConstantSupplier.GET_APP_USER_PROFILE_LIST_SUCCESS,
-                        MessageType = Enum.EnumResponseType.Success,
-                        ResponseCode = (int)HttpStatusCode.OK,
-                        Result = result
-                    };
-                }
-                #endregion
-
                 #region ADO.NET Codeblock
-                //PagingResult<AppUserProfile>? result = await _userService.GetAllAppUserProfileAdoAsync(oPaginationFilter);
-                //if ((result != null) && (result.RowCount > 0))
-                //{
-                //    return response = new()
-                //    {
-                //        Success = true,
-                //        Message = ConstantSupplier.GET_APP_USER_PROFILE_LIST_SUCCESS,
-                //        MessageType = Enum.EnumResponseType.Success,
-                //        ResponseCode = (int)HttpStatusCode.OK,
-                //        Result = result
-                //    };
-                //}
-                #endregion
-
-                response = new()
+                PagingSearchFilter? oPagingSearchFilter = JsonConvert.DeserializeObject<PagingSearchFilter>(param);
+                PagingResult<AppUserProfileResponse>? userprofileList = await _userService.GetAllAppUserProfilePagingWithSearchAsync(oPagingSearchFilter);
+                if (Utilities.IsNull(userprofileList))
                 {
-                    Success = true,
-                    Message = ConstantSupplier.GET_APP_USER_PROFILE_LIST_FAILED,
-                    MessageType = Enum.EnumResponseType.Warning,
-                    ResponseCode = (int)HttpStatusCode.BadRequest,
-                    Result = result
-                };
-
+                    return new DataResponse { Success = false, Message = ConstantSupplier.GET_ALL_USER_PROFILE_PAGING_SEARCH_RESULT_EMPTY_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                }
+                response = new DataResponse { Success = true, Message = ConstantSupplier.GET_ALL_USER_PROFILE_PAGING_SEARCH_RESULT_SUCCESS_MSG, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.Found, Result = userprofileList };
+                #endregion
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETALL_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -150,7 +118,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALL_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
 
@@ -165,8 +133,8 @@ namespace SBERP.Security.Controllers.v1
         [ServiceFilter(typeof(ValidateModelAttribute))]
         public async Task<object> GetAppUserProfileByIdAsync([FromQuery] string id)
         {
-            _securityLogService.LogInfo(ConstantSupplier.GETBYID_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETBYID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
+            _securityLogService.LogInfo(ConstantSupplier.GET_USER_PROFILE_BY_ID_STARTED_INFO_MSG);
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
             DataResponse response;
             try
             {
@@ -181,7 +149,8 @@ namespace SBERP.Security.Controllers.v1
             catch (Exception Ex)
             {
                 //_securityLogService.LogError(Ex.Message);
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETBYID_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Message = Ex.Message,
@@ -191,7 +160,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETBYID_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
             return response;
         }
 
@@ -217,6 +186,7 @@ namespace SBERP.Security.Controllers.v1
             {
                 //_securityLogService.LogError(Ex.Message);
                 _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Message = Ex.Message,
