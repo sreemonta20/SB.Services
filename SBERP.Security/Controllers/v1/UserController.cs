@@ -39,7 +39,7 @@ namespace SBERP.Security.Controllers.v1
         #endregion
 
         #region AppUser related all http methods
-        // POST api/User/createUpdateAppUser
+        // POST api/v1/User/createUpdateAppUser
         /// <summary>
         /// <br>This method is used to create or update application user for getting user credential to use the application. Also it creates salt key to save</br> 
         /// <br>the password with proper hasing during the creating and updating the application user.</br>
@@ -77,7 +77,7 @@ namespace SBERP.Security.Controllers.v1
         #endregion
 
         #region AppUserProfile related all http methods
-        // GET api/RoleMenu/getAllAppUserProfilePagingWithSearch
+        // GET api/v1/RoleMenu/getAllAppUserProfilePagingWithSearch
         /// <summary>
         /// It used to get all user profile based on the search text or term.Sample param:{"SearchTerm":"Admin","SortColumnName":"","SortColumnDirection":"ASC","PageNumber":1,"PageSize":10}
         /// </summary>
@@ -122,7 +122,7 @@ namespace SBERP.Security.Controllers.v1
             return response;
         }
 
-        // GET api/User/getAppUserProfileById
+        // GET api/v1/User/getAppUserProfileById
         /// <summary>
         /// This method used to get a specific user details by supplying user id.
         /// </summary>
@@ -164,7 +164,7 @@ namespace SBERP.Security.Controllers.v1
             return response;
         }
 
-        // POST api/User/createUpdateAppUserProfile
+        // POST api/v1/User/createUpdateAppUserProfile
         /// <summary>
         /// This method is being used for registering new user and updating old user. Except the password update during the updating details.
         /// </summary>
@@ -200,7 +200,7 @@ namespace SBERP.Security.Controllers.v1
             return response;
         }
 
-        // DELETE api/User/deleteAppUserProfile
+        // DELETE api/v1/User/deleteAppUserProfile
         /// <summary>
         /// It deletes user details by supplying the user id.
         /// </summary>

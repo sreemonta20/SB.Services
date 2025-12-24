@@ -181,7 +181,7 @@ namespace SBERP.Security.Service
                 if (Utilities.IsNull(oAppUserRole))
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_APP_USER_ROLE_FAILED, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETBYID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETROLEBYID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
                 }
                 else
                 {

@@ -288,17 +288,40 @@ namespace SBERP.Security.Service
             _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
             try
             {
-                AppUserProfile? oAppUserProfile = await _context.AppUserProfiles.FirstOrDefaultAsync(u => u.Id == new Guid(id));
-
-                if (oAppUserProfile != null)
+                IQueryable<AppUserProfileResponse> query =
+                from profile in _context.AppUserProfiles!
+                join role in _context.AppUserRoles!
+                    on profile.AppUserRoleId equals role.Id
+                where profile.Id == new Guid(id)
+                select new AppUserProfileResponse
                 {
-                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.GET_APP_USER_PROFILE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oAppUserProfile };
+                    Id = profile.Id,
+                    FullName = profile.FullName,
+                    Address = profile.Address,
+                    Email = profile.Email,
+                    AppUserRoleId = profile.AppUserRoleId,
+                    RoleName = role.RoleName,
+                    CreatedBy = profile.CreatedBy,
+                    CreatedDate = profile.CreatedDate,
+                    UpdatedBy = profile.UpdatedBy,
+                    UpdatedDate = profile.UpdatedDate,
+                    IsActive = profile.IsActive
+                };
+
+                AppUserProfileResponse? result = await query.FirstOrDefaultAsync();
+
+                if (result == null)
+                {
+                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
+                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
                 }
                 else
                 {
-                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    // Serialize to JSON string (as requested)
+                    string jsonResult = JsonConvert.SerializeObject(result, Formatting.Indented);
+                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.GET_APP_USER_PROFILE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = jsonResult };
                 }
+
                 return oDataResponse;
             }
             catch (Exception)
@@ -319,18 +342,18 @@ namespace SBERP.Security.Service
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
             try
             {
-                AppUserProfile? user;
+                AppUserProfileResponse? result;
                 List<IDbDataParameter> parameters = new() { _dbmanager.CreateParameter("@Id", new Guid(id), DbType.Guid) };
                 DataTable oDT = await _dbmanager.GetDataTableAsync(ConstantSupplier.GET_USER_PROFILE_BY_ID_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
 
                 if (oDT != null && oDT.Rows.Count > 0)
                 {
-                    user = JArray.FromObject(oDT)[0].ToObject<AppUserProfile>();
-                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.GET_APP_USER_PROFILE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = user };
+                    result = JArray.FromObject(oDT)[0].ToObject<AppUserProfileResponse>();
+                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.GET_APP_USER_PROFILE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = result };
                 }
                 else
                 {
-                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
                     _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
                 }
                 return oDataResponse;
@@ -377,7 +400,7 @@ namespace SBERP.Security.Service
                                 Address = request.Address,
                                 Email = request.Email,
                                 AppUserRoleId = new Guid(request.AppUserRoleId),
-                                CreatedBy = request.CreateUpdatedBy,
+                                CreatedBy = request.CreateUpdateBy,
                                 CreatedDate = DateTime.UtcNow,
                                 IsActive = request.IsActive
                             };
@@ -437,7 +460,7 @@ namespace SBERP.Security.Service
                                 oOldAppUserProfile.Address = request.Address;
                                 oOldAppUserProfile.Email = request.Email;
                                 oOldAppUserProfile.AppUserRoleId = new Guid(request.AppUserRoleId);
-                                oOldAppUserProfile.UpdatedBy = request.CreateUpdatedBy;
+                                oOldAppUserProfile.UpdatedBy = request.CreateUpdateBy;
                                 oOldAppUserProfile.UpdatedDate = DateTime.UtcNow;
                                 oOldAppUserProfile.IsActive = request.IsActive;
                             

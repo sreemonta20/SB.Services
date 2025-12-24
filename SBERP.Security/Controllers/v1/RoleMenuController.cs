@@ -38,7 +38,7 @@ namespace SBERP.Security.Controllers.v1
         #endregion
 
         #region AppUserRole related all http methods 
-        // GET api/RoleMenu/getAllAppUserRoles
+        // GET api/v1/RoleMenu/getAllAppUserRoles
 
         /// <summary>
         /// It used to get all user roles.
@@ -118,7 +118,7 @@ namespace SBERP.Security.Controllers.v1
             return response;
         }
 
-        // GET api/RoleMenu/getAppUserRolesById
+        // GET api/v1/RoleMenu/getAppUserRolesById
 
         /// <summary>
         /// It used to get a role by roleId.
@@ -157,7 +157,7 @@ namespace SBERP.Security.Controllers.v1
             return response;
         }
 
-        // POST api/RoleMenu/createUpdateAppUserRole
+        // POST api/v1/RoleMenu/createUpdateAppUserRole
 
         /// <summary>
         /// It used to create and update role based on supplied <see cref="RoleSaveUpdateRequest"/> request model.
@@ -196,7 +196,7 @@ namespace SBERP.Security.Controllers.v1
             return response;
         }
 
-        // GET api/RoleMenu/deleteAppUserRole
+        // GET api/v1/RoleMenu/deleteAppUserRole
 
         /// <summary>
         /// It used to delete a role. Delete can be happen either simply making the IsActive false or delete command. It is decided based on user settings in appsettings.json.
@@ -239,7 +239,7 @@ namespace SBERP.Security.Controllers.v1
         #endregion
 
         #region AppUserMenu related all http methods
-        // GET api/RoleMenu/getAllAppUserMenuPagingWithSearch 
+        // GET api/v1/RoleMenu/getAllAppUserMenuPagingWithSearch 
         /// <summary>
         /// It used to get all user menu based on the search text or term.Sample param:{"SearchTerm":"Admin","SortColumnName":"","SortColumnDirection":"ASC","PageNumber":1,"PageSize":10}
         /// </summary>
@@ -287,7 +287,7 @@ namespace SBERP.Security.Controllers.v1
             return response;
         }
 
-        // GET api/RoleMenu/getAllAppUserMenuByUserId
+        // GET api/v1/RoleMenu/getAllAppUserMenuByUserId
         /// <summary>
         /// It used to get all user menu and their access permission by a specific user
         /// </summary>
@@ -325,7 +325,7 @@ namespace SBERP.Security.Controllers.v1
             return response;
         }
 
-        // POST api/RoleMenu/createUpdateAppUserMenu
+        // POST api/v1/RoleMenu/createUpdateAppUserMenu
         /// <summary>
         /// It used to create and update role based on supplied <see cref="AppUserMenuRequest"/> request model.
         /// </summary>
@@ -364,7 +364,7 @@ namespace SBERP.Security.Controllers.v1
             return response;
         }
 
-        // GET api/RoleMenu/deleteAppUserMenu
+        // GET api/v1/RoleMenu/deleteAppUserMenu
         /// <summary>
         /// It used to delete a user menu. Delete can be happen either simply making the IsActive false or delete command. It is decided based on user settings in appsettings.json.
         /// </summary>
@@ -402,7 +402,7 @@ namespace SBERP.Security.Controllers.v1
             return response;
         }
 
-        // GET api/RoleMenu/getAllParentMenus
+        // GET api/v1/RoleMenu/getAllParentMenus
         /// <summary>
         /// It used to get all parent menu list.
         /// </summary>
@@ -442,7 +442,7 @@ namespace SBERP.Security.Controllers.v1
 
         #region AppUserRoleMenu realted all http methods
 
-        // GET api/RoleMenu/getAppUserRoleMenuInitialData
+        // GET api/v1/RoleMenu/getAppUserRoleMenuInitialData
         /// <summary>
         /// This method used to get all list data, which are needed to be loaded during the user form initialization.
         /// </summary>
@@ -480,7 +480,7 @@ namespace SBERP.Security.Controllers.v1
             return response;
         }
 
-        // GET api/RoleMenu/getMenusByRoleId
+        // GET api/v1/RoleMenu/getMenusByRoleId
 
         /// <summary>
         /// It used to get all active user menus by role id.
@@ -520,7 +520,7 @@ namespace SBERP.Security.Controllers.v1
             return response;
         }
 
-        // GET api/RoleMenu/getRoleMenusPagingWithSearch 
+        // GET api/v1/RoleMenu/getRoleMenusPagingWithSearch 
         /// <summary>
         /// This method used to get all role menu permissions based on the role id. Also based on search text role menu permission can be fetched.
         /// </summary>
@@ -581,7 +581,7 @@ namespace SBERP.Security.Controllers.v1
             return response;
         }
 
-        // POST api/RoleMenu/saveUpdateRoleMenuBulk
+        // POST api/v1/RoleMenu/saveUpdateRoleMenuBulk
         /// <summary>
         /// It used to create and update role based on supplied <see cref="AppUserMenuRequest"/> request model.
         /// </summary>

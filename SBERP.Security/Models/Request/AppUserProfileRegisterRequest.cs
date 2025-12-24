@@ -20,7 +20,7 @@ namespace SBERP.Security.Models.Request
         public string? Address { get; set; }
         public string? Email { get; set; }
         public string? AppUserRoleId { get; set; }
-        public string? CreateUpdatedBy { get; set; }
+        public string? CreateUpdateBy { get; set; }
         public bool? IsActive { get; set; }
         public string? ActionName { get; set; }
     }
