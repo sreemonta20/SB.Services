@@ -8,6 +8,7 @@
         public string? Email { get; set; }
         public Guid? AppUserRoleId { get; set; }
         public string? RoleName { get; set; }
+        public string? UserName { get; set; } // Added for AppUser
         public string? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? UpdatedBy { get; set; }

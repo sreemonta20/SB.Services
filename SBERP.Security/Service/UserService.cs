@@ -292,6 +292,8 @@ namespace SBERP.Security.Service
                 from profile in _context.AppUserProfiles!
                 join role in _context.AppUserRoles!
                     on profile.AppUserRoleId equals role.Id
+                join user in _context.AppUsers!
+                on profile.Id equals user.AppUserProfileId
                 where profile.Id == new Guid(id)
                 select new AppUserProfileResponse
                 {
@@ -301,6 +303,7 @@ namespace SBERP.Security.Service
                     Email = profile.Email,
                     AppUserRoleId = profile.AppUserRoleId,
                     RoleName = role.RoleName,
+                    UserName = user.UserName,
                     CreatedBy = profile.CreatedBy,
                     CreatedDate = profile.CreatedDate,
                     UpdatedBy = profile.UpdatedBy,
@@ -365,7 +368,6 @@ namespace SBERP.Security.Service
 
         }
 
-
         /// <summary>
         /// <para>EF And ADO.NET Codeblocks: CreateUpdateAppUserProfileAsync</para>
         /// <br>This method is used to registering or creating or updating application user profile.</br>
@@ -373,6 +375,198 @@ namespace SBERP.Security.Service
         /// <param name="request"></param>
         /// <returns>DataResponse</returns>
         public async Task<DataResponse> CreateUpdateAppUserProfileAsync(AppUserProfileRegisterRequest? request)
+        {
+            DataResponse? oDataResponse = null;
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+
+            // Validate password match if password is provided
+            if (!string.IsNullOrEmpty(request!.Password) && request.Password != request.ConfirmPassword)
+            {
+                return new DataResponse { Success = false, Message = ConstantSupplier.CREATE_APP_USER_PROFILE_PWD_NOT_MATCHED, MessageType = Enum.EnumResponseType.Warning, 
+                    ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
+            }
+
+            bool isCreate = request.ActionName == ConstantSupplier.SAVE_KEY;
+
+            using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
+            try
+            {
+                if (request != null)
+                {
+                    AppUserProfile? oAppUserProfile;
+                    if (isCreate)
+                    {
+                        AppUserProfile? oExistAppUserProfile = await _context.AppUserProfiles!.FirstOrDefaultAsync(x => (x.FullName!.Trim().ToLower()) == request.FullName.Trim().ToLower() && (x.Email.Trim().ToLower()) == request.Email.Trim().ToLower() && x.AppUserRoleId == new Guid(request.AppUserRoleId));
+
+                        if (Utilities.IsNotNull(oExistAppUserProfile) && !String.IsNullOrWhiteSpace(Convert.ToString(request.Id)))
+                        {
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_RES_MSG, JsonConvert.SerializeObject(oExistAppUserProfile, Formatting.Indented)));
+                            oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_APP_USER_PROFILE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
+                            return oDataResponse;
+                        }
+                        // CREATE Profile
+                        oAppUserProfile = new AppUserProfile
+                        {
+                            Id = Guid.NewGuid(),
+                            FullName = request.FullName,
+                            Address = request.Address,
+                            Email = request.Email,
+                            AppUserRoleId = new Guid(request.AppUserRoleId),
+                            CreatedBy = request.CreateUpdateBy,
+                            CreatedDate = DateTime.UtcNow,
+                            IsActive = request.IsActive
+                        };
+                        _context.AppUserProfiles!.Add(oAppUserProfile);
+
+                    }
+                    else
+                    {
+                        // UPDATE Profile
+                        oAppUserProfile = await _context.AppUserProfiles!
+                            .FirstOrDefaultAsync(p => p.Id == new Guid(request.Id!));
+
+                        if (oAppUserProfile == null)
+                        {
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+                            return new DataResponse
+                            {
+                                Success = false,
+                                Message = ConstantSupplier.CREATE_APP_USER_PROFILE_NOT_FOUND,
+                                MessageType = Enum.EnumResponseType.Warning,
+                                ResponseCode = (int)HttpStatusCode.BadRequest,
+                                Result = request
+                            };
+                        }
+                        else
+                        {
+                            oAppUserProfile.FullName = request.FullName;
+                            oAppUserProfile.Address = request.Address;
+                            oAppUserProfile.Email = request.Email;
+                            oAppUserProfile.AppUserRoleId = new Guid(request.AppUserRoleId);
+                            oAppUserProfile.UpdatedBy = request.CreateUpdateBy;
+                            oAppUserProfile.UpdatedDate = DateTime.UtcNow;
+                            oAppUserProfile.IsActive = request.IsActive;
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+
+                    // Handle AppUser (one-to-one)
+                    AppUser? oAppUser = await _context.AppUsers!.FirstOrDefaultAsync(u => u.AppUserProfileId == oAppUserProfile.Id);
+
+                    request.UserName = request.UserName?.Trim().ToLowerInvariant();
+
+                    bool hasUserCredentials = !string.IsNullOrWhiteSpace(request.UserName);
+
+                    if (hasUserCredentials)
+                    {
+                        // Username uniqueness check
+                        AppUser? oExistingAppUserWithSameName = await _context.AppUsers!
+                            .FirstOrDefaultAsync(u => u.UserName == request.UserName && u.AppUserProfileId != oAppUserProfile.Id);
+
+                        if (oExistingAppUserWithSameName != null)
+                        {
+                            return new DataResponse { Success = false, Message = ConstantSupplier.EXIST_APP_USER, MessageType = Enum.EnumResponseType.Warning, 
+                                ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
+                        }
+
+                        bool isCreatingUser = oAppUser == null;
+                        request.Password = request.Password?.Trim();
+                        bool isUpdatingPassword = !string.IsNullOrEmpty(request.Password);
+
+                        string? salt = null;
+                        string? hashedPassword = null;
+
+                        if (isCreatingUser || isUpdatingPassword)
+                        {
+                            if (string.IsNullOrEmpty(request.Password))
+                            {
+                                return new DataResponse { Success = false, Message = ConstantSupplier.CREATE_UPDATE_APP_USER_REQ_PASSWORD,
+                                    MessageType = Enum.EnumResponseType.Warning,
+                                    ResponseCode = (int)HttpStatusCode.BadRequest,
+                                    Result = request
+                                };
+                            }
+
+                            salt = BCryptNet.GenerateSalt(13); // or 13 as in your example
+                            hashedPassword = BCryptNet.HashPassword(request.Password, salt);
+                        }
+
+                        if (isCreatingUser)
+                        {
+                            oAppUser = new AppUser
+                            {
+                                Id = Guid.NewGuid(),
+                                AppUserProfileId = oAppUserProfile.Id,
+                                UserName = request.UserName!,
+                                Password = hashedPassword!,
+                                SaltKey = salt!,
+                                CreatedBy = request.CreateUpdateBy,
+                                CreatedDate = DateTime.UtcNow,
+                                IsActive = request.IsActive
+                            };
+                            _context.AppUsers!.Add(oAppUser);
+                        }
+                        else
+                        {
+                            oAppUser.UserName = request.UserName!;
+                            if (isUpdatingPassword)
+                            {
+                                oAppUser.Password = hashedPassword!;
+                                oAppUser.SaltKey = salt!;
+                            }
+                            oAppUser.UpdatedBy = request.CreateUpdateBy;
+                            oAppUser.UpdatedDate = DateTime.UtcNow;
+                            oAppUser.IsActive = request.IsActive;
+                        }
+                    }
+                    // If UserName is empty, do nothing — keep existing AppUser or leave none
+
+                    //await _context.SaveChangesAsync();
+                    int isSaveUpdateProfile = await _context.SaveChangesAsync();
+                    await oTrasaction.CommitAsync();
+                    if(isSaveUpdateProfile <= 0)
+                    {
+                        _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_FAILED_RES_MSG, isSaveUpdateProfile));
+                        return new DataResponse
+                        {
+                            Success = false,
+                            Message = isCreate ? ConstantSupplier.CREATE_APP_USER_PROFILE_SAVE_FAILED : ConstantSupplier.UPDATE_APP_USER_PROFILE_FAILED,
+                            MessageType = Enum.EnumResponseType.Error,
+                            ResponseCode = (int)HttpStatusCode.BadRequest,
+                            Result = request
+                        };
+                    }
+
+                    string successMsg = isCreate
+                        ? ConstantSupplier.CREATE_APP_USER_PROFILE_SAVE_SUCCESS
+                        : ConstantSupplier.UPDATE_APP_USER_PROFILE_SUCCESS;
+
+                    return new DataResponse { Success = true, Message = successMsg,
+                        MessageType = Enum.EnumResponseType.Success,
+                        ResponseCode = (int)HttpStatusCode.OK,
+                        Result = request
+                    };
+
+                }
+                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.CREATE_UPDATE_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+                return oDataResponse;
+            }
+            catch (Exception)
+            {
+                await oTrasaction.RollbackAsync();
+                throw;
+            }
+
+        }
+
+        /// <summary>
+        /// <para>EF And ADO.NET Codeblocks: CreateUpdateAppUserProfileAsync</para>
+        /// <br>This method is used to registering or creating or updating application user profile.</br>
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>DataResponse</returns>
+        public async Task<DataResponse> CreateUpdateAppUserProfileAsyncExtn(AppUserProfileRegisterRequest? request)
         {
             DataResponse? oDataResponse = null;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
@@ -463,7 +657,7 @@ namespace SBERP.Security.Service
                                 oOldAppUserProfile.UpdatedBy = request.CreateUpdateBy;
                                 oOldAppUserProfile.UpdatedDate = DateTime.UtcNow;
                                 oOldAppUserProfile.IsActive = request.IsActive;
-                            
+
 
                                 #region EF Code block of saving data
                                 int isUpdate = await _context.SaveChangesAsync();
@@ -518,77 +712,127 @@ namespace SBERP.Security.Service
                 await oTrasaction.RollbackAsync();
                 throw;
             }
-            
+
         }
 
         /// <summary>
-        /// <para>EF & ADO.NET Codeblocks: DeleteAppUserProfileAsync</para>
-        /// This method simply delete the user details from the database.
+        /// <para>EF And ADO.NET Codeblocks: DeleteAppUserProfileAsync</para>
+        /// <br>This method simply delete the profile and user details from the database.</br>
         /// </summary>
         /// <param name="id"></param>
         /// <returns>DataResponse</returns>
         public async Task<DataResponse> DeleteAppUserProfileAsync(string id)
         {
-            DataResponse? oDataResponse = null;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_DEL_APP_USER_PROFILE_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
-            using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
+            using IDbContextTransaction oTransaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                AppUserProfile? oExistAppUserProfile = await _context.AppUserProfiles.FindAsync(new Guid(id));
+                Guid profileId = new(id);
 
-                if (Utilities.IsNotNull(oExistAppUserProfile))
+                AppUserProfile? oAppUserProfile = await _context.AppUserProfiles!.FindAsync(profileId);
+
+                if (oAppUserProfile == null)
                 {
-
-                    #region EF Codeblock of deleting data
-                    if (_appSettings.IsUserDelate)
-                    {
-                        _context.AppUserProfiles.Remove(oExistAppUserProfile);
-                    }
-                    else
-                    {
-                        oExistAppUserProfile.IsActive = false;
-                    }
-
-
-                    await _context.SaveChangesAsync();
-                    await oTrasaction.CommitAsync();
-
-                    oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.DELETE_APP_USER_PROFILE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oExistAppUserProfile };
-                    return oDataResponse;
-                    #endregion
-
-                    #region ADO.NET Codeblock of deleting data
-                    //List<IDbDataParameter> parameters = new()
-                    //        {
-                    //            _dbmanager.CreateParameter("@Id", oExistAppUserProfile.Id, DbType.Guid),
-                    //            _dbmanager.CreateParameter("@IsDelete", _appSettings.IsUserDelate? true: false, DbType.Boolean)
-                    //        };
-
-                    //object isDelete = await _dbmanager.DeleteAsync(ConstantSupplier.DELETE_USER_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
-
-                    //if (!isDelete.Equals(1))
-                    //{
-                    //    _securityLogService.LogError(String.Format(ConstantSupplier.DEL_APP_USER_PROFILE_FAILED_RES_MSG, isDelete));
-                    //}
-
-                    //return Convert.ToInt32(isDelete) > 0
-                    //? new DataResponse { Success = true, Message = ConstantSupplier.DELETE_APP_USER_PROFILE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oExistAppUserProfile }
-                    //: new DataResponse { Success = false, Message = ConstantSupplier.DELETE_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                    #endregion
+                    _securityLogService.LogError(String.Format(ConstantSupplier.DEL_APP_USER_PROFILE_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                    return new DataResponse { Success = false, Message = ConstantSupplier.CREATE_APP_USER_PROFILE_NOT_FOUND, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = id };
                 }
-                _securityLogService.LogError(String.Format(ConstantSupplier.DEL_APP_USER_PROFILE_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
-                oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.DELETE_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = id };
-                return oDataResponse;
+
+                int affectedRows = 0;
+
+                /* ============================================================
+                   EF CORE CODEBLOCK
+                   ============================================================ */
+                #region EF Codeblock of deleting data
+                AppUser? oAppUser = await _context.AppUsers!.FirstOrDefaultAsync(u => u.AppUserProfileId == profileId);
+
+                if (oAppUser != null)
+                {
+                    if (_appSettings!.IsUserDelate)
+                        _context.AppUsers!.Remove(oAppUser);
+                    else
+                        oAppUser.IsActive = false;
+                }
+
+                if (_appSettings!.IsUserDelate)
+                    _context.AppUserProfiles!.Remove(oAppUserProfile);
+                else
+                    oAppUserProfile.IsActive = false;
+
+                affectedRows = await _context.SaveChangesAsync();
+
+                if (affectedRows <= 0)
+                {
+                    await oTransaction.RollbackAsync();
+
+                    return new DataResponse
+                    {
+                        Success = false,
+                        Message = ConstantSupplier.DELETE_APP_USER_PROFILE_FAILED,
+                        MessageType = Enum.EnumResponseType.Error,
+                        ResponseCode = (int)HttpStatusCode.BadRequest,
+                        Result = null
+                    };
+                }
+                else
+                {
+                    await oTransaction.CommitAsync();
+                    return new DataResponse
+                    {
+                        Success = true,
+                        Message = ConstantSupplier.DELETE_APP_USER_PROFILE_SUCCESS,
+                        MessageType = Enum.EnumResponseType.Success,
+                        ResponseCode = (int)HttpStatusCode.OK,
+                        Result = null
+                    };
+                }
+                #endregion
+
+                /* ============================================================
+                   ADO.NET CODEBLOCK (LEGACY – COMMENTED)
+                   ============================================================ */
+                #region ADO.NET Codeblock of deleting data (Legacy)
+                /*
+                List<IDbDataParameter> parameters = new()
+                {
+                    _dbmanager.CreateParameter("@Id", profileId, DbType.Guid),
+                    _dbmanager.CreateParameter("@IsDelete", _appSettings.IsUserDelate, DbType.Boolean)
+                };
+
+                object rowsAffected = await _dbmanager.DeleteAsync(ConstantSupplier.DELETE_USER_SP_NAME,
+                        CommandType.StoredProcedure,
+                        parameters.ToArray());
+
+                if (Convert.ToInt32(rowsAffected) <= 0)
+                {
+                    _securityLogService.LogError(String.Format(ConstantSupplier.DEL_APP_USER_PROFILE_FAILED_RES_MSG, rowsAffected));
+
+                    return new DataResponse
+                    {
+                        Success = false,
+                        Message = ConstantSupplier.DELETE_APP_USER_PROFILE_FAILED,
+                        MessageType = Enum.EnumResponseType.Error,
+                        ResponseCode = (int)HttpStatusCode.BadRequest,
+                        Result = null
+                    };
+                }
+
+                return new DataResponse
+                {
+                    Success = true,
+                    Message = ConstantSupplier.DELETE_APP_USER_PROFILE_SUCCESS,
+                    MessageType = Enum.EnumResponseType.Success,
+                    ResponseCode = (int)HttpStatusCode.OK,
+                    Result = null
+                };
+                */
+                #endregion
             }
             catch (Exception)
             {
-                await oTrasaction.RollbackAsync();
+                await oTransaction.RollbackAsync();
                 throw;
             }
-            
         }
 
-        
         #endregion
     }
 }

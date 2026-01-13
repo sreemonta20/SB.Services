@@ -229,13 +229,15 @@ namespace SBERP.Security.Helper
         public const string GET_APP_USER_PROFILE_FAILED = "Fetching user details failed.";
 
         public const string EXIST_APP_USER_PROFILE = "User profile is already exist. Try unique one or activate/update it.";
-        public const string CREATE_APP_USER_PROFILE_SAVE_SUCCESS = "Creating user profile success!";
+        public const string CREATE_APP_USER_PROFILE_PWD_NOT_MATCHED = "Passwords do not match.";
+        public const string CREATE_APP_USER_PROFILE_NOT_FOUND = "Deletion failed! User profile not found. Please try again later";
+        public const string CREATE_APP_USER_PROFILE_SAVE_SUCCESS = "User profile and credentials created successfully.";
         public const string CREATE_APP_USER_PROFILE_SAVE_FAILED = "Creating user profile failed. Please try again later";
-        public const string UPDATE_APP_USER_PROFILE_SUCCESS = "Updating user profile success!";
+        public const string UPDATE_APP_USER_PROFILE_SUCCESS = "User profile and credentials updated successfully.";
         public const string UPDATE_APP_USER_PROFILE_FAILED = "Updating user profile failed. Please try again later";
         public const string CREATE_UPDATE_APP_USER_PROFILE_FAILED = "Creating/updating user profile failed. Please try again later";
 
-        public const string DELETE_APP_USER_PROFILE_SUCCESS = "User profile deleted successfully";
+        public const string DELETE_APP_USER_PROFILE_SUCCESS = "Profile and associated user deleted successfully";
         public const string DELETE_APP_USER_PROFILE_FAILED = "Deletion profile of user failed!. Please try again later";
 
         public const string EXIST_APP_USER = "User is already exist. Try unique username or activate/update it.";
@@ -243,6 +245,7 @@ namespace SBERP.Security.Helper
         public const string CREATE_APP_USER_SAVE_FAILED = "Creating user failed. Please try again later";
         public const string UPDATE_APP_USER_SUCCESS = "Updating user success!";
         public const string UPDATE_APP_USER_FAILED = "Updating user failed. Please try again later";
+        public const string CREATE_UPDATE_APP_USER_REQ_PASSWORD = "Password is required when creating or updating user credentials.";
         public const string CREATE_UPDATE_APP_USER_FAILED = "Creating/updating user failed. Please try again later";
 
         #endregion

@@ -20,8 +20,9 @@ namespace SBERP.Security.Service
         Task<DataResponse> GetAppUserProfileByIdAsync(string id);
         Task<DataResponse> GetAppUserProfileByIdAdoAsync(string id);
         Task<DataResponse> CreateUpdateAppUserProfileAsync(AppUserProfileRegisterRequest request);
+        Task<DataResponse> CreateUpdateAppUserProfileAsyncExtn(AppUserProfileRegisterRequest request);
         Task<DataResponse> DeleteAppUserProfileAsync(string id);
         #endregion
-        
+
     }
 }
