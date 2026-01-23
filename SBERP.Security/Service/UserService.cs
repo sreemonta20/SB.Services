@@ -376,6 +376,218 @@ namespace SBERP.Security.Service
         /// <returns>DataResponse</returns>
         public async Task<DataResponse> CreateUpdateAppUserProfileAsync(AppUserProfileRegisterRequest? request)
         {
+            _securityLogService.LogInfo(String.Format(
+                ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_REQ_MSG, 
+                JsonConvert.SerializeObject(request, Formatting.Indented)));
+            if(request == null)
+            {
+                _securityLogService.LogError(String.Format(
+                    ConstantSupplier.SAVEUP_APP_USER_PROFILE_FAILED_RES_MSG, 
+                    JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                return new DataResponse 
+                { Success = false, Message = ConstantSupplier.CREATE_UPDATE_APP_USER_PROFILE_FAILED, 
+                  MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null 
+                };
+                
+            }
+
+            // Normalize username early
+            request.UserName = request.UserName?.Trim().ToLowerInvariant();
+
+            // If password is provided, confirm must match
+            if (!string.IsNullOrWhiteSpace(request.Password) &&
+                request.Password != request.ConfirmPassword)
+            {
+                return new DataResponse
+                {
+                    Success = false,
+                    Message = ConstantSupplier.CREATE_APP_USER_PROFILE_PWD_NOT_MATCHED,
+                    MessageType = Enum.EnumResponseType.Warning,
+                    ResponseCode = (int)HttpStatusCode.BadRequest,
+                    Result = request
+                };
+            }
+
+            bool isCreate = request.ActionName == ConstantSupplier.SAVE_KEY;
+            bool hasUserCredentials = !string.IsNullOrWhiteSpace(request.UserName);
+
+            await using IDbContextTransaction oTrasaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                AppUserProfile oAppUserProfile;
+                if (isCreate)
+                {
+                    // Read-only check => AsNoTracking
+                    AppUserProfile? oExistAppUserProfile = await _context.AppUserProfiles!
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(x =>
+                            x.FullName != null &&
+                            x.Email != null &&
+                            x.FullName.Trim().ToLower() == request.FullName.Trim().ToLower() &&
+                            x.Email.Trim().ToLower() == request.Email.Trim().ToLower() &&
+                            x.AppUserRoleId == new Guid(request.AppUserRoleId));
+
+                    if (Utilities.IsNotNull(oExistAppUserProfile))
+                    {
+                        _securityLogService.LogWarning(string.Format(
+                            ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_RES_MSG,
+                            JsonConvert.SerializeObject(oExistAppUserProfile, Formatting.Indented)));
+
+                        return new DataResponse
+                        {
+                            Success = false,
+                            Message = ConstantSupplier.EXIST_APP_USER_PROFILE,
+                            MessageType = Enum.EnumResponseType.Warning,
+                            ResponseCode = (int)HttpStatusCode.BadRequest,
+                            Result = request
+                        };
+                    }
+
+                    // CREATE Profile
+                    oAppUserProfile = new AppUserProfile
+                    {
+                        Id = Guid.NewGuid(),
+                        FullName = request.FullName,
+                        Address = request.Address,
+                        Email = request.Email,
+                        AppUserRoleId = new Guid(request.AppUserRoleId),
+                        CreatedBy = request.CreateUpdateBy,
+                        CreatedDate = DateTime.UtcNow,
+                        IsActive = request.IsActive
+                    };
+                    _context.AppUserProfiles!.Add(oAppUserProfile);
+                }
+                else
+                {
+                    // Must be tracked => NO AsNoTracking
+                    Guid profileId = new Guid(request.Id!);
+                    oAppUserProfile = await _context.AppUserProfiles!
+                        .FirstOrDefaultAsync(p => p.Id == profileId);
+
+                    if (Utilities.IsNull(oAppUserProfile))
+                    {
+                        _securityLogService.LogWarning(String.Format(
+                            ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_RES_MSG,
+                            JsonConvert.SerializeObject(request, Formatting.Indented)));
+
+                        return new DataResponse
+                        {
+                            Success = false,
+                            Message = ConstantSupplier.CREATE_APP_USER_PROFILE_NOT_FOUND,
+                            MessageType = Enum.EnumResponseType.Warning,
+                            ResponseCode = (int)HttpStatusCode.BadRequest,
+                            Result = request
+                        };
+                    }
+
+                    oAppUserProfile.FullName = request.FullName;
+                    oAppUserProfile.Address = request.Address;
+                    oAppUserProfile.Email = request.Email;
+                    oAppUserProfile.AppUserRoleId = new Guid(request.AppUserRoleId);
+                    oAppUserProfile.UpdatedBy = request.CreateUpdateBy;
+                    oAppUserProfile.UpdatedDate = DateTime.UtcNow;
+                    oAppUserProfile.IsActive = request.IsActive;
+                }
+
+                // Save profile first (so we have profile ID for AppUser)
+                await _context.SaveChangesAsync();
+
+                // Handle AppUser (one-to-one) - tracked (for update)
+                AppUser? oAppUser = await _context.AppUsers!
+                    .FirstOrDefaultAsync(u => u.AppUserProfileId == oAppUserProfile.Id);
+
+                if (hasUserCredentials)
+                {
+                    bool isCreatingUser = (oAppUser == null);
+
+                    request.Password = request.Password?.Trim();
+                    bool isUpdatingPassword = !string.IsNullOrWhiteSpace(request.Password);
+
+                    // If creating user OR updating password, password is mandatory
+                    if ((isCreatingUser || isUpdatingPassword) && string.IsNullOrWhiteSpace(request.Password))
+                    {
+                        return new DataResponse
+                        {
+                            Success = false,
+                            Message = ConstantSupplier.CREATE_UPDATE_APP_USER_REQ_PASSWORD,
+                            MessageType = Enum.EnumResponseType.Warning,
+                            ResponseCode = (int)HttpStatusCode.BadRequest,
+                            Result = request
+                        };
+                    }
+
+                    string? salt = null;
+                    string? hashedPassword = null;
+
+                    if (isCreatingUser || isUpdatingPassword)
+                    {
+                        salt = BCryptNet.GenerateSalt(13);
+                        hashedPassword = BCryptNet.HashPassword(request.Password!, salt);
+                    }
+
+                    if (isCreatingUser)
+                    {
+                        oAppUser = new AppUser
+                        {
+                            Id = Guid.NewGuid(),
+                            AppUserProfileId = oAppUserProfile.Id,
+                            UserName = request.UserName!,
+                            Password = hashedPassword!,
+                            SaltKey = salt!,
+                            CreatedBy = request.CreateUpdateBy,
+                            CreatedDate = DateTime.UtcNow,
+                            IsActive = request.IsActive
+                        };
+                        _context.AppUsers!.Add(oAppUser);
+                    }
+                    else
+                    {
+                        oAppUser!.UserName = request.UserName!;
+                        if (isUpdatingPassword)
+                        {
+                            oAppUser.Password = hashedPassword!;
+                            oAppUser.SaltKey = salt!;
+                        }
+                        oAppUser.UpdatedBy = request.CreateUpdateBy;
+                        oAppUser.UpdatedDate = DateTime.UtcNow;
+                        oAppUser.IsActive = request.IsActive;
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                await oTrasaction.CommitAsync();
+
+                return new DataResponse
+                {
+                    Success = true,
+                    Message = isCreate
+                        ? ConstantSupplier.CREATE_APP_USER_PROFILE_SAVE_SUCCESS
+                        : ConstantSupplier.UPDATE_APP_USER_PROFILE_SUCCESS,
+                    MessageType = Enum.EnumResponseType.Success,
+                    ResponseCode = (int)HttpStatusCode.OK,
+                    Result = request
+                };
+            }
+            catch (DbUpdateException dbEx) when (Utilities.IsUniqueUserNameViolation(dbEx))
+            {
+                await oTrasaction.RollbackAsync();
+                return new DataResponse
+                {
+                    Success = false,
+                    Message = ConstantSupplier.EXIST_APP_USER,
+                    MessageType = Enum.EnumResponseType.Warning,
+                    ResponseCode = (int)HttpStatusCode.BadRequest,
+                    Result = request
+                };
+            }
+            catch
+            {
+                await oTrasaction.RollbackAsync();
+                throw;
+            }
+        }
+        public async Task<DataResponse> CreateUpdateAppUserProfileAsyncTemp(AppUserProfileRegisterRequest? request)
+        {
             DataResponse? oDataResponse = null;
             _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
 
@@ -459,15 +671,15 @@ namespace SBERP.Security.Service
 
                     if (hasUserCredentials)
                     {
-                        // Username uniqueness check
-                        AppUser? oExistingAppUserWithSameName = await _context.AppUsers!
-                            .FirstOrDefaultAsync(u => u.UserName == request.UserName && u.AppUserProfileId != oAppUserProfile.Id);
+                        //// Username uniqueness check
+                        //AppUser? oExistingAppUserWithSameName = await _context.AppUsers!
+                        //    .FirstOrDefaultAsync(u => u.UserName == request.UserName && u.AppUserProfileId != oAppUserProfile.Id);
 
-                        if (oExistingAppUserWithSameName != null)
-                        {
-                            return new DataResponse { Success = false, Message = ConstantSupplier.EXIST_APP_USER, MessageType = Enum.EnumResponseType.Warning, 
-                                ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
-                        }
+                        //if (oExistingAppUserWithSameName != null)
+                        //{
+                        //    return new DataResponse { Success = false, Message = ConstantSupplier.EXIST_APP_USER, MessageType = Enum.EnumResponseType.Warning, 
+                        //        ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
+                        //}
 
                         bool isCreatingUser = oAppUser == null;
                         request.Password = request.Password?.Trim();
@@ -551,6 +763,19 @@ namespace SBERP.Security.Service
                 _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
                 oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.CREATE_UPDATE_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
                 return oDataResponse;
+            }
+            catch (DbUpdateException dbEx) when (Utilities.IsUniqueUserNameViolation(dbEx))
+            {
+                await oTrasaction.RollbackAsync();
+
+                return new DataResponse
+                {
+                    Success = false,
+                    Message = ConstantSupplier.EXIST_APP_USER, // your duplicate username message
+                    MessageType = Enum.EnumResponseType.Warning,
+                    ResponseCode = (int)HttpStatusCode.BadRequest,
+                    Result = request
+                };
             }
             catch (Exception)
             {

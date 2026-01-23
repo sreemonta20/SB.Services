@@ -1,5 +1,5 @@
 GO
-/****** Object:  UserDefinedFunction [dbo].[GetChildMenus]    Script Date: 11/11/2025 10:45:05 AM ******/
+/****** Object:  UserDefinedFunction [dbo].[GetChildMenus]    Script Date: 1/23/2026 4:58:51 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

@@ -273,7 +273,7 @@ namespace SBERP.Security.Persistence
             {
                 entity.Property(x => x.Id).HasColumnName("Id");
                 entity.Property(x => x.AppUserProfileId).HasColumnName("AppUserProfileId");
-                entity.Property(x => x.UserName).HasMaxLength(100);
+                entity.Property(x => x.UserName).HasMaxLength(100).IsRequired();
                 entity.Property(x => x.Password).HasMaxLength(255);
                 entity.Property(x => x.SaltKey).HasMaxLength(255);
                 entity.Property(x => x.RefreshToken).HasMaxLength(255);
@@ -285,9 +285,8 @@ namespace SBERP.Security.Persistence
                     .HasForeignKey<AppUser>(x => x.AppUserProfileId)
                     .HasConstraintName("FK_AppUser_AppUserProfiles");
 
-                //entity.ToTable(x => x.HasTrigger("TRG_InsertAppUsers"));
-                //entity.ToTable(x => x.HasTrigger("TRG_UpdateAppUsers"));
-                //entity.ToTable(x => x.HasTrigger("TRG_DeleteAppUsers"));
+                // Add unique index on UserName
+                entity.HasIndex(x => x.UserName).IsUnique().HasDatabaseName("UX_AppUsers_UserName");  // <-- NEW LINE: Enforces unique UserName
                 entity.ToTable(table =>
                 {
                     table.HasTrigger("TRG_InsertAppUsers");
@@ -575,50 +574,6 @@ namespace SBERP.Security.Persistence
                     UpdatedDate = menuTime,
                     IsActive = true
                 },
-                //new AppUserMenu
-                //{
-                //    Id = new Guid("73CC3330-54E9-4152-9ED4-F7C31748985E"),
-                //    Name = "User Profile",
-                //    IsHeader = false,
-                //    IsModule = false,
-                //    IsComponent = true,
-                //    CssClass = "nav-item",
-                //    IsRouteLink = true,
-                //    RouteLink = "/business/security/appuserprofile",
-                //    RouteLinkClass = "nav-link",
-                //    Icon = "far fa-circle nav-icon",
-                //    Remark = "Navigation Item",
-                //    ParentId = new Guid("C15215C8-32CA-4182-9510-B57419708A80"),
-                //    DropdownIcon = null,
-                //    SerialNo = 5,
-                //    CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
-                //    CreatedDate = menuTime,
-                //    UpdatedBy = null,
-                //    UpdatedDate = menuTime,
-                //    IsActive = true
-                //},
-                //new AppUserMenu
-                //{
-                //    Id = new Guid("AD0983EB-F60C-4329-8516-1650537A0567"),
-                //    Name = "Application User",
-                //    IsHeader = false,
-                //    IsModule = false,
-                //    IsComponent = true,
-                //    CssClass = "nav-item",
-                //    IsRouteLink = true,
-                //    RouteLink = "/business/security/appuser",
-                //    RouteLinkClass = "nav-link",
-                //    Icon = "far fa-circle nav-icon",
-                //    Remark = "Navigation Item",
-                //    ParentId = new Guid("C15215C8-32CA-4182-9510-B57419708A80"),
-                //    DropdownIcon = null,
-                //    SerialNo = 5,
-                //    CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
-                //    CreatedDate = menuTime,
-                //    UpdatedBy = null,
-                //    UpdatedDate = menuTime,
-                //    IsActive = true
-                //},
                 new AppUserMenu
                 {
                     Id = new Guid("52D7E13B-EF24-4F17-937B-D6E8005A6658"),
@@ -655,6 +610,28 @@ namespace SBERP.Security.Persistence
                     Icon = "nav-icon fas fa-cog",
                     Remark = "Navigation Item",
                     ParentId = new Guid("52D7E13B-EF24-4F17-937B-D6E8005A6658"),
+                    DropdownIcon = null,
+                    SerialNo = 7,
+                    CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                    CreatedDate = menuTime,
+                    UpdatedBy = null,
+                    UpdatedDate = menuTime,
+                    IsActive = true
+                },
+                new AppUserMenu
+                {
+                    Id = new Guid("96695CA5-6010-474C-BFD1-F9746FABD81A"),
+                    Name = "User Profile",
+                    IsHeader = false,
+                    IsModule = false,
+                    IsComponent = true,
+                    CssClass = "nav-item",
+                    IsRouteLink = true,
+                    RouteLink = "/business/security/appuserprofile",
+                    RouteLinkClass = "nav-link active",
+                    Icon = "nav-icon fa-circle-user",
+                    Remark = "Navigation Item",
+                    ParentId = new Guid("C15215C8-32CA-4182-9510-B57419708A80"),
                     DropdownIcon = null,
                     SerialNo = 7,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
@@ -903,6 +880,21 @@ namespace SBERP.Security.Persistence
                     IsCreate = null,
                     IsUpdate = null,
                     IsDelete = null,
+                    CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                    CreatedDate = roleMenuTime,
+                    UpdatedBy = null,
+                    UpdatedDate = roleMenuTime,
+                    IsActive = true
+                },
+                new AppUserRoleMenu
+                {
+                    Id = new Guid("99C2D21A-2197-4334-A86C-AE9416DBFB67"),
+                    AppUserRoleId = new Guid("1B15CE5A-56B3-4EB9-8286-6E27F770B0DA"),
+                    AppUserMenuId = new Guid("96695CA5-6010-474C-BFD1-F9746FABD81A"),
+                    IsView = true,
+                    IsCreate = true,
+                    IsUpdate = true,
+                    IsDelete = true,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                     CreatedDate = roleMenuTime,
                     UpdatedBy = null,

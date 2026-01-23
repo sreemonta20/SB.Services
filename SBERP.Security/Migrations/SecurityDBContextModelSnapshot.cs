@@ -65,6 +65,7 @@ namespace SBERP.Security.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -73,6 +74,10 @@ namespace SBERP.Security.Migrations
                     b.HasIndex("AppUserProfileId")
                         .IsUnique()
                         .HasFilter("[AppUserProfileId] IS NOT NULL");
+
+                    b.HasIndex("UserName")
+                        .IsUnique()
+                        .HasDatabaseName("UX_AppUsers_UserName");
 
                     b.ToTable("AppUsers", t =>
                         {
@@ -438,6 +443,26 @@ namespace SBERP.Security.Migrations
                             ParentId = new Guid("52d7e13b-ef24-4f17-937b-d6e8005a6658"),
                             Remark = "Navigation Item",
                             RouteLink = "/business/appsettings",
+                            RouteLinkClass = "nav-link active",
+                            SerialNo = 7,
+                            UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("96695ca5-6010-474c-bfd1-f9746fabd81a"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "nav-icon fa-circle-user",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            Name = "User Profile",
+                            ParentId = new Guid("c15215c8-32ca-4182-9510-b57419708a80"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/security/appuserprofile",
                             RouteLinkClass = "nav-link active",
                             SerialNo = 7,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
@@ -1119,6 +1144,20 @@ namespace SBERP.Security.Migrations
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2024, 1, 1, 10, 20, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
+                            UpdatedDate = new DateTime(2024, 1, 1, 10, 20, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("99c2d21a-2197-4334-a86c-ae9416dbfb67"),
+                            AppUserMenuId = new Guid("96695ca5-6010-474c-bfd1-f9746fabd81a"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2024, 1, 1, 10, 20, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 20, 0, 0, DateTimeKind.Utc)
                         });
                 });

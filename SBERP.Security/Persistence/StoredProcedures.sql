@@ -1,6 +1,218 @@
 USE [SecurityDB]
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserMenusByUserId]    Script Date: 12/5/2025 11:37:25 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_CreateUpdateAppUserMenu]    Script Date: 1/23/2026 4:35:01 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Sreemonta Bhowmik
+-- Create date: 21.04.2024
+-- Description:	This SP is used to create or update User Menu
+-- =============================================
+CREATE PROCEDURE [dbo].[SP_CreateUpdateAppUserMenu]
+	-- Add the parameters for the stored procedure here
+	@ActionName			VARCHAR(10), --Save Update
+    @Id					UNIQUEIDENTIFIER,
+    @Name				NVARCHAR(100),
+    @IsHeader			BIT,
+	@IsModule			BIT,
+	@IsComponent		BIT,
+	@CssClass			NVARCHAR(100),
+	@IsRouteLink		BIT,
+	@RouteLink			NVARCHAR(255),
+	@RouteLinkClass		NVARCHAR(200),
+	@Icon				NVARCHAR(100),
+	@Remark				NVARCHAR(255),
+	@ParentId			UNIQUEIDENTIFIER,
+	@DropdownIcon		NVARCHAR(100),
+	@SerialNo			INT,
+	@CreatedBy			NVARCHAR(MAX),
+	@CreatedDate		DATETIME2(7),
+	@UpdatedBy			NVARCHAR(MAX),
+	@UpdatedDate		DATETIME2(7),
+	@IsActive			BIT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+	IF @ActionName = 'Save' -- Save
+    BEGIN
+		IF EXISTS (SELECT 1 FROM AppUserMenus WHERE Id = @Id)
+		BEGIN
+			SELECT 0 AS 'RowsAffected';
+		END
+		ELSE
+		BEGIN
+			INSERT INTO AppUserMenus (Id, Name, IsHeader, IsModule, IsComponent, CssClass, IsRouteLink, RouteLink, RouteLinkClass, Icon, Remark, ParentId, DropdownIcon, SerialNo, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate, IsActive)
+			VALUES (@Id, @Name, @IsHeader, @IsModule, @IsComponent, @CssClass, @IsRouteLink, @RouteLink, @RouteLinkClass, @Icon, @Remark, @ParentId, @DropdownIcon, @SerialNo, @CreatedBy, GETUTCDATE(), NULL, NULL, @IsActive);
+
+			SELECT @@ROWCOUNT AS 'RowsAffected';
+		END
+        
+    END
+	ELSE IF @ActionName = 'Update' -- Update
+    BEGIN
+		IF EXISTS (SELECT 1 FROM AppUserMenus WHERE Id = @Id)
+		BEGIN
+			UPDATE AppUserMenus SET Name = @Name, IsHeader = @IsHeader,  IsModule = @IsModule, IsComponent = @IsComponent, CssClass = @CssClass, IsRouteLink = @IsRouteLink, RouteLink = @RouteLink,
+			RouteLinkClass = @RouteLinkClass, Icon = @Icon, Remark = @Remark, ParentId = @ParentId,DropdownIcon = @DropdownIcon,
+			SerialNo = @SerialNo,UpdatedBy = @UpdatedBy,UpdatedDate = GETUTCDATE(),IsActive = @IsActive
+			WHERE [Id] = @Id;
+		
+			SELECT @@ROWCOUNT AS 'RowsAffected';
+		END
+		ELSE
+		BEGIN
+			SELECT 0 AS 'RowsAffected';
+		END
+    END
+    ELSE
+    BEGIN
+        RAISERROR('Invalid action flag. Must be either ''Save'' or ''Update''.', 16, 1);
+    END
+END
+
+GO
+
+GO
+/****** Object:  StoredProcedure [dbo].[SP_DeleteAppUserMenu]    Script Date: 1/23/2026 4:37:21 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Sreemonta Bhowmik
+-- Create date: 22nd April 2024
+-- Description:	This Stored Procedure is to delete or inactive based on @IsDelete flag parameter supplied value.
+-- =============================================
+--EXEC SP_DeleteAppUserMenu 0,'60AADC18-6B91-4CEE-ACE7-97700B685C98'
+CREATE PROCEDURE [dbo].[SP_DeleteAppUserMenu]
+    @IsDelete BIT,
+    @MenuId NVARCHAR(MAX)
+AS
+BEGIN
+    SET NOCOUNT ON;
+	DECLARE @ConvertedMenuId UNIQUEIDENTIFIER;
+    DECLARE @RowCount INT;
+	DECLARE @AffectedRow INT = 0;
+	DECLARE @Result NVARCHAR(MAX);
+
+	SET @ConvertedMenuId = CAST(@MenuId AS UNIQUEIDENTIFIER);
+    -- Check if the MenuId is used in UserRoleMenu table
+    SELECT @RowCount = COUNT(*)
+    FROM AppUserRoleMenus
+    WHERE AppUserMenuId = @ConvertedMenuId AND IsActive = 1;
+
+    IF @RowCount > 0
+    BEGIN
+        -- Menu is already used in UserRoleMenu, return JSON message
+        --SELECT '{"rowcount": 0, "message": "This menu already used for a role"}' AS Result;
+		SET @Result = N'{"message": "This menu already used for a role", "rowcount": ' + CAST(@AffectedRow AS NVARCHAR(10)) + ', "sucess":"false"}';
+		SELECT @Result
+    END
+    ELSE
+    BEGIN
+        -- Menu is not used in UserRoleMenu
+        IF @IsDelete = 1
+        BEGIN
+            -- Delete the UserMenu record
+            DELETE FROM AppUserMenus WHERE Id = @ConvertedMenuId;
+			SET @AffectedRow = @@ROWCOUNT;
+			SET @Result = N'{"message": "User menu is successfully removed", "rowcount": ' + CAST(@AffectedRow AS NVARCHAR(10)) + ', "sucess":"true"}';
+            --SELECT '{"rowcount": 1, "message": "User menu is successfully removed"}' AS Result;
+			SELECT @Result
+        END
+        ELSE
+        BEGIN
+            -- Update IsActive column to false
+            UPDATE AppUserMenus SET IsActive = 0 WHERE Id = @ConvertedMenuId;
+			SET @AffectedRow = @@ROWCOUNT;
+			SET @Result = N'{"message": "User menu is successfully inactivated", "rowcount": ' + CAST(@AffectedRow AS NVARCHAR(10)) + ', "sucess":"true"}';
+			--SELECT '{"rowcount": 1, "message": "User menu is successfully inactivated"}' AS Result;
+			SELECT @Result
+        END
+    END
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[SP_DeleteAppUserProfile]    Script Date: 1/23/2026 4:40:40 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Sreemonta Bhowmik
+-- Create date: 26.04.2023
+-- Description:	Delete a user
+-- =============================================
+--EXEC SP_DeleteAppUserProfile '10BB4212-AC20-4AC5-A3F6-B5FFF08338C8'
+CREATE PROCEDURE [dbo].[SP_DeleteAppUserProfile]
+(
+    @Id         UNIQUEIDENTIFIER, -- AppUserProfile.Id
+    @IsDelete   BIT
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @RowsAffected INT = 0;
+
+    BEGIN TRY
+        BEGIN TRAN;
+
+        /* ---------- Handle AppUsers ---------- */
+        IF EXISTS (SELECT 1 FROM dbo.AppUsers WHERE AppUserProfileId = @Id)
+        BEGIN
+            IF (@IsDelete = 1)
+            BEGIN
+                DELETE FROM dbo.AppUsers
+                WHERE AppUserProfileId = @Id;
+
+                SET @RowsAffected += @@ROWCOUNT;
+            END
+            ELSE
+            BEGIN
+                UPDATE dbo.AppUsers
+                SET IsActive = 0
+                WHERE AppUserProfileId = @Id;
+
+                SET @RowsAffected += @@ROWCOUNT;
+            END
+        END
+
+        /* ---------- Handle AppUserProfiles ---------- */
+        IF (@IsDelete = 1)
+        BEGIN
+            DELETE FROM dbo.AppUserProfiles
+            WHERE Id = @Id;
+
+            SET @RowsAffected += @@ROWCOUNT;
+        END
+        ELSE
+        BEGIN
+            UPDATE dbo.AppUserProfiles
+            SET IsActive = 0
+            WHERE Id = @Id;
+
+            SET @RowsAffected += @@ROWCOUNT;
+        END
+
+        COMMIT TRAN;
+
+        SELECT @RowsAffected AS RowsAffected;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRAN;
+
+        THROW;
+    END CATCH
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserMenusByUserId]    Script Date: 1/23/2026 4:42:10 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -88,244 +300,7 @@ DECLARE @JsonMenu NVARCHAR(MAX),
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_SaveUpdateAppUser]    Script Date: 12/5/2025 11:39:01 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[SP_SaveUpdateAppUser]
-	@ActionName					VARCHAR(10), --Save Update
-    @Id							UNIQUEIDENTIFIER,
-	@AppUserProfileId			UNIQUEIDENTIFIER,
-    @UserName					NVARCHAR(50),
-	@Password					NVARCHAR(MAX),
-	@SaltKey					NVARCHAR(MAX),
-	@RefreshToken				NVARCHAR(MAX),
-	@RefreshTokenExpiryTime		DATETIME,
-	@CreatedBy					NVARCHAR(MAX),
-	@CreatedDate				DATETIME2(7),
-	@UpdatedBy					NVARCHAR(MAX),
-	@UpdatedDate				DATETIME2(7),
-	@IsActive					BIT
-AS
-BEGIN
-    SET NOCOUNT ON;
-    IF @ActionName = 'Save' -- Save
-    BEGIN
-        INSERT INTO AppUsers ([Id],[AppUserProfileId],[UserName],[Password],[SaltKey],[RefreshToken],[RefreshTokenExpiryTime],[CreatedBy],[CreatedDate],[UpdatedBy],[UpdatedDate],[IsActive])
-     VALUES
-           (@Id,@AppUserProfileId, @UserName,@Password, @SaltKey, @RefreshToken, @RefreshTokenExpiryTime, @CreatedBy,@CreatedDate,NULL, NULL, @IsActive)
-
-        SELECT @@ROWCOUNT AS 'RowsAffected';
-    END
-    ELSE IF @ActionName = 'Update' -- Update
-    BEGIN
-        UPDATE AppUsers SET [Id] = @Id,[AppUserProfileId] = @AppUserProfileId,[UserName] = @UserName,[Password] = @Password,[SaltKey] = @SaltKey,[RefreshToken] = @RefreshToken,
-		[RefreshTokenExpiryTime] = @RefreshTokenExpiryTime, [UpdatedBy] = @UpdatedBy,[UpdatedDate] = @UpdatedDate, IsActive = @IsActive
-        WHERE [Id] = @Id;
-
-        SELECT @@ROWCOUNT AS 'RowsAffected';
-    END
-    ELSE
-    BEGIN
-        RAISERROR('Invalid action flag. Must be either ''Save'' or ''Update''.', 16, 1);
-    END
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserProfilesPagingWithSearch]    Script Date: 12/14/2025 2:16:31 AM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
---EXEC SP_GetAllAppUserProfilesPagingWithSearch 1,10,'','FullName','asc'
-CREATE PROCEDURE [dbo].[SP_GetAllAppUserProfilesPagingWithSearch]
-    @PageNumber INT,
-    @PageSize INT,
-    @SearchTerm VARCHAR(50) = '',
-    @SortColumnName VARCHAR(50) = '',
-    @SortColumnDirection VARCHAR(50) = ''
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    DECLARE @TotalRecords INT;
-    DECLARE @TotalPages INT;
-    DECLARE @Result XML;
-    DECLARE @Items XML;
-
-    CREATE TABLE #AppUserProfileTBL
-    (
-        [RowCount] INT,
-        [CurrentPage] INT,
-        [PageSize] INT,
-        [PageCount] INT,
-        [Items] XML
-    );
-
-    -- Calculate total records with the search term filter
-    SELECT @TotalRecords = COUNT(*)
-    FROM [dbo].[AppUserProfiles] AUP
-	LEFT JOIN [dbo].[AppUserRoles] AUR ON AUR.Id = AUP.AppUserRoleId
-    WHERE AUR.IsActive = 1
-          AND (
-                  @SearchTerm = ''
-                  OR AUP.[FullName] LIKE '%' + @SearchTerm + '%' 
-				  OR AUP.[Email] LIKE '%' + @SearchTerm + '%'
-				  OR AUR.[RoleName] LIKE '%' + @SearchTerm + '%'
-				  OR AUP.[Address] LIKE '%' + @SearchTerm + '%'
-              );
-
-    -- Calculate total pages
-    SET @TotalPages = CEILING(CAST(@TotalRecords AS FLOAT) / @PageSize);
-    WITH SortedAppUserProfiles AS
-    (
-        SELECT 
-            AUP.[Id],
-            AUP.[FullName],
-            AUP.[Address],
-            AUP.[Email],
-            AUP.[AppUserRoleId],
-			AUR.[RoleName],
-            AUP.[CreatedBy],
-			AUP.[CreatedDate],
-            AUP.[UpdatedBy],
-            AUP.[UpdatedDate],
-            AUP.[IsActive],
-            ROW_NUMBER() OVER 
-            (
-                ORDER BY 
-					CASE WHEN @SortColumnName = 'FullName' AND @SortColumnDirection = 'asc' THEN AUP.[FullName] END ASC,
-					CASE WHEN @SortColumnName = 'Address' AND @SortColumnDirection = 'asc' THEN AUP.[Address] END ASC,
-					CASE WHEN @SortColumnName = 'Email' AND @SortColumnDirection = 'asc' THEN AUP.[Email] END ASC,
-					CASE WHEN @SortColumnName = 'RoleName' AND @SortColumnDirection = 'asc' THEN AUR.[RoleName] END ASC,
-					CASE WHEN @SortColumnName = 'IsActive' AND @SortColumnDirection = 'asc' THEN AUP.[IsActive] END ASC,
-                    
-                    CASE WHEN @SortColumnName = 'FullName' AND @SortColumnDirection = 'desc' THEN AUP.[FullName] END DESC,
-					CASE WHEN @SortColumnName = 'Address' AND @SortColumnDirection = 'desc' THEN AUP.[Address] END DESC,
-					CASE WHEN @SortColumnName = 'Email' AND @SortColumnDirection = 'desc' THEN AUP.[Email] END DESC,
-					CASE WHEN @SortColumnName = 'RoleName' AND @SortColumnDirection = 'desc' THEN AUR.[RoleName] END DESC,
-					CASE WHEN @SortColumnName = 'IsActive' AND @SortColumnDirection = 'desc' THEN AUP.[IsActive] END DESC
-            ) AS RowNum
-        FROM 
-            [dbo].[AppUserProfiles] AUP
-	LEFT JOIN [dbo].[AppUserRoles] AUR ON AUR.Id = AUP.AppUserRoleId
-    WHERE AUR.IsActive = 1
-          AND (
-                  @SearchTerm = ''
-                  OR AUP.[FullName] LIKE '%' + @SearchTerm + '%' 
-				  OR AUP.[Email] LIKE '%' + @SearchTerm + '%'
-				  OR AUR.[RoleName] LIKE '%' + @SearchTerm + '%'
-				  OR AUP.[Address] LIKE '%' + @SearchTerm + '%'
-              )
-    )
-    SELECT @Items =
-    (
-        SELECT 
-            [Id],
-            [FullName],
-            [Address],
-            [Email],
-            [AppUserRoleId],
-			[RoleName],
-            [CreatedBy],
-			[CreatedDate],
-            [UpdatedBy],
-            [UpdatedDate],
-            [IsActive]
-        FROM 
-            SortedAppUserProfiles
-        WHERE 
-            RowNum BETWEEN (@PageNumber - 1) * @PageSize + 1 AND @PageNumber * @PageSize
-        FOR JSON AUTO
-    );
-
-    INSERT INTO #AppUserProfileTBL
-    (
-        [RowCount],
-        [CurrentPage],
-        [PageSize],
-        [PageCount],
-        [Items]
-    )
-    SELECT @TotalRecords,
-           @PageNumber,
-           @PageSize,
-           @TotalPages,
-           @Items;
-
-    SET @Result =
-    (
-        SELECT * FROM #AppUserProfileTBL FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
-    );
-
-    DROP TABLE #AppUserProfileTBL;
-
-    SELECT @Result AS result;
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAppUserProfileById]    Script Date: 12/5/2025 11:41:06 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
--- =============================================
--- Author:		Sreemonta Bhowmik
--- Create date: 24.04.2023
--- Description:	Get user details by supplying ID
--- =============================================
---EXEC SP_GetAppUserProfileById 'D670A7BA-F10D-4241-8230-6CD8E0A2B7C0'
-CREATE PROCEDURE [dbo].[SP_GetAppUserProfileById] 
-	-- Add the parameters for the stored procedure here
-	@Id UNIQUEIDENTIFIER
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	SELECT AUP.Id, AUP.FullName,AUP.Address,AUP.Email,AUP.AppUserRoleId,AUP.CreatedBy,AUP.CreatedDate,AUP.UpdatedBy,AUP.UpdatedDate,AUP.IsActive
-	FROM AppUserProfiles AUP 
-	WHERE AUP.Id = @Id
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[SP_DeleteAppUserProfile]    Script Date: 12/5/2025 11:41:38 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
--- =============================================
--- Author:		Sreemonta Bhowmik
--- Create date: 26.04.2023
--- Description:	Delete a user
--- =============================================
---EXEC SP_DeleteAppUserProfile '10BB4212-AC20-4AC5-A3F6-B5FFF08338C8'
-CREATE PROCEDURE [dbo].[SP_DeleteAppUserProfile]
-(
-   @Id			UNIQUEIDENTIFIER,
-   @IsDelete	BIT
-)
-AS
-BEGIN
-	IF (@IsDelete = 1)
-	BEGIN
-		DELETE FROM [dbo].[AppUserProfiles]
-		WHERE Id = @Id
-		SELECT @@ROWCOUNT AS 'RowsAffected';
-	END
-	ELSE
-	BEGIN
-		UPDATE [dbo].[AppUserProfiles] SET IsActive = 0
-		WHERE Id = @Id
-		SELECT @@ROWCOUNT AS 'RowsAffected';
-	END
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserMenusPagingWithSearch]    Script Date: 12/14/2025 2:48:38 AM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserMenusPagingWithSearch]    Script Date: 1/23/2026 4:48:09 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -335,7 +310,7 @@ GO
 --EXEC SP_GetAllAppUserMenusPagingWithSearch 1,5,'User','','ASC'
 --EXEC SP_GetAllAppUserMenusPagingWithSearch 1,5,'','','ASC'
 --EXEC SP_GetAllAppUserMenusPagingWithSearch 1,10,'','Name','asc'
-ALTER PROCEDURE [dbo].[SP_GetAllAppUserMenusPagingWithSearch]
+CREATE PROCEDURE [dbo].[SP_GetAllAppUserMenusPagingWithSearch]
     @PageNumber INT,
     @PageSize INT,
     @SearchTerm VARCHAR(50) = '',
@@ -499,142 +474,177 @@ BEGIN
 END;
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_CreateUpdateAppUserMenu]    Script Date: 12/5/2025 11:43:43 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllAppUserProfilesPagingWithSearch]    Script Date: 1/23/2026 4:50:04 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+--EXEC SP_GetAllAppUserProfilesPagingWithSearch 1,10,'','FullName','asc'
+CREATE PROCEDURE [dbo].[SP_GetAllAppUserProfilesPagingWithSearch]
+    @PageNumber INT,
+    @PageSize INT,
+    @SearchTerm VARCHAR(50) = '',
+    @SortColumnName VARCHAR(50) = '',
+    @SortColumnDirection VARCHAR(50) = ''
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @TotalRecords INT;
+    DECLARE @TotalPages INT;
+    DECLARE @Result XML;
+    DECLARE @Items XML;
+
+    CREATE TABLE #AppUserProfileTBL
+    (
+        [RowCount] INT,
+        [CurrentPage] INT,
+        [PageSize] INT,
+        [PageCount] INT,
+        [Items] XML
+    );
+
+    -- Calculate total records with the search term filter
+    SELECT @TotalRecords = COUNT(*)
+    FROM [dbo].[AppUserProfiles] AUP
+	LEFT JOIN [dbo].[AppUserRoles] AUR ON AUR.Id = AUP.AppUserRoleId
+	LEFT JOIN [dbo].[AppUsers] AU ON AU.AppUserProfileId = AUP.Id
+    WHERE AUR.IsActive = 1
+          AND (
+                  @SearchTerm = ''
+                  OR AUP.[FullName] LIKE '%' + @SearchTerm + '%' 
+				  OR AUP.[Email] LIKE '%' + @SearchTerm + '%'
+				  OR AUR.[RoleName] LIKE '%' + @SearchTerm + '%'
+				  OR AUP.[Address] LIKE '%' + @SearchTerm + '%'
+				  OR AU.[UserName] LIKE '%' + @SearchTerm + '%'
+              );
+
+    -- Calculate total pages
+    SET @TotalPages = CEILING(CAST(@TotalRecords AS FLOAT) / @PageSize);
+    WITH SortedAppUserProfiles AS
+    (
+        SELECT 
+            AUP.[Id],
+            AUP.[FullName],
+            AUP.[Address],
+            AUP.[Email],
+            AUP.[AppUserRoleId],
+			AUR.[RoleName],
+			AU.[UserName],
+            AUP.[CreatedBy],
+			AUP.[CreatedDate],
+            AUP.[UpdatedBy],
+            AUP.[UpdatedDate],
+            AUP.[IsActive],
+            ROW_NUMBER() OVER 
+            (
+                ORDER BY 
+					CASE WHEN @SortColumnName = 'FullName' AND @SortColumnDirection = 'asc' THEN AUP.[FullName] END ASC,
+					CASE WHEN @SortColumnName = 'Address' AND @SortColumnDirection = 'asc' THEN AUP.[Address] END ASC,
+					CASE WHEN @SortColumnName = 'Email' AND @SortColumnDirection = 'asc' THEN AUP.[Email] END ASC,
+					CASE WHEN @SortColumnName = 'RoleName' AND @SortColumnDirection = 'asc' THEN AUR.[RoleName] END ASC,
+					CASE WHEN @SortColumnName = 'UserName' AND @SortColumnDirection = 'asc' THEN AU.[UserName] END ASC,
+					CASE WHEN @SortColumnName = 'IsActive' AND @SortColumnDirection = 'asc' THEN AUP.[IsActive] END ASC,
+                    
+                    CASE WHEN @SortColumnName = 'FullName' AND @SortColumnDirection = 'desc' THEN AUP.[FullName] END DESC,
+					CASE WHEN @SortColumnName = 'Address' AND @SortColumnDirection = 'desc' THEN AUP.[Address] END DESC,
+					CASE WHEN @SortColumnName = 'Email' AND @SortColumnDirection = 'desc' THEN AUP.[Email] END DESC,
+					CASE WHEN @SortColumnName = 'RoleName' AND @SortColumnDirection = 'desc' THEN AUR.[RoleName] END DESC,
+					CASE WHEN @SortColumnName = 'UserName' AND @SortColumnDirection = 'desc' THEN AU.[UserName] END DESC,
+					CASE WHEN @SortColumnName = 'IsActive' AND @SortColumnDirection = 'desc' THEN AUP.[IsActive] END DESC
+            ) AS RowNum
+        FROM 
+            [dbo].[AppUserProfiles] AUP
+	LEFT JOIN [dbo].[AppUserRoles] AUR ON AUR.Id = AUP.AppUserRoleId
+	LEFT JOIN [dbo].[AppUsers] AU ON AU.AppUserProfileId = AUP.Id
+    WHERE AUR.IsActive = 1
+          AND (
+                  @SearchTerm = ''
+                  OR AUP.[FullName] LIKE '%' + @SearchTerm + '%' 
+				  OR AUP.[Email] LIKE '%' + @SearchTerm + '%'
+				  OR AUR.[RoleName] LIKE '%' + @SearchTerm + '%'
+				  OR AUP.[Address] LIKE '%' + @SearchTerm + '%'
+				  OR AU.[UserName] LIKE '%' + @SearchTerm + '%'
+              )
+    )
+    SELECT @Items =
+    (
+        SELECT 
+            [Id],
+            [FullName],
+            [Address],
+            [Email],
+            [AppUserRoleId],
+			[RoleName],
+			[UserName],
+            [CreatedBy],
+			[CreatedDate],
+            [UpdatedBy],
+            [UpdatedDate],
+            [IsActive]
+        FROM 
+            SortedAppUserProfiles
+        WHERE 
+            RowNum BETWEEN (@PageNumber - 1) * @PageSize + 1 AND @PageNumber * @PageSize
+        FOR JSON AUTO
+    );
+
+    INSERT INTO #AppUserProfileTBL
+    (
+        [RowCount],
+        [CurrentPage],
+        [PageSize],
+        [PageCount],
+        [Items]
+    )
+    SELECT @TotalRecords,
+           @PageNumber,
+           @PageSize,
+           @TotalPages,
+           @Items;
+
+    SET @Result =
+    (
+        SELECT * FROM #AppUserProfileTBL FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+    );
+
+    DROP TABLE #AppUserProfileTBL;
+
+    SELECT @Result AS result;
+END;
+
+GO
+/****** Object:  StoredProcedure [dbo].[SP_GetAppUserProfileById]    Script Date: 1/23/2026 4:51:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 -- =============================================
 -- Author:		Sreemonta Bhowmik
--- Create date: 21.04.2024
--- Description:	This SP is used to create or update User Menu
+-- Create date: 24.04.2023
+-- Description:	Get user details by supplying ID
 -- =============================================
-CREATE PROCEDURE [dbo].[SP_CreateUpdateAppUserMenu]
+--EXEC SP_GetAppUserProfileById 'D670A7BA-F10D-4241-8230-6CD8E0A2B7C0'
+CREATE PROCEDURE [dbo].[SP_GetAppUserProfileById] 
 	-- Add the parameters for the stored procedure here
-	@ActionName			VARCHAR(10), --Save Update
-    @Id					UNIQUEIDENTIFIER,
-    @Name				NVARCHAR(100),
-    @IsHeader			BIT,
-	@IsModule			BIT,
-	@IsComponent		BIT,
-	@CssClass			NVARCHAR(100),
-	@IsRouteLink		BIT,
-	@RouteLink			NVARCHAR(255),
-	@RouteLinkClass		NVARCHAR(200),
-	@Icon				NVARCHAR(100),
-	@Remark				NVARCHAR(255),
-	@ParentId			UNIQUEIDENTIFIER,
-	@DropdownIcon		NVARCHAR(100),
-	@SerialNo			INT,
-	@CreatedBy			NVARCHAR(MAX),
-	@CreatedDate		DATETIME2(7),
-	@UpdatedBy			NVARCHAR(MAX),
-	@UpdatedDate		DATETIME2(7),
-	@IsActive			BIT
+	@Id UNIQUEIDENTIFIER
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
-	IF @ActionName = 'Save' -- Save
-    BEGIN
-		IF EXISTS (SELECT 1 FROM AppUserMenus WHERE Id = @Id)
-		BEGIN
-			SELECT 0 AS 'RowsAffected';
-		END
-		ELSE
-		BEGIN
-			INSERT INTO AppUserMenus (Id, Name, IsHeader, IsModule, IsComponent, CssClass, IsRouteLink, RouteLink, RouteLinkClass, Icon, Remark, ParentId, DropdownIcon, SerialNo, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate, IsActive)
-			VALUES (@Id, @Name, @IsHeader, @IsModule, @IsComponent, @CssClass, @IsRouteLink, @RouteLink, @RouteLinkClass, @Icon, @Remark, @ParentId, @DropdownIcon, @SerialNo, @CreatedBy, GETUTCDATE(), NULL, NULL, @IsActive);
 
-			SELECT @@ROWCOUNT AS 'RowsAffected';
-		END
-        
-    END
-	ELSE IF @ActionName = 'Update' -- Update
-    BEGIN
-		IF EXISTS (SELECT 1 FROM AppUserMenus WHERE Id = @Id)
-		BEGIN
-			UPDATE AppUserMenus SET Name = @Name, IsHeader = @IsHeader,  IsModule = @IsModule, IsComponent = @IsComponent, CssClass = @CssClass, IsRouteLink = @IsRouteLink, RouteLink = @RouteLink,
-			RouteLinkClass = @RouteLinkClass, Icon = @Icon, Remark = @Remark, ParentId = @ParentId,DropdownIcon = @DropdownIcon,
-			SerialNo = @SerialNo,UpdatedBy = @UpdatedBy,UpdatedDate = GETUTCDATE(),IsActive = @IsActive
-			WHERE [Id] = @Id;
-		
-			SELECT @@ROWCOUNT AS 'RowsAffected';
-		END
-		ELSE
-		BEGIN
-			SELECT 0 AS 'RowsAffected';
-		END
-    END
-    ELSE
-    BEGIN
-        RAISERROR('Invalid action flag. Must be either ''Save'' or ''Update''.', 16, 1);
-    END
+    -- Insert statements for procedure here
+	SELECT AUP.Id, AUP.FullName,AUP.Address,AUP.Email,AUP.AppUserRoleId, AUR.RoleName, AU.UserName,
+	AUP.CreatedBy,AUP.CreatedDate,AUP.UpdatedBy,AUP.UpdatedDate,AUP.IsActive
+	FROM AppUserProfiles AUP 
+	LEFT JOIN AppUserRoles AUR ON AUR.Id = AUP.AppUserRoleId
+	LEFT JOIN AppUsers AU ON AU.AppUserProfileId = AUP.Id
+	WHERE AUP.Id = @Id
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[SP_DeleteAppUserMenu]    Script Date: 12/5/2025 11:45:07 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
--- =============================================
--- Author:		Sreemonta Bhowmik
--- Create date: 22nd April 2024
--- Description:	This Stored Procedure is to delete or inactive based on @IsDelete flag parameter supplied value.
--- =============================================
---EXEC SP_DeleteAppUserMenu 0,'60AADC18-6B91-4CEE-ACE7-97700B685C98'
-CREATE PROCEDURE [dbo].[SP_DeleteAppUserMenu]
-    @IsDelete BIT,
-    @MenuId NVARCHAR(MAX)
-AS
-BEGIN
-    SET NOCOUNT ON;
-	DECLARE @ConvertedMenuId UNIQUEIDENTIFIER;
-    DECLARE @RowCount INT;
-	DECLARE @AffectedRow INT = 0;
-	DECLARE @Result NVARCHAR(MAX);
-
-	SET @ConvertedMenuId = CAST(@MenuId AS UNIQUEIDENTIFIER);
-    -- Check if the MenuId is used in UserRoleMenu table
-    SELECT @RowCount = COUNT(*)
-    FROM AppUserRoleMenus
-    WHERE AppUserMenuId = @ConvertedMenuId AND IsActive = 1;
-
-    IF @RowCount > 0
-    BEGIN
-        -- Menu is already used in UserRoleMenu, return JSON message
-        --SELECT '{"rowcount": 0, "message": "This menu already used for a role"}' AS Result;
-		SET @Result = N'{"message": "This menu already used for a role", "rowcount": ' + CAST(@AffectedRow AS NVARCHAR(10)) + ', "sucess":"false"}';
-		SELECT @Result
-    END
-    ELSE
-    BEGIN
-        -- Menu is not used in UserRoleMenu
-        IF @IsDelete = 1
-        BEGIN
-            -- Delete the UserMenu record
-            DELETE FROM AppUserMenus WHERE Id = @ConvertedMenuId;
-			SET @AffectedRow = @@ROWCOUNT;
-			SET @Result = N'{"message": "User menu is successfully removed", "rowcount": ' + CAST(@AffectedRow AS NVARCHAR(10)) + ', "sucess":"true"}';
-            --SELECT '{"rowcount": 1, "message": "User menu is successfully removed"}' AS Result;
-			SELECT @Result
-        END
-        ELSE
-        BEGIN
-            -- Update IsActive column to false
-            UPDATE AppUserMenus SET IsActive = 0 WHERE Id = @ConvertedMenuId;
-			SET @AffectedRow = @@ROWCOUNT;
-			SET @Result = N'{"message": "User menu is successfully inactivated", "rowcount": ' + CAST(@AffectedRow AS NVARCHAR(10)) + ', "sucess":"true"}';
-			--SELECT '{"rowcount": 1, "message": "User menu is successfully inactivated"}' AS Result;
-			SELECT @Result
-        END
-    END
-END
-
-GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAppUserRoleMenuInitialData]    Script Date: 12/5/2025 11:46:01 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAppUserRoleMenuInitialData]    Script Date: 1/23/2026 4:52:57 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -774,8 +784,9 @@ BEGIN
     SELECT @result AS result;
  
 END;
+
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetRoleMenusPagingWithSearch]    Script Date: 12/7/2025 4:04:49 AM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetRoleMenusPagingWithSearch]    Script Date: 1/23/2026 4:54:41 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -924,8 +935,54 @@ BEGIN
 
     SELECT @Result AS result;
 END
+
 GO
-/****** Object:  StoredProcedure [dbo].[SP_SaveUpdateRoleMenuInBulk]    Script Date: 12/7/2025 4:06:14 AM ******/
+/****** Object:  StoredProcedure [dbo].[SP_SaveUpdateAppUser]    Script Date: 1/23/2026 4:56:19 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[SP_SaveUpdateAppUser]
+	@ActionName					VARCHAR(10), --Save Update
+    @Id							UNIQUEIDENTIFIER,
+	@AppUserProfileId			UNIQUEIDENTIFIER,
+    @UserName					NVARCHAR(50),
+	@Password					NVARCHAR(MAX),
+	@SaltKey					NVARCHAR(MAX),
+	@RefreshToken				NVARCHAR(MAX),
+	@RefreshTokenExpiryTime		DATETIME,
+	@CreatedBy					NVARCHAR(MAX),
+	@CreatedDate				DATETIME2(7),
+	@UpdatedBy					NVARCHAR(MAX),
+	@UpdatedDate				DATETIME2(7),
+	@IsActive					BIT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF @ActionName = 'Save' -- Save
+    BEGIN
+        INSERT INTO AppUsers ([Id],[AppUserProfileId],[UserName],[Password],[SaltKey],[RefreshToken],[RefreshTokenExpiryTime],[CreatedBy],[CreatedDate],[UpdatedBy],[UpdatedDate],[IsActive])
+     VALUES
+           (@Id,@AppUserProfileId, @UserName,@Password, @SaltKey, @RefreshToken, @RefreshTokenExpiryTime, @CreatedBy,@CreatedDate,NULL, NULL, @IsActive)
+
+        SELECT @@ROWCOUNT AS 'RowsAffected';
+    END
+    ELSE IF @ActionName = 'Update' -- Update
+    BEGIN
+        UPDATE AppUsers SET [Id] = @Id,[AppUserProfileId] = @AppUserProfileId,[UserName] = @UserName,[Password] = @Password,[SaltKey] = @SaltKey,[RefreshToken] = @RefreshToken,
+		[RefreshTokenExpiryTime] = @RefreshTokenExpiryTime, [UpdatedBy] = @UpdatedBy,[UpdatedDate] = @UpdatedDate, IsActive = @IsActive
+        WHERE [Id] = @Id;
+
+        SELECT @@ROWCOUNT AS 'RowsAffected';
+    END
+    ELSE
+    BEGIN
+        RAISERROR('Invalid action flag. Must be either ''Save'' or ''Update''.', 16, 1);
+    END
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[SP_SaveUpdateRoleMenuInBulk]    Script Date: 1/23/2026 4:57:52 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

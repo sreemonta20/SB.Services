@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -310,6 +311,15 @@ namespace SBERP.Security.Helper
 
                 _ => throw new ArgumentException($"Query identifier '{queryIdentifier}' not found.", nameof(queryIdentifier))
             };
+        }
+
+        public static bool IsUniqueUserNameViolation(DbUpdateException ex)
+        {
+            // SQL Server unique constraint violation: 2601 or 2627
+            if (ex.InnerException is SqlException sqlEx)
+                return sqlEx.Number == 2601 || sqlEx.Number == 2627;
+
+            return false;
         }
     }
 }
