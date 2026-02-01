@@ -22,6 +22,19 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "environmentVariables": {
+        "ASPNETCORE_HTTPS_PORTS": "8083",
+        "ASPNETCORE_HTTP_PORTS": "8082"
+      },
+      "publishAllPorts": true,
+      "useSSL": true,
+      "httpPort": 51939,
+      "sslPort": 44357
     }
   },
   "$schema": "https://json.schemastore.org/launchsettings.json",
