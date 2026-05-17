@@ -7,7 +7,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace SBERP.Security.Service
 {
@@ -36,12 +35,33 @@ namespace SBERP.Security.Service
         
         public string GenerateJwtToken(ClaimRequest oClaimRequest)
         {
+            //var oClaim = new[]
+            //{
+            //    new Claim(ClaimTypes.NameIdentifier, oClaimRequest.UserId!.ToString()),
+            //    new Claim(ClaimTypes.Name, oClaimRequest.UserName!),
+            //    new Claim(ClaimTypes.Email, oClaimRequest.Email!),
+            //    new Claim(ClaimTypes.Role, oClaimRequest.Role!)
+            //};
             var oClaim = new[]
             {
+                // ── Existing claims — keep exactly as they are ─────────────────────
                 new Claim(ClaimTypes.NameIdentifier, oClaimRequest.UserId!.ToString()),
-                new Claim(ClaimTypes.Name, oClaimRequest.UserName!),
-                new Claim(ClaimTypes.Email, oClaimRequest.Email!),
-                new Claim(ClaimTypes.Role, oClaimRequest.Role!)
+                new Claim(ClaimTypes.Name,           oClaimRequest.UserName!),
+                new Claim(ClaimTypes.Email,          oClaimRequest.Email!),
+                new Claim(ClaimTypes.Role,           oClaimRequest.Role!),
+
+                // ── NEW: unique token ID — required for Redis blacklist on logout ───
+    
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+
+
+                // ── NEW: issued-at timestamp ────────────────────────────────────────
+    
+            new Claim(
+                    JwtRegisteredClaimNames.Iat,
+                    DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),
+                    ClaimValueTypes.Integer64)
+
             };
 
             SymmetricSecurityKey oSymmetricSecurityKey = new(Encoding.UTF8.GetBytes(_jwtKey!));

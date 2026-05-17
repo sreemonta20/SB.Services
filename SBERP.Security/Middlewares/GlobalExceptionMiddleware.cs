@@ -10,10 +10,22 @@ namespace SBERP.Security.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly ISecurityLogService _securityLogService;
-        public GlobalExceptionMiddleware(RequestDelegate next, ISecurityLogService securityLogService)
+        // FIX: Inject IWebHostEnvironment to detect runtime environment.
+        // The original #if DEBUG was a compile-time check — it only included exception
+        // details in Debug build configurations, not in Development runtime mode.
+        // You can be running a Release build locally (e.g. docker-compose or publish)
+        // in Development environment and get no details at all.
+        // IWebHostEnvironment.IsDevelopment() is the correct runtime check.
+        private readonly IWebHostEnvironment _env;
+
+        public GlobalExceptionMiddleware(
+            RequestDelegate next,
+            ISecurityLogService securityLogService,
+            IWebHostEnvironment env)
         {
             _next = next;
             _securityLogService = securityLogService;
+            _env = env;
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
@@ -24,32 +36,52 @@ namespace SBERP.Security.Middlewares
             }
             catch (UnauthorizedAccessException ex)
             {
-                _securityLogService.LogError(String.Format("Unauthorized Access Exception: {0}", ex.Message));
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.Unauthorized, ConstantSupplier.GLOBAL_ERR_AUTH_FAILED_NO_PERMISSION_MSG);
+                _securityLogService.LogError(
+                    String.Format("Unauthorized Access Exception: {0}", ex.ToString()));
+                await HandleExceptionAsync(httpContext, ex,
+                    HttpStatusCode.Unauthorized,
+                    ConstantSupplier.GLOBAL_ERR_AUTH_FAILED_NO_PERMISSION_MSG, _env);
             }
             catch (ApplicationException ex)
             {
-                _securityLogService.LogError(String.Format("Application Exception: {0}", ex.Message));
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.BadRequest, ConstantSupplier.GLOBAL_ERR_INVALID_INPUT_STATE_MSG);
+                _securityLogService.LogError(
+                    String.Format("Application Exception: {0}", ex.ToString()));
+                await HandleExceptionAsync(httpContext, ex,
+                    HttpStatusCode.BadRequest,
+                    ConstantSupplier.GLOBAL_ERR_INVALID_INPUT_STATE_MSG, _env);
             }
             catch (InvalidOperationException ex)
             {
-                _securityLogService.LogError(String.Format("Invalid Operation Exception: {0}", ex.Message));
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.BadRequest, ConstantSupplier.GLOBAL_ERR_INVALID_OPERATION_MSG);
+                _securityLogService.LogError(
+                    String.Format("Invalid Operation Exception: {0}", ex.ToString()));
+                await HandleExceptionAsync(httpContext, ex,
+                    HttpStatusCode.BadRequest,
+                    ConstantSupplier.GLOBAL_ERR_INVALID_OPERATION_MSG, _env);
             }
             catch (KeyNotFoundException ex)
             {
-                _securityLogService.LogError(String.Format("Key Not Found Exception: {0}", ex.Message));
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.NotFound, ConstantSupplier.GLOBAL_ERR_RESOURCE_NOT_FOUND_MSG);
+                _securityLogService.LogError(
+                    String.Format("Key Not Found Exception: {0}", ex.ToString()));
+                await HandleExceptionAsync(httpContext, ex,
+                    HttpStatusCode.NotFound,
+                    ConstantSupplier.GLOBAL_ERR_RESOURCE_NOT_FOUND_MSG, _env);
             }
             catch (Exception ex)
             {
-                _securityLogService.LogError(String.Format("Unhandled Exception: {0}", ex.Message));
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.InternalServerError, ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG);
+                _securityLogService.LogError(
+                    String.Format("Unhandled Exception: {0}", ex.ToString()));
+                await HandleExceptionAsync(httpContext, ex,
+                    HttpStatusCode.InternalServerError,
+                    ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG, _env);
             }
         }
 
-        private static async Task HandleExceptionAsync(HttpContext context, Exception exception, HttpStatusCode statusCode, string defaultMessage)
+        private static async Task HandleExceptionAsync(
+            HttpContext context,
+            Exception exception,
+            HttpStatusCode statusCode,
+            string defaultMessage,
+            IWebHostEnvironment env)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
@@ -63,14 +95,22 @@ namespace SBERP.Security.Middlewares
                 Result = null
             };
 
-            // In development, we might want to include more error details
-            #if DEBUG
-            errorResponse.Result = new
+            // FIX: Use runtime IsDevelopment() instead of compile-time #if DEBUG.
+            // This ensures full exception details are always visible when running
+            // in the Development environment, regardless of build configuration.
+            // NEVER expose stack traces in Production.
+            if (env.IsDevelopment())
             {
-                ExceptionType = exception.GetType().Name,
-                ExceptionMessage = exception.Message
-            };
-            #endif
+                errorResponse.Result = new
+                {
+                    ExceptionType = exception.GetType().FullName,
+                    ExceptionMessage = exception.Message,
+                    // Include the full stack trace so you can pinpoint the exact line
+                    // causing the swagger.json 500 without needing the debugger.
+                    StackTrace = exception.StackTrace,
+                    InnerException = exception.InnerException?.Message
+                };
+            }
 
             var jsonResponse = JsonConvert.SerializeObject(errorResponse);
             await context.Response.WriteAsync(jsonResponse);

@@ -3,10 +3,10 @@ using Azure.Core;
 using FluentEmail.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Org.BouncyCastle.Asn1.Ocsp;
 using SBERP.DataAccessLayer;
 using SBERP.EmailService.Models;
 using SBERP.EmailService.Service;
@@ -16,6 +16,7 @@ using SBERP.Security.Models.Configuration;
 using SBERP.Security.Models.Request;
 using SBERP.Security.Models.Response;
 using SBERP.Security.Persistence;
+using SBERP.Shared.Services;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Dynamic.Core;
@@ -40,7 +41,9 @@ namespace SBERP.Security.Service
         private readonly IDatabaseManager _dbmanager;
         private readonly ITokenService _tokenService;
         private readonly IRoleMenuService _roleMenuService;
-
+        private readonly IDistributedCache _distributedCache;
+        private readonly RedisSettings _redisSettings;
+        private readonly ITokenBlacklistService _tokenBlacklistService;
 
         /// <summary>
         /// Public Constructor
@@ -54,7 +57,8 @@ namespace SBERP.Security.Service
         /// <param name="tokenService"></param>
         /// <param name="roleMenuService"></param>
         public AuthService(IConfiguration config, SecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options,
-        ISecurityLogService securityLogService, IDatabaseManager dbManager, ITokenService tokenService, IRoleMenuService roleMenuService)
+        ISecurityLogService securityLogService, IDatabaseManager dbManager, ITokenService tokenService, IRoleMenuService roleMenuService,
+        IDistributedCache distributedCache, IOptions<RedisSettings> redisSettings, ITokenBlacklistService tokenBlacklistService)
         {
             _configuration = config;
             _context = context;
@@ -65,6 +69,9 @@ namespace SBERP.Security.Service
             _dbmanager.InitializeDatabase(_appSettings?.ConnectionStrings?.ProdSqlConnectionString, _appSettings?.ConnectionProvider);
             _tokenService = tokenService;
             _roleMenuService = roleMenuService;
+            _distributedCache = distributedCache;
+            _redisSettings = redisSettings.Value;
+            _tokenBlacklistService = tokenBlacklistService;
         }
 
         #endregion
@@ -129,29 +136,121 @@ namespace SBERP.Security.Service
         /// <param name="userId"></param>
         /// <returns><see cref="Task{DataResponse}"/></returns>
         /// <exception cref="Exception"></exception>
+        //public async Task<DataResponse> GetAppUserProfileMenuAsync(string userId)
+        //{
+        //    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_REQ_MSG, JsonConvert.SerializeObject(userId, Formatting.Indented)));
+        //    object? nullValue = null;
+        //    try
+        //    {
+        //        if (Utilities.IsNullOrEmptyOrWhiteSpace(userId))
+        //            return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.Unauthorized, null, ConstantSupplier.APP_USER_PROFILE_MENU_INVALID_TOKEN_MSG, ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
+
+        //        AppUser? oExistAppUser = await _context.AppUsers!.Include(u => u.AppUserProfile).FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId) && u.IsActive == true);
+
+        //        if (Utilities.IsNull(oExistAppUser))
+        //            return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.NotFound, null, ConstantSupplier.INVALID_USER_MSG, ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
+
+        //        AppUserProfile? oAppUserProfile = await _context.AppUserProfiles!.FirstOrDefaultAsync(x => x.Id == oExistAppUser!.AppUserProfileId && x.IsActive == true);
+
+        //        if (Utilities.IsNull(oAppUserProfile))
+        //            return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.AUTH_USER_PROFILE_NOT_FOUND_MSG, ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
+
+        //        DataResponse oUserMenuResponse = await _roleMenuService.GetAllAppUserMenuByUserIdAsync(oAppUserProfile!.Id.ToString());
+        //        if (!oUserMenuResponse.Success)
+        //            return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.AUTH_FAILED_RETRIEVE_MENU_MSG, ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
+
+
+        //        ProfileMenuResponse oProfileMenuResponse = new()
+        //        {
+        //            user = new User
+        //            {
+        //                Id = Convert.ToString(oAppUserProfile.Id),
+        //                FullName = oAppUserProfile.FullName,
+        //                UserName = oExistAppUser!.UserName,
+        //                Email = oAppUserProfile.Email,
+        //                UserRole = oAppUserProfile.AppUserRoleId.ToString(),
+        //                CreatedDate = oAppUserProfile.CreatedDate
+        //            },
+        //            userMenus = Convert.ToString(oUserMenuResponse.Result)
+        //        };
+
+
+        //        return new DataResponse { Success = true, Message = ConstantSupplier.APP_USER_PROFILE_MENU_SUCCESS_MSG, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oProfileMenuResponse };
+
+        //    }
+        //    catch (Exception Ex)
+        //    {
+        //        _securityLogService.LogError($"Service: Exception in GetAppUserProfileMenuAsync: {Ex.Message}");
+        //        throw new Exception(ConstantSupplier.APP_USER_PROFILE_MENU_SERVICE_EXCEPTION_MSG);
+        //    }
+        //}
+
         public async Task<DataResponse> GetAppUserProfileMenuAsync(string userId)
         {
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_REQ_MSG, JsonConvert.SerializeObject(userId, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(
+                ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_REQ_MSG,
+                JsonConvert.SerializeObject(userId, Formatting.Indented)));
             object? nullValue = null;
             try
             {
                 if (Utilities.IsNullOrEmptyOrWhiteSpace(userId))
-                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.Unauthorized, null, ConstantSupplier.APP_USER_PROFILE_MENU_INVALID_TOKEN_MSG, ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
+                    return Utilities.FailedResponse(nullValue, _securityLogService,
+                        (int)HttpStatusCode.Unauthorized, null,
+                        ConstantSupplier.APP_USER_PROFILE_MENU_INVALID_TOKEN_MSG,
+                        ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
 
-                AppUser? oExistAppUser = await _context.AppUsers!.Include(u => u.AppUserProfile).FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId) && u.IsActive == true);
+                // ── Step 1: Try Redis cache (IDistributedCache.GetStringAsync) ────────
+                string cacheKey = $"user_menu_{userId}";
+                try
+                {
+                    var cached = await _distributedCache.GetStringAsync(cacheKey);
+                    if (!string.IsNullOrEmpty(cached))
+                    {
+                        _securityLogService.LogInfo(
+                            $"Menu cache HIT for userId: {userId}");
+                        return JsonConvert.DeserializeObject<DataResponse>(cached)!;
+                    }
+                }
+                catch (Exception cacheEx)
+                {
+                    // Redis unavailable — fall back to DB
+                    _securityLogService.LogWarning(
+                        $"Redis read failed for {userId}: {cacheEx.Message}. Fallback to DB.");
+                }
+
+                // ── Step 2: Cache MISS — fetch from database ───────────────────────────
+                _securityLogService.LogInfo(
+                    $"Menu cache MISS for userId: {userId}. Fetching from DB.");
+
+                AppUser? oExistAppUser = await _context.AppUsers!
+                    .Include(u => u.AppUserProfile)
+                    .FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId)
+                                           && u.IsActive == true);
 
                 if (Utilities.IsNull(oExistAppUser))
-                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.NotFound, null, ConstantSupplier.INVALID_USER_MSG, ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
+                    return Utilities.FailedResponse(nullValue, _securityLogService,
+                        (int)HttpStatusCode.NotFound, null,
+                        ConstantSupplier.INVALID_USER_MSG,
+                        ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
 
-                AppUserProfile? oAppUserProfile = await _context.AppUserProfiles!.FirstOrDefaultAsync(x => x.Id == oExistAppUser!.AppUserProfileId && x.IsActive == true);
+                AppUserProfile? oAppUserProfile = await _context.AppUserProfiles!
+                    .FirstOrDefaultAsync(x => x.Id == oExistAppUser!.AppUserProfileId
+                                           && x.IsActive == true);
 
                 if (Utilities.IsNull(oAppUserProfile))
-                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.AUTH_USER_PROFILE_NOT_FOUND_MSG, ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
+                    return Utilities.FailedResponse(nullValue, _securityLogService,
+                        (int)HttpStatusCode.BadRequest, null,
+                        ConstantSupplier.AUTH_USER_PROFILE_NOT_FOUND_MSG,
+                        ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
 
-                DataResponse oUserMenuResponse = await _roleMenuService.GetAllAppUserMenuByUserIdAsync(oAppUserProfile!.Id.ToString());
+                DataResponse oUserMenuResponse = await _roleMenuService
+                    .GetAllAppUserMenuByUserIdAsync(oAppUserProfile!.Id.ToString());
+
                 if (!oUserMenuResponse.Success)
-                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.AUTH_FAILED_RETRIEVE_MENU_MSG, ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
-
+                    return Utilities.FailedResponse(nullValue, _securityLogService,
+                        (int)HttpStatusCode.BadRequest, null,
+                        ConstantSupplier.AUTH_FAILED_RETRIEVE_MENU_MSG,
+                        ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
 
                 ProfileMenuResponse oProfileMenuResponse = new()
                 {
@@ -167,14 +266,62 @@ namespace SBERP.Security.Service
                     userMenus = Convert.ToString(oUserMenuResponse.Result)
                 };
 
+                var successResponse = new DataResponse
+                {
+                    Success = true,
+                    Message = ConstantSupplier.APP_USER_PROFILE_MENU_SUCCESS_MSG,
+                    MessageType = Enum.EnumResponseType.Success,
+                    ResponseCode = (int)HttpStatusCode.OK,
+                    Result = oProfileMenuResponse
+                };
 
-                return new DataResponse { Success = true, Message = ConstantSupplier.APP_USER_PROFILE_MENU_SUCCESS_MSG, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oProfileMenuResponse };
+                // ── Step 3: Store in Redis (IDistributedCache.SetStringAsync) ─────────
+                try
+                {
+                    await _distributedCache.SetStringAsync(
+                        cacheKey,
+                        JsonConvert.SerializeObject(successResponse),
+                        new DistributedCacheEntryOptions
+                        {
+                            AbsoluteExpirationRelativeToNow =
+                                TimeSpan.FromMinutes(_redisSettings.MenuCacheExpiryMinutes),
+                            SlidingExpiration =
+                                TimeSpan.FromMinutes(_redisSettings.MenuCacheSlidingExpiryMinutes)
+                        });
+                    _securityLogService.LogInfo(
+                        $"Menu cached. Key:{cacheKey}. TTL:{_redisSettings.MenuCacheExpiryMinutes}min");
+                }
+                catch (Exception cacheEx)
+                {
+                    _securityLogService.LogWarning(
+                        $"Redis write failed for {userId}: {cacheEx.Message}");
+                }
 
+                return successResponse;
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError($"Service: Exception in GetAppUserProfileMenuAsync: {Ex.Message}");
-                throw new Exception(ConstantSupplier.APP_USER_PROFILE_MENU_SERVICE_EXCEPTION_MSG);
+                _securityLogService.LogError(
+                    $"Exception in GetAppUserProfileMenuAsync: {Ex.Message}");
+                throw new Exception(
+                    ConstantSupplier.APP_USER_PROFILE_MENU_SERVICE_EXCEPTION_MSG);
+            }
+        }
+
+        public async Task InvalidateMenuCacheAsync(string userId)
+        {
+            if (string.IsNullOrWhiteSpace(userId)) return;
+            try
+            {
+                // IDistributedCache.RemoveAsync — Microsoft official pattern
+                await _distributedCache.RemoveAsync($"user_menu_{userId}");
+                _securityLogService.LogInfo(
+                    $"Menu cache invalidated for userId: {userId}");
+            }
+            catch (Exception ex)
+            {
+                _securityLogService.LogWarning(
+                    $"Cache invalidation failed for userId {userId}: {ex.Message}");
             }
         }
 

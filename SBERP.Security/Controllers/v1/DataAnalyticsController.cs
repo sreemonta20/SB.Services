@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ namespace SBERP.Security.Controllers.v1
     /// <summary>
     /// This API Controller will be containing all the data of the different business models in graphical representation.
     /// </summary>
-    //[ApiVersion("1.0")] // Specify the version
+    [ApiVersion("1.0")]
     [Authorize]
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]

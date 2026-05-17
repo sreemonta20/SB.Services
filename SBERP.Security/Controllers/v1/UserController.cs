@@ -1,4 +1,5 @@
-﻿using SBERP.Security.Filter;
+﻿using Asp.Versioning;
+using SBERP.Security.Filter;
 using SBERP.Security.Helper;
 using SBERP.Security.Models.Configuration;
 using SBERP.Security.Models.Request;
@@ -19,7 +20,7 @@ namespace SBERP.Security.Controllers.v1
     /// <summary>
     /// This API Controller contains specific create and update user, get all user profile, get all user profile by id, save or update user profile, and delete user profile methods.
     /// </summary>
-    //[ApiVersion("1.0")] // Specify the version
+    [ApiVersion("1.0")]
     [Authorize]
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
@@ -60,7 +61,6 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                //_securityLogService.LogError(Ex.Message);
                 _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUP_APP_USER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
                 return new DataResponse
                 {
@@ -148,7 +148,6 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                //_securityLogService.LogError(Ex.Message);
                 _securityLogService.LogError(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
                 _securityLogService.LogError(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
                 return new DataResponse
@@ -184,7 +183,6 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                //_securityLogService.LogError(Ex.Message);
                 _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
                 _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
                 return new DataResponse
@@ -220,7 +218,6 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                //_securityLogService.LogError(Ex.Message);
                 _securityLogService.LogError(string.Format(ConstantSupplier.DEL_APP_USER_PROFILE_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
                 return new DataResponse
                 {

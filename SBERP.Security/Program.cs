@@ -1,11 +1,21 @@
-#region Program.cs Final Version
+﻿#region Program.cs
 
+// .NET 10 / Swashbuckle 10.x NAMESPACE CHANGES vs .NET 9 / Swashbuckle 6.x:
+//
+// REMOVED: using Microsoft.OpenApi.Models  → namespace gone in OpenApi 2.x+
+// REMOVED: using Microsoft.AspNetCore.Mvc.Versioning → package renamed to Asp.Versioning
+// ADDED:   using Microsoft.OpenApi         → all OpenApi types now in root namespace
+// ADDED:   using Asp.Versioning            → replacement for deprecated versioning package
+// ADDED:   using Microsoft.AspNetCore.Mvc.ApiExplorer → for TryGetMethodInfo()
+
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Newtonsoft.Json.Serialization;
 using SBERP.DataAccessLayer;
 using SBERP.EmailService.Service;
@@ -15,7 +25,10 @@ using SBERP.Security.Middlewares;
 using SBERP.Security.Models.Configuration;
 using SBERP.Security.Persistence;
 using SBERP.Security.Service;
+using SBERP.Shared.Extensions;
+using SBERP.Shared.Services;
 using Serilog;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Data;
 using System.Data.Odbc;
 using System.Data.OleDb;
@@ -64,18 +77,33 @@ RegisterDatabase(services, appSettings);
 services.AddScoped<IEmailService, EmailSender>();
 
 services.AddControllers()
-    .AddJsonOptions(options => options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)
-    .AddNewtonsoftJson(o => o.SerializerSettings.ContractResolver = new DefaultContractResolver());
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)
+    .AddNewtonsoftJson(o =>
+        o.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
+// ADDED in .NET 10: Required for Swashbuckle to discover controller metadata
+services.AddEndpointsApiExplorer();
+
+// CHANGED in .NET 10: Must chain .AddApiExplorer() — Asp.Versioning 10.x requires
+// this for its IApiVersionDescriptionProvider to register with the API explorer.
+// Without it Swashbuckle finds no versioned endpoints and returns HTTP 500.
 services.AddApiVersioning(options =>
 {
     options.AssumeDefaultVersionWhenUnspecified = true;
     options.DefaultApiVersion = new ApiVersion(1, 0);
     options.ReportApiVersions = true;
+})
+.AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";         // formats version as "v1", "v2" etc.
+    options.SubstituteApiVersionInUrl = true;   // replaces {version} route tokens
 });
 
 // 3.4 CORS
-var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "https://localhost:4200", "http://localhost:4200" };
+var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>()
+    ?? new[] { "https://localhost:4200", "http://localhost:4200" };
+
 services.AddCors(options =>
 {
     options.AddPolicy(ConstantSupplier.CORSS_POLICY_NAME, builder =>
@@ -89,6 +117,9 @@ services.AddCors(options =>
 });
 
 // 3.5 Swagger
+// CHANGED in .NET 10: OpenApiInfo, OpenApiContact, OpenApiSecurityScheme,
+// SecuritySchemeType, ParameterLocation are now in Microsoft.OpenApi namespace
+// (not Microsoft.OpenApi.Models which no longer exists).
 services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc(ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_VERSION_NAME, new OpenApiInfo
@@ -104,27 +135,39 @@ services.AddSwaggerGen(c =>
         }
     });
 
-    c.ResolveConflictingActions(apiDescription => apiDescription.First());
     c.OperationFilter<SwaggerDefaultValues>();
 
-    var securitySchema = new OpenApiSecurityScheme
+    // Maps each controller action to the correct swagger doc version
+    c.DocInclusionPredicate((docName, apiDesc) =>
     {
-        Description = ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_SCHEME_DESC,
-        Name = ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_SCHEME_NAME,
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-        Scheme = JwtBearerDefaults.AuthenticationScheme,
-        Reference = new OpenApiReference
-        {
-            Type = ReferenceType.SecurityScheme,
-            Id = JwtBearerDefaults.AuthenticationScheme
-        }
-    };
+        if (!apiDesc.TryGetMethodInfo(out var methodInfo)) return false;
+        var versions = methodInfo.DeclaringType?
+            .GetCustomAttributes(true)
+            .OfType<ApiVersionAttribute>()
+            .SelectMany(attr => attr.Versions)
+            .Select(v => $"v{v.MajorVersion}");
+        if (versions == null || !versions.Any()) return docName == "v1";
+        return versions.Any(v => v == docName);
+    });
 
-    c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securitySchema);
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    // Http Bearer scheme — Swagger UI adds "Bearer " prefix automatically.
+    // Users paste ONLY the raw JWT token in the Authorize dialog.
+    c.AddSecurityDefinition(
+        ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_SCHEME_REF_ID,
+        new OpenApiSecurityScheme
+        {
+            Description = "Enter your JWT token only — Swagger adds 'Bearer ' automatically.",
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer"   // lowercase — RFC 6750
+        });
+
+    // CHANGED in .NET 10: pass the lambda's document parameter directly into
+    // OpenApiSecuritySchemeReference so it serialises as "Bearer":[] correctly.
+    // No SecurityDocumentFilter needed.
+    c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
     {
-        { securitySchema, new[] { JwtBearerDefaults.AuthenticationScheme } }
+        [new OpenApiSecuritySchemeReference(
+            ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_SCHEME_REF_ID, document)] = []
     });
 });
 
@@ -133,7 +176,7 @@ var key = Encoding.ASCII.GetBytes(appSettings?.JWT?.Key ?? "");
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.RequireHttpsMetadata = false; // Change to true in production
+        options.RequireHttpsMetadata = false;
         options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -152,7 +195,8 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             OnAuthenticationFailed = context =>
             {
                 if (context.Exception is SecurityTokenExpiredException)
-                    context.Response?.Headers?.Add("Token-Expired", "true");
+                    // CHANGED in .NET 10: .Add() deprecated → use .Append()
+                    context.Response?.Headers?.Append("Token-Expired", "true");
                 return Task.CompletedTask;
             }
         };
@@ -161,7 +205,21 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 services.AddAuthorization();
 services.AddHttpContextAccessor();
 services.AddResponseCompression();
-services.AddDistributedMemoryCache();
+//services.AddDistributedMemoryCache();
+var redisSettings = configuration
+    .GetSection("RedisSettings")
+    .Get<RedisSettings>();
+
+services.Configure<RedisSettings>(
+    configuration.GetSection("RedisSettings"));
+
+// AddStackExchangeRedisCache — Microsoft recommended pattern
+// (learn.microsoft.com/aspnetcore/performance/caching/distributed)
+services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = redisSettings?.ConnectionString ?? "localhost:6379";
+    options.InstanceName = redisSettings?.InstanceName ?? "SBERP_Security_";
+});
 
 // 3.7 Dependency Injection Services
 services.AddTransient<ISecurityLogService, SecurityLogService>();
@@ -173,54 +231,44 @@ services.AddScoped<ITokenService, TokenService>();
 services.AddScoped<IDatabaseManager, DatabaseManager>();
 services.AddScoped<IDatabaseHandlerFactory, DatabaseHandlerFactory>();
 services.AddScoped<ValidateModelAttribute>();
+services.AddScoped<ITokenBlacklistService, TokenBlacklistService>();
 
 // 4. Build App
 var app = builder.Build();
 
 try
 {
-    // 5. Middleware
-    // Global exception handler � should be first to catch all exceptions
     app.UseMiddleware<GlobalExceptionMiddleware>();
-    // Environment-specific middlewares (development tools)
+
     if (app.Environment.IsDevelopment())
     {
         app.UseDeveloperExceptionPage();
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint(ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_END_POINT, ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_END_POINT_NAME);
+            c.SwaggerEndpoint(
+                ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_END_POINT,
+                ConstantSupplier.SWAGGER_SB_API_SERVICE_DOC_END_POINT_NAME);
             c.RoutePrefix = string.Empty;
         });
     }
     else
     {
-        // Use HSTS only in non-development environments
         app.UseHsts();
     }
 
-    // Optional: Log all HTTP requests
     app.UseSerilogRequestLogging();
-    // Enforce HTTPS
     app.UseHttpsRedirection();
-    // Serve static files (e.g., wwwroot)
     app.UseStaticFiles();
-    // Routing starts here
     app.UseRouting();
-    // CORS must be applied before any auth middleware
     app.UseCors(ConstantSupplier.CORSS_POLICY_NAME);
-    // Security headers � safe to add here
     app.UseMiddleware<SecurityHeadersMiddleware>();
-    // Custom middleware related to routing (e.g., HTTP verb checks)
     app.UseMiddleware<HttpVerbsConstraintMiddleware>();
-    // Authentication and Authorization
     app.UseAuthentication();
+    app.UseTokenBlacklist();
     app.UseAuthorization();
-    // Compression (applied before sending response)
     app.UseResponseCompression();
-    // Final step: Map controller endpoints
     app.MapControllers();
-    // Run the application
     app.Run();
 }
 finally
@@ -228,36 +276,34 @@ finally
     Log.CloseAndFlush();
 }
 
-// Database Registration
 static void RegisterDatabase(IServiceCollection services, AppSettings? appSettings)
 {
     var cs = appSettings?.ConnectionStrings;
-
     switch (appSettings?.AppDB)
     {
         case ConstantSupplier.SQLSERVER:
             services.AddDbContext<SecurityDBContext>(options =>
                 options.UseSqlServer(cs?.ProdSqlConnectionString));
-            services.AddTransient<IDbConnection>(_ => new SqlConnection(cs?.ProdSqlConnectionString));
+            services.AddTransient<IDbConnection>(_ =>
+                new SqlConnection(cs?.ProdSqlConnectionString));
             break;
-
         case ConstantSupplier.ORACLE:
-            // Recommendation: use Oracle.ManagedDataAccess.Client instead of deprecated System.Data.OracleClient
             services.AddDbContext<SecurityDBContext>(options =>
                 options.UseOracle(cs?.ProdOracleConnectionString));
-            services.AddScoped<IDbConnection>(_ => new Oracle.ManagedDataAccess.Client.OracleConnection(cs?.ProdOracleConnectionString));
+            services.AddScoped<IDbConnection>(_ =>
+                new Oracle.ManagedDataAccess.Client.OracleConnection(cs?.ProdOracleConnectionString));
             break;
-
         case ConstantSupplier.ODBC:
             services.AddDbContext<SecurityDBContext>(options =>
                 options.UseJetOdbc(cs?.ProdOdbcConnectionString));
-            services.AddScoped<IDbConnection>(_ => new OdbcConnection(cs?.ProdOdbcConnectionString));
+            services.AddScoped<IDbConnection>(_ =>
+                new OdbcConnection(cs?.ProdOdbcConnectionString));
             break;
-
         case ConstantSupplier.OLEDB:
             services.AddDbContext<SecurityDBContext>(options =>
                 options.UseJetOleDb(cs?.ProdOledbConnectionString));
-            services.AddScoped<IDbConnection>(_ => new OleDbConnection(cs?.ProdOledbConnectionString));
+            services.AddScoped<IDbConnection>(_ =>
+                new OleDbConnection(cs?.ProdOledbConnectionString));
             break;
     }
 }

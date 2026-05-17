@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using MailKit.Search;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -7,7 +6,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Org.BouncyCastle.Asn1.X9;
 using SBERP.DataAccessLayer;
 using SBERP.EmailService.Service;
 using SBERP.Security.Enum;

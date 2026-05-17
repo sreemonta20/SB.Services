@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace SBERP.Security.Controllers.v1
     /// DeleteAppUserRole, GetAllAppUserMenuPagingWithSearch, GetAllAppUserMenuByUserId, CreateUpdateAppUserMenu, DeleteAppUserMenu, 
     /// GetAllParentMenus, GetAppUserRoleMenuInitialData, and GetAllAppUserRoleMenusPagingWithSearch methods.
     /// </summary>
-    //[ApiVersion("1.0")] // Specify the version
+    [ApiVersion("1.0")]
     [Authorize]
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
@@ -204,7 +205,6 @@ namespace SBERP.Security.Controllers.v1
         /// <returns>
         /// <see cref="Task{object}"/>
         /// </returns>
-        //[HttpGet]
         [HttpDelete]
         [Route(ConstantSupplier.DELETE_ROLE_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
@@ -370,7 +370,6 @@ namespace SBERP.Security.Controllers.v1
         /// </summary>
         /// <param name="menuId"></param>
         /// <returns><see cref="Task{object}"/></returns>
-        //[HttpGet]
         [HttpDelete]
         [Route(ConstantSupplier.DELETE_USER_MENU_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]

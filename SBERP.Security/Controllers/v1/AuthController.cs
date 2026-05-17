@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -7,6 +8,8 @@ using SBERP.Security.Helper;
 using SBERP.Security.Models.Request;
 using SBERP.Security.Models.Response;
 using SBERP.Security.Service;
+using SBERP.Shared.Services;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 
@@ -17,7 +20,7 @@ namespace SBERP.Security.Controllers.v1
     /// <summary>
     /// This API Controller contains login, register, resetpassword, refreshToken, and revoke methods.
     /// </summary>
-    //[ApiVersion("1.0")] // Specify the version
+    [ApiVersion("1.0")]
     [Authorize]
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
@@ -28,11 +31,14 @@ namespace SBERP.Security.Controllers.v1
         private readonly IAuthService _authService;
         private readonly ISecurityLogService _securityLogService;
         private readonly ITokenService _tokenService;
-        public AuthController(IAuthService authService, ISecurityLogService securityLogService, ITokenService tokenService)
+        private readonly ITokenBlacklistService _tokenBlacklistService;
+        public AuthController(IAuthService authService, ISecurityLogService securityLogService, ITokenService tokenService, 
+        ITokenBlacklistService tokenBlacklistService)
         {
             _authService = authService;
             _securityLogService = securityLogService;
             _tokenService = tokenService;
+            _tokenBlacklistService = tokenBlacklistService;
         }
         #endregion
 
@@ -180,6 +186,25 @@ namespace SBERP.Security.Controllers.v1
 
             try
             {
+                var authHeader = Request.Headers["Authorization"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(authHeader) &&
+                    authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                {
+                    var rawToken = authHeader["Bearer ".Length..].Trim();
+                    var handler = new JwtSecurityTokenHandler();
+                    if (handler.CanReadToken(rawToken))
+                    {
+                        var jwt = handler.ReadJwtToken(rawToken);
+                        var jti = jwt.Id;
+                        var expiry = jwt.ValidTo - DateTime.UtcNow;
+                        if (!string.IsNullOrEmpty(jti) && expiry > TimeSpan.Zero)
+                        {
+                            await _tokenBlacklistService.BlacklistAsync(jti, expiry);
+                            _securityLogService.LogInfo(
+                                $"Token JTI {jti} blacklisted for user: {request.UserName}");
+                        }
+                    }
+                }
                 response = await _authService.RevokeAsync(request.UserName!);
 
                 if (!response.Success)
