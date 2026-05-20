@@ -1,25 +1,19 @@
 #region Program.cs
 
-// .NET 10 / Swashbuckle 10.x NAMESPACE CHANGES — same as SBERP.Security:
-//
-// REMOVED: using Microsoft.OpenApi.Models  → namespace gone in OpenApi 2.x+
-// REMOVED: using Microsoft.AspNetCore.Mvc.Versioning → package renamed to Asp.Versioning
-// ADDED:   using Microsoft.OpenApi         → all OpenApi types now in root namespace
-// ADDED:   using Asp.Versioning            → replacement for deprecated versioning package
-// ADDED:   using Microsoft.AspNetCore.Mvc.ApiExplorer → for TryGetMethodInfo()
+// .NET 10 / Swashbuckle 10.x — same pattern as SBERP.Security.
 
 using Asp.Versioning;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Newtonsoft.Json.Serialization;
 using SBERP.HumanResources.Filter;
+using SBERP.HumanResources.Helper;
+using SBERP.HumanResources.Models.Configuration;
+using SBERP.HumanResources.Persistence;
+using SBERP.HumanResources.Service;
 using SBERP.Shared.Extensions;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,7 +29,7 @@ builder.Configuration
 
 var configuration = builder.Configuration;
 
-// 2. Serilog — reads from "Serilog" section in appsettings.json
+// 2. Serilog
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .Enrich.FromLogContext()
@@ -49,40 +43,48 @@ Log.Information("SBERP.HumanResources starting...");
 // 3. Services
 var services = builder.Services;
 
-// 3.1 CORS — accept from Gateway and direct Angular during development
-var allowedOrigins = configuration
-    .GetSection("AllowedOrigins")
-    .Get<string[]>()
-    ?? new[] { "https://localhost:4200", "http://localhost:4200" };
+// 3.1 Bind AppSettings — used by HRSettingsService for upload paths
+services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
 
-services.AddCors(options =>
+// 3.2 DbContext — points at HumanResourcesDB
+var hrConnection = configuration.GetSection("ConnectionStrings")["HRDatabase"];
+if (string.IsNullOrWhiteSpace(hrConnection))
+    throw new InvalidOperationException(
+        "ConnectionStrings:HRDatabase missing in appsettings.json");
+
+services.AddDbContext<HumanResourcesDBContext>(opts =>
+    opts.UseSqlServer(hrConnection, sql =>
+        sql.EnableRetryOnFailure(maxRetryCount: 3,
+                                 maxRetryDelay: TimeSpan.FromSeconds(2),
+                                 errorNumbersToAdd: null)));
+
+// 3.3 CORS
+//var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>()
+//    ?? new[] { "https://localhost:4200", "http://localhost:4200" };
+var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>()
+    ?? new[] { "http://localhost:5201", "https://localhost:5200", "http://localhost:5201", "https://localhost:4200", "http://localhost:4200", };
+
+services.AddCors(o =>
 {
-    options.AddPolicy("HRCorsPolicy", policy =>
-    {
-        policy
-            .WithOrigins(allowedOrigins)
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .WithExposedHeaders("X-Pagination", "Token-Expired");
-    });
+    o.AddPolicy(ConstantSupplier.CORSS_POLICY_NAME, p =>
+        p.WithOrigins(allowedOrigins)
+         .AllowAnyMethod()
+         .AllowAnyHeader()
+         .WithExposedHeaders("X-Pagination", "Token-Expired"));
 });
 
-// 3.2 Controllers + JSON serialization — mirrors Security
+// 3.4 Controllers + JSON
 services.AddControllers()
-    .AddJsonOptions(options =>
-        options.JsonSerializerOptions.DefaultIgnoreCondition =
+    .AddJsonOptions(o =>
+        o.JsonSerializerOptions.DefaultIgnoreCondition =
             JsonIgnoreCondition.WhenWritingNull)
     .AddNewtonsoftJson(o =>
         o.SerializerSettings.ContractResolver =
             new DefaultContractResolver());
 
-// ADDED in .NET 10: Required for Swashbuckle to discover controller metadata
 services.AddEndpointsApiExplorer();
 
-// 3.3 API Versioning
-// CHANGED in .NET 10: Must chain .AddApiExplorer() — Asp.Versioning 10.x requires
-// this for its IApiVersionDescriptionProvider to register with the API explorer.
-// Without it Swashbuckle finds no versioned endpoints and returns HTTP 500.
+// 3.5 API Versioning
 services.AddApiVersioning(options =>
 {
     options.AssumeDefaultVersionWhenUnspecified = true;
@@ -91,21 +93,19 @@ services.AddApiVersioning(options =>
 })
 .AddApiExplorer(options =>
 {
-    options.GroupNameFormat = "'v'VVV";       // formats as "v1", "v2" etc.
-    options.SubstituteApiVersionInUrl = true;           // replaces {version} route tokens
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
 });
 
-// 3.4 Swagger
-// CHANGED in .NET 10: OpenApiInfo, OpenApiContact, OpenApiSecurityScheme,
-// SecuritySchemeType, ParameterLocation are now in Microsoft.OpenApi namespace
-// (not Microsoft.OpenApi.Models which no longer exists).
+// 3.6 Swagger
 services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "SBERP Human Resources Service",
         Version = "v1",
-        Description = "Human Resources microservice — employee and department management",
+        Description = "Human Resources microservice — employee, department, " +
+                      "designation, attendance, and HR settings management",
         Contact = new OpenApiContact
         {
             Name = "Sreemonta Bhowmik",
@@ -114,12 +114,8 @@ services.AddSwaggerGen(c =>
         }
     });
 
-    // Operation filter — removes auto-injected api-version query param from Swagger UI
     c.OperationFilter<SwaggerDefaultValues>();
 
-    // Maps each controller action to the correct swagger doc version.
-    // Falls back to v1 when no [ApiVersion] attribute is present — HR controllers
-    // without the attribute still appear in Swagger under v1.
     c.DocInclusionPredicate((docName, apiDesc) =>
     {
         if (!apiDesc.TryGetMethodInfo(out var methodInfo)) return false;
@@ -132,45 +128,44 @@ services.AddSwaggerGen(c =>
         return versions.Any(v => v == docName);
     });
 
-    // Http Bearer scheme — Swagger UI adds "Bearer " prefix automatically.
-    // Users paste ONLY the raw JWT token in the Authorize dialog.
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "Enter your JWT token only — Swagger adds 'Bearer ' automatically.",
         Type = SecuritySchemeType.Http,
-        Scheme = "bearer"   // lowercase — RFC 6750
+        Scheme = "bearer"
     });
 
-    // CHANGED in .NET 10: pass the lambda's document parameter directly into
-    // OpenApiSecuritySchemeReference so it serialises as "Bearer":[] correctly.
-    // Old OpenApiSecurityRequirement dictionary syntax no longer works.
     c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
     {
         [new OpenApiSecuritySchemeReference("Bearer", document)] = []
     });
 });
 
-// 3.5 JWT Auth via SBERP.Shared — reads "SharedJwtSettings" from appsettings.json.
-// Also registers ITokenBlacklistService (Scoped, used by TokenBlacklistMiddleware).
+// 3.7 JWT via SBERP.Shared — same Key/Issuer/Audience as Security
 services.AddSharedJwtAuthentication(builder.Configuration);
 
-// 3.6 Redis for token blacklist.
-// Microsoft.Extensions.Caching.StackExchangeRedis v10.0.0.
-// AddSharedJwtAuthentication registers ITokenBlacklistService which depends on
-// IDistributedCache — this Redis registration satisfies that dependency.
-services.AddStackExchangeRedisCache(options =>
+// 3.8 Redis (token blacklist + future caching)
+services.AddStackExchangeRedisCache(o =>
 {
-    options.Configuration =
+    o.Configuration =
         configuration["RedisSettings:ConnectionString"] ?? "localhost:6379";
-    options.InstanceName =
+    o.InstanceName =
         configuration["RedisSettings:InstanceName"] ?? "SBERP_HR_";
 });
 
-// 3.7 Core services
+// 3.9 Core services
 services.AddHttpContextAccessor();
 services.AddResponseCompression();
 
-// 4. Build application
+// 3.10 DI registrations
+services.AddSingleton<IHRLogService, HRLogService>();
+services.AddScoped<IDepartmentService, DepartmentService>();
+services.AddScoped<IDesignationService, DesignationService>();
+services.AddScoped<IEmployeeService, EmployeeService>();
+services.AddScoped<IHRSettingsService, HRSettingsService>();
+services.AddScoped<ValidateModelAttribute>();
+
+// 4. Build
 var app = builder.Build();
 
 try
@@ -181,9 +176,10 @@ try
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json",
-                              "SBERP Human Resources v1");
-            c.RoutePrefix = string.Empty; // Swagger at root https://localhost:44358
+            c.SwaggerEndpoint(
+                ConstantSupplier.SWAGGER_HR_DOC_END_POINT,
+                ConstantSupplier.SWAGGER_HR_DOC_END_POINT_NAME);
+            c.RoutePrefix = string.Empty;
         });
     }
     else
@@ -196,10 +192,10 @@ try
     app.UseHttpsRedirection();
     app.UseStaticFiles();
     app.UseRouting();
-    app.UseCors("HRCorsPolicy");
-    app.UseAuthentication();  // Layer 2: validates JWT using SharedJwtSettings key
-    app.UseTokenBlacklist();  // Layer 3: checks Redis — blocks revoked tokens (SBERP.Shared)
-    app.UseAuthorization();   // Layer 4: enforces [Authorize] and [Authorize(Roles="Admin")]
+    app.UseCors(ConstantSupplier.CORSS_POLICY_NAME);
+    app.UseAuthentication();
+    app.UseTokenBlacklist();
+    app.UseAuthorization();
     app.UseResponseCompression();
     app.MapControllers();
     app.Run();

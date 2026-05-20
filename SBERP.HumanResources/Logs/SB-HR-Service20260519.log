@@ -1,0 +1,38 @@
+[2026-05-19 22:16:00.824] [Information] () <> SBERP.HumanResources starting...
+[2026-05-19 22:16:06.818] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-19 22:16:19.500] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-19 22:16:19.559] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 5479.9768 ms
+[2026-05-19 22:17:59.466] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-19 22:17:59.471] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-19 22:18:05.149] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("69"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [d].[Id], [d].[DepartmentCode], [d].[Name], [d].[Description], [d].[ParentDepartmentId], [d].[IsActive]
+FROM [Departments] AS [d]
+WHERE [d].[IsActive] = CAST(1 AS bit)
+ORDER BY [d].[Name]"
+[2026-05-19 22:18:05.625] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Department/getAllDepartments" responded 200 in 6469.1342 ms
+[2026-05-19 22:19:43.366] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '5/19/2026 6:19:08 PM', Current time (UTC): '5/19/2026 6:19:42 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+[2026-05-19 22:19:43.442] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> "Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '5/19/2026 6:19:08 PM', Current time (UTC): '5/19/2026 6:19:42 PM'."
+[2026-05-19 22:19:43.473] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was challenged.
+[2026-05-19 22:19:43.474] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Department/getAllDepartments" responded 401 in 501.7813 ms
+[2026-05-19 22:20:01.594] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-19 22:20:01.595] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-19 22:20:01.679] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [d].[Id], [d].[DepartmentCode], [d].[Name], [d].[Description], [d].[ParentDepartmentId], [d].[IsActive]
+FROM [Departments] AS [d]
+WHERE [d].[IsActive] = CAST(1 AS bit)
+ORDER BY [d].[Name]"
+[2026-05-19 22:20:01.683] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Department/getAllDepartments" responded 200 in 88.6969 ms
+[2026-05-19 22:21:27.720] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '5/19/2026 6:20:58 PM', Current time (UTC): '5/19/2026 6:21:27 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+[2026-05-19 22:21:27.723] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> "Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '5/19/2026 6:20:58 PM', Current time (UTC): '5/19/2026 6:21:27 PM'."
+[2026-05-19 22:21:27.724] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was challenged.
+[2026-05-19 22:21:27.724] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Department/getDepartmentById/a3a3a3a3-3333-4333-8333-333333333333" responded 401 in 100.6802 ms

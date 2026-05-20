@@ -102,7 +102,7 @@ services.AddApiVersioning(options =>
 
 // 3.4 CORS
 var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>()
-    ?? new[] { "https://localhost:4200", "http://localhost:4200" };
+    ?? new[] { "http://localhost:5201", "https://localhost:5200", "http://localhost:5201", "https://localhost:4200", "http://localhost:4200", };
 
 services.AddCors(options =>
 {
