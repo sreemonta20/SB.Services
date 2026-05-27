@@ -36,6 +36,21 @@ namespace SBERP.HumanResources.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BloodGroups",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    SortOrder = table.Column<int>(type: "int", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BloodGroups", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Departments",
                 columns: table => new
                 {
@@ -157,6 +172,51 @@ namespace SBERP.HumanResources.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EmploymentStatuses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    SortOrder = table.Column<int>(type: "int", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmploymentStatuses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmploymentTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    SortOrder = table.Column<int>(type: "int", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmploymentTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Genders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    SortOrder = table.Column<int>(type: "int", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Genders", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "HRSettings",
                 columns: table => new
                 {
@@ -183,6 +243,21 @@ namespace SBERP.HumanResources.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HRSettings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MaritalStatuses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    SortOrder = table.Column<int>(type: "int", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MaritalStatuses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -549,6 +624,21 @@ namespace SBERP.HumanResources.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "BloodGroups",
+                columns: new[] { "Id", "Code", "IsActive", "Name", "SortOrder" },
+                values: new object[,]
+                {
+                    { 1, "A_POS", true, "A+", 1 },
+                    { 2, "A_NEG", true, "A-", 2 },
+                    { 3, "B_POS", true, "B+", 3 },
+                    { 4, "B_NEG", true, "B-", 4 },
+                    { 5, "AB_POS", true, "AB+", 5 },
+                    { 6, "AB_NEG", true, "AB-", 6 },
+                    { 7, "O_POS", true, "O+", 7 },
+                    { 8, "O_NEG", true, "O-", 8 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "DepartmentCode", "Description", "HeadEmployeeId", "IsActive", "Name", "ParentDepartmentId", "UpdatedBy", "UpdatedDate" },
                 values: new object[,]
@@ -576,14 +666,68 @@ namespace SBERP.HumanResources.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "EmploymentStatuses",
+                columns: new[] { "Id", "Code", "IsActive", "Name", "SortOrder" },
+                values: new object[,]
+                {
+                    { 1, "ACTIVE", true, "Active", 1 },
+                    { 2, "ON_LEAVE", true, "On Leave", 2 },
+                    { 3, "SUSPENDED", true, "Suspended", 3 },
+                    { 4, "RESIGNED", true, "Resigned", 4 },
+                    { 5, "TERMINATED", true, "Terminated", 5 },
+                    { 6, "RETIRED", true, "Retired", 6 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "EmploymentTypes",
+                columns: new[] { "Id", "Code", "IsActive", "Name", "SortOrder" },
+                values: new object[,]
+                {
+                    { 1, "FULL_TIME", true, "Full Time", 1 },
+                    { 2, "PART_TIME", true, "Part Time", 2 },
+                    { 3, "CONTRACT", true, "Contract", 3 },
+                    { 4, "INTERN", true, "Intern", 4 },
+                    { 5, "CONSULTANT", true, "Consultant", 5 },
+                    { 6, "PROBATION", true, "Probation", 6 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Genders",
+                columns: new[] { "Id", "Code", "IsActive", "Name", "SortOrder" },
+                values: new object[,]
+                {
+                    { 1, "MALE", true, "Male", 1 },
+                    { 2, "FEMALE", true, "Female", 2 },
+                    { 3, "OTHER", true, "Other", 3 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "HRSettings",
                 columns: new[] { "Id", "AnnualLeaveDays", "AttendanceSource", "AutoProcessEnabled", "AutoProcessTime", "BiometricConnectionString", "BiometricProvider", "BiometricSourceObject", "CasualLeaveDays", "CreatedBy", "CreatedDate", "GracePeriodMinutes", "IsActive", "OfficeEndTime", "OfficeStartTime", "SickLeaveDays", "UpdatedBy", "UpdatedDate", "WeeklyOffDays" },
                 values: new object[] { new Guid("feed0001-0000-4000-8000-000000000001"), 22, 1, false, "23:30", null, 0, null, 5, "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), 15, true, "17:30", "08:30", 10, null, null, "5,6" });
+
+            migrationBuilder.InsertData(
+                table: "MaritalStatuses",
+                columns: new[] { "Id", "Code", "IsActive", "Name", "SortOrder" },
+                values: new object[,]
+                {
+                    { 1, "SINGLE", true, "Single", 1 },
+                    { 2, "MARRIED", true, "Married", 2 },
+                    { 3, "DIVORCED", true, "Divorced", 3 },
+                    { 4, "WIDOWED", true, "Widowed", 4 },
+                    { 5, "SEPARATED", true, "Separated", 5 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "UX_Attendance_Employee_Date",
                 table: "Attendances",
                 columns: new[] { "EmployeeId", "AttendanceDate" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UX_BloodGroups_Code",
+                table: "BloodGroups",
+                column: "Code",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -676,6 +820,30 @@ namespace SBERP.HumanResources.Migrations
                 name: "IX_EmployeeTrainings_EmployeeId",
                 table: "EmployeeTrainings",
                 column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "UX_EmploymentStatuses_Code",
+                table: "EmploymentStatuses",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UX_EmploymentTypes_Code",
+                table: "EmploymentTypes",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UX_Genders_Code",
+                table: "Genders",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UX_MaritalStatuses_Code",
+                table: "MaritalStatuses",
+                column: "Code",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -686,6 +854,9 @@ namespace SBERP.HumanResources.Migrations
 
             migrationBuilder.DropTable(
                 name: "AttendanceUploadLogs");
+
+            migrationBuilder.DropTable(
+                name: "BloodGroups");
 
             migrationBuilder.DropTable(
                 name: "DepartmentsLog");
@@ -724,7 +895,19 @@ namespace SBERP.HumanResources.Migrations
                 name: "EmployeeTrainings");
 
             migrationBuilder.DropTable(
+                name: "EmploymentStatuses");
+
+            migrationBuilder.DropTable(
+                name: "EmploymentTypes");
+
+            migrationBuilder.DropTable(
+                name: "Genders");
+
+            migrationBuilder.DropTable(
                 name: "HRSettings");
+
+            migrationBuilder.DropTable(
+                name: "MaritalStatuses");
 
             migrationBuilder.DropTable(
                 name: "Employees");

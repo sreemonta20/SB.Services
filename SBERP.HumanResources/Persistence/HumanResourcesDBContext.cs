@@ -40,6 +40,14 @@ namespace SBERP.HumanResources.Persistence
         // === Settings ===
         public virtual DbSet<HRSettings>? HRSettings { get; set; }
 
+        // === Employee reference / lookup tables ===
+        // Ids mirror the C# enums in SBERP.HumanResources.Enum — keep in sync.
+        public virtual DbSet<GenderLookup>? Genders { get; set; }
+        public virtual DbSet<MaritalStatusLookup>? MaritalStatuses { get; set; }
+        public virtual DbSet<BloodGroupLookup>? BloodGroups { get; set; }
+        public virtual DbSet<EmploymentTypeLookup>? EmploymentTypes { get; set; }
+        public virtual DbSet<EmploymentStatusLookup>? EmploymentStatuses { get; set; }
+
         // === Attendance ===
         public virtual DbSet<Attendance>?          Attendances          { get; set; }
         public virtual DbSet<AttendanceUploadLog>? AttendanceUploadLogs { get; set; }
@@ -265,6 +273,42 @@ namespace SBERP.HumanResources.Persistence
                 e.Property(x => x.RolledBackDate).HasColumnType("datetime");
             });
 
+            // ------------------------------------------------------------
+            // Lookup tables — identical shape. No audit triggers: reference
+            // data, not transactional. Id is assigned (ValueGeneratedNever)
+            // so it matches the C# enum values exactly.
+            // ------------------------------------------------------------
+            mb.Entity<GenderLookup>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Id).ValueGeneratedNever();
+                e.HasIndex(x => x.Code).IsUnique().HasDatabaseName("UX_Genders_Code");
+            });
+            mb.Entity<MaritalStatusLookup>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Id).ValueGeneratedNever();
+                e.HasIndex(x => x.Code).IsUnique().HasDatabaseName("UX_MaritalStatuses_Code");
+            });
+            mb.Entity<BloodGroupLookup>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Id).ValueGeneratedNever();
+                e.HasIndex(x => x.Code).IsUnique().HasDatabaseName("UX_BloodGroups_Code");
+            });
+            mb.Entity<EmploymentTypeLookup>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Id).ValueGeneratedNever();
+                e.HasIndex(x => x.Code).IsUnique().HasDatabaseName("UX_EmploymentTypes_Code");
+            });
+            mb.Entity<EmploymentStatusLookup>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Id).ValueGeneratedNever();
+                e.HasIndex(x => x.Code).IsUnique().HasDatabaseName("UX_EmploymentStatuses_Code");
+            });
+
             // ============================================================
             // SEED DATA — deterministic
             // Menu seeds live in SBERP.Security, not here.
@@ -313,6 +357,54 @@ namespace SBERP.HumanResources.Persistence
                     CreatedDate = seedTime,
                     IsActive = true
                 }
+            );
+
+            // --- Genders (Id == EnumGender) ---
+            mb.Entity<GenderLookup>().HasData(
+                new GenderLookup { Id = 1, Code = "MALE", Name = "Male", SortOrder = 1, IsActive = true },
+                new GenderLookup { Id = 2, Code = "FEMALE", Name = "Female", SortOrder = 2, IsActive = true },
+                new GenderLookup { Id = 3, Code = "OTHER", Name = "Other", SortOrder = 3, IsActive = true }
+            );
+
+            // --- Marital statuses (Id == EnumMaritalStatus) ---
+            mb.Entity<MaritalStatusLookup>().HasData(
+                new MaritalStatusLookup { Id = 1, Code = "SINGLE", Name = "Single", SortOrder = 1, IsActive = true },
+                new MaritalStatusLookup { Id = 2, Code = "MARRIED", Name = "Married", SortOrder = 2, IsActive = true },
+                new MaritalStatusLookup { Id = 3, Code = "DIVORCED", Name = "Divorced", SortOrder = 3, IsActive = true },
+                new MaritalStatusLookup { Id = 4, Code = "WIDOWED", Name = "Widowed", SortOrder = 4, IsActive = true },
+                new MaritalStatusLookup { Id = 5, Code = "SEPARATED", Name = "Separated", SortOrder = 5, IsActive = true }
+            );
+
+            // --- Blood groups (Id == EnumBloodGroup) ---
+            mb.Entity<BloodGroupLookup>().HasData(
+                new BloodGroupLookup { Id = 1, Code = "A_POS", Name = "A+", SortOrder = 1, IsActive = true },
+                new BloodGroupLookup { Id = 2, Code = "A_NEG", Name = "A-", SortOrder = 2, IsActive = true },
+                new BloodGroupLookup { Id = 3, Code = "B_POS", Name = "B+", SortOrder = 3, IsActive = true },
+                new BloodGroupLookup { Id = 4, Code = "B_NEG", Name = "B-", SortOrder = 4, IsActive = true },
+                new BloodGroupLookup { Id = 5, Code = "AB_POS", Name = "AB+", SortOrder = 5, IsActive = true },
+                new BloodGroupLookup { Id = 6, Code = "AB_NEG", Name = "AB-", SortOrder = 6, IsActive = true },
+                new BloodGroupLookup { Id = 7, Code = "O_POS", Name = "O+", SortOrder = 7, IsActive = true },
+                new BloodGroupLookup { Id = 8, Code = "O_NEG", Name = "O-", SortOrder = 8, IsActive = true }
+            );
+
+            // --- Employment types (Id == EnumEmploymentType) ---
+            mb.Entity<EmploymentTypeLookup>().HasData(
+                new EmploymentTypeLookup { Id = 1, Code = "FULL_TIME", Name = "Full Time", SortOrder = 1, IsActive = true },
+                new EmploymentTypeLookup { Id = 2, Code = "PART_TIME", Name = "Part Time", SortOrder = 2, IsActive = true },
+                new EmploymentTypeLookup { Id = 3, Code = "CONTRACT", Name = "Contract", SortOrder = 3, IsActive = true },
+                new EmploymentTypeLookup { Id = 4, Code = "INTERN", Name = "Intern", SortOrder = 4, IsActive = true },
+                new EmploymentTypeLookup { Id = 5, Code = "CONSULTANT", Name = "Consultant", SortOrder = 5, IsActive = true },
+                new EmploymentTypeLookup { Id = 6, Code = "PROBATION", Name = "Probation", SortOrder = 6, IsActive = true }
+            );
+
+            // --- Employment statuses (Id == EnumEmploymentStatus) ---
+            mb.Entity<EmploymentStatusLookup>().HasData(
+                new EmploymentStatusLookup { Id = 1, Code = "ACTIVE", Name = "Active", SortOrder = 1, IsActive = true },
+                new EmploymentStatusLookup { Id = 2, Code = "ON_LEAVE", Name = "On Leave", SortOrder = 2, IsActive = true },
+                new EmploymentStatusLookup { Id = 3, Code = "SUSPENDED", Name = "Suspended", SortOrder = 3, IsActive = true },
+                new EmploymentStatusLookup { Id = 4, Code = "RESIGNED", Name = "Resigned", SortOrder = 4, IsActive = true },
+                new EmploymentStatusLookup { Id = 5, Code = "TERMINATED", Name = "Terminated", SortOrder = 5, IsActive = true },
+                new EmploymentStatusLookup { Id = 6, Code = "RETIRED", Name = "Retired", SortOrder = 6, IsActive = true }
             );
         }
     }

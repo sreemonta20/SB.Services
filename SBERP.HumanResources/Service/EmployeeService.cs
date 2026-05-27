@@ -44,48 +44,50 @@ namespace SBERP.HumanResources.Service
                 var raw = (string?)await cmd.ExecuteScalarAsync();
 
                 // Build static enum dropdowns in C# — no point storing in DB.
-                var resp = new EmployeeInitialDataResponse
-                {
-                    Genders = new List<LookupItem>
-                    {
-                        new() { Id = "1", Name = "Male"   },
-                        new() { Id = "2", Name = "Female" },
-                        new() { Id = "3", Name = "Other"  }
-                    },
-                    MaritalStatuses = new List<LookupItem>
-                    {
-                        new() { Id = "1", Name = "Single"   },
-                        new() { Id = "2", Name = "Married"  },
-                        new() { Id = "3", Name = "Divorced" },
-                        new() { Id = "4", Name = "Widowed"  },
-                        new() { Id = "5", Name = "Separated"}
-                    },
-                    BloodGroups = new List<LookupItem>
-                    {
-                        new() { Id = "1", Name = "A+"  }, new() { Id = "2", Name = "A-"  },
-                        new() { Id = "3", Name = "B+"  }, new() { Id = "4", Name = "B-"  },
-                        new() { Id = "5", Name = "AB+" }, new() { Id = "6", Name = "AB-" },
-                        new() { Id = "7", Name = "O+"  }, new() { Id = "8", Name = "O-"  }
-                    },
-                    EmploymentTypes = new List<LookupItem>
-                    {
-                        new() { Id = "1", Name = "Full Time"  },
-                        new() { Id = "2", Name = "Part Time"  },
-                        new() { Id = "3", Name = "Contract"   },
-                        new() { Id = "4", Name = "Intern"     },
-                        new() { Id = "5", Name = "Consultant" },
-                        new() { Id = "6", Name = "Probation"  }
-                    },
-                    EmploymentStatuses = new List<LookupItem>
-                    {
-                        new() { Id = "1", Name = "Active"     },
-                        new() { Id = "2", Name = "On Leave"   },
-                        new() { Id = "3", Name = "Suspended"  },
-                        new() { Id = "4", Name = "Resigned"   },
-                        new() { Id = "5", Name = "Terminated" },
-                        new() { Id = "6", Name = "Retired"    }
-                    }
-                };
+                //var resp = new EmployeeInitialDataResponse
+                //{
+                //    Genders = new List<LookupItem>
+                //    {
+                //        new() { Id = "1", Name = "Male"   },
+                //        new() { Id = "2", Name = "Female" },
+                //        new() { Id = "3", Name = "Other"  }
+                //    },
+                //    MaritalStatuses = new List<LookupItem>
+                //    {
+                //        new() { Id = "1", Name = "Single"   },
+                //        new() { Id = "2", Name = "Married"  },
+                //        new() { Id = "3", Name = "Divorced" },
+                //        new() { Id = "4", Name = "Widowed"  },
+                //        new() { Id = "5", Name = "Separated"}
+                //    },
+                //    BloodGroups = new List<LookupItem>
+                //    {
+                //        new() { Id = "1", Name = "A+"  }, new() { Id = "2", Name = "A-"  },
+                //        new() { Id = "3", Name = "B+"  }, new() { Id = "4", Name = "B-"  },
+                //        new() { Id = "5", Name = "AB+" }, new() { Id = "6", Name = "AB-" },
+                //        new() { Id = "7", Name = "O+"  }, new() { Id = "8", Name = "O-"  }
+                //    },
+                //    EmploymentTypes = new List<LookupItem>
+                //    {
+                //        new() { Id = "1", Name = "Full Time"  },
+                //        new() { Id = "2", Name = "Part Time"  },
+                //        new() { Id = "3", Name = "Contract"   },
+                //        new() { Id = "4", Name = "Intern"     },
+                //        new() { Id = "5", Name = "Consultant" },
+                //        new() { Id = "6", Name = "Probation"  }
+                //    },
+                //    EmploymentStatuses = new List<LookupItem>
+                //    {
+                //        new() { Id = "1", Name = "Active"     },
+                //        new() { Id = "2", Name = "On Leave"   },
+                //        new() { Id = "3", Name = "Suspended"  },
+                //        new() { Id = "4", Name = "Resigned"   },
+                //        new() { Id = "5", Name = "Terminated" },
+                //        new() { Id = "6", Name = "Retired"    }
+                //    }
+                //};
+
+                var resp = new EmployeeInitialDataResponse();
 
                 if (!string.IsNullOrWhiteSpace(raw))
                 {
@@ -93,6 +95,11 @@ namespace SBERP.HumanResources.Service
                     resp.Departments       = ParseLookup(jo["departments"]?.ToString());
                     resp.Designations      = ParseLookup(jo["designations"]?.ToString());
                     resp.ReportingManagers = ParseLookup(jo["reportingManagers"]?.ToString());
+                    resp.Genders = ParseLookup(jo["genders"]?.ToString());
+                    resp.MaritalStatuses = ParseLookup(jo["maritalStatuses"]?.ToString());
+                    resp.BloodGroups = ParseLookup(jo["bloodGroups"]?.ToString());
+                    resp.EmploymentTypes = ParseLookup(jo["employmentTypes"]?.ToString());
+                    resp.EmploymentStatuses = ParseLookup(jo["employmentStatuses"]?.ToString());
                     resp.NextEmployeeCode  = jo["nextEmployeeCode"]?.ToString();
                 }
 

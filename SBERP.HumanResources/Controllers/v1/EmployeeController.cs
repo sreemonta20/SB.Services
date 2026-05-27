@@ -86,10 +86,10 @@ namespace SBERP.HumanResources.Controllers.v1
             catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(GetAllEmployeesPagingWithSearchAsync)); }
         }
 
-        // GET api/v1/Employee/getEmployeeById/{id}
+        // GET api/v1/Employee/getEmployeeById
         [HttpGet]
         [Route(ConstantSupplier.GET_EMPLOYEE_BY_ID_ROUTE)]
-        public async Task<object> GetEmployeeByIdAsync(string id)
+        public async Task<object> GetEmployeeByIdAsync([FromQuery] string id)
         {
             _log.LogInfo(string.Format(ConstantSupplier.LOG_API_REQ, nameof(GetEmployeeByIdAsync), id));
             try { return await _employeeService.GetEmployeeByIdAsync(id); }
@@ -122,13 +122,19 @@ namespace SBERP.HumanResources.Controllers.v1
             catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(UpdateEmployeeAsync)); }
         }
 
-        // DELETE api/v1/Employee/deleteEmployee/{id}?hard=false
+        // DELETE api/v1/Employee/deleteEmployee?id={id}&hard=false
         [HttpDelete]
         [Route(ConstantSupplier.DELETE_EMPLOYEE_ROUTE)]
-        public async Task<object> DeleteEmployeeAsync(string id, [FromQuery] bool hard = false)
+        public async Task<object> DeleteEmployeeAsync([FromQuery] string id, [FromQuery] bool hard = false)
         {
             _log.LogInfo(string.Format(ConstantSupplier.LOG_API_REQ, nameof(DeleteEmployeeAsync), id));
-            try { return await _employeeService.DeleteEmployeeAsync(id, hard); }
+            try
+            {
+                if (string.IsNullOrWhiteSpace(id))
+                    return Utilities.Warn(ConstantSupplier.REQUIRED_PARAMETER_NOT_EMPTY);
+
+                return await _employeeService.DeleteEmployeeAsync(id, hard);
+            }
             catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(DeleteEmployeeAsync)); }
         }
     }

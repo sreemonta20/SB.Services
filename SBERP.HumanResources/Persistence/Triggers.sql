@@ -198,3 +198,78 @@ BEGIN
     FROM deleted D;
 END
 GO
+
+-- =============================================================================
+-- OPTIONAL: audit triggers for the lookup tables
+-- =============================================================================
+-- You asked for triggers "where adding or modification needed." For these
+-- five lookup tables my honest recommendation is: DON'T add audit triggers.
+--
+-- Reasoning:
+--   * These are reference tables. Rows change maybe once a year, if ever.
+--   * They have no *Log sibling tables (unlike Departments/Employees), and
+--     adding them would mean five more tables carrying near-zero data.
+--   * The audit value is negligible — there's no "who changed this employee's
+--     salary" question here, just "someone added a blood group once."
+--   * Triggers on a table that an admin edits by hand in SSMS can surprise
+--     them with failures if the *Log table or trigger has any issue.
+--
+-- What you DO want instead is a guard trigger that PREVENTS deleting or
+-- renumbering a row that the Employees table still references — because the
+-- Id is a contract shared with the C# enums. That protects data integrity,
+-- which is the real risk here, rather than logging.
+--
+-- Below is that guard for the two tables most likely to be referenced by
+-- existing employee rows. Apply the same pattern to the others if you wish.
+-- Skip this whole file if you'd rather rely on application-level discipline.
+-- =============================================================================
+
+
+-- Prevent deleting an employment status that employees still use.
+IF OBJECT_ID('dbo.TRG_PreventDelete_EmploymentStatuses', 'TR') IS NOT NULL
+    DROP TRIGGER dbo.TRG_PreventDelete_EmploymentStatuses;
+GO
+CREATE TRIGGER dbo.TRG_PreventDelete_EmploymentStatuses
+ON dbo.EmploymentStatuses
+INSTEAD OF DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF EXISTS (
+        SELECT 1
+        FROM deleted d
+        INNER JOIN dbo.Employees e ON e.EmploymentStatus = d.Id
+    )
+    BEGIN
+        RAISERROR('Cannot delete an employment status that is still assigned to employees. Set IsActive = 0 instead.', 16, 1);
+        RETURN;
+    END
+    DELETE FROM dbo.EmploymentStatuses
+    WHERE Id IN (SELECT Id FROM deleted);
+END
+GO
+
+
+-- Prevent deleting an employment type that employees still use.
+IF OBJECT_ID('dbo.TRG_PreventDelete_EmploymentTypes', 'TR') IS NOT NULL
+    DROP TRIGGER dbo.TRG_PreventDelete_EmploymentTypes;
+GO
+CREATE TRIGGER dbo.TRG_PreventDelete_EmploymentTypes
+ON dbo.EmploymentTypes
+INSTEAD OF DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF EXISTS (
+        SELECT 1
+        FROM deleted d
+        INNER JOIN dbo.Employees e ON e.EmploymentType = d.Id
+    )
+    BEGIN
+        RAISERROR('Cannot delete an employment type that is still assigned to employees. Set IsActive = 0 instead.', 16, 1);
+        RETURN;
+    END
+    DELETE FROM dbo.LkEmploymentTypes
+    WHERE Id IN (SELECT Id FROM deleted);
+END
+GO

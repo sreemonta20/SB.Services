@@ -388,10 +388,17 @@ BEGIN
         departments        XML,
         designations       XML,
         reportingManagers  XML,
+        genders            XML,
+        maritalStatuses    XML,
+        bloodGroups        XML,
+        employmentTypes    XML,
+        employmentStatuses XML,
         nextEmployeeCode   NVARCHAR(30)
     );
 
-    DECLARE @Dept XML, @Desg XML, @Mgr XML, @Next NVARCHAR(30);
+    DECLARE @Dept XML, @Desg XML, @Mgr XML, @Gender  XML, 
+            @Marital XML, @Blood XML, @EmpType XML, @EmpStatus XML, 
+            @Next NVARCHAR(30);
 
     SET @Dept = (SELECT Id AS id, [Name] AS [name]
                  FROM dbo.Departments WHERE ISNULL(IsActive, 0) = 1
@@ -407,9 +414,32 @@ BEGIN
                    AND ISNULL(EmploymentStatus, 1) = 1
                  ORDER BY FullName FOR JSON AUTO);
 
+    -- Lookup tables — id cast to NVARCHAR so it lands as a string,
+    -- matching the existing { Id: "1", Name: "..." } client contract.
+    SET @Gender = (SELECT CAST(Id AS NVARCHAR(10)) AS id, [Name] AS [name]
+                   FROM dbo.Genders WHERE ISNULL(IsActive, 0) = 1
+                   ORDER BY SortOrder FOR JSON AUTO);
+
+    SET @Marital = (SELECT CAST(Id AS NVARCHAR(10)) AS id, [Name] AS [name]
+                    FROM dbo.MaritalStatuses WHERE ISNULL(IsActive, 0) = 1
+                    ORDER BY SortOrder FOR JSON AUTO);
+
+    SET @Blood = (SELECT CAST(Id AS NVARCHAR(10)) AS id, [Name] AS [name]
+                  FROM dbo.BloodGroups WHERE ISNULL(IsActive, 0) = 1
+                  ORDER BY SortOrder FOR JSON AUTO);
+
+    SET @EmpType = (SELECT CAST(Id AS NVARCHAR(10)) AS id, [Name] AS [name]
+                    FROM dbo.EmploymentTypes WHERE ISNULL(IsActive, 0) = 1
+                    ORDER BY SortOrder FOR JSON AUTO);
+
+    SET @EmpStatus = (SELECT CAST(Id AS NVARCHAR(10)) AS id, [Name] AS [name]
+                      FROM dbo.EmploymentStatuses WHERE ISNULL(IsActive, 0) = 1
+                      ORDER BY SortOrder FOR JSON AUTO);
+
     SET @Next = dbo.fn_GetNextEmployeeCode();
 
-    INSERT INTO #InitTBL VALUES (@Dept, @Desg, @Mgr, @Next);
+    INSERT INTO #InitTBL VALUES (@Dept, @Desg, @Mgr, @Gender, @Marital, @Blood,
+            @EmpType, @EmpStatus, @Next);
 
     SELECT (SELECT * FROM #InitTBL FOR JSON PATH, WITHOUT_ARRAY_WRAPPER) AS result;
 

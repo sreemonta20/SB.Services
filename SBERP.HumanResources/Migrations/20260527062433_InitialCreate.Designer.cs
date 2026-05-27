@@ -12,7 +12,7 @@ using SBERP.HumanResources.Persistence;
 namespace SBERP.HumanResources.Migrations
 {
     [DbContext(typeof(HumanResourcesDBContext))]
-    [Migration("20260519175942_InitialCreate")]
+    [Migration("20260527062433_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -126,6 +126,102 @@ namespace SBERP.HumanResources.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AttendanceUploadLogs");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.BloodGroupLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasDatabaseName("UX_BloodGroups_Code");
+
+                    b.ToTable("BloodGroups");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "A_POS",
+                            IsActive = true,
+                            Name = "A+",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "A_NEG",
+                            IsActive = true,
+                            Name = "A-",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "B_POS",
+                            IsActive = true,
+                            Name = "B+",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "B_NEG",
+                            IsActive = true,
+                            Name = "B-",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "AB_POS",
+                            IsActive = true,
+                            Name = "AB+",
+                            SortOrder = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Code = "AB_NEG",
+                            IsActive = true,
+                            Name = "AB-",
+                            SortOrder = 6
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Code = "O_POS",
+                            IsActive = true,
+                            Name = "O+",
+                            SortOrder = 7
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Code = "O_NEG",
+                            IsActive = true,
+                            Name = "O-",
+                            SortOrder = 8
+                        });
                 });
 
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.Department", b =>
@@ -1155,6 +1251,222 @@ namespace SBERP.HumanResources.Migrations
                     b.ToTable("EmployeeTrainings");
                 });
 
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.EmploymentStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasDatabaseName("UX_EmploymentStatuses_Code");
+
+                    b.ToTable("EmploymentStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "ACTIVE",
+                            IsActive = true,
+                            Name = "Active",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "ON_LEAVE",
+                            IsActive = true,
+                            Name = "On Leave",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "SUSPENDED",
+                            IsActive = true,
+                            Name = "Suspended",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "RESIGNED",
+                            IsActive = true,
+                            Name = "Resigned",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "TERMINATED",
+                            IsActive = true,
+                            Name = "Terminated",
+                            SortOrder = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Code = "RETIRED",
+                            IsActive = true,
+                            Name = "Retired",
+                            SortOrder = 6
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.EmploymentTypeLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasDatabaseName("UX_EmploymentTypes_Code");
+
+                    b.ToTable("EmploymentTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "FULL_TIME",
+                            IsActive = true,
+                            Name = "Full Time",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "PART_TIME",
+                            IsActive = true,
+                            Name = "Part Time",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "CONTRACT",
+                            IsActive = true,
+                            Name = "Contract",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "INTERN",
+                            IsActive = true,
+                            Name = "Intern",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "CONSULTANT",
+                            IsActive = true,
+                            Name = "Consultant",
+                            SortOrder = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Code = "PROBATION",
+                            IsActive = true,
+                            Name = "Probation",
+                            SortOrder = 6
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.GenderLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Genders_Code");
+
+                    b.ToTable("Genders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "MALE",
+                            IsActive = true,
+                            Name = "Male",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "FEMALE",
+                            IsActive = true,
+                            Name = "Female",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "OTHER",
+                            IsActive = true,
+                            Name = "Other",
+                            SortOrder = 3
+                        });
+                });
+
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.HRSettings", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1243,6 +1555,78 @@ namespace SBERP.HumanResources.Migrations
                             OfficeStartTime = "08:30",
                             SickLeaveDays = 10,
                             WeeklyOffDays = "5,6"
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.MaritalStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasDatabaseName("UX_MaritalStatuses_Code");
+
+                    b.ToTable("MaritalStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "SINGLE",
+                            IsActive = true,
+                            Name = "Single",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "MARRIED",
+                            IsActive = true,
+                            Name = "Married",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "DIVORCED",
+                            IsActive = true,
+                            Name = "Divorced",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "WIDOWED",
+                            IsActive = true,
+                            Name = "Widowed",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "SEPARATED",
+                            IsActive = true,
+                            Name = "Separated",
+                            SortOrder = 5
                         });
                 });
 
