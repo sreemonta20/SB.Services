@@ -1,0 +1,806 @@
+[2026-05-28 01:04:55.272] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 01:05:00.107] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 01:05:07.075] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 01:05:07.105] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 4378.4336 ms
+[2026-05-28 02:23:57.898] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 02:23:59.429] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 02:24:01.068] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 02:24:01.108] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 424.4819 ms
+[2026-05-28 02:44:19.101] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 02:44:20.280] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 02:44:21.850] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 02:44:21.882] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 331.2669 ms
+[2026-05-28 02:49:57.661] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 02:50:00.998] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 02:50:08.109] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 02:50:08.173] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 4483.8125 ms
+[2026-05-28 03:08:24.427] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 03:08:30.065] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 03:08:41.733] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 03:08:41.794] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 7391.9780 ms
+[2026-05-28 03:31:16.183] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 03:31:22.045] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 03:31:29.017] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 03:31:29.077] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 4886.2980 ms
+[2026-05-28 04:12:26.242] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 04:12:31.432] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 04:12:41.348] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 04:12:41.563] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 5230.8622 ms
+[2026-05-28 04:22:01.328] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 04:22:06.178] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 04:22:29.090] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 04:22:29.164] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 8245.0018 ms
+[2026-05-28 04:24:20.022] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 04:24:20.026] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 04:24:22.435] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-05-28 04:24:25.757] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 6470.4608 ms
+[2026-05-28 04:26:04.016] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 04:26:04.017] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 04:26:04.028] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-05-28 04:26:04.217] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 226.9487 ms
+[2026-05-28 05:03:09.017] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 05:03:13.762] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 05:03:20.001] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 05:03:20.068] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 4878.0362 ms
+[2026-05-28 05:12:21.282] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 05:12:21.286] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 05:12:23.766] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-05-28 05:12:26.986] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 6163.0969 ms
+[2026-05-28 05:12:37.171] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 05:12:37.172] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 05:12:37.190] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 05:12:37.190] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 05:12:38.272] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Department/getAllDepartmentsPagingWithSearch" responded 200 in 1084.9029 ms
+[2026-05-28 05:12:38.704] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("20"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [d].[Id], [d].[DepartmentCode], [d].[Name], [d].[Description], [d].[ParentDepartmentId], [d].[IsActive]
+FROM [Departments] AS [d]
+WHERE [d].[IsActive] = CAST(1 AS bit)
+ORDER BY [d].[Name]"
+[2026-05-28 05:12:38.799] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Department/getAllDepartments" responded 200 in 1640.0575 ms
+[2026-05-28 05:12:41.434] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 05:12:41.435] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 05:12:43.502] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("36"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [h].[Id], [h].[AnnualLeaveDays], [h].[AttendanceSource], [h].[AutoProcessEnabled], [h].[AutoProcessTime], [h].[BiometricConnectionString], [h].[BiometricProvider], [h].[BiometricSourceObject], [h].[CasualLeaveDays], [h].[CreatedBy], [h].[CreatedDate], [h].[GracePeriodMinutes], [h].[IsActive], [h].[OfficeEndTime], [h].[OfficeStartTime], [h].[SickLeaveDays], [h].[UpdatedBy], [h].[UpdatedDate], [h].[WeeklyOffDays]
+FROM [HRSettings] AS [h]
+WHERE [h].[IsActive] = CAST(1 AS bit)
+ORDER BY [h].[CreatedDate] DESC"
+[2026-05-28 05:12:43.540] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/HRSettings/getHRSettings" responded 200 in 2106.3499 ms
+[2026-05-28 05:12:59.557] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 05:12:59.557] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 05:12:59.707] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 151.9227 ms
+[2026-05-28 05:13:32.724] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 05:13:32.725] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 05:13:32.725] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 05:13:32.725] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 05:13:32.790] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("9"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [d].[Id], [d].[DepartmentCode], [d].[Name], [d].[Description], [d].[ParentDepartmentId], [d].[IsActive]
+FROM [Departments] AS [d]
+WHERE [d].[IsActive] = CAST(1 AS bit)
+ORDER BY [d].[Name]"
+[2026-05-28 05:13:32.792] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Department/getAllDepartments" responded 200 in 68.4125 ms
+[2026-05-28 05:13:32.800] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Department/getAllDepartmentsPagingWithSearch" responded 200 in 75.8106 ms
+[2026-05-28 05:13:36.353] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 05:13:36.353] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 05:13:36.358] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-05-28 05:13:36.396] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 46.4232 ms
+[2026-05-28 05:13:46.353] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 05:13:46.353] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 05:13:46.370] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-05-28 05:13:46.615] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "A1A1A1A1-1111-4111-8111-111111111111",
+        "Name": "Administration"
+      },
+      {
+        "Id": "A3A3A3A3-3333-4333-8333-333333333333",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "A4A4A4A4-4444-4444-8444-444444444444",
+        "Name": "Finance"
+      },
+      {
+        "Id": "A2A2A2A2-2222-4222-8222-222222222222",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "A5A5A5A5-5555-4555-8555-555555555555",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "D7777777-7777-4777-8777-777777777777",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "D1111111-1111-4111-8111-111111111111",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "D6666666-6666-4666-8666-666666666666",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "D8888888-8888-4888-8888-888888888888",
+        "Name": "Intern"
+      },
+      {
+        "Id": "D2222222-2222-4222-8222-222222222222",
+        "Name": "Manager"
+      },
+      {
+        "Id": "D4444444-4444-4444-8444-444444444444",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "D5555555-5555-4555-8555-555555555555",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "D3333333-3333-4333-8333-333333333333",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0001"
+  }
+}
+
+[2026-05-28 05:13:46.620] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 267.9885 ms
+[2026-05-28 05:14:06.494] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 05:14:06.494] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 05:14:06.587] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 102.6480 ms
+[2026-05-28 05:15:06.717] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '5/28/2026 1:14:09 AM', Current time (UTC): '5/28/2026 1:15:06 AM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+[2026-05-28 05:15:06.767] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> "Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '5/28/2026 1:14:09 AM', Current time (UTC): '5/28/2026 1:15:06 AM'."
+[2026-05-28 05:15:06.778] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was challenged.
+[2026-05-28 05:15:06.779] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/v1/Designation/createUpdateDesignation" responded 401 in 249.3529 ms
+[2026-05-28 05:15:08.101] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 05:15:08.101] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 05:15:08.581] [Error] () <Microsoft.EntityFrameworkCore.Query> An exception occurred while iterating over the results of a query for context type '"SBERP.HumanResources.Persistence.HumanResourcesDBContext"'."
+""System.InvalidOperationException: The configured execution strategy 'SqlServerRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()"
+System.InvalidOperationException: The configured execution strategy 'SqlServerRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+[2026-05-28 05:15:08.974] [Error] () <> CreateUpdateDesignationAsync api method exception: 
+"The configured execution strategy 'SqlServerRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit."
+
+[2026-05-28 05:15:09.030] [Error] () <> {
+  "ClassName": "System.InvalidOperationException",
+  "Message": "The configured execution strategy 'SqlServerRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.",
+  "Data": {},
+  "InnerException": null,
+  "HelpURL": null,
+  "StackTraceString": "   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()\r\n   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()\r\n   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)\r\n   at SBERP.HumanResources.Service.DesignationService.CreateUpdateDesignationAsync(DesignationRequest request) in D:\\Personal Work\\Project\\SB.Web\\SBERP.Services\\SBERP.HumanResources\\Service\\DesignationService.cs:line 102",
+  "RemoteStackTraceString": null,
+  "RemoteStackIndex": 0,
+  "ExceptionMethod": null,
+  "HResult": -2146233079,
+  "Source": "Microsoft.EntityFrameworkCore",
+  "WatsonBuckets": null
+}
+[2026-05-28 05:15:09.034] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/v1/Designation/createUpdateDesignation" responded 200 in 933.5452 ms
+[2026-05-28 05:16:00.702] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 05:16:00.703] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 05:16:27.519] [Error] () <Microsoft.EntityFrameworkCore.Query> An exception occurred while iterating over the results of a query for context type '"SBERP.HumanResources.Persistence.HumanResourcesDBContext"'."
+""System.InvalidOperationException: The configured execution strategy 'SqlServerRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()"
+System.InvalidOperationException: The configured execution strategy 'SqlServerRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+[2026-05-28 15:26:46.521] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 15:26:53.032] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 15:27:34.214] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 15:27:34.280] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 6407.3474 ms
+[2026-05-28 15:31:03.900] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 15:31:03.906] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 15:31:07.889] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-05-28 15:31:14.471] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 11176.3496 ms
+[2026-05-28 15:31:53.061] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 15:31:53.062] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 15:31:53.104] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-05-28 15:31:53.438] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "A1A1A1A1-1111-4111-8111-111111111111",
+        "Name": "Administration"
+      },
+      {
+        "Id": "A3A3A3A3-3333-4333-8333-333333333333",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "A4A4A4A4-4444-4444-8444-444444444444",
+        "Name": "Finance"
+      },
+      {
+        "Id": "A2A2A2A2-2222-4222-8222-222222222222",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "A5A5A5A5-5555-4555-8555-555555555555",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "D7777777-7777-4777-8777-777777777777",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "D1111111-1111-4111-8111-111111111111",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "D6666666-6666-4666-8666-666666666666",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "D8888888-8888-4888-8888-888888888888",
+        "Name": "Intern"
+      },
+      {
+        "Id": "D2222222-2222-4222-8222-222222222222",
+        "Name": "Manager"
+      },
+      {
+        "Id": "D4444444-4444-4444-8444-444444444444",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "D5555555-5555-4555-8555-555555555555",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "D3333333-3333-4333-8333-333333333333",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0001"
+  }
+}
+
+[2026-05-28 15:31:53.496] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 457.5641 ms
+[2026-05-28 15:32:13.439] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 15:32:13.439] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 15:32:18.231] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("40"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [h].[Id], [h].[AnnualLeaveDays], [h].[AttendanceSource], [h].[AutoProcessEnabled], [h].[AutoProcessTime], [h].[BiometricConnectionString], [h].[BiometricProvider], [h].[BiometricSourceObject], [h].[CasualLeaveDays], [h].[CreatedBy], [h].[CreatedDate], [h].[GracePeriodMinutes], [h].[IsActive], [h].[OfficeEndTime], [h].[OfficeStartTime], [h].[SickLeaveDays], [h].[UpdatedBy], [h].[UpdatedDate], [h].[WeeklyOffDays]
+FROM [HRSettings] AS [h]
+WHERE [h].[IsActive] = CAST(1 AS bit)
+ORDER BY [h].[CreatedDate] DESC"
+[2026-05-28 15:32:18.357] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/HRSettings/getHRSettings" responded 200 in 4918.9261 ms
+[2026-05-28 15:35:53.567] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 15:35:53.568] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 15:35:54.074] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 510.8492 ms
+[2026-05-28 15:37:35.008] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 15:37:35.009] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 15:37:46.295] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("5"ms) [Parameters=["@request_Name='?' (Size = 150)"], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Designations] AS [d]
+        WHERE [d].[Name] = @request_Name) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+[2026-05-28 15:38:12.373] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("33"ms) [Parameters=["@p0='?' (DbType = Guid), @p1='?' (Size = 20), @p2='?' (Size = 4000), @p3='?' (DbType = DateTime), @p4='?' (Size = 500), @p5='?' (DbType = Int32), @p6='?' (DbType = Boolean), @p7='?' (Size = 150), @p8='?' (Size = 4000), @p9='?' (DbType = DateTime)"], CommandType='Text', CommandTimeout='30']"
+""SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Designations] ([Id], [Code], [CreatedBy], [CreatedDate], [Description], [Grade], [IsActive], [Name], [UpdatedBy], [UpdatedDate])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);"
+[2026-05-28 15:38:17.258] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/v1/Designation/createUpdateDesignation" responded 200 in 42256.7661 ms
+[2026-05-28 15:40:34.324] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 15:40:34.324] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 15:40:34.513] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 192.9548 ms
+[2026-05-28 15:43:45.018] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '5/28/2026 11:42:33 AM', Current time (UTC): '5/28/2026 11:43:44 AM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+[2026-05-28 15:43:45.114] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> "Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '5/28/2026 11:42:33 AM', Current time (UTC): '5/28/2026 11:43:44 AM'."
+[2026-05-28 15:43:45.137] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was challenged.
+[2026-05-28 15:43:45.138] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/v1/Designation/createUpdateDesignation" responded 401 in 570.5634 ms
+[2026-05-28 15:43:54.079] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 15:43:54.079] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 15:43:58.436] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("8"ms) [Parameters=["@request_Name='?' (Size = 150)"], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Designations] AS [d]
+        WHERE [d].[Name] = @request_Name) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+[2026-05-28 15:43:58.574] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("125"ms) [Parameters=["@p0='?' (DbType = Guid), @p1='?' (Size = 20), @p2='?' (Size = 4000), @p3='?' (DbType = DateTime), @p4='?' (Size = 500), @p5='?' (DbType = Int32), @p6='?' (DbType = Boolean), @p7='?' (Size = 150), @p8='?' (Size = 4000), @p9='?' (DbType = DateTime)"], CommandType='Text', CommandTimeout='30']"
+""SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Designations] ([Id], [Code], [CreatedBy], [CreatedDate], [Description], [Grade], [IsActive], [Name], [UpdatedBy], [UpdatedDate])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);"
+[2026-05-28 15:43:58.578] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/v1/Designation/createUpdateDesignation" responded 200 in 4499.8957 ms
+[2026-05-28 15:47:08.410] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 15:47:08.411] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 15:47:08.583] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 173.5328 ms
+[2026-05-28 15:47:57.650] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 15:47:57.650] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 15:48:01.811] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("35"ms) [Parameters=["@request_Name='?' (Size = 150)"], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Designations] AS [d]
+        WHERE [d].[Name] = @request_Name) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+[2026-05-28 15:48:01.829] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("14"ms) [Parameters=["@p0='?' (DbType = Guid), @p1='?' (Size = 20), @p2='?' (Size = 4000), @p3='?' (DbType = DateTime), @p4='?' (Size = 500), @p5='?' (DbType = Int32), @p6='?' (DbType = Boolean), @p7='?' (Size = 150), @p8='?' (Size = 4000), @p9='?' (DbType = DateTime)"], CommandType='Text', CommandTimeout='30']"
+""SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Designations] ([Id], [Code], [CreatedBy], [CreatedDate], [Description], [Grade], [IsActive], [Name], [UpdatedBy], [UpdatedDate])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);"
+[2026-05-28 15:48:01.836] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/v1/Designation/createUpdateDesignation" responded 200 in 4186.1245 ms
+[2026-05-28 16:55:59.894] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 16:56:06.830] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 16:56:19.510] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 16:56:19.583] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 6018.1764 ms
+[2026-05-28 16:57:52.809] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 16:57:52.813] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 16:57:56.482] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-05-28 16:58:03.339] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 11009.2224 ms
+[2026-05-28 16:58:06.745] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 16:58:06.745] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 16:58:07.231] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 499.0360 ms
+[2026-05-28 16:58:14.986] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 16:58:14.987] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 16:58:15.528] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 547.9136 ms
+[2026-05-28 16:59:34.844] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 16:59:34.845] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 16:59:49.098] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("11"ms) [Parameters=["@id='?' (DbType = Guid)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [d].[Id], [d].[Code], [d].[CreatedBy], [d].[CreatedDate], [d].[Description], [d].[Grade], [d].[IsActive], [d].[Name], [d].[UpdatedBy], [d].[UpdatedDate]
+FROM [Designations] AS [d]
+WHERE [d].[Id] = @id"
+[2026-05-28 16:59:49.858] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("29"ms) [Parameters=["@p5='?' (DbType = Guid), @p0='?' (Size = 20), @p1='?' (Size = 500), @p2='?' (Size = 150), @p3='?' (Size = 4000), @p4='?' (DbType = DateTime)"], CommandType='Text', CommandTimeout='30']"
+""SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Designations] SET [Code] = @p0, [Description] = @p1, [Name] = @p2, [UpdatedBy] = @p3, [UpdatedDate] = @p4
+WHERE [Id] = @p5;
+SELECT @@ROWCOUNT;"
+[2026-05-28 16:59:49.941] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/v1/Designation/createUpdateDesignation" responded 200 in 15098.5986 ms
+[2026-05-28 16:59:50.728] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '5/28/2026 12:59:41 PM', Current time (UTC): '5/28/2026 12:59:50 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+[2026-05-28 16:59:50.812] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> "Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '5/28/2026 12:59:41 PM', Current time (UTC): '5/28/2026 12:59:50 PM'."
+[2026-05-28 16:59:50.829] [Information] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was challenged.
+[2026-05-28 16:59:50.830] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 401 in 401.9112 ms
+[2026-05-28 16:59:52.508] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 16:59:52.509] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 16:59:52.607] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 99.2869 ms
+[2026-05-28 16:59:57.816] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 16:59:57.816] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 16:59:57.909] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 94.4313 ms
+[2026-05-28 17:00:22.282] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:00:22.282] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:00:22.310] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:00:22.311] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:00:22.632] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Department/getAllDepartmentsPagingWithSearch" responded 200 in 345.3725 ms
+[2026-05-28 17:00:22.640] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("9"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [d].[Id], [d].[DepartmentCode], [d].[Name], [d].[Description], [d].[ParentDepartmentId], [d].[IsActive]
+FROM [Departments] AS [d]
+WHERE [d].[IsActive] = CAST(1 AS bit)
+ORDER BY [d].[Name]"
+[2026-05-28 17:00:22.649] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Department/getAllDepartments" responded 200 in 368.0136 ms
+[2026-05-28 17:00:38.196] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:00:38.197] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:00:38.238] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 43.3535 ms
+[2026-05-28 17:01:06.819] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:01:06.819] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:01:06.879] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 60.5656 ms
+[2026-05-28 17:06:43.876] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:06:43.876] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:06:43.993] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 117.6040 ms
+[2026-05-28 17:06:53.097] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:06:53.098] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:06:53.100] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "DELETE" "/api/v1/Designation/deleteDesignation" responded 404 in 2.8413 ms
+[2026-05-28 17:07:34.992] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:07:34.992] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:07:35.072] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 81.8979 ms
+[2026-05-28 17:07:40.096] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:07:40.097] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:07:40.098] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "DELETE" "/api/v1/Designation/deleteDesignation" responded 404 in 1.5588 ms
+[2026-05-28 17:08:07.477] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:08:07.477] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:08:07.677] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 202.6197 ms
+[2026-05-28 17:08:18.735] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:08:18.735] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:08:18.737] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "DELETE" "/api/v1/Designation/deleteDesignation" responded 404 in 1.7977 ms
+[2026-05-28 17:12:33.299] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:12:33.299] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:12:33.634] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 335.9563 ms
+[2026-05-28 17:12:52.546] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:12:52.546] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:12:52.549] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "DELETE" "/api/v1/Designation/deleteDesignation" responded 404 in 4.1646 ms
+[2026-05-28 17:16:38.772] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 17:16:45.867] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 17:16:59.724] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 17:16:59.834] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 10306.0564 ms
+[2026-05-28 17:17:43.149] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:17:43.154] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:17:53.230] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 10604.0926 ms
+[2026-05-28 17:17:59.604] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:17:59.607] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:18:03.979] [Information] () <> DeleteDesignationAsync api method request: 
+1b18ebc6-49a3-4be9-80ca-98f455dccd23
+
+[2026-05-28 17:18:26.097] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("15"ms) [Parameters=["@g='?' (DbType = Guid)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [d].[Id], [d].[Code], [d].[CreatedBy], [d].[CreatedDate], [d].[Description], [d].[Grade], [d].[IsActive], [d].[Name], [d].[UpdatedBy], [d].[UpdatedDate]
+FROM [Designations] AS [d]
+WHERE [d].[Id] = @g"
+[2026-05-28 17:18:28.342] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("4"ms) [Parameters=["@g='?' (DbType = Guid)"], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Employees] AS [e]
+        WHERE [e].[DesignationId] = @g) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+[2026-05-28 17:18:35.007] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("111"ms) [Parameters=["@p1='?' (DbType = Guid), @p0='?' (DbType = Boolean)"], CommandType='Text', CommandTimeout='30']"
+""SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Designations] SET [IsActive] = @p0
+WHERE [Id] = @p1;
+SELECT @@ROWCOUNT;"
+[2026-05-28 17:18:35.049] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "DELETE" "/api/v1/Designation/deleteDesignation" responded 200 in 35473.9706 ms
+[2026-05-28 17:18:35.109] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:18:35.109] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:18:35.342] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 234.2930 ms
+[2026-05-28 17:18:43.048] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:18:43.048] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:18:43.143] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 95.7577 ms
+[2026-05-28 17:19:08.212] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:19:08.213] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:19:08.358] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("15"ms) [Parameters=["@id='?' (DbType = Guid)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [d].[Id], [d].[Code], [d].[CreatedBy], [d].[CreatedDate], [d].[Description], [d].[Grade], [d].[IsActive], [d].[Name], [d].[UpdatedBy], [d].[UpdatedDate]
+FROM [Designations] AS [d]
+WHERE [d].[Id] = @id"
+[2026-05-28 17:19:08.650] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("153"ms) [Parameters=["@p2='?' (DbType = Guid), @p0='?' (DbType = Boolean), @p1='?' (DbType = DateTime)"], CommandType='Text', CommandTimeout='30']"
+""SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Designations] SET [IsActive] = @p0, [UpdatedDate] = @p1
+WHERE [Id] = @p2;
+SELECT @@ROWCOUNT;"
+[2026-05-28 17:19:08.673] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "POST" "/api/v1/Designation/createUpdateDesignation" responded 200 in 461.3625 ms
+[2026-05-28 17:19:08.756] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:19:08.757] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:19:08.821] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 66.2171 ms
+[2026-05-28 17:19:15.423] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:19:15.423] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:19:15.427] [Information] () <> DeleteDesignationAsync api method request: 
+1b18ebc6-49a3-4be9-80ca-98f455dccd23
+
+[2026-05-28 17:19:15.459] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("3"ms) [Parameters=["@g='?' (DbType = Guid)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [d].[Id], [d].[Code], [d].[CreatedBy], [d].[CreatedDate], [d].[Description], [d].[Grade], [d].[IsActive], [d].[Name], [d].[UpdatedBy], [d].[UpdatedDate]
+FROM [Designations] AS [d]
+WHERE [d].[Id] = @g"
+[2026-05-28 17:19:15.472] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("8"ms) [Parameters=["@g='?' (DbType = Guid)"], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Employees] AS [e]
+        WHERE [e].[DesignationId] = @g) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+[2026-05-28 17:19:15.495] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("21"ms) [Parameters=["@p1='?' (DbType = Guid), @p0='?' (DbType = Boolean)"], CommandType='Text', CommandTimeout='30']"
+""SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Designations] SET [IsActive] = @p0
+WHERE [Id] = @p1;
+SELECT @@ROWCOUNT;"
+[2026-05-28 17:19:15.498] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "DELETE" "/api/v1/Designation/deleteDesignation" responded 200 in 75.8164 ms
+[2026-05-28 17:19:15.579] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:19:15.580] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:19:15.619] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Designation/getAllDesignationsPagingWithSearch" responded 200 in 40.3421 ms
+[2026-05-28 17:19:52.558] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-28 17:19:52.559] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-28 17:19:55.183] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("33"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [h].[Id], [h].[AnnualLeaveDays], [h].[AttendanceSource], [h].[AutoProcessEnabled], [h].[AutoProcessTime], [h].[BiometricConnectionString], [h].[BiometricProvider], [h].[BiometricSourceObject], [h].[CasualLeaveDays], [h].[CreatedBy], [h].[CreatedDate], [h].[GracePeriodMinutes], [h].[IsActive], [h].[OfficeEndTime], [h].[OfficeStartTime], [h].[SickLeaveDays], [h].[UpdatedBy], [h].[UpdatedDate], [h].[WeeklyOffDays]
+FROM [HRSettings] AS [h]
+WHERE [h].[IsActive] = CAST(1 AS bit)
+ORDER BY [h].[CreatedDate] DESC"
+[2026-05-28 17:19:55.218] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/HRSettings/getHRSettings" responded 200 in 2660.5737 ms
+[2026-05-28 22:20:41.733] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 22:20:46.286] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 22:20:53.208] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 22:20:53.272] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 4087.8745 ms
+[2026-05-28 22:50:20.887] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 22:50:25.885] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 22:50:38.248] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 22:50:38.313] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 4334.8321 ms
+[2026-05-28 23:46:23.054] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 23:46:24.365] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 23:46:25.858] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 23:46:25.884] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 448.1105 ms
+[2026-05-28 23:56:10.135] [Information] () <> SBERP.HumanResources starting...
+[2026-05-28 23:56:14.519] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-28 23:56:20.240] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-28 23:56:20.304] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 4551.1689 ms

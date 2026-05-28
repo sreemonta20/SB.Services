@@ -158,6 +158,53 @@ namespace SBERP.HumanResources.Service
         // -----------------------------------------------------------------
         // Get by id — returns the full nested record (JSON from SP)
         // -----------------------------------------------------------------
+        //public async Task<DataResponse> GetEmployeeByIdAsync(string id)
+        //{
+        //    try
+        //    {
+        //        if (!Guid.TryParse(id, out var g))
+        //            return Utilities.Warn("Invalid employee id");
+
+        //        var conn = _ctx.Database.GetDbConnection();
+        //        if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
+
+        //        using var cmd = conn.CreateCommand();
+        //        cmd.CommandText = "EXEC dbo." + ConstantSupplier.SP_GET_EMPLOYEE_BY_ID + " @Id=@p0";
+        //        AddParam(cmd, "@p0", g);
+
+        //        // SP returns JSON in a single-column row
+        //        using var reader = await cmd.ExecuteReaderAsync();
+        //        var sb = new System.Text.StringBuilder();
+        //        while (await reader.ReadAsync())
+        //            sb.Append(reader.GetValue(0)?.ToString());
+
+        //        var json = sb.ToString();
+        //        if (string.IsNullOrWhiteSpace(json))
+        //            return Utilities.Warn(ConstantSupplier.EMPLOYEE_NOT_FOUND,
+        //                                  code: (int)HttpStatusCode.NotFound);
+
+        //        // Inner FOR JSON columns come back as escaped strings — parse them.
+        //        var jo = JObject.Parse(json);
+        //        var detail = jo.ToObject<EmployeeDetailResponse>()!;
+
+        //        detail.Addresses         = ParseJsonArray<EmployeeAddressDto>(jo["Addresses"]?.ToString());
+        //        detail.Educations        = ParseJsonArray<EmployeeEducationDto>(jo["Educations"]?.ToString());
+        //        detail.Experiences       = ParseJsonArray<EmployeeExperienceDto>(jo["Experiences"]?.ToString());
+        //        detail.Skills            = ParseJsonArray<EmployeeSkillDto>(jo["Skills"]?.ToString());
+        //        detail.Trainings         = ParseJsonArray<EmployeeTrainingDto>(jo["Trainings"]?.ToString());
+        //        detail.Certifications    = ParseJsonArray<EmployeeCertificationDto>(jo["Certifications"]?.ToString());
+        //        detail.Documents         = ParseJsonArray<EmployeeDocumentDto>(jo["Documents"]?.ToString());
+        //        detail.EmergencyContacts = ParseJsonArray<EmployeeEmergencyContactDto>(jo["EmergencyContacts"]?.ToString());
+
+        //        var bankRaw = jo["BankInfo"]?.ToString();
+        //        if (!string.IsNullOrWhiteSpace(bankRaw))
+        //            detail.BankInfo = JsonConvert.DeserializeObject<EmployeeBankDto>(bankRaw);
+
+        //        return Utilities.Ok(ConstantSupplier.EMPLOYEE_FETCH_SUCCESS, detail);
+        //    }
+        //    catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(GetEmployeeByIdAsync)); }
+        //}
+
         public async Task<DataResponse> GetEmployeeByIdAsync(string id)
         {
             try
@@ -172,37 +219,41 @@ namespace SBERP.HumanResources.Service
                 cmd.CommandText = "EXEC dbo." + ConstantSupplier.SP_GET_EMPLOYEE_BY_ID + " @Id=@p0";
                 AddParam(cmd, "@p0", g);
 
-                // SP returns JSON in a single-column row
-                using var reader = await cmd.ExecuteReaderAsync();
-                var sb = new System.Text.StringBuilder();
-                while (await reader.ReadAsync())
-                    sb.Append(reader.GetValue(0)?.ToString());
+                // ExecuteScalarAsync pulls the single NVARCHAR(MAX) output effortlessly without chunking loops
+                var scalarResult = await cmd.ExecuteScalarAsync();
+                var json = scalarResult?.ToString();
 
-                var json = sb.ToString();
                 if (string.IsNullOrWhiteSpace(json))
-                    return Utilities.Warn(ConstantSupplier.EMPLOYEE_NOT_FOUND,
-                                          code: (int)HttpStatusCode.NotFound);
+                    return Utilities.Warn(ConstantSupplier.EMPLOYEE_NOT_FOUND, code: (int)HttpStatusCode.NotFound);
 
-                // Inner FOR JSON columns come back as escaped strings — parse them.
+                // Parse the valid, non-truncated JSON payload
                 var jo = JObject.Parse(json);
+                // 2. Extract the escaped Bank string manually BEFORE mapping the root
+                var bankRaw = jo["BankInfo"]?.ToString();
+                // 3. Remove the string element so .ToObject doesn't try to force-map a string into an EmployeeBankDto object
+                jo.Remove("BankInfo");
                 var detail = jo.ToObject<EmployeeDetailResponse>()!;
 
-                detail.Addresses         = ParseJsonArray<EmployeeAddressDto>(jo["Addresses"]?.ToString());
-                detail.Educations        = ParseJsonArray<EmployeeEducationDto>(jo["Educations"]?.ToString());
-                detail.Experiences       = ParseJsonArray<EmployeeExperienceDto>(jo["Experiences"]?.ToString());
-                detail.Skills            = ParseJsonArray<EmployeeSkillDto>(jo["Skills"]?.ToString());
-                detail.Trainings         = ParseJsonArray<EmployeeTrainingDto>(jo["Trainings"]?.ToString());
-                detail.Certifications    = ParseJsonArray<EmployeeCertificationDto>(jo["Certifications"]?.ToString());
-                detail.Documents         = ParseJsonArray<EmployeeDocumentDto>(jo["Documents"]?.ToString());
+                // Parse your pre-serialized relational arrays safely
+                detail.Addresses = ParseJsonArray<EmployeeAddressDto>(jo["Addresses"]?.ToString());
+                detail.Educations = ParseJsonArray<EmployeeEducationDto>(jo["Educations"]?.ToString());
+                detail.Experiences = ParseJsonArray<EmployeeExperienceDto>(jo["Experiences"]?.ToString());
+                detail.Skills = ParseJsonArray<EmployeeSkillDto>(jo["Skills"]?.ToString());
+                detail.Trainings = ParseJsonArray<EmployeeTrainingDto>(jo["Trainings"]?.ToString());
+                detail.Certifications = ParseJsonArray<EmployeeCertificationDto>(jo["Certifications"]?.ToString());
+                detail.Documents = ParseJsonArray<EmployeeDocumentDto>(jo["Documents"]?.ToString());
                 detail.EmergencyContacts = ParseJsonArray<EmployeeEmergencyContactDto>(jo["EmergencyContacts"]?.ToString());
 
-                var bankRaw = jo["BankInfo"]?.ToString();
+                // 6. Manually deserialize the Bank object string back into its proper type
                 if (!string.IsNullOrWhiteSpace(bankRaw))
                     detail.BankInfo = JsonConvert.DeserializeObject<EmployeeBankDto>(bankRaw);
 
                 return Utilities.Ok(ConstantSupplier.EMPLOYEE_FETCH_SUCCESS, detail);
             }
-            catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(GetEmployeeByIdAsync)); }
+            catch (Exception ex)
+            {
+                return Utilities.Exception(ex, _log, nameof(GetEmployeeByIdAsync));
+            }
         }
 
         // -----------------------------------------------------------------
@@ -315,7 +366,7 @@ namespace SBERP.HumanResources.Service
         // -----------------------------------------------------------------
         // Delete (soft by default)
         // -----------------------------------------------------------------
-        public async Task<DataResponse> DeleteEmployeeAsync(string id, bool hardDelete = false)
+        public async Task<DataResponse> DeleteEmployeeAsync(string id)
         {
             await using var tx = await _ctx.Database.BeginTransactionAsync();
             try
@@ -328,7 +379,11 @@ namespace SBERP.HumanResources.Service
                     return Utilities.Warn(ConstantSupplier.EMPLOYEE_NOT_FOUND,
                                           code: (int)HttpStatusCode.NotFound);
 
-                if (hardDelete)
+                bool isHardDelete = await _ctx.HRSettings!.AsNoTracking()
+                    .OrderByDescending(x => x.CreatedDate)
+                    .Select(x => x.IsHardDelete ?? false)
+                    .FirstOrDefaultAsync();
+                if (isHardDelete)
                 {
                     _ctx.Employees!.Remove(emp);   // cascade deletes children
                 }

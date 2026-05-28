@@ -10,6 +10,6 @@ namespace SBERP.HumanResources.Service
         Task<PagingResult<DepartmentResponse>?> GetAllDepartmentsPagingWithSearchAsync(PagingSearchFilter filter);
         Task<DataResponse> GetDepartmentByIdAsync(string id);
         Task<DataResponse> CreateUpdateDepartmentAsync(DepartmentRequest request);
-        Task<DataResponse> DeleteDepartmentAsync(string id, bool hardDelete = false);
+        Task<DataResponse> DeleteDepartmentAsync(string id);
     }
 }

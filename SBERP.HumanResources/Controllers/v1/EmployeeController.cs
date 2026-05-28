@@ -125,7 +125,7 @@ namespace SBERP.HumanResources.Controllers.v1
         // DELETE api/v1/Employee/deleteEmployee?id={id}&hard=false
         [HttpDelete]
         [Route(ConstantSupplier.DELETE_EMPLOYEE_ROUTE)]
-        public async Task<object> DeleteEmployeeAsync([FromQuery] string id, [FromQuery] bool hard = false)
+        public async Task<object> DeleteEmployeeAsync([FromQuery] string id)
         {
             _log.LogInfo(string.Format(ConstantSupplier.LOG_API_REQ, nameof(DeleteEmployeeAsync), id));
             try
@@ -133,7 +133,7 @@ namespace SBERP.HumanResources.Controllers.v1
                 if (string.IsNullOrWhiteSpace(id))
                     return Utilities.Warn(ConstantSupplier.REQUIRED_PARAMETER_NOT_EMPTY);
 
-                return await _employeeService.DeleteEmployeeAsync(id, hard);
+                return await _employeeService.DeleteEmployeeAsync(id);
             }
             catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(DeleteEmployeeAsync)); }
         }

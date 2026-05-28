@@ -12,7 +12,7 @@ using SBERP.HumanResources.Persistence;
 namespace SBERP.HumanResources.Migrations
 {
     [DbContext(typeof(HumanResourcesDBContext))]
-    [Migration("20260527062433_InitialCreate")]
+    [Migration("20260528181439_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace SBERP.HumanResources.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -287,7 +287,7 @@ namespace SBERP.HumanResources.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a1a1a1a1-1111-4111-8111-111111111111"),
+                            Id = new Guid("28260da1-0bb1-4842-a3ec-786f859dc5ca"),
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentCode = "ADMIN",
@@ -297,7 +297,7 @@ namespace SBERP.HumanResources.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a2a2a2a2-2222-4222-8222-222222222222"),
+                            Id = new Guid("2b3c7610-f979-48f0-881c-44b9f3c93555"),
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentCode = "HR",
@@ -307,7 +307,7 @@ namespace SBERP.HumanResources.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a3a3a3a3-3333-4333-8333-333333333333"),
+                            Id = new Guid("1f8fd7ee-c9c4-484b-aeb9-3f81f2c04609"),
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentCode = "ENG",
@@ -317,7 +317,7 @@ namespace SBERP.HumanResources.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a4a4a4a4-4444-4444-8444-444444444444"),
+                            Id = new Guid("729197ee-0a7e-4910-81a1-be9060a51ae7"),
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentCode = "FIN",
@@ -327,7 +327,7 @@ namespace SBERP.HumanResources.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a5a5a5a5-5555-4555-8555-555555555555"),
+                            Id = new Guid("5232ea50-7b93-4559-8eb6-dc5f3bd78a09"),
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentCode = "OPS",
@@ -444,7 +444,7 @@ namespace SBERP.HumanResources.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d1111111-1111-4111-8111-111111111111"),
+                            Id = new Guid("4e2e6864-b92c-4224-8bef-20f7e72df648"),
                             Code = "CEO",
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
@@ -454,7 +454,7 @@ namespace SBERP.HumanResources.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d2222222-2222-4222-8222-222222222222"),
+                            Id = new Guid("e619d48f-bd89-404f-a406-f466f1b62088"),
                             Code = "MGR",
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
@@ -464,7 +464,7 @@ namespace SBERP.HumanResources.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d3333333-3333-4333-8333-333333333333"),
+                            Id = new Guid("f46d487d-f446-4e3c-b06f-8263dc854c89"),
                             Code = "TL",
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
@@ -474,7 +474,7 @@ namespace SBERP.HumanResources.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d4444444-4444-4444-8444-444444444444"),
+                            Id = new Guid("51da7cd0-7d22-4c3b-a01e-21e1eafd27e9"),
                             Code = "SE",
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
@@ -484,7 +484,7 @@ namespace SBERP.HumanResources.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d5555555-5555-4555-8555-555555555555"),
+                            Id = new Guid("368c0e9b-e60d-40cf-912c-43744db1b19f"),
                             Code = "SWE",
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
@@ -494,7 +494,7 @@ namespace SBERP.HumanResources.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d6666666-6666-4666-8666-666666666666"),
+                            Id = new Guid("60bbb9db-3a9e-4560-bb0f-c93dbaf9c7db"),
                             Code = "HRM",
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
@@ -504,7 +504,7 @@ namespace SBERP.HumanResources.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d7777777-7777-4777-8777-777777777777"),
+                            Id = new Guid("82b5f6d0-5403-48d0-8d1c-8ef510762631"),
                             Code = "ACC",
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
@@ -514,7 +514,7 @@ namespace SBERP.HumanResources.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d8888888-8888-4888-8888-888888888888"),
+                            Id = new Guid("f2597dae-b3c6-47bb-b2a1-5caa5dcfd770"),
                             Code = "INT",
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
@@ -1512,6 +1512,9 @@ namespace SBERP.HumanResources.Migrations
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("IsHardDelete")
+                        .HasColumnType("bit");
+
                     b.Property<string>("OfficeEndTime")
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
@@ -1551,6 +1554,7 @@ namespace SBERP.HumanResources.Migrations
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
                             GracePeriodMinutes = 15,
                             IsActive = true,
+                            IsHardDelete = true,
                             OfficeEndTime = "17:30",
                             OfficeStartTime = "08:30",
                             SickLeaveDays = 10,

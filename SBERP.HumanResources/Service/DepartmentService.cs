@@ -218,7 +218,7 @@ namespace SBERP.HumanResources.Service
             }
         }
 
-        public async Task<DataResponse> DeleteDepartmentAsync(string id, bool hardDelete = false)
+        public async Task<DataResponse> DeleteDepartmentAsync(string id)
         {
             try
             {
@@ -241,7 +241,12 @@ namespace SBERP.HumanResources.Service
                     return Utilities.Warn(ConstantSupplier.DEPARTMENT_HAS_EMPLOYEES, dept.Id);
                 }
 
-                if (hardDelete)
+                bool isHardDelete = await _ctx.HRSettings!.AsNoTracking()
+                    .OrderByDescending(x => x.CreatedDate)
+                    .Select(x => x.IsHardDelete ?? false)
+                    .FirstOrDefaultAsync();
+
+                if (isHardDelete)
                 {
                     _ctx.Departments!.Remove(dept);
                 }

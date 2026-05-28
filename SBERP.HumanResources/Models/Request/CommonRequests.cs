@@ -45,5 +45,6 @@ namespace SBERP.HumanResources.Models.Request
         public bool? AutoProcessEnabled { get; set; }
         public string? CreateUpdateBy { get; set; }
         public bool? IsActive { get; set; }
+        public bool? IsHardDelete { get; set; }
     }
 }

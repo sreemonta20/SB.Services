@@ -14,7 +14,9 @@ using SBERP.HumanResources.Service;
 using SBERP.Shared.Extensions;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,11 +54,14 @@ if (string.IsNullOrWhiteSpace(hrConnection))
     throw new InvalidOperationException(
         "ConnectionStrings:HRDatabase missing in appsettings.json");
 
-services.AddDbContext<HumanResourcesDBContext>(opts =>
-    opts.UseSqlServer(hrConnection, sql =>
-        sql.EnableRetryOnFailure(maxRetryCount: 3,
-                                 maxRetryDelay: TimeSpan.FromSeconds(2),
-                                 errorNumbersToAdd: null)));
+services.AddDbContext<HumanResourcesDBContext>(options =>
+                options.UseSqlServer(hrConnection));
+
+//services.AddDbContext<HumanResourcesDBContext>(opts =>
+//    opts.UseSqlServer(hrConnection, sql =>
+//        sql.EnableRetryOnFailure(maxRetryCount: 3,
+//                                 maxRetryDelay: TimeSpan.FromSeconds(2),
+//                                 errorNumbersToAdd: null)));
 
 // 3.3 CORS
 //var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>()
@@ -74,13 +79,21 @@ services.AddCors(o =>
 });
 
 // 3.4 Controllers + JSON
+//services.AddControllers()
+//    .AddJsonOptions(o =>
+//        o.JsonSerializerOptions.DefaultIgnoreCondition =
+//            JsonIgnoreCondition.WhenWritingNull)
+//    .AddNewtonsoftJson(o =>
+//        o.SerializerSettings.ContractResolver =
+//            new DefaultContractResolver());
+
 services.AddControllers()
-    .AddJsonOptions(o =>
-        o.JsonSerializerOptions.DefaultIgnoreCondition =
-            JsonIgnoreCondition.WhenWritingNull)
+    .AddJsonOptions(o =>{
+        o.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        o.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+    })
     .AddNewtonsoftJson(o =>
-        o.SerializerSettings.ContractResolver =
-            new DefaultContractResolver());
+        o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
 services.AddEndpointsApiExplorer();
 

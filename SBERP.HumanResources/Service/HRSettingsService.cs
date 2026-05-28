@@ -74,7 +74,8 @@ namespace SBERP.HumanResources.Service
                     CasualLeaveDays = s.CasualLeaveDays,
                     AutoProcessTime = s.AutoProcessTime,
                     AutoProcessEnabled = s.AutoProcessEnabled,
-                    IsActive = s.IsActive
+                    IsActive = s.IsActive,
+                    IsHardDelete = s.IsHardDelete
                 };
 
                 return Utilities.Ok(ConstantSupplier.HR_SETTINGS_FETCH_SUCCESS, dto);
@@ -120,6 +121,7 @@ namespace SBERP.HumanResources.Service
                 s.AutoProcessTime          = r.AutoProcessTime;
                 s.AutoProcessEnabled       = r.AutoProcessEnabled;
                 s.IsActive                 = r.IsActive ?? true;
+                s.IsHardDelete = r.IsHardDelete ?? true;
 
                 if (!isCreate)
                 {

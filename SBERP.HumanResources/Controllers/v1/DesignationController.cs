@@ -80,10 +80,10 @@ namespace SBERP.HumanResources.Controllers.v1
             catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(CreateUpdateDesignationAsync)); }
         }
 
-        // DELETE api/v1/Employee/deleteDesignation?id={id}&hard=false
+        // DELETE api/v1/Employee/deleteDesignation?id=id
         [HttpDelete]
         [Route(ConstantSupplier.DELETE_DESIGNATION_ROUTE)]
-        public async Task<object> DeleteDesignationAsync([FromQuery] string id, [FromQuery] bool hard = false)
+        public async Task<object> DeleteDesignationAsync([FromQuery] string id)
         {
             _log.LogInfo(string.Format(ConstantSupplier.LOG_API_REQ, nameof(DeleteDesignationAsync), id));
             try
@@ -91,7 +91,7 @@ namespace SBERP.HumanResources.Controllers.v1
                 if (string.IsNullOrWhiteSpace(id))
                     return Utilities.Warn(ConstantSupplier.REQUIRED_PARAMETER_NOT_EMPTY);
 
-                return await _service.DeleteDesignationAsync(id, hard);
+                return await _service.DeleteDesignationAsync(id);
             }
             catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(DeleteDesignationAsync)); }
         }

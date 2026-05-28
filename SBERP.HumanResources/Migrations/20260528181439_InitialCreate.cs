@@ -238,7 +238,8 @@ namespace SBERP.HumanResources.Migrations
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    IsHardDelete = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -643,11 +644,11 @@ namespace SBERP.HumanResources.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "DepartmentCode", "Description", "HeadEmployeeId", "IsActive", "Name", "ParentDepartmentId", "UpdatedBy", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { new Guid("a1a1a1a1-1111-4111-8111-111111111111"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "ADMIN", "Administrative and executive office", null, true, "Administration", null, null, null },
-                    { new Guid("a2a2a2a2-2222-4222-8222-222222222222"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "HR", "People operations and talent management", null, true, "Human Resources", null, null, null },
-                    { new Guid("a3a3a3a3-3333-4333-8333-333333333333"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "ENG", "Software engineering and development", null, true, "Engineering", null, null, null },
-                    { new Guid("a4a4a4a4-4444-4444-8444-444444444444"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "FIN", "Accounting, payroll and treasury", null, true, "Finance", null, null, null },
-                    { new Guid("a5a5a5a5-5555-4555-8555-555555555555"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "OPS", "Day-to-day business operations", null, true, "Operations", null, null, null }
+                    { new Guid("1f8fd7ee-c9c4-484b-aeb9-3f81f2c04609"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "ENG", "Software engineering and development", null, true, "Engineering", null, null, null },
+                    { new Guid("28260da1-0bb1-4842-a3ec-786f859dc5ca"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "ADMIN", "Administrative and executive office", null, true, "Administration", null, null, null },
+                    { new Guid("2b3c7610-f979-48f0-881c-44b9f3c93555"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "HR", "People operations and talent management", null, true, "Human Resources", null, null, null },
+                    { new Guid("5232ea50-7b93-4559-8eb6-dc5f3bd78a09"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "OPS", "Day-to-day business operations", null, true, "Operations", null, null, null },
+                    { new Guid("729197ee-0a7e-4910-81a1-be9060a51ae7"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "FIN", "Accounting, payroll and treasury", null, true, "Finance", null, null, null }
                 });
 
             migrationBuilder.InsertData(
@@ -655,14 +656,14 @@ namespace SBERP.HumanResources.Migrations
                 columns: new[] { "Id", "Code", "CreatedBy", "CreatedDate", "Description", "Grade", "IsActive", "Name", "UpdatedBy", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { new Guid("d1111111-1111-4111-8111-111111111111"), "CEO", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 1, true, "Chief Executive Officer", null, null },
-                    { new Guid("d2222222-2222-4222-8222-222222222222"), "MGR", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 4, true, "Manager", null, null },
-                    { new Guid("d3333333-3333-4333-8333-333333333333"), "TL", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 5, true, "Team Lead", null, null },
-                    { new Guid("d4444444-4444-4444-8444-444444444444"), "SE", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 6, true, "Senior Engineer", null, null },
-                    { new Guid("d5555555-5555-4555-8555-555555555555"), "SWE", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 7, true, "Software Engineer", null, null },
-                    { new Guid("d6666666-6666-4666-8666-666666666666"), "HRM", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 4, true, "HR Manager", null, null },
-                    { new Guid("d7777777-7777-4777-8777-777777777777"), "ACC", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 6, true, "Accountant", null, null },
-                    { new Guid("d8888888-8888-4888-8888-888888888888"), "INT", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 9, true, "Intern", null, null }
+                    { new Guid("368c0e9b-e60d-40cf-912c-43744db1b19f"), "SWE", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 7, true, "Software Engineer", null, null },
+                    { new Guid("4e2e6864-b92c-4224-8bef-20f7e72df648"), "CEO", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 1, true, "Chief Executive Officer", null, null },
+                    { new Guid("51da7cd0-7d22-4c3b-a01e-21e1eafd27e9"), "SE", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 6, true, "Senior Engineer", null, null },
+                    { new Guid("60bbb9db-3a9e-4560-bb0f-c93dbaf9c7db"), "HRM", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 4, true, "HR Manager", null, null },
+                    { new Guid("82b5f6d0-5403-48d0-8d1c-8ef510762631"), "ACC", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 6, true, "Accountant", null, null },
+                    { new Guid("e619d48f-bd89-404f-a406-f466f1b62088"), "MGR", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 4, true, "Manager", null, null },
+                    { new Guid("f2597dae-b3c6-47bb-b2a1-5caa5dcfd770"), "INT", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 9, true, "Intern", null, null },
+                    { new Guid("f46d487d-f446-4e3c-b06f-8263dc854c89"), "TL", "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, 5, true, "Team Lead", null, null }
                 });
 
             migrationBuilder.InsertData(
@@ -703,8 +704,8 @@ namespace SBERP.HumanResources.Migrations
 
             migrationBuilder.InsertData(
                 table: "HRSettings",
-                columns: new[] { "Id", "AnnualLeaveDays", "AttendanceSource", "AutoProcessEnabled", "AutoProcessTime", "BiometricConnectionString", "BiometricProvider", "BiometricSourceObject", "CasualLeaveDays", "CreatedBy", "CreatedDate", "GracePeriodMinutes", "IsActive", "OfficeEndTime", "OfficeStartTime", "SickLeaveDays", "UpdatedBy", "UpdatedDate", "WeeklyOffDays" },
-                values: new object[] { new Guid("feed0001-0000-4000-8000-000000000001"), 22, 1, false, "23:30", null, 0, null, 5, "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), 15, true, "17:30", "08:30", 10, null, null, "5,6" });
+                columns: new[] { "Id", "AnnualLeaveDays", "AttendanceSource", "AutoProcessEnabled", "AutoProcessTime", "BiometricConnectionString", "BiometricProvider", "BiometricSourceObject", "CasualLeaveDays", "CreatedBy", "CreatedDate", "GracePeriodMinutes", "IsActive", "IsHardDelete", "OfficeEndTime", "OfficeStartTime", "SickLeaveDays", "UpdatedBy", "UpdatedDate", "WeeklyOffDays" },
+                values: new object[] { new Guid("feed0001-0000-4000-8000-000000000001"), 22, 1, false, "23:30", null, 0, null, 5, "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), 15, true, true, "17:30", "08:30", 10, null, null, "5,6" });
 
             migrationBuilder.InsertData(
                 table: "MaritalStatuses",

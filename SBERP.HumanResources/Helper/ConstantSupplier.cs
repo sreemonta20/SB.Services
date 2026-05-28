@@ -50,26 +50,26 @@ namespace SBERP.HumanResources.Helper
 
         #region Routes — Employee
         public const string GET_ALL_EMPLOYEES_PAGING_ROUTE   = "getAllEmployeesPagingWithSearch";
-        public const string GET_EMPLOYEE_BY_ID_ROUTE         = "getEmployeeById/{id}";
+        public const string GET_EMPLOYEE_BY_ID_ROUTE         = "getEmployeeById";
         public const string GET_EMPLOYEE_INITIAL_DATA_ROUTE  = "getEmployeeInitialData";
         public const string CREATE_EMPLOYEE_ROUTE            = "createEmployee";
         public const string UPDATE_EMPLOYEE_ROUTE            = "updateEmployee";
-        public const string DELETE_EMPLOYEE_ROUTE            = "deleteEmployee/{id}";
+        public const string DELETE_EMPLOYEE_ROUTE            = "deleteEmployee";
         #endregion
 
         #region Routes — Department
         public const string GET_ALL_DEPARTMENTS_ROUTE         = "getAllDepartments";
         public const string GET_ALL_DEPARTMENTS_PAGING_ROUTE  = "getAllDepartmentsPagingWithSearch";
-        public const string GET_DEPARTMENT_BY_ID_ROUTE        = "getDepartmentById/{id}";
+        public const string GET_DEPARTMENT_BY_ID_ROUTE        = "getDepartmentById";
         public const string SAVE_UPDATE_DEPARTMENT_ROUTE      = "createUpdateDepartment";
-        public const string DELETE_DEPARTMENT_ROUTE           = "deleteDepartment/{id}";
+        public const string DELETE_DEPARTMENT_ROUTE           = "deleteDepartment";
         #endregion
 
         #region Routes — Designation
         public const string GET_ALL_DESIGNATIONS_ROUTE        = "getAllDesignations";
         public const string GET_ALL_DESIGNATIONS_PAGING_ROUTE = "getAllDesignationsPagingWithSearch";
         public const string SAVE_UPDATE_DESIGNATION_ROUTE     = "createUpdateDesignation";
-        public const string DELETE_DESIGNATION_ROUTE          = "deleteDesignation/{id}";
+        public const string DELETE_DESIGNATION_ROUTE          = "deleteDesignation";
         #endregion
 
         #region Routes — HR Settings

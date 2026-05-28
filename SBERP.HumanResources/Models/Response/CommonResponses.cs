@@ -48,5 +48,6 @@ namespace SBERP.HumanResources.Models.Response
         public string? AutoProcessTime { get; set; }
         public bool? AutoProcessEnabled { get; set; }
         public bool? IsActive { get; set; }
+        public bool? IsHardDelete { get; set; }
     }
 }

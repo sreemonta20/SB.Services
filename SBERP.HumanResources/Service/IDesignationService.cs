@@ -9,6 +9,6 @@ namespace SBERP.HumanResources.Service
         Task<DataResponse> GetAllDesignationsAsync();
         Task<PagingResult<DesignationResponse>?> GetAllDesignationsPagingWithSearchAsync(PagingSearchFilter filter);
         Task<DataResponse> CreateUpdateDesignationAsync(DesignationRequest request);
-        Task<DataResponse> DeleteDesignationAsync(string id, bool hardDelete = false);
+        Task<DataResponse> DeleteDesignationAsync(string id);
     }
 }

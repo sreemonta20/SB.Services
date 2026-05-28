@@ -269,7 +269,7 @@ BEGIN
         RAISERROR('Cannot delete an employment type that is still assigned to employees. Set IsActive = 0 instead.', 16, 1);
         RETURN;
     END
-    DELETE FROM dbo.LkEmploymentTypes
+    DELETE FROM dbo.EmploymentTypes
     WHERE Id IN (SELECT Id FROM deleted);
 END
 GO

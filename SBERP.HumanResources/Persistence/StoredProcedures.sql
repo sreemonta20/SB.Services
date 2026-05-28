@@ -547,51 +547,59 @@ IF OBJECT_ID('dbo.SP_GetEmployeeById', 'P') IS NOT NULL
     DROP PROCEDURE dbo.SP_GetEmployeeById;
 GO
 
-CREATE PROCEDURE dbo.SP_GetEmployeeById @Id UNIQUEIDENTIFIER
+CREATE PROCEDURE [dbo].[SP_GetEmployeeById] @Id UNIQUEIDENTIFIER
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT
-        E.Id, E.EmployeeCode, E.AppUserId, E.OfficialEmail,
-        E.FirstName, E.MiddleName, E.LastName, E.FullName,
-        E.DateOfBirth, E.Gender, E.MaritalStatus, E.BloodGroup,
-        E.Nationality, E.Religion, E.NationalId,
-        E.PassportNumber, E.PassportExpiryDate,
-        E.PersonalEmail, E.MobileNumber, E.AlternatePhoneNumber,
-        E.DepartmentId,   D.[Name]   AS DepartmentName,
-        E.DesignationId,  DG.[Name]  AS DesignationName,
-        E.ReportingManagerId, RM.FullName AS ReportingManagerName,
-        E.DateOfJoining, E.ProbationEndDate, E.ConfirmationDate, E.DateOfLeaving,
-        E.EmploymentType, E.EmploymentStatus, E.WorkLocation,
-        E.BasicSalary, E.SalaryCurrency,
-        E.PhotoUrl, E.SignatureUrl, E.IsActive,
+    -- Declare a variable to hold the entire massive JSON payload safely
+    DECLARE @EmployeeJson NVARCHAR(MAX);
 
-        Addresses        = ISNULL((SELECT Id, AddressType, Line1, Line2, City, State, Country, PostalCode, IsPrimary, IsActive
-                                   FROM dbo.EmployeeAddresses           WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
-        Educations       = ISNULL((SELECT Id, Qualification, Institution, University, Specialization, StartYear, EndYear, Grade, DocumentUrl, IsActive
-                                   FROM dbo.EmployeeEducations          WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
-        Experiences      = ISNULL((SELECT Id, CompanyName, Designation, StartDate, EndDate, Responsibilities, Location, IsActive
-                                   FROM dbo.EmployeeExperiences         WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
-        Skills           = ISNULL((SELECT Id, SkillName, ProficiencyLevel, YearsOfExperience, IsActive
-                                   FROM dbo.EmployeeSkills              WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
-        Trainings        = ISNULL((SELECT Id, TrainingName, Provider, StartDate, EndDate, Outcome, CertificateUrl, IsActive
-                                   FROM dbo.EmployeeTrainings           WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
-        Certifications   = ISNULL((SELECT Id, CertificationName, IssuingAuthority, CertificationNumber, IssueDate, ExpiryDate, CertificateUrl, IsActive
-                                   FROM dbo.EmployeeCertifications      WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
-        Documents        = ISNULL((SELECT Id, DocumentType, DocumentNumber, FileUrl, IssueDate, ExpiryDate, Remark, IsActive
-                                   FROM dbo.EmployeeDocuments           WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
-        EmergencyContacts= ISNULL((SELECT Id, [Name], Relationship, PrimaryPhone, AlternatePhone, Email, Address, IsPrimary, IsActive
-                                   FROM dbo.EmployeeEmergencyContacts   WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
-        BankInfo         = (SELECT TOP 1 Id, BankName, BranchName, AccountHolderName, AccountNumber, IbanNumber, SwiftCode, RoutingNumber, Currency, IsActive
-                                   FROM dbo.EmployeeBanks               WHERE EmployeeId = E.Id FOR JSON PATH, WITHOUT_ARRAY_WRAPPER)
+    SET @EmployeeJson = (
+        SELECT
+            E.Id, E.EmployeeCode, E.AppUserId, E.OfficialEmail,
+            E.FirstName, E.MiddleName, E.LastName, E.FullName,
+            E.DateOfBirth, E.Gender, E.MaritalStatus, E.BloodGroup,
+            E.Nationality, E.Religion, E.NationalId,
+            E.PassportNumber, E.PassportExpiryDate,
+            E.PersonalEmail, E.MobileNumber, E.AlternatePhoneNumber,
+            E.DepartmentId,   D.[Name]   AS DepartmentName,
+            E.DesignationId,  DG.[Name]  AS DesignationName,
+            E.ReportingManagerId, RM.FullName AS ReportingManagerName,
+            E.DateOfJoining, E.ProbationEndDate, E.ConfirmationDate, E.DateOfLeaving,
+            E.EmploymentType, E.EmploymentStatus, E.WorkLocation,
+            E.BasicSalary, E.SalaryCurrency,
+            E.PhotoUrl, E.SignatureUrl, E.IsActive,
 
-    FROM dbo.Employees E
-    LEFT JOIN dbo.Departments  D  ON D.Id  = E.DepartmentId
-    LEFT JOIN dbo.Designations DG ON DG.Id = E.DesignationId
-    LEFT JOIN dbo.Employees    RM ON RM.Id = E.ReportingManagerId
-    WHERE E.Id = @Id
-    FOR JSON PATH, WITHOUT_ARRAY_WRAPPER;
+            Addresses        = ISNULL((SELECT Id, AddressType, Line1, Line2, City, State, Country, PostalCode, IsPrimary, IsActive
+                                       FROM dbo.EmployeeAddresses           WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
+            Educations       = ISNULL((SELECT Id, Qualification, Institution, University, Specialization, StartYear, EndYear, Grade, DocumentUrl, IsActive
+                                       FROM dbo.EmployeeEducations          WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
+            Experiences      = ISNULL((SELECT Id, CompanyName, Designation, StartDate, EndDate, Responsibilities, Location, IsActive
+                                       FROM dbo.EmployeeExperiences         WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
+            Skills           = ISNULL((SELECT Id, SkillName, ProficiencyLevel, YearsOfExperience, IsActive
+                                       FROM dbo.EmployeeSkills              WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
+            Trainings        = ISNULL((SELECT Id, TrainingName, Provider, StartDate, EndDate, Outcome, CertificateUrl, IsActive
+                                       FROM dbo.EmployeeTrainings           WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
+            Certifications   = ISNULL((SELECT Id, CertificationName, IssuingAuthority, CertificationNumber, IssueDate, ExpiryDate, CertificateUrl, IsActive
+                                       FROM dbo.EmployeeCertifications      WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
+            Documents        = ISNULL((SELECT Id, DocumentType, DocumentNumber, FileUrl, IssueDate, ExpiryDate, Remark, IsActive
+                                       FROM dbo.EmployeeDocuments           WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
+            EmergencyContacts= ISNULL((SELECT Id, [Name], Relationship, PrimaryPhone, AlternatePhone, Email, Address, IsPrimary, IsActive
+                                       FROM dbo.EmployeeEmergencyContacts   WHERE EmployeeId = E.Id FOR JSON PATH), '[]'),
+            BankInfo         = (SELECT TOP 1 Id, BankName, BranchName, AccountHolderName, AccountNumber, IbanNumber, SwiftCode, ISNULL(RoutingNumber,'') AS RoutingNumber, Currency, IsActive
+                                       FROM dbo.EmployeeBanks               WHERE EmployeeId = E.Id FOR JSON PATH, WITHOUT_ARRAY_WRAPPER)
+
+        FROM dbo.Employees E
+        LEFT JOIN dbo.Departments  D  ON D.Id  = E.DepartmentId
+        LEFT JOIN dbo.Designations DG ON DG.Id = E.DesignationId
+        LEFT JOIN dbo.Employees    RM ON RM.Id = E.ReportingManagerId
+        WHERE E.Id = @Id
+        FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+    );
+
+    -- Return the complete JSON string cleanly as a single record field
+    SELECT @EmployeeJson AS EmployeeData;
 END
 GO
 
@@ -655,7 +663,7 @@ BEGIN
         BiometricConnectionString, BiometricSourceObject,
         OfficeStartTime, OfficeEndTime, GracePeriodMinutes,
         WeeklyOffDays, AnnualLeaveDays, SickLeaveDays, CasualLeaveDays,
-        AutoProcessTime, AutoProcessEnabled, IsActive
+        AutoProcessTime, AutoProcessEnabled, IsActive, IsHardDelete
     FROM dbo.HRSettings
     WHERE ISNULL(IsActive, 0) = 1
     ORDER BY CreatedDate DESC;

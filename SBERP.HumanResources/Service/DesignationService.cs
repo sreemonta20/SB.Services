@@ -153,7 +153,7 @@ namespace SBERP.HumanResources.Service
             }
         }
 
-        public async Task<DataResponse> DeleteDesignationAsync(string id, bool hardDelete = false)
+        public async Task<DataResponse> DeleteDesignationAsync(string id)
         {
             try
             {
@@ -173,7 +173,11 @@ namespace SBERP.HumanResources.Service
                     return Utilities.Warn("Designation in use — inactivated instead of removed.", d.Id);
                 }
 
-                if (hardDelete) _ctx.Designations!.Remove(d);
+                bool isHardDelete = await _ctx.HRSettings!.AsNoTracking()
+                    .OrderByDescending(x => x.CreatedDate)
+                    .Select(x => x.IsHardDelete ?? false)
+                    .FirstOrDefaultAsync();
+                if (isHardDelete) _ctx.Designations!.Remove(d);
                 else d.IsActive = false;
 
                 await _ctx.SaveChangesAsync();

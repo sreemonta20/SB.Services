@@ -318,23 +318,23 @@ namespace SBERP.HumanResources.Persistence
 
             // --- Departments ---
             mb.Entity<Department>().HasData(
-                new Department { Id = new Guid("A1A1A1A1-1111-4111-8111-111111111111"), DepartmentCode = "ADMIN", Name = "Administration",  Description = "Administrative and executive office",   CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Department { Id = new Guid("A2A2A2A2-2222-4222-8222-222222222222"), DepartmentCode = "HR",    Name = "Human Resources", Description = "People operations and talent management", CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Department { Id = new Guid("A3A3A3A3-3333-4333-8333-333333333333"), DepartmentCode = "ENG",   Name = "Engineering",     Description = "Software engineering and development",   CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Department { Id = new Guid("A4A4A4A4-4444-4444-8444-444444444444"), DepartmentCode = "FIN",   Name = "Finance",         Description = "Accounting, payroll and treasury",       CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Department { Id = new Guid("A5A5A5A5-5555-4555-8555-555555555555"), DepartmentCode = "OPS",   Name = "Operations",      Description = "Day-to-day business operations",          CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true }
+                new Department { Id = new Guid("28260DA1-0BB1-4842-A3EC-786F859DC5CA"), DepartmentCode = "ADMIN", Name = "Administration",  Description = "Administrative and executive office",   CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Department { Id = new Guid("2B3C7610-F979-48F0-881C-44B9F3C93555"), DepartmentCode = "HR",    Name = "Human Resources", Description = "People operations and talent management", CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Department { Id = new Guid("1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609"), DepartmentCode = "ENG",   Name = "Engineering",     Description = "Software engineering and development",   CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Department { Id = new Guid("729197EE-0A7E-4910-81A1-BE9060A51AE7"), DepartmentCode = "FIN",   Name = "Finance",         Description = "Accounting, payroll and treasury",       CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Department { Id = new Guid("5232EA50-7B93-4559-8EB6-DC5F3BD78A09"), DepartmentCode = "OPS",   Name = "Operations",      Description = "Day-to-day business operations",          CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true }
             );
 
             // --- Designations ---
             mb.Entity<Designation>().HasData(
-                new Designation { Id = new Guid("D1111111-1111-4111-8111-111111111111"), Name = "Chief Executive Officer", Code = "CEO", Grade = 1, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Designation { Id = new Guid("D2222222-2222-4222-8222-222222222222"), Name = "Manager",                  Code = "MGR", Grade = 4, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Designation { Id = new Guid("D3333333-3333-4333-8333-333333333333"), Name = "Team Lead",                Code = "TL",  Grade = 5, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Designation { Id = new Guid("D4444444-4444-4444-8444-444444444444"), Name = "Senior Engineer",          Code = "SE",  Grade = 6, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Designation { Id = new Guid("D5555555-5555-4555-8555-555555555555"), Name = "Software Engineer",        Code = "SWE", Grade = 7, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Designation { Id = new Guid("D6666666-6666-4666-8666-666666666666"), Name = "HR Manager",               Code = "HRM", Grade = 4, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Designation { Id = new Guid("D7777777-7777-4777-8777-777777777777"), Name = "Accountant",               Code = "ACC", Grade = 6, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Designation { Id = new Guid("D8888888-8888-4888-8888-888888888888"), Name = "Intern",                   Code = "INT", Grade = 9, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true }
+                new Designation { Id = new Guid("4E2E6864-B92C-4224-8BEF-20F7E72DF648"), Name = "Chief Executive Officer", Code = "CEO", Grade = 1, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Designation { Id = new Guid("E619D48F-BD89-404F-A406-F466F1B62088"), Name = "Manager",                  Code = "MGR", Grade = 4, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Designation { Id = new Guid("F46D487D-F446-4E3C-B06F-8263DC854C89"), Name = "Team Lead",                Code = "TL",  Grade = 5, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Designation { Id = new Guid("51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9"), Name = "Senior Engineer",          Code = "SE",  Grade = 6, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Designation { Id = new Guid("368C0E9B-E60D-40CF-912C-43744DB1B19F"), Name = "Software Engineer",        Code = "SWE", Grade = 7, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Designation { Id = new Guid("60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB"), Name = "HR Manager",               Code = "HRM", Grade = 4, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Designation { Id = new Guid("82B5F6D0-5403-48D0-8D1C-8EF510762631"), Name = "Accountant",               Code = "ACC", Grade = 6, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Designation { Id = new Guid("F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770"), Name = "Intern",                   Code = "INT", Grade = 9, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true }
             );
 
             // --- HRSettings (single row) ---
@@ -355,7 +355,8 @@ namespace SBERP.HumanResources.Persistence
                     AutoProcessEnabled = false,
                     CreatedBy = seedCreator,
                     CreatedDate = seedTime,
-                    IsActive = true
+                    IsActive = true,
+                    IsHardDelete = true
                 }
             );
 
