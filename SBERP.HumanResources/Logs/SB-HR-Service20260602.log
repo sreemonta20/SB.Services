@@ -1,0 +1,3960 @@
+[2026-06-02 00:50:37.459] [Information] () <> SBERP.HumanResources starting...
+[2026-06-02 00:50:42.554] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-06-02 00:50:49.607] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-06-02 00:50:49.668] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 3929.8053 ms
+[2026-06-02 00:51:59.544] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 00:51:59.548] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 00:52:02.053] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 00:52:05.377] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 6232.7587 ms
+[2026-06-02 00:52:09.443] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 00:52:09.443] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 00:52:09.444] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 00:52:09.444] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 00:52:09.458] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 00:52:09.459] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 00:52:09.518] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 00:52:09.532] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 100.7762 ms
+[2026-06-02 00:52:10.066] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 634.9845 ms
+[2026-06-02 00:52:33.797] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 00:52:33.798] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 00:52:33.810] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 00:52:34.020] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 00:52:34.023] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 226.3254 ms
+[2026-06-02 00:53:14.375] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 00:53:14.375] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 00:53:14.377] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 00:53:14.409] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 00:53:14.410] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 00:53:14.411] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 00:53:14.459] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 50.4189 ms
+[2026-06-02 00:53:14.465] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 00:53:14.472] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 97.4713 ms
+[2026-06-02 00:54:02.717] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 00:54:02.717] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 00:54:02.721] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 00:54:02.982] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 266.1829 ms
+[2026-06-02 00:54:42.420] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 00:54:42.420] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 00:54:42.422] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 00:54:42.422] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 00:54:42.422] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 00:54:42.423] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 00:54:42.538] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 118.7270 ms
+[2026-06-02 00:54:42.547] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 00:54:42.549] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 128.0308 ms
+[2026-06-02 00:55:09.544] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 00:55:09.544] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 00:55:09.831] [Information] () <> UpdateEmployeeAsync api method request: 
+{
+  "ActionName": "Update",
+  "Id": "25f78cec-2242-402a-931f-afea2078ed10",
+  "EmployeeCode": "EMP-0001",
+  "AppUserId": null,
+  "FirstName": "Sreemonta",
+  "MiddleName": null,
+  "LastName": "Bhowmik",
+  "OfficialEmail": "sreemonta.bhowmik@gmail.com",
+  "PersonalEmail": "sreemonta.bhowmik@gmail.com",
+  "DateOfBirth": "2000-01-03T00:00:00",
+  "Gender": 1,
+  "MaritalStatus": 2,
+  "BloodGroup": 7,
+  "Nationality": "Bangladesh",
+  "Religion": null,
+  "NationalId": "877639237434",
+  "PassportNumber": "A09376",
+  "PassportExpiryDate": null,
+  "MobileNumber": "+971505518307",
+  "AlternatePhoneNumber": "+971505518307",
+  "DepartmentId": "1f8fd7ee-c9c4-484b-aeb9-3f81f2c04609",
+  "DesignationId": "51da7cd0-7d22-4c3b-a01e-21e1eafd27e9",
+  "ReportingManagerId": null,
+  "DateOfJoining": "2026-05-14T00:00:00",
+  "ProbationEndDate": "2026-05-31T00:00:00",
+  "ConfirmationDate": "2026-07-03T00:00:00",
+  "DateOfLeaving": null,
+  "EmploymentType": 1,
+  "EmploymentStatus": 1,
+  "WorkLocation": "Dhaka",
+  "BasicSalary": 20000.0,
+  "SalaryCurrency": null,
+  "PhotoUrl": null,
+  "SignatureUrl": null,
+  "CreateUpdateBy": "c047d662-9f0e-4358-b323-15ec3081312c",
+  "IsActive": true,
+  "Addresses": [
+    {
+      "Id": "9d750edd-e666-4ab6-8406-f5c52295b80b",
+      "AddressType": 1,
+      "Line1": "Dhaka",
+      "Line2": "BD",
+      "City": "Dhaka",
+      "State": "Dhaka",
+      "Country": "Bangladesh",
+      "PostalCode": "456543",
+      "IsPrimary": null,
+      "IsActive": true
+    }
+  ],
+  "Educations": [
+    {
+      "Id": "63efa3cf-ca49-43c1-b0c8-a9c0e11d6a2a",
+      "Qualification": "B.Tech",
+      "Institution": "SIT",
+      "University": "WBUT",
+      "Specialization": "CSE",
+      "StartYear": 2004,
+      "EndYear": 2008,
+      "Grade": 7.52,
+      "DocumentUrl": null,
+      "IsActive": true
+    }
+  ],
+  "Experiences": [
+    {
+      "Id": "277e38ba-5f31-4452-95af-8043f0a1c353",
+      "CompanyName": "Lead Soft",
+      "Designation": "Senior Architect",
+      "StartDate": "2026-05-01T00:00:00",
+      "EndDate": "2026-05-19T00:00:00",
+      "Responsibilities": "eerff",
+      "Location": null,
+      "IsActive": true
+    }
+  ],
+  "Skills": [
+    {
+      "Id": "8b02e3f9-1f0f-4d26-8ebe-d0ab299fcae0",
+      "SkillName": "C#",
+      "ProficiencyLevel": "Expert",
+      "YearsOfExperience": 8,
+      "IsActive": true
+    }
+  ],
+  "Trainings": [
+    {
+      "Id": "2ccc9e9e-92b0-466b-9fa2-5a819e2da33f",
+      "TrainingName": "ASP.NET Training",
+      "Provider": "BIBTM",
+      "StartDate": "2026-05-01T00:00:00",
+      "EndDate": "2026-05-20T00:00:00",
+      "Outcome": null,
+      "CertificateUrl": null,
+      "IsActive": true
+    }
+  ],
+  "Certifications": [],
+  "Documents": [
+    {
+      "Id": "595a146b-b129-4d0d-af1e-4d3e0f5cfa12",
+      "DocumentType": "A495784",
+      "DocumentNumber": "34343434",
+      "FileUrl": null,
+      "IssueDate": "2026-01-01T00:00:00",
+      "ExpiryDate": "2026-02-04T00:00:00",
+      "Remark": null,
+      "IsActive": true
+    }
+  ],
+  "EmergencyContacts": [
+    {
+      "Id": "a1e3653a-3fdc-4936-aaf5-ec6835c636d5",
+      "Name": "Anannya Rohine",
+      "Relationship": "Spouse",
+      "PrimaryPhone": "+97505518307",
+      "AlternatePhone": null,
+      "Email": "sreemonta.bhowmik@gmail.com",
+      "Address": null,
+      "IsPrimary": null,
+      "IsActive": true
+    }
+  ],
+  "BankInfo": {
+    "Id": "443f57f0-ef48-477f-b183-9f0bf31c8478",
+    "BankName": "ICIC Bank",
+    "BranchName": "Shyamoli",
+    "AccountHolderName": "Sreemonta Bhowmik",
+    "AccountNumber": "345675432",
+    "IbanNumber": "IBN356543",
+    "SwiftCode": "DBBL67363",
+    "RoutingNumber": "",
+    "Currency": "BDT",
+    "IsActive": true
+  }
+}
+
+[2026-06-02 00:55:11.187] [Warning] () <Microsoft.EntityFrameworkCore.Query> Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+[2026-06-02 00:55:11.487] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("36"ms) [Parameters=["@id='?' (DbType = Guid)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [s].[Id], [s].[AlternatePhoneNumber], [s].[AppUserId], [s].[BasicSalary], [s].[BloodGroup], [s].[ConfirmationDate], [s].[CreatedBy], [s].[CreatedDate], [s].[DateOfBirth], [s].[DateOfJoining], [s].[DateOfLeaving], [s].[DepartmentId], [s].[DesignationId], [s].[EmployeeCode], [s].[EmploymentStatus], [s].[EmploymentType], [s].[FirstName], [s].[FullName], [s].[Gender], [s].[IsActive], [s].[LastName], [s].[MaritalStatus], [s].[MiddleName], [s].[MobileNumber], [s].[NationalId], [s].[Nationality], [s].[OfficialEmail], [s].[PassportExpiryDate], [s].[PassportNumber], [s].[PersonalEmail], [s].[PhotoUrl], [s].[ProbationEndDate], [s].[Religion], [s].[ReportingManagerId], [s].[SalaryCurrency], [s].[SignatureUrl], [s].[UpdatedBy], [s].[UpdatedDate], [s].[WorkLocation], [s].[Id0], [e1].[Id], [e1].[AddressType], [e1].[City], [e1].[Country], [e1].[CreatedBy], [e1].[CreatedDate], [e1].[EmployeeId], [e1].[IsActive], [e1].[IsPrimary], [e1].[Line1], [e1].[Line2], [e1].[PostalCode], [e1].[State], [e1].[UpdatedBy], [e1].[UpdatedDate], [e2].[Id], [e2].[CreatedBy], [e2].[CreatedDate], [e2].[DocumentUrl], [e2].[EmployeeId], [e2].[EndYear], [e2].[Grade], [e2].[Institution], [e2].[IsActive], [e2].[Qualification], [e2].[Specialization], [e2].[StartYear], [e2].[University], [e2].[UpdatedBy], [e2].[UpdatedDate], [e3].[Id], [e3].[CompanyName], [e3].[CreatedBy], [e3].[CreatedDate], [e3].[Designation], [e3].[EmployeeId], [e3].[EndDate], [e3].[IsActive], [e3].[Location], [e3].[Responsibilities], [e3].[StartDate], [e3].[UpdatedBy], [e3].[UpdatedDate], [e4].[Id], [e4].[CreatedBy], [e4].[CreatedDate], [e4].[EmployeeId], [e4].[IsActive], [e4].[ProficiencyLevel], [e4].[SkillName], [e4].[UpdatedBy], [e4].[UpdatedDate], [e4].[YearsOfExperience], [e5].[Id], [e5].[CertificateUrl], [e5].[CreatedBy], [e5].[CreatedDate], [e5].[EmployeeId], [e5].[EndDate], [e5].[IsActive], [e5].[Outcome], [e5].[Provider], [e5].[StartDate], [e5].[TrainingName], [e5].[UpdatedBy], [e5].[UpdatedDate], [e6].[Id], [e6].[CertificateUrl], [e6].[CertificationName], [e6].[CertificationNumber], [e6].[CreatedBy], [e6].[CreatedDate], [e6].[EmployeeId], [e6].[ExpiryDate], [e6].[IsActive], [e6].[IssueDate], [e6].[IssuingAuthority], [e6].[UpdatedBy], [e6].[UpdatedDate], [e7].[Id], [e7].[CreatedBy], [e7].[CreatedDate], [e7].[DocumentNumber], [e7].[DocumentType], [e7].[EmployeeId], [e7].[ExpiryDate], [e7].[FileUrl], [e7].[IsActive], [e7].[IssueDate], [e7].[Remark], [e7].[UpdatedBy], [e7].[UpdatedDate], [e8].[Id], [e8].[Address], [e8].[AlternatePhone], [e8].[CreatedBy], [e8].[CreatedDate], [e8].[Email], [e8].[EmployeeId], [e8].[IsActive], [e8].[IsPrimary], [e8].[Name], [e8].[PrimaryPhone], [e8].[Relationship], [e8].[UpdatedBy], [e8].[UpdatedDate], [s].[AccountHolderName], [s].[AccountNumber], [s].[BankName], [s].[BranchName], [s].[CreatedBy0], [s].[CreatedDate0], [s].[Currency], [s].[EmployeeId], [s].[IbanNumber], [s].[IsActive0], [s].[RoutingNumber], [s].[SwiftCode], [s].[UpdatedBy0], [s].[UpdatedDate0]
+FROM (
+    SELECT TOP(1) [e].[Id], [e].[AlternatePhoneNumber], [e].[AppUserId], [e].[BasicSalary], [e].[BloodGroup], [e].[ConfirmationDate], [e].[CreatedBy], [e].[CreatedDate], [e].[DateOfBirth], [e].[DateOfJoining], [e].[DateOfLeaving], [e].[DepartmentId], [e].[DesignationId], [e].[EmployeeCode], [e].[EmploymentStatus], [e].[EmploymentType], [e].[FirstName], [e].[FullName], [e].[Gender], [e].[IsActive], [e].[LastName], [e].[MaritalStatus], [e].[MiddleName], [e].[MobileNumber], [e].[NationalId], [e].[Nationality], [e].[OfficialEmail], [e].[PassportExpiryDate], [e].[PassportNumber], [e].[PersonalEmail], [e].[PhotoUrl], [e].[ProbationEndDate], [e].[Religion], [e].[ReportingManagerId], [e].[SalaryCurrency], [e].[SignatureUrl], [e].[UpdatedBy], [e].[UpdatedDate], [e].[WorkLocation], [e0].[Id] AS [Id0], [e0].[AccountHolderName], [e0].[AccountNumber], [e0].[BankName], [e0].[BranchName], [e0].[CreatedBy] AS [CreatedBy0], [e0].[CreatedDate] AS [CreatedDate0], [e0].[Currency], [e0].[EmployeeId], [e0].[IbanNumber], [e0].[IsActive] AS [IsActive0], [e0].[RoutingNumber], [e0].[SwiftCode], [e0].[UpdatedBy] AS [UpdatedBy0], [e0].[UpdatedDate] AS [UpdatedDate0]
+    FROM [Employees] AS [e]
+    LEFT JOIN [EmployeeBanks] AS [e0] ON [e].[Id] = [e0].[EmployeeId]
+    WHERE [e].[Id] = @id
+) AS [s]
+LEFT JOIN [EmployeeAddresses] AS [e1] ON [s].[Id] = [e1].[EmployeeId]
+LEFT JOIN [EmployeeEducations] AS [e2] ON [s].[Id] = [e2].[EmployeeId]
+LEFT JOIN [EmployeeExperiences] AS [e3] ON [s].[Id] = [e3].[EmployeeId]
+LEFT JOIN [EmployeeSkills] AS [e4] ON [s].[Id] = [e4].[EmployeeId]
+LEFT JOIN [EmployeeTrainings] AS [e5] ON [s].[Id] = [e5].[EmployeeId]
+LEFT JOIN [EmployeeCertifications] AS [e6] ON [s].[Id] = [e6].[EmployeeId]
+LEFT JOIN [EmployeeDocuments] AS [e7] ON [s].[Id] = [e7].[EmployeeId]
+LEFT JOIN [EmployeeEmergencyContacts] AS [e8] ON [s].[Id] = [e8].[EmployeeId]
+ORDER BY [s].[Id], [s].[Id0], [e1].[Id], [e2].[Id], [e3].[Id], [e4].[Id], [e5].[Id], [e6].[Id], [e7].[Id]"
+[2026-06-02 00:55:12.783] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("21"ms) [Parameters=["@p0='?' (DbType = Guid), @p1='?' (DbType = Guid), @p2='?' (DbType = Guid), @p3='?' (DbType = Guid), @p4='?' (DbType = Guid), @p5='?' (DbType = Guid), @p6='?' (DbType = Guid), @p7='?' (DbType = Guid), @p10='?' (DbType = Guid), @p8='?' (DbType = Int32), @p9='?' (DbType = DateTime)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+DELETE FROM [EmployeeAddresses]
+OUTPUT 1
+WHERE [Id] = @p0;
+DELETE FROM [EmployeeBanks]
+OUTPUT 1
+WHERE [Id] = @p1;
+DELETE FROM [EmployeeDocuments]
+OUTPUT 1
+WHERE [Id] = @p2;
+DELETE FROM [EmployeeEducations]
+OUTPUT 1
+WHERE [Id] = @p3;
+DELETE FROM [EmployeeEmergencyContacts]
+OUTPUT 1
+WHERE [Id] = @p4;
+DELETE FROM [EmployeeExperiences]
+OUTPUT 1
+WHERE [Id] = @p5;
+DELETE FROM [EmployeeSkills]
+OUTPUT 1
+WHERE [Id] = @p6;
+DELETE FROM [EmployeeTrainings]
+OUTPUT 1
+WHERE [Id] = @p7;
+UPDATE [Employees] SET [EmploymentStatus] = @p8, [UpdatedDate] = @p9
+WHERE [Id] = @p10;
+SELECT @@ROWCOUNT;"
+[2026-06-02 00:55:12.946] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("22"ms) [Parameters=["@p0='?' (DbType = Guid), @p1='?' (DbType = Int32), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (Size = 4000), @p5='?' (DbType = DateTime2), @p6='?' (DbType = Guid), @p7='?' (DbType = Boolean), @p8='?' (DbType = Boolean), @p9='?' (Size = 4000), @p10='?' (Size = 4000), @p11='?' (Size = 4000), @p12='?' (Size = 4000), @p13='?' (Size = 4000), @p14='?' (DbType = DateTime2), @p15='?' (DbType = Guid), @p16='?' (Size = 4000), @p17='?' (Size = 4000), @p18='?' (Size = 4000), @p19='?' (Size = 4000), @p20='?' (Size = 4000), @p21='?' (DbType = DateTime2), @p22='?' (Size = 4000), @p23='?' (DbType = Guid), @p24='?' (Size = 4000), @p25='?' (DbType = Boolean), @p26='?' (Size = 4000), @p27='?' (Size = 4000), @p28='?' (Size = 4000), @p29='?' (DbType = DateTime2), @p30='?' (DbType = Guid), @p31='?' (Size = 4000), @p32='?' (DbType = DateTime2), @p33='?' (Size = 4000), @p34='?' (Size = 4000), @p35='?' (DbType = Guid), @p36='?' (DbType = DateTime2), @p37='?' (Size = 4000), @p38='?' (DbType = Boolean), @p39='?' (DbType = DateTime2), @p40='?' (Size = 4000), @p41='?' (Size = 4000), @p42='?' (DbType = DateTime2), @p43='?' (DbType = Guid), @p44='?' (Size = 4000), @p45='?' (DbType = DateTime2), @p46='?' (Size = 4000), @p47='?' (DbType = Guid), @p48='?' (DbType = Int32), @p49='?' (Precision = 5) (Scale = 2) (DbType = Decimal), @p50='?' (Size = 4000), @p51='?' (DbType = Boolean), @p52='?' (Size = 4000), @p53='?' (Size = 4000), @p54='?' (DbType = Int32), @p55='?' (Size = 4000), @p56='?' (Size = 4000), @p57='?' (DbType = DateTime2), @p58='?' (DbType = Guid), @p59='?' (Size = 4000), @p60='?' (Size = 4000), @p61='?' (Size = 4000), @p62='?' (DbType = DateTime2), @p63='?' (Size = 4000), @p64='?' (DbType = Guid), @p65='?' (DbType = Boolean), @p66='?' (DbType = Boolean), @p67='?' (Size = 4000), @p68='?' (Size = 4000), @p69='?' (Size = 4000), @p70='?' (Size = 4000), @p71='?' (DbType = DateTime2), @p72='?' (DbType = Guid), @p73='?' (Size = 4000), @p74='?' (Size = 4000), @p75='?' (DbType = DateTime2), @p76='?' (Size = 4000), @p77='?' (DbType = Guid), @p78='?' (DbType = DateTime2), @p79='?' (DbType = Boolean), @p80='?' (Size = 4000), @p81='?' (Size = 4000), @p82='?' (DbType = DateTime2), @p83='?' (Size = 4000), @p84='?' (DbType = DateTime2), @p85='?' (DbType = Guid), @p86='?' (Size = 4000), @p87='?' (DbType = DateTime2), @p88='?' (DbType = Guid), @p89='?' (DbType = Boolean), @p90='?' (Size = 4000), @p91='?' (Size = 4000), @p92='?' (Size = 4000), @p93='?' (DbType = DateTime2), @p94='?' (DbType = Int32), @p95='?' (DbType = Guid), @p96='?' (Size = 4000), @p97='?' (Size = 4000), @p98='?' (DbType = DateTime2), @p99='?' (DbType = Guid), @p100='?' (DbType = DateTime2), @p101='?' (DbType = Boolean), @p102='?' (Size = 4000), @p103='?' (Size = 4000), @p104='?' (DbType = DateTime2), @p105='?' (Size = 4000), @p106='?' (Size = 4000), @p107='?' (DbType = DateTime2)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+INSERT INTO [EmployeeAddresses] ([Id], [AddressType], [City], [Country], [CreatedBy], [CreatedDate], [EmployeeId], [IsActive], [IsPrimary], [Line1], [Line2], [PostalCode], [State], [UpdatedBy], [UpdatedDate])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14);
+INSERT INTO [EmployeeBanks] ([Id], [AccountHolderName], [AccountNumber], [BankName], [BranchName], [CreatedBy], [CreatedDate], [Currency], [EmployeeId], [IbanNumber], [IsActive], [RoutingNumber], [SwiftCode], [UpdatedBy], [UpdatedDate])
+VALUES (@p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26, @p27, @p28, @p29);
+INSERT INTO [EmployeeDocuments] ([Id], [CreatedBy], [CreatedDate], [DocumentNumber], [DocumentType], [EmployeeId], [ExpiryDate], [FileUrl], [IsActive], [IssueDate], [Remark], [UpdatedBy], [UpdatedDate])
+VALUES (@p30, @p31, @p32, @p33, @p34, @p35, @p36, @p37, @p38, @p39, @p40, @p41, @p42);
+INSERT INTO [EmployeeEducations] ([Id], [CreatedBy], [CreatedDate], [DocumentUrl], [EmployeeId], [EndYear], [Grade], [Institution], [IsActive], [Qualification], [Specialization], [StartYear], [University], [UpdatedBy], [UpdatedDate])
+VALUES (@p43, @p44, @p45, @p46, @p47, @p48, @p49, @p50, @p51, @p52, @p53, @p54, @p55, @p56, @p57);
+INSERT INTO [EmployeeEmergencyContacts] ([Id], [Address], [AlternatePhone], [CreatedBy], [CreatedDate], [Email], [EmployeeId], [IsActive], [IsPrimary], [Name], [PrimaryPhone], [Relationship], [UpdatedBy], [UpdatedDate])
+VALUES (@p58, @p59, @p60, @p61, @p62, @p63, @p64, @p65, @p66, @p67, @p68, @p69, @p70, @p71);
+INSERT INTO [EmployeeExperiences] ([Id], [CompanyName], [CreatedBy], [CreatedDate], [Designation], [EmployeeId], [EndDate], [IsActive], [Location], [Responsibilities], [StartDate], [UpdatedBy], [UpdatedDate])
+VALUES (@p72, @p73, @p74, @p75, @p76, @p77, @p78, @p79, @p80, @p81, @p82, @p83, @p84);
+INSERT INTO [EmployeeSkills] ([Id], [CreatedBy], [CreatedDate], [EmployeeId], [IsActive], [ProficiencyLevel], [SkillName], [UpdatedBy], [UpdatedDate], [YearsOfExperience])
+VALUES (@p85, @p86, @p87, @p88, @p89, @p90, @p91, @p92, @p93, @p94);
+INSERT INTO [EmployeeTrainings] ([Id], [CertificateUrl], [CreatedBy], [CreatedDate], [EmployeeId], [EndDate], [IsActive], [Outcome], [Provider], [StartDate], [TrainingName], [UpdatedBy], [UpdatedDate])
+VALUES (@p95, @p96, @p97, @p98, @p99, @p100, @p101, @p102, @p103, @p104, @p105, @p106, @p107);"
+[2026-06-02 00:55:12.981] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "PUT" "/api/v1/Employee/updateEmployee" responded 200 in 3437.2829 ms
+[2026-06-02 00:55:13.121] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 00:55:13.121] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 00:55:13.126] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 00:55:13.162] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 41.8514 ms
+[2026-06-02 00:55:19.349] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 00:55:19.349] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 00:55:19.360] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 00:55:19.412] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [
+      {
+        "Id": "25F78CEC-2242-402A-931F-AFEA2078ED10",
+        "Name": "Sreemonta Bhowmik"
+      }
+    ],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 00:55:19.413] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 65.2557 ms
+[2026-06-02 00:55:41.032] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 00:55:41.032] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 00:55:41.033] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 00:55:41.047] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 00:55:41.047] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 00:55:41.049] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 00:55:41.084] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [
+      {
+        "Id": "25F78CEC-2242-402A-931F-AFEA2078ED10",
+        "Name": "Sreemonta Bhowmik"
+      }
+    ],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 00:55:41.086] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 53.5481 ms
+[2026-06-02 00:55:41.099] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 52.5572 ms
+[2026-06-02 01:05:34.296] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:05:34.296] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:05:34.334] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 01:05:34.445] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 149.3996 ms
+[2026-06-02 01:05:54.699] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:05:54.700] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:05:54.700] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:05:54.700] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:05:54.701] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 01:05:54.703] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 01:05:54.753] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 52.6421 ms
+[2026-06-02 01:05:54.806] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [
+      {
+        "Id": "25F78CEC-2242-402A-931F-AFEA2078ED10",
+        "Name": "Sreemonta Bhowmik"
+      }
+    ],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 01:05:54.807] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 108.5649 ms
+[2026-06-02 01:06:31.182] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:06:31.182] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:06:31.195] [Information] () <> UpdateEmployeeAsync api method request: 
+{
+  "ActionName": "Update",
+  "Id": "25f78cec-2242-402a-931f-afea2078ed10",
+  "EmployeeCode": "EMP-0001",
+  "AppUserId": null,
+  "FirstName": "Sreemonta",
+  "MiddleName": null,
+  "LastName": "Bhowmik",
+  "OfficialEmail": "sreemonta.bhowmik@gmail.com",
+  "PersonalEmail": "sreemonta.bhowmik@gmail.com",
+  "DateOfBirth": "2000-01-03T00:00:00",
+  "Gender": 1,
+  "MaritalStatus": 2,
+  "BloodGroup": 7,
+  "Nationality": "Bangladesh",
+  "Religion": null,
+  "NationalId": "877639237434",
+  "PassportNumber": "A09376",
+  "PassportExpiryDate": null,
+  "MobileNumber": "+971505518307",
+  "AlternatePhoneNumber": "+971505518307",
+  "DepartmentId": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+  "DesignationId": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+  "ReportingManagerId": null,
+  "DateOfJoining": "2026-05-14T00:00:00",
+  "ProbationEndDate": "2026-05-31T00:00:00",
+  "ConfirmationDate": "2026-07-03T00:00:00",
+  "DateOfLeaving": null,
+  "EmploymentType": 1,
+  "EmploymentStatus": 1,
+  "WorkLocation": "Dhaka",
+  "BasicSalary": 20000.0,
+  "SalaryCurrency": null,
+  "PhotoUrl": null,
+  "SignatureUrl": null,
+  "CreateUpdateBy": "c047d662-9f0e-4358-b323-15ec3081312c",
+  "IsActive": true,
+  "Addresses": [
+    {
+      "Id": "ebc5ed11-f3f4-4857-aa96-c3bc0343fd67",
+      "AddressType": 1,
+      "Line1": "Dhaka",
+      "Line2": "BD",
+      "City": "Dhaka",
+      "State": "Dhaka",
+      "Country": "Bangladesh",
+      "PostalCode": "456543",
+      "IsPrimary": null,
+      "IsActive": true
+    }
+  ],
+  "Educations": [
+    {
+      "Id": "9c2aafc3-b155-46ab-b8d3-68cc4a9d0dec",
+      "Qualification": "B.Tech",
+      "Institution": "SIT",
+      "University": "WBUT",
+      "Specialization": "CSE",
+      "StartYear": 2004,
+      "EndYear": 2008,
+      "Grade": 7.52,
+      "DocumentUrl": null,
+      "IsActive": true
+    }
+  ],
+  "Experiences": [
+    {
+      "Id": "4cc33225-b724-4db6-af70-14d2d0a4796e",
+      "CompanyName": "Lead Soft",
+      "Designation": "Senior Architect",
+      "StartDate": "2026-05-01T00:00:00",
+      "EndDate": "2026-05-19T00:00:00",
+      "Responsibilities": "eerff",
+      "Location": null,
+      "IsActive": true
+    }
+  ],
+  "Skills": [
+    {
+      "Id": "27015b3e-2ce1-4608-acd5-92a29a93a8fe",
+      "SkillName": "C#",
+      "ProficiencyLevel": "Expert",
+      "YearsOfExperience": 8,
+      "IsActive": true
+    }
+  ],
+  "Trainings": [
+    {
+      "Id": "a46eb1e1-b650-4532-9eb2-80d9b656cdd7",
+      "TrainingName": "ASP.NET Training",
+      "Provider": "BIBTM",
+      "StartDate": "2026-05-01T00:00:00",
+      "EndDate": "2026-05-20T00:00:00",
+      "Outcome": null,
+      "CertificateUrl": null,
+      "IsActive": true
+    }
+  ],
+  "Certifications": [],
+  "Documents": [
+    {
+      "Id": "74a71362-a5ac-45f6-86f6-c60e8946b71a",
+      "DocumentType": "A495784",
+      "DocumentNumber": "34343434",
+      "FileUrl": null,
+      "IssueDate": "2026-01-01T00:00:00",
+      "ExpiryDate": "2026-02-04T00:00:00",
+      "Remark": null,
+      "IsActive": true
+    }
+  ],
+  "EmergencyContacts": [
+    {
+      "Id": "c0673447-d705-4b4e-9af7-176650a852c9",
+      "Name": "Anannya Rohine",
+      "Relationship": "Spouse",
+      "PrimaryPhone": "+97505518307",
+      "AlternatePhone": null,
+      "Email": "sreemonta.bhowmik@gmail.com",
+      "Address": null,
+      "IsPrimary": null,
+      "IsActive": true
+    }
+  ],
+  "BankInfo": {
+    "Id": "6365c936-d289-481f-a30b-4b484ff1c303",
+    "BankName": "ICIC Bank",
+    "BranchName": "Shyamoli",
+    "AccountHolderName": "Sreemonta Bhowmik",
+    "AccountNumber": "345675432",
+    "IbanNumber": "IBN356543",
+    "SwiftCode": "DBBL67363",
+    "RoutingNumber": "",
+    "Currency": "BDT",
+    "IsActive": true
+  }
+}
+
+[2026-06-02 01:06:31.602] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("30"ms) [Parameters=["@id='?' (DbType = Guid)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [s].[Id], [s].[AlternatePhoneNumber], [s].[AppUserId], [s].[BasicSalary], [s].[BloodGroup], [s].[ConfirmationDate], [s].[CreatedBy], [s].[CreatedDate], [s].[DateOfBirth], [s].[DateOfJoining], [s].[DateOfLeaving], [s].[DepartmentId], [s].[DesignationId], [s].[EmployeeCode], [s].[EmploymentStatus], [s].[EmploymentType], [s].[FirstName], [s].[FullName], [s].[Gender], [s].[IsActive], [s].[LastName], [s].[MaritalStatus], [s].[MiddleName], [s].[MobileNumber], [s].[NationalId], [s].[Nationality], [s].[OfficialEmail], [s].[PassportExpiryDate], [s].[PassportNumber], [s].[PersonalEmail], [s].[PhotoUrl], [s].[ProbationEndDate], [s].[Religion], [s].[ReportingManagerId], [s].[SalaryCurrency], [s].[SignatureUrl], [s].[UpdatedBy], [s].[UpdatedDate], [s].[WorkLocation], [s].[Id0], [e1].[Id], [e1].[AddressType], [e1].[City], [e1].[Country], [e1].[CreatedBy], [e1].[CreatedDate], [e1].[EmployeeId], [e1].[IsActive], [e1].[IsPrimary], [e1].[Line1], [e1].[Line2], [e1].[PostalCode], [e1].[State], [e1].[UpdatedBy], [e1].[UpdatedDate], [e2].[Id], [e2].[CreatedBy], [e2].[CreatedDate], [e2].[DocumentUrl], [e2].[EmployeeId], [e2].[EndYear], [e2].[Grade], [e2].[Institution], [e2].[IsActive], [e2].[Qualification], [e2].[Specialization], [e2].[StartYear], [e2].[University], [e2].[UpdatedBy], [e2].[UpdatedDate], [e3].[Id], [e3].[CompanyName], [e3].[CreatedBy], [e3].[CreatedDate], [e3].[Designation], [e3].[EmployeeId], [e3].[EndDate], [e3].[IsActive], [e3].[Location], [e3].[Responsibilities], [e3].[StartDate], [e3].[UpdatedBy], [e3].[UpdatedDate], [e4].[Id], [e4].[CreatedBy], [e4].[CreatedDate], [e4].[EmployeeId], [e4].[IsActive], [e4].[ProficiencyLevel], [e4].[SkillName], [e4].[UpdatedBy], [e4].[UpdatedDate], [e4].[YearsOfExperience], [e5].[Id], [e5].[CertificateUrl], [e5].[CreatedBy], [e5].[CreatedDate], [e5].[EmployeeId], [e5].[EndDate], [e5].[IsActive], [e5].[Outcome], [e5].[Provider], [e5].[StartDate], [e5].[TrainingName], [e5].[UpdatedBy], [e5].[UpdatedDate], [e6].[Id], [e6].[CertificateUrl], [e6].[CertificationName], [e6].[CertificationNumber], [e6].[CreatedBy], [e6].[CreatedDate], [e6].[EmployeeId], [e6].[ExpiryDate], [e6].[IsActive], [e6].[IssueDate], [e6].[IssuingAuthority], [e6].[UpdatedBy], [e6].[UpdatedDate], [e7].[Id], [e7].[CreatedBy], [e7].[CreatedDate], [e7].[DocumentNumber], [e7].[DocumentType], [e7].[EmployeeId], [e7].[ExpiryDate], [e7].[FileUrl], [e7].[IsActive], [e7].[IssueDate], [e7].[Remark], [e7].[UpdatedBy], [e7].[UpdatedDate], [e8].[Id], [e8].[Address], [e8].[AlternatePhone], [e8].[CreatedBy], [e8].[CreatedDate], [e8].[Email], [e8].[EmployeeId], [e8].[IsActive], [e8].[IsPrimary], [e8].[Name], [e8].[PrimaryPhone], [e8].[Relationship], [e8].[UpdatedBy], [e8].[UpdatedDate], [s].[AccountHolderName], [s].[AccountNumber], [s].[BankName], [s].[BranchName], [s].[CreatedBy0], [s].[CreatedDate0], [s].[Currency], [s].[EmployeeId], [s].[IbanNumber], [s].[IsActive0], [s].[RoutingNumber], [s].[SwiftCode], [s].[UpdatedBy0], [s].[UpdatedDate0]
+FROM (
+    SELECT TOP(1) [e].[Id], [e].[AlternatePhoneNumber], [e].[AppUserId], [e].[BasicSalary], [e].[BloodGroup], [e].[ConfirmationDate], [e].[CreatedBy], [e].[CreatedDate], [e].[DateOfBirth], [e].[DateOfJoining], [e].[DateOfLeaving], [e].[DepartmentId], [e].[DesignationId], [e].[EmployeeCode], [e].[EmploymentStatus], [e].[EmploymentType], [e].[FirstName], [e].[FullName], [e].[Gender], [e].[IsActive], [e].[LastName], [e].[MaritalStatus], [e].[MiddleName], [e].[MobileNumber], [e].[NationalId], [e].[Nationality], [e].[OfficialEmail], [e].[PassportExpiryDate], [e].[PassportNumber], [e].[PersonalEmail], [e].[PhotoUrl], [e].[ProbationEndDate], [e].[Religion], [e].[ReportingManagerId], [e].[SalaryCurrency], [e].[SignatureUrl], [e].[UpdatedBy], [e].[UpdatedDate], [e].[WorkLocation], [e0].[Id] AS [Id0], [e0].[AccountHolderName], [e0].[AccountNumber], [e0].[BankName], [e0].[BranchName], [e0].[CreatedBy] AS [CreatedBy0], [e0].[CreatedDate] AS [CreatedDate0], [e0].[Currency], [e0].[EmployeeId], [e0].[IbanNumber], [e0].[IsActive] AS [IsActive0], [e0].[RoutingNumber], [e0].[SwiftCode], [e0].[UpdatedBy] AS [UpdatedBy0], [e0].[UpdatedDate] AS [UpdatedDate0]
+    FROM [Employees] AS [e]
+    LEFT JOIN [EmployeeBanks] AS [e0] ON [e].[Id] = [e0].[EmployeeId]
+    WHERE [e].[Id] = @id
+) AS [s]
+LEFT JOIN [EmployeeAddresses] AS [e1] ON [s].[Id] = [e1].[EmployeeId]
+LEFT JOIN [EmployeeEducations] AS [e2] ON [s].[Id] = [e2].[EmployeeId]
+LEFT JOIN [EmployeeExperiences] AS [e3] ON [s].[Id] = [e3].[EmployeeId]
+LEFT JOIN [EmployeeSkills] AS [e4] ON [s].[Id] = [e4].[EmployeeId]
+LEFT JOIN [EmployeeTrainings] AS [e5] ON [s].[Id] = [e5].[EmployeeId]
+LEFT JOIN [EmployeeCertifications] AS [e6] ON [s].[Id] = [e6].[EmployeeId]
+LEFT JOIN [EmployeeDocuments] AS [e7] ON [s].[Id] = [e7].[EmployeeId]
+LEFT JOIN [EmployeeEmergencyContacts] AS [e8] ON [s].[Id] = [e8].[EmployeeId]
+ORDER BY [s].[Id], [s].[Id0], [e1].[Id], [e2].[Id], [e3].[Id], [e4].[Id], [e5].[Id], [e6].[Id], [e7].[Id]"
+[2026-06-02 01:06:31.636] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("18"ms) [Parameters=["@p0='?' (DbType = Guid), @p1='?' (DbType = Guid), @p2='?' (DbType = Guid), @p3='?' (DbType = Guid), @p4='?' (DbType = Guid), @p5='?' (DbType = Guid), @p6='?' (DbType = Guid), @p7='?' (DbType = Guid), @p10='?' (DbType = Guid), @p8='?' (DbType = Guid), @p9='?' (DbType = DateTime)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+DELETE FROM [EmployeeAddresses]
+OUTPUT 1
+WHERE [Id] = @p0;
+DELETE FROM [EmployeeBanks]
+OUTPUT 1
+WHERE [Id] = @p1;
+DELETE FROM [EmployeeDocuments]
+OUTPUT 1
+WHERE [Id] = @p2;
+DELETE FROM [EmployeeEducations]
+OUTPUT 1
+WHERE [Id] = @p3;
+DELETE FROM [EmployeeEmergencyContacts]
+OUTPUT 1
+WHERE [Id] = @p4;
+DELETE FROM [EmployeeExperiences]
+OUTPUT 1
+WHERE [Id] = @p5;
+DELETE FROM [EmployeeSkills]
+OUTPUT 1
+WHERE [Id] = @p6;
+DELETE FROM [EmployeeTrainings]
+OUTPUT 1
+WHERE [Id] = @p7;
+UPDATE [Employees] SET [DesignationId] = @p8, [UpdatedDate] = @p9
+WHERE [Id] = @p10;
+SELECT @@ROWCOUNT;"
+[2026-06-02 01:06:31.654] [Information] () <Microsoft.EntityFrameworkCore.Database.Command> Executed DbCommand ("14"ms) [Parameters=["@p0='?' (DbType = Guid), @p1='?' (DbType = Int32), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (Size = 4000), @p5='?' (DbType = DateTime2), @p6='?' (DbType = Guid), @p7='?' (DbType = Boolean), @p8='?' (DbType = Boolean), @p9='?' (Size = 4000), @p10='?' (Size = 4000), @p11='?' (Size = 4000), @p12='?' (Size = 4000), @p13='?' (Size = 4000), @p14='?' (DbType = DateTime2), @p15='?' (DbType = Guid), @p16='?' (Size = 4000), @p17='?' (Size = 4000), @p18='?' (Size = 4000), @p19='?' (Size = 4000), @p20='?' (Size = 4000), @p21='?' (DbType = DateTime2), @p22='?' (Size = 4000), @p23='?' (DbType = Guid), @p24='?' (Size = 4000), @p25='?' (DbType = Boolean), @p26='?' (Size = 4000), @p27='?' (Size = 4000), @p28='?' (Size = 4000), @p29='?' (DbType = DateTime2), @p30='?' (DbType = Guid), @p31='?' (Size = 4000), @p32='?' (DbType = DateTime2), @p33='?' (Size = 4000), @p34='?' (Size = 4000), @p35='?' (DbType = Guid), @p36='?' (DbType = DateTime2), @p37='?' (Size = 4000), @p38='?' (DbType = Boolean), @p39='?' (DbType = DateTime2), @p40='?' (Size = 4000), @p41='?' (Size = 4000), @p42='?' (DbType = DateTime2), @p43='?' (DbType = Guid), @p44='?' (Size = 4000), @p45='?' (DbType = DateTime2), @p46='?' (Size = 4000), @p47='?' (DbType = Guid), @p48='?' (DbType = Int32), @p49='?' (Precision = 5) (Scale = 2) (DbType = Decimal), @p50='?' (Size = 4000), @p51='?' (DbType = Boolean), @p52='?' (Size = 4000), @p53='?' (Size = 4000), @p54='?' (DbType = Int32), @p55='?' (Size = 4000), @p56='?' (Size = 4000), @p57='?' (DbType = DateTime2), @p58='?' (DbType = Guid), @p59='?' (Size = 4000), @p60='?' (Size = 4000), @p61='?' (Size = 4000), @p62='?' (DbType = DateTime2), @p63='?' (Size = 4000), @p64='?' (DbType = Guid), @p65='?' (DbType = Boolean), @p66='?' (DbType = Boolean), @p67='?' (Size = 4000), @p68='?' (Size = 4000), @p69='?' (Size = 4000), @p70='?' (Size = 4000), @p71='?' (DbType = DateTime2), @p72='?' (DbType = Guid), @p73='?' (Size = 4000), @p74='?' (Size = 4000), @p75='?' (DbType = DateTime2), @p76='?' (Size = 4000), @p77='?' (DbType = Guid), @p78='?' (DbType = DateTime2), @p79='?' (DbType = Boolean), @p80='?' (Size = 4000), @p81='?' (Size = 4000), @p82='?' (DbType = DateTime2), @p83='?' (Size = 4000), @p84='?' (DbType = DateTime2), @p85='?' (DbType = Guid), @p86='?' (Size = 4000), @p87='?' (DbType = DateTime2), @p88='?' (DbType = Guid), @p89='?' (DbType = Boolean), @p90='?' (Size = 4000), @p91='?' (Size = 4000), @p92='?' (Size = 4000), @p93='?' (DbType = DateTime2), @p94='?' (DbType = Int32), @p95='?' (DbType = Guid), @p96='?' (Size = 4000), @p97='?' (Size = 4000), @p98='?' (DbType = DateTime2), @p99='?' (DbType = Guid), @p100='?' (DbType = DateTime2), @p101='?' (DbType = Boolean), @p102='?' (Size = 4000), @p103='?' (Size = 4000), @p104='?' (DbType = DateTime2), @p105='?' (Size = 4000), @p106='?' (Size = 4000), @p107='?' (DbType = DateTime2)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+INSERT INTO [EmployeeAddresses] ([Id], [AddressType], [City], [Country], [CreatedBy], [CreatedDate], [EmployeeId], [IsActive], [IsPrimary], [Line1], [Line2], [PostalCode], [State], [UpdatedBy], [UpdatedDate])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14);
+INSERT INTO [EmployeeBanks] ([Id], [AccountHolderName], [AccountNumber], [BankName], [BranchName], [CreatedBy], [CreatedDate], [Currency], [EmployeeId], [IbanNumber], [IsActive], [RoutingNumber], [SwiftCode], [UpdatedBy], [UpdatedDate])
+VALUES (@p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26, @p27, @p28, @p29);
+INSERT INTO [EmployeeDocuments] ([Id], [CreatedBy], [CreatedDate], [DocumentNumber], [DocumentType], [EmployeeId], [ExpiryDate], [FileUrl], [IsActive], [IssueDate], [Remark], [UpdatedBy], [UpdatedDate])
+VALUES (@p30, @p31, @p32, @p33, @p34, @p35, @p36, @p37, @p38, @p39, @p40, @p41, @p42);
+INSERT INTO [EmployeeEducations] ([Id], [CreatedBy], [CreatedDate], [DocumentUrl], [EmployeeId], [EndYear], [Grade], [Institution], [IsActive], [Qualification], [Specialization], [StartYear], [University], [UpdatedBy], [UpdatedDate])
+VALUES (@p43, @p44, @p45, @p46, @p47, @p48, @p49, @p50, @p51, @p52, @p53, @p54, @p55, @p56, @p57);
+INSERT INTO [EmployeeEmergencyContacts] ([Id], [Address], [AlternatePhone], [CreatedBy], [CreatedDate], [Email], [EmployeeId], [IsActive], [IsPrimary], [Name], [PrimaryPhone], [Relationship], [UpdatedBy], [UpdatedDate])
+VALUES (@p58, @p59, @p60, @p61, @p62, @p63, @p64, @p65, @p66, @p67, @p68, @p69, @p70, @p71);
+INSERT INTO [EmployeeExperiences] ([Id], [CompanyName], [CreatedBy], [CreatedDate], [Designation], [EmployeeId], [EndDate], [IsActive], [Location], [Responsibilities], [StartDate], [UpdatedBy], [UpdatedDate])
+VALUES (@p72, @p73, @p74, @p75, @p76, @p77, @p78, @p79, @p80, @p81, @p82, @p83, @p84);
+INSERT INTO [EmployeeSkills] ([Id], [CreatedBy], [CreatedDate], [EmployeeId], [IsActive], [ProficiencyLevel], [SkillName], [UpdatedBy], [UpdatedDate], [YearsOfExperience])
+VALUES (@p85, @p86, @p87, @p88, @p89, @p90, @p91, @p92, @p93, @p94);
+INSERT INTO [EmployeeTrainings] ([Id], [CertificateUrl], [CreatedBy], [CreatedDate], [EmployeeId], [EndDate], [IsActive], [Outcome], [Provider], [StartDate], [TrainingName], [UpdatedBy], [UpdatedDate])
+VALUES (@p95, @p96, @p97, @p98, @p99, @p100, @p101, @p102, @p103, @p104, @p105, @p106, @p107);"
+[2026-06-02 01:06:31.656] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "PUT" "/api/v1/Employee/updateEmployee" responded 200 in 476.7060 ms
+[2026-06-02 01:06:31.714] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:06:31.715] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:06:31.718] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 01:06:31.753] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 39.6067 ms
+[2026-06-02 01:06:33.963] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:06:33.963] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:06:33.966] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 01:06:33.973] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:06:33.973] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:06:33.976] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 01:06:34.035] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [
+      {
+        "Id": "25F78CEC-2242-402A-931F-AFEA2078ED10",
+        "Name": "Sreemonta Bhowmik"
+      }
+    ],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 01:06:34.036] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 73.2375 ms
+[2026-06-02 01:06:34.088] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 115.6073 ms
+[2026-06-02 01:10:50.249] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:10:50.250] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:10:50.267] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 01:10:50.393] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 144.5551 ms
+[2026-06-02 01:11:08.327] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:11:08.327] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:11:08.328] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 01:11:08.456] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [
+      {
+        "Id": "25F78CEC-2242-402A-931F-AFEA2078ED10",
+        "Name": "Sreemonta Bhowmik"
+      }
+    ],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 01:11:08.457] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 131.0698 ms
+[2026-06-02 01:11:10.858] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:11:10.859] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:11:10.862] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 01:11:10.928] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 72.2089 ms
+[2026-06-02 01:17:11.793] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:17:11.793] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:17:11.795] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 01:17:11.881] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 89.2732 ms
+[2026-06-02 01:17:28.027] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:17:28.028] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:17:28.029] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 01:17:28.100] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [
+      {
+        "Id": "25F78CEC-2242-402A-931F-AFEA2078ED10",
+        "Name": "Sreemonta Bhowmik"
+      }
+    ],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 01:17:28.101] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 74.9699 ms
+[2026-06-02 01:17:30.109] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:17:30.109] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:17:30.111] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 01:17:30.257] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 148.4592 ms
+[2026-06-02 01:19:02.614] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:19:02.614] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:19:02.631] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 01:19:02.907] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 294.0846 ms
+[2026-06-02 01:19:22.053] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:19:22.053] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:19:22.055] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 01:19:22.168] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 115.3357 ms
+[2026-06-02 01:19:28.302] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:19:28.302] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:19:28.304] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 01:19:28.483] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [
+      {
+        "Id": "25F78CEC-2242-402A-931F-AFEA2078ED10",
+        "Name": "Sreemonta Bhowmik"
+      }
+    ],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 01:19:28.484] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 182.2648 ms
+[2026-06-02 01:19:29.914] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:19:29.914] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:19:29.917] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 01:19:29.960] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 47.5228 ms
+[2026-06-02 01:22:37.728] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:22:37.728] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:22:37.737] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 01:22:37.777] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 50.8887 ms
+[2026-06-02 01:22:45.289] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:22:45.289] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:22:45.291] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 01:22:45.368] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [
+      {
+        "Id": "25F78CEC-2242-402A-931F-AFEA2078ED10",
+        "Name": "Sreemonta Bhowmik"
+      }
+    ],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 01:22:45.369] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 81.8004 ms
+[2026-06-02 01:22:46.848] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 01:22:46.848] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 01:22:46.850] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 01:22:47.086] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 239.2130 ms
+[2026-06-02 02:17:49.489] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:17:49.535] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:17:49.538] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 02:17:49.659] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 170.9970 ms
+[2026-06-02 02:17:52.897] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:17:52.897] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:17:57.440] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 02:17:57.464] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:17:57.464] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:17:57.466] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 02:17:57.641] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 176.8572 ms
+[2026-06-02 02:17:57.961] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [
+      {
+        "Id": "25F78CEC-2242-402A-931F-AFEA2078ED10",
+        "Name": "Sreemonta Bhowmik"
+      }
+    ],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 02:17:57.963] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 5066.6955 ms
+[2026-06-02 02:18:57.886] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:18:57.886] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:18:57.954] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 02:18:58.119] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 232.7453 ms
+[2026-06-02 02:19:03.729] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:19:03.729] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:19:03.730] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 02:19:04.055] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [
+      {
+        "Id": "25F78CEC-2242-402A-931F-AFEA2078ED10",
+        "Name": "Sreemonta Bhowmik"
+      }
+    ],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 02:19:04.056] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 327.7746 ms
+[2026-06-02 02:19:06.136] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:19:06.137] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:19:06.143] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 02:19:06.233] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 97.1946 ms
+[2026-06-02 02:22:51.453] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:22:51.505] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:22:51.515] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 02:22:51.697] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 244.5378 ms
+[2026-06-02 02:22:56.819] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:22:56.819] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:22:56.821] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 02:22:56.892] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [
+      {
+        "Id": "25F78CEC-2242-402A-931F-AFEA2078ED10",
+        "Name": "Sreemonta Bhowmik"
+      }
+    ],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 02:22:56.893] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 74.0134 ms
+[2026-06-02 02:22:57.842] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:22:57.842] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:22:57.843] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 02:22:57.933] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 90.8542 ms
+[2026-06-02 02:47:17.738] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:47:18.138] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:47:18.175] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 02:47:18.240] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 503.9445 ms
+[2026-06-02 02:47:20.311] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:47:20.311] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:47:20.312] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:47:20.312] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:47:20.313] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 02:47:20.315] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 02:47:20.395] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [
+      {
+        "Id": "25F78CEC-2242-402A-931F-AFEA2078ED10",
+        "Name": "Sreemonta Bhowmik"
+      }
+    ],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 02:47:20.397] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 85.9554 ms
+[2026-06-02 02:47:20.434] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 122.0113 ms
+[2026-06-02 02:53:44.047] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:53:44.047] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:53:44.049] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-02 02:53:44.129] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 81.8619 ms
+[2026-06-02 02:53:46.397] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:53:46.397] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:53:46.400] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-06-02 02:53:46.402] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-02 02:53:46.402] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-02 02:53:46.403] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-06-02 02:53:46.441] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260da1-0bb1-4842-a3ec-786f859dc5ca",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1f8fd7ee-c9c4-484b-aeb9-3f81f2c04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197ee-0a7e-4910-81a1-be9060a51ae7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2b3c7610-f979-48f0-881c-44b9f3c93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232ea50-7b93-4559-8eb6-dc5f3bd78a09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82b5f6d0-5403-48d0-8d1c-8ef510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4e2e6864-b92c-4224-8bef-20f7e72df648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60bbb9db-3a9e-4560-bb0f-c93dbaf9c7db",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "f2597dae-b3c6-47bb-b2a1-5caa5dcfd770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "e619d48f-bd89-404f-a406-f466f1b62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51da7cd0-7d22-4c3b-a01e-21e1eafd27e9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368c0e9b-e60d-40cf-912c-43744db1b19f",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "f46d487d-f446-4e3c-b06f-8263dc854c89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [
+      {
+        "Id": "25f78cec-2242-402a-931f-afea2078ed10",
+        "Name": "Sreemonta Bhowmik"
+      }
+    ],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-06-02 02:53:46.442] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 40.4566 ms
+[2026-06-02 02:53:46.467] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 74.3705 ms

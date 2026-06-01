@@ -1,0 +1,210 @@
+[2026-05-30 23:56:46.963] [Information] () <> SBERP.HumanResources starting...
+[2026-05-30 23:56:54.955] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-05-30 23:57:03.754] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-05-30 23:57:03.825] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 5294.5485 ms
+[2026-05-30 23:58:35.040] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-30 23:58:35.046] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-30 23:58:38.255] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-05-30 23:58:42.842] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 8337.6036 ms
+[2026-05-30 23:58:46.308] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-30 23:58:46.308] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-05-30 23:58:46.309] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-30 23:58:46.309] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-05-30 23:58:46.343] [Information] () <> GetEmployeeInitialDataAsync api method started.
+[2026-05-30 23:58:46.360] [Information] () <> GetEmployeeByIdAsync api method request: 
+25f78cec-2242-402a-931f-afea2078ed10
+
+[2026-05-30 23:58:46.502] [Information] () <> GetEmployeeInitialDataAsync api method response: 
+{
+  "Success": true,
+  "Message": "Employee initial data fetched.",
+  "MessageType": 1,
+  "ResponseCode": 200,
+  "Result": {
+    "Departments": [
+      {
+        "Id": "28260DA1-0BB1-4842-A3EC-786F859DC5CA",
+        "Name": "Administration"
+      },
+      {
+        "Id": "1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609",
+        "Name": "Engineering"
+      },
+      {
+        "Id": "729197EE-0A7E-4910-81A1-BE9060A51AE7",
+        "Name": "Finance"
+      },
+      {
+        "Id": "2B3C7610-F979-48F0-881C-44B9F3C93555",
+        "Name": "Human Resources"
+      },
+      {
+        "Id": "5232EA50-7B93-4559-8EB6-DC5F3BD78A09",
+        "Name": "Operations"
+      }
+    ],
+    "Designations": [
+      {
+        "Id": "82B5F6D0-5403-48D0-8D1C-8EF510762631",
+        "Name": "Accountant"
+      },
+      {
+        "Id": "4E2E6864-B92C-4224-8BEF-20F7E72DF648",
+        "Name": "Chief Executive Officer"
+      },
+      {
+        "Id": "60BBB9DB-3A9E-4560-BB0F-C93DBAF9C7DB",
+        "Name": "HR Manager"
+      },
+      {
+        "Id": "F2597DAE-B3C6-47BB-B2A1-5CAA5DCFD770",
+        "Name": "Intern"
+      },
+      {
+        "Id": "E619D48F-BD89-404F-A406-F466F1B62088",
+        "Name": "Manager"
+      },
+      {
+        "Id": "51DA7CD0-7D22-4C3B-A01E-21E1EAFD27E9",
+        "Name": "Senior Engineer"
+      },
+      {
+        "Id": "368C0E9B-E60D-40CF-912C-43744DB1B19F",
+        "Name": "Software Engineer"
+      },
+      {
+        "Id": "F46D487D-F446-4E3C-B06F-8263DC854C89",
+        "Name": "Team Lead"
+      }
+    ],
+    "ReportingManagers": [],
+    "Genders": [
+      {
+        "Id": "1",
+        "Name": "Male"
+      },
+      {
+        "Id": "2",
+        "Name": "Female"
+      },
+      {
+        "Id": "3",
+        "Name": "Other"
+      }
+    ],
+    "MaritalStatuses": [
+      {
+        "Id": "1",
+        "Name": "Single"
+      },
+      {
+        "Id": "2",
+        "Name": "Married"
+      },
+      {
+        "Id": "3",
+        "Name": "Divorced"
+      },
+      {
+        "Id": "4",
+        "Name": "Widowed"
+      },
+      {
+        "Id": "5",
+        "Name": "Separated"
+      }
+    ],
+    "BloodGroups": [
+      {
+        "Id": "1",
+        "Name": "A+"
+      },
+      {
+        "Id": "2",
+        "Name": "A-"
+      },
+      {
+        "Id": "3",
+        "Name": "B+"
+      },
+      {
+        "Id": "4",
+        "Name": "B-"
+      },
+      {
+        "Id": "5",
+        "Name": "AB+"
+      },
+      {
+        "Id": "6",
+        "Name": "AB-"
+      },
+      {
+        "Id": "7",
+        "Name": "O+"
+      },
+      {
+        "Id": "8",
+        "Name": "O-"
+      }
+    ],
+    "EmploymentTypes": [
+      {
+        "Id": "1",
+        "Name": "Full Time"
+      },
+      {
+        "Id": "2",
+        "Name": "Part Time"
+      },
+      {
+        "Id": "3",
+        "Name": "Contract"
+      },
+      {
+        "Id": "4",
+        "Name": "Intern"
+      },
+      {
+        "Id": "5",
+        "Name": "Consultant"
+      },
+      {
+        "Id": "6",
+        "Name": "Probation"
+      }
+    ],
+    "EmploymentStatuses": [
+      {
+        "Id": "1",
+        "Name": "Active"
+      },
+      {
+        "Id": "2",
+        "Name": "On Leave"
+      },
+      {
+        "Id": "3",
+        "Name": "Suspended"
+      },
+      {
+        "Id": "4",
+        "Name": "Resigned"
+      },
+      {
+        "Id": "5",
+        "Name": "Terminated"
+      },
+      {
+        "Id": "6",
+        "Name": "Retired"
+      }
+    ],
+    "NextEmployeeCode": "EMP-0002"
+  }
+}
+
+[2026-05-30 23:58:46.523] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeInitialData" responded 200 in 226.9488 ms
+[2026-05-30 23:58:47.234] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getEmployeeById" responded 200 in 951.2165 ms
