@@ -15,7 +15,8 @@ namespace SBERP.HumanResources.Models.Configuration
 
     public class ConnectionStrings
     {
-        public string? HRDatabase { get; set; }
+        public string? HRSqlConnectionString { get; set; }
+        public string? HRDefaultConnectionString { get; set; }
     }
 
     public class AttendanceSettings

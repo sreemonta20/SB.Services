@@ -1,0 +1,193 @@
+[2026-06-11 02:13:57.672] [Information] () <> SBERP.HumanResources starting...
+[2026-06-11 02:14:03.183] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-06-11 02:14:14.413] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-06-11 02:14:14.474] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 3904.6505 ms
+[2026-06-11 02:16:05.662] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-11 02:16:05.666] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-11 02:16:08.074] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-11 02:16:11.123] [Error] () <> GetAllEmployeesPagingWithSearchAsync api method exception: 
+"The ConnectionString property has not been initialized."
+
+[2026-06-11 02:16:11.200] [Error] () <> {
+  "ClassName": "System.InvalidOperationException",
+  "Message": "The ConnectionString property has not been initialized.",
+  "Data": null,
+  "InnerException": null,
+  "HelpURL": null,
+  "StackTraceString": "   at Microsoft.Data.SqlClient.SqlConnection.PermissionDemand()\r\n   at Microsoft.Data.SqlClient.SqlConnectionFactory.PermissionDemand(DbConnection outerConnection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)\r\n   at Microsoft.Data.SqlClient.SqlConnection.InternalOpenAsync(SqlConnectionOverrides overrides, CancellationToken cancellationToken)\r\n--- End of stack trace from previous location ---\r\n   at SBERP.HumanResources.Service.EmployeeService.GetAllEmployeesPagingWithSearchAsync(PagingSearchFilter filter) in D:\\Personal Work\\Project\\SB.Web\\SBERP.Services\\SBERP.HumanResources\\Service\\EmployeeService.cs:line 120",
+  "RemoteStackTraceString": null,
+  "RemoteStackIndex": 0,
+  "ExceptionMethod": null,
+  "HResult": -2146233079,
+  "Source": "Microsoft.Data.SqlClient",
+  "WatsonBuckets": null
+}
+[2026-06-11 02:16:11.274] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 5957.7787 ms
+[2026-06-11 02:16:24.887] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-11 02:16:24.887] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-11 02:16:24.888] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-11 02:16:24.888] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-11 02:16:25.192] [Error] () <> GetAllDepartmentsPagingWithSearchAsync api method exception: 
+"The ConnectionString property has not been initialized."
+
+[2026-06-11 02:16:25.195] [Error] () <> {
+  "ClassName": "System.InvalidOperationException",
+  "Message": "The ConnectionString property has not been initialized.",
+  "Data": null,
+  "InnerException": null,
+  "HelpURL": null,
+  "StackTraceString": "   at Microsoft.Data.SqlClient.SqlConnection.PermissionDemand()\r\n   at Microsoft.Data.SqlClient.SqlConnectionFactory.PermissionDemand(DbConnection outerConnection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)\r\n   at Microsoft.Data.SqlClient.SqlConnection.InternalOpenAsync(SqlConnectionOverrides overrides, CancellationToken cancellationToken)\r\n--- End of stack trace from previous location ---\r\n   at SBERP.HumanResources.Service.DepartmentService.GetAllDepartmentsPagingWithSearchAsync(PagingSearchFilter filter) in D:\\Personal Work\\Project\\SB.Web\\SBERP.Services\\SBERP.HumanResources\\Service\\DepartmentService.cs:line 77",
+  "RemoteStackTraceString": null,
+  "RemoteStackIndex": 0,
+  "ExceptionMethod": null,
+  "HResult": -2146233079,
+  "Source": "Microsoft.Data.SqlClient",
+  "WatsonBuckets": null
+}
+[2026-06-11 02:16:25.200] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Department/getAllDepartmentsPagingWithSearch" responded 200 in 327.5025 ms
+[2026-06-11 02:16:26.605] [Error] () <Microsoft.EntityFrameworkCore.Database.Connection> An error occurred using the connection to database '""' on server '""'.
+[2026-06-11 02:16:26.812] [Error] () <Microsoft.EntityFrameworkCore.Query> An exception occurred while iterating over the results of a query for context type '"SBERP.HumanResources.Persistence.HumanResourcesDBContext"'."
+""System.InvalidOperationException: The ConnectionString property has not been initialized.
+   at Microsoft.Data.SqlClient.SqlConnection.PermissionDemand()
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.PermissionDemand(DbConnection outerConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.InternalOpenAsync(SqlConnectionOverrides overrides, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()"
+System.InvalidOperationException: The ConnectionString property has not been initialized.
+   at Microsoft.Data.SqlClient.SqlConnection.PermissionDemand()
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.PermissionDemand(DbConnection outerConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.InternalOpenAsync(SqlConnectionOverrides overrides, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+[2026-06-11 02:16:26.920] [Error] () <> GetAllDepartmentsAsync api method exception: 
+"The ConnectionString property has not been initialized."
+
+[2026-06-11 02:16:26.930] [Error] () <> {
+  "ClassName": "System.InvalidOperationException",
+  "Message": "The ConnectionString property has not been initialized.",
+  "Data": {},
+  "InnerException": null,
+  "HelpURL": null,
+  "StackTraceString": "   at Microsoft.Data.SqlClient.SqlConnection.PermissionDemand()\r\n   at Microsoft.Data.SqlClient.SqlConnectionFactory.PermissionDemand(DbConnection outerConnection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)\r\n   at Microsoft.Data.SqlClient.SqlConnection.InternalOpenAsync(SqlConnectionOverrides overrides, CancellationToken cancellationToken)\r\n--- End of stack trace from previous location ---\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()\r\n   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)\r\n   at SBERP.HumanResources.Service.DepartmentService.GetAllDepartmentsAsync() in D:\\Personal Work\\Project\\SB.Web\\SBERP.Services\\SBERP.HumanResources\\Service\\DepartmentService.cs:line 42",
+  "RemoteStackTraceString": null,
+  "RemoteStackIndex": 0,
+  "ExceptionMethod": null,
+  "HResult": -2146233079,
+  "Source": "Microsoft.Data.SqlClient",
+  "WatsonBuckets": null
+}
+[2026-06-11 02:16:26.931] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Department/getAllDepartments" responded 200 in 2054.0558 ms
+[2026-06-11 02:16:29.394] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-11 02:16:29.395] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-11 02:16:29.402] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-11 02:16:29.584] [Error] () <> GetAllEmployeesPagingWithSearchAsync api method exception: 
+"The ConnectionString property has not been initialized."
+
+[2026-06-11 02:16:29.585] [Error] () <> {
+  "ClassName": "System.InvalidOperationException",
+  "Message": "The ConnectionString property has not been initialized.",
+  "Data": null,
+  "InnerException": null,
+  "HelpURL": null,
+  "StackTraceString": "   at Microsoft.Data.SqlClient.SqlConnection.PermissionDemand()\r\n   at Microsoft.Data.SqlClient.SqlConnectionFactory.PermissionDemand(DbConnection outerConnection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)\r\n   at Microsoft.Data.SqlClient.SqlConnection.InternalOpenAsync(SqlConnectionOverrides overrides, CancellationToken cancellationToken)\r\n--- End of stack trace from previous location ---\r\n   at SBERP.HumanResources.Service.EmployeeService.GetAllEmployeesPagingWithSearchAsync(PagingSearchFilter filter) in D:\\Personal Work\\Project\\SB.Web\\SBERP.Services\\SBERP.HumanResources\\Service\\EmployeeService.cs:line 120",
+  "RemoteStackTraceString": null,
+  "RemoteStackIndex": 0,
+  "ExceptionMethod": null,
+  "HResult": -2146233079,
+  "Source": "Microsoft.Data.SqlClient",
+  "WatsonBuckets": null
+}
+[2026-06-11 02:16:29.586] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 194.7886 ms
+[2026-06-11 02:20:18.638] [Information] () <> SBERP.HumanResources starting...
+[2026-06-11 02:20:19.756] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-06-11 02:20:21.728] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-06-11 02:20:21.784] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 829.2067 ms
+[2026-06-11 02:21:04.866] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-11 02:21:04.881] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-11 02:21:06.426] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-11 02:21:09.775] [Error] () <> GetAllEmployeesPagingWithSearchAsync api method exception: 
+"The ConnectionString property has not been initialized."
+
+[2026-06-11 02:21:09.805] [Error] () <> {
+  "ClassName": "System.InvalidOperationException",
+  "Message": "The ConnectionString property has not been initialized.",
+  "Data": null,
+  "InnerException": null,
+  "HelpURL": null,
+  "StackTraceString": "   at Microsoft.Data.SqlClient.SqlConnection.PermissionDemand()\r\n   at Microsoft.Data.SqlClient.SqlConnectionFactory.PermissionDemand(DbConnection outerConnection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)\r\n   at Microsoft.Data.SqlClient.SqlConnection.InternalOpenAsync(SqlConnectionOverrides overrides, CancellationToken cancellationToken)\r\n--- End of stack trace from previous location ---\r\n   at SBERP.HumanResources.Service.EmployeeService.GetAllEmployeesPagingWithSearchAsync(PagingSearchFilter filter) in D:\\Personal Work\\Project\\SB.Web\\SBERP.Services\\SBERP.HumanResources\\Service\\EmployeeService.cs:line 120",
+  "RemoteStackTraceString": null,
+  "RemoteStackIndex": 0,
+  "ExceptionMethod": null,
+  "HResult": -2146233079,
+  "Source": "Microsoft.Data.SqlClient",
+  "WatsonBuckets": null
+}
+[2026-06-11 02:21:09.877] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 5378.8144 ms
+[2026-06-11 02:24:05.663] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-11 02:24:05.664] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-11 02:24:05.683] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-11 02:24:05.912] [Error] () <> GetAllEmployeesPagingWithSearchAsync api method exception: 
+"The ConnectionString property has not been initialized."
+
+[2026-06-11 02:24:05.913] [Error] () <> {
+  "ClassName": "System.InvalidOperationException",
+  "Message": "The ConnectionString property has not been initialized.",
+  "Data": null,
+  "InnerException": null,
+  "HelpURL": null,
+  "StackTraceString": "   at Microsoft.Data.SqlClient.SqlConnection.PermissionDemand()\r\n   at Microsoft.Data.SqlClient.SqlConnectionFactory.PermissionDemand(DbConnection outerConnection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)\r\n   at Microsoft.Data.SqlClient.SqlConnection.InternalOpenAsync(SqlConnectionOverrides overrides, CancellationToken cancellationToken)\r\n--- End of stack trace from previous location ---\r\n   at SBERP.HumanResources.Service.EmployeeService.GetAllEmployeesPagingWithSearchAsync(PagingSearchFilter filter) in D:\\Personal Work\\Project\\SB.Web\\SBERP.Services\\SBERP.HumanResources\\Service\\EmployeeService.cs:line 120",
+  "RemoteStackTraceString": null,
+  "RemoteStackIndex": 0,
+  "ExceptionMethod": null,
+  "HResult": -2146233079,
+  "Source": "Microsoft.Data.SqlClient",
+  "WatsonBuckets": null
+}
+[2026-06-11 02:24:05.917] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 273.1826 ms
+[2026-06-11 02:25:14.181] [Information] () <> SBERP.HumanResources starting...
+[2026-06-11 02:26:52.922] [Information] () <> SBERP.HumanResources starting...
+[2026-06-11 02:27:06.232] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-06-11 02:27:08.143] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-06-11 02:27:08.202] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 727.0802 ms
+[2026-06-11 02:27:49.100] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-11 02:27:49.104] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-11 02:27:50.664] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-11 02:27:54.274] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 5512.9824 ms
+[2026-06-11 02:32:16.485] [Information] () <> SBERP.HumanResources starting...
+[2026-06-11 02:33:41.309] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-06-11 02:33:53.901] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-06-11 02:33:53.954] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 3982.0115 ms
+[2026-06-11 02:35:05.211] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> Successfully validated the token.
+[2026-06-11 02:35:05.235] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was successfully authenticated.
+[2026-06-11 02:35:07.635] [Information] () <> GetAllEmployeesPagingWithSearchAsync api method request: 
+{"SearchTerm":"","SortColumnName":"EmployeeCode","SortColumnDirection":"asc","PageNumber":1,"PageSize":10}
+
+[2026-06-11 02:35:11.697] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/api/v1/Employee/getAllEmployeesPagingWithSearch" responded 200 in 6820.4945 ms

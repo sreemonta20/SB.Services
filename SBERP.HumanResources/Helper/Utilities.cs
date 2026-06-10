@@ -1,8 +1,11 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using SBERP.HumanResources.Models.Response;
-using SBERP.HumanResources.Service;
 using Newtonsoft.Json;
+using SBERP.HumanResources.Models.Configuration;
+using SBERP.HumanResources.Models.Response;
+using SBERP.HumanResources.Persistence;
+using SBERP.HumanResources.Service;
+using System.Data;
 using System.Net;
 
 namespace SBERP.HumanResources.Helper
@@ -92,6 +95,27 @@ namespace SBERP.HumanResources.Helper
                 ResponseCode = (int)HttpStatusCode.InternalServerError,
                 Result = null
             };
+        }
+
+        public static void RegisterDatabase(IServiceCollection services, AppSettings? appSettings)
+        {
+            var cs = appSettings?.ConnectionStrings;
+            switch (appSettings?.AppDB)
+            {
+                case ConstantSupplier.SQLSERVER:
+                    services.AddDbContext<HumanResourcesDBContext>(options =>
+                        options.UseSqlServer(cs?.HRSqlConnectionString));
+                    services.AddTransient<IDbConnection>(_ =>
+                        new SqlConnection(cs?.HRSqlConnectionString));
+                    break;
+
+                default:
+                    services.AddDbContext<HumanResourcesDBContext>(options =>
+                        options.UseSqlServer(cs?.HRDefaultConnectionString));
+                    services.AddTransient<IDbConnection>(_ =>
+                        new SqlConnection(cs?.HRDefaultConnectionString));
+                    break;
+            }
         }
     }
 }

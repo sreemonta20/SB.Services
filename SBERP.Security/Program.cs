@@ -9,6 +9,8 @@
 // ADDED:   using Microsoft.AspNetCore.Mvc.ApiExplorer → for TryGetMethodInfo()
 
 using Asp.Versioning;
+using Azure.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -38,9 +40,28 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Configuration
+//builder.Configuration
+//    .SetBasePath(Directory.GetCurrentDirectory())
+//    .AddJsonFile(ConstantSupplier.APP_SETTINGS_FILE_NAME);
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile(ConstantSupplier.APP_SETTINGS_FILE_NAME);
+    .AddJsonFile(ConstantSupplier.APP_SETTINGS_FILE_NAME, optional: false, reloadOnChange: true);
+
+bool isConnectionStrInAzureVault = bool.Parse(builder.Configuration["IsConnectionStrInAzureVault"] ?? "false");
+if (isConnectionStrInAzureVault)
+{
+    // Pull the Key Vault URI from appsettings
+    var keyVaultUri = builder.Configuration["KeyVaultUri"];
+
+    if (!string.IsNullOrEmpty(keyVaultUri))
+    {
+        // Connects to Key Vault using Azure RBAC credentials
+        builder.Configuration.AddAzureKeyVault(
+            new Uri(keyVaultUri),
+            new DefaultAzureCredential()
+        );
+    }
+}
 
 var configuration = builder.Configuration;
 
@@ -71,7 +92,7 @@ services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
 var appSettings = configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
 
 // 3.2 Register Database
-RegisterDatabase(services, appSettings);
+Utilities.RegisterDatabase(services, appSettings);
 
 // 3.3 Core Services
 services.AddScoped<IEmailService, EmailSender>();
@@ -276,36 +297,43 @@ finally
     Log.CloseAndFlush();
 }
 
-static void RegisterDatabase(IServiceCollection services, AppSettings? appSettings)
-{
-    var cs = appSettings?.ConnectionStrings;
-    switch (appSettings?.AppDB)
-    {
-        case ConstantSupplier.SQLSERVER:
-            services.AddDbContext<SecurityDBContext>(options =>
-                options.UseSqlServer(cs?.ProdSqlConnectionString));
-            services.AddTransient<IDbConnection>(_ =>
-                new SqlConnection(cs?.ProdSqlConnectionString));
-            break;
-        case ConstantSupplier.ORACLE:
-            services.AddDbContext<SecurityDBContext>(options =>
-                options.UseOracle(cs?.ProdOracleConnectionString));
-            services.AddScoped<IDbConnection>(_ =>
-                new Oracle.ManagedDataAccess.Client.OracleConnection(cs?.ProdOracleConnectionString));
-            break;
-        case ConstantSupplier.ODBC:
-            services.AddDbContext<SecurityDBContext>(options =>
-                options.UseJetOdbc(cs?.ProdOdbcConnectionString));
-            services.AddScoped<IDbConnection>(_ =>
-                new OdbcConnection(cs?.ProdOdbcConnectionString));
-            break;
-        case ConstantSupplier.OLEDB:
-            services.AddDbContext<SecurityDBContext>(options =>
-                options.UseJetOleDb(cs?.ProdOledbConnectionString));
-            services.AddScoped<IDbConnection>(_ =>
-                new OleDbConnection(cs?.ProdOledbConnectionString));
-            break;
-    }
-}
+//static void RegisterDatabase(IServiceCollection services, AppSettings? appSettings)
+//{
+//    var cs = appSettings?.ConnectionStrings;
+//    switch (appSettings?.AppDB)
+//    {
+//        case ConstantSupplier.SQLSERVER:
+//            services.AddDbContext<SecurityDBContext>(options =>
+//                options.UseSqlServer(cs?.SCSqlConnectionString));
+//            services.AddTransient<IDbConnection>(_ =>
+//                new SqlConnection(cs?.SCSqlConnectionString));
+//            break;
+//        case ConstantSupplier.ORACLE:
+//            services.AddDbContext<SecurityDBContext>(options =>
+//                options.UseOracle(cs?.SCOracleConnectionString));
+//            services.AddScoped<IDbConnection>(_ =>
+//                new Oracle.ManagedDataAccess.Client.OracleConnection(cs?.SCOracleConnectionString));
+//            break;
+//        case ConstantSupplier.ODBC:
+//            services.AddDbContext<SecurityDBContext>(options =>
+//                options.UseJetOdbc(cs?.SCOdbcConnectionString));
+//            services.AddScoped<IDbConnection>(_ =>
+//                new OdbcConnection(cs?.SCOdbcConnectionString));
+//            break;
+//        case ConstantSupplier.OLEDB:
+//            services.AddDbContext<SecurityDBContext>(options =>
+//                options.UseJetOleDb(cs?.SCOledbConnectionString));
+//            services.AddScoped<IDbConnection>(_ =>
+//                new OleDbConnection(cs?.SCOledbConnectionString));
+//            break;
+
+//        default:
+//            services.AddDbContext<SecurityDBContext>(options =>
+//                options.UseSqlServer(cs?.SCDefaultConnectionString));
+//            services.AddTransient<IDbConnection>(_ =>
+//                new SqlConnection(cs?.SCDefaultConnectionString));
+//            break;
+//    }
+//}
 
 #endregion

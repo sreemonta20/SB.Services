@@ -3,6 +3,8 @@
 // .NET 10 / Swashbuckle 10.x — same pattern as SBERP.Security.
 
 using Asp.Versioning;
+using Azure.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Newtonsoft.Json.Serialization;
@@ -14,6 +16,8 @@ using SBERP.HumanResources.Service;
 using SBERP.Shared.Extensions;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Data;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -28,6 +32,24 @@ builder.Configuration
         $"appsettings.{builder.Environment.EnvironmentName}.json",
         optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
+
+bool isConnectionStrInAzureVault = bool.Parse(builder.Configuration["IsConnectionStrInAzureVault"] ?? "false");
+if (isConnectionStrInAzureVault)
+{
+    // --- Azure Key Vault ---
+    var keyVaultUri = builder.Configuration["KeyVaultUri"];
+    if (!string.IsNullOrWhiteSpace(keyVaultUri))
+    {
+        // DefaultAzureCredential works across environments without code changes:
+        //   - local dev: Visual Studio / az login / VS Code sign-in
+        //   - Azure host: the app's Managed Identity
+        // Grant that identity "Key Vault Secrets User" on the vault (RBAC) or a
+        // Get/List secrets access policy.
+        builder.Configuration.AddAzureKeyVault(
+            new Uri(keyVaultUri),
+            new DefaultAzureCredential());
+    }
+}
 
 var configuration = builder.Configuration;
 
@@ -47,21 +69,19 @@ var services = builder.Services;
 
 // 3.1 Bind AppSettings — used by HRSettingsService for upload paths
 services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
+var appSettings = configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
 
-// 3.2 DbContext — points at HumanResourcesDB
-var hrConnection = configuration.GetSection("ConnectionStrings")["HRDatabase"];
-if (string.IsNullOrWhiteSpace(hrConnection))
-    throw new InvalidOperationException(
-        "ConnectionStrings:HRDatabase missing in appsettings.json");
+// 3.2 DbContext — points at HumanResourcesDB (SQL Server for now, but switchable via AppSettings.AppDB and DI) [Register Database]
+//var hrConnection = configuration.GetSection("ConnectionStrings")["HRDatabase"];
+//if (string.IsNullOrWhiteSpace(hrConnection))
+//    throw new InvalidOperationException(
+//        "ConnectionStrings:HRDatabase missing in appsettings.json");
 
-services.AddDbContext<HumanResourcesDBContext>(options =>
-                options.UseSqlServer(hrConnection));
+//services.AddDbContext<HumanResourcesDBContext>(options =>
+//                options.UseSqlServer(hrConnection));
+// 3.2 Register Database
+Utilities.RegisterDatabase(services, appSettings);
 
-//services.AddDbContext<HumanResourcesDBContext>(opts =>
-//    opts.UseSqlServer(hrConnection, sql =>
-//        sql.EnableRetryOnFailure(maxRetryCount: 3,
-//                                 maxRetryDelay: TimeSpan.FromSeconds(2),
-//                                 errorNumbersToAdd: null)));
 
 // 3.3 CORS
 //var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>()
@@ -217,5 +237,26 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+//static void RegisterDatabase(IServiceCollection services, AppSettings? appSettings)
+//{
+//    var cs = appSettings?.ConnectionStrings;
+//    switch (appSettings?.AppDB)
+//    {
+//        case ConstantSupplier.SQLSERVER:
+//            services.AddDbContext<HumanResourcesDBContext>(options =>
+//                options.UseSqlServer(cs?.HRSqlConnectionString));
+//            services.AddTransient<IDbConnection>(_ =>
+//                new SqlConnection(cs?.HRSqlConnectionString));
+//            break;
+
+//        default:
+//            services.AddDbContext<HumanResourcesDBContext>(options =>
+//                options.UseSqlServer(cs?.HRDefaultConnectionString));
+//            services.AddTransient<IDbConnection>(_ =>
+//                new SqlConnection(cs?.HRDefaultConnectionString));
+//            break;
+//    }
+//}
 
 #endregion

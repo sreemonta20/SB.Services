@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SBERP.Security.Models.Configuration;
 using SBERP.Security.Models.Response;
+using SBERP.Security.Persistence;
 using SBERP.Security.Service;
 using System.Collections;
 using System.Data;
+using System.Data.Odbc;
+using System.Data.OleDb;
 using System.Linq.Dynamic.Core;
 using System.Reflection;
 
@@ -320,6 +324,45 @@ namespace SBERP.Security.Helper
                 return sqlEx.Number == 2601 || sqlEx.Number == 2627;
 
             return false;
+        }
+
+        public static void RegisterDatabase(IServiceCollection services, AppSettings? appSettings)
+        {
+            var cs = appSettings?.ConnectionStrings;
+            switch (appSettings?.AppDB)
+            {
+                case ConstantSupplier.SQLSERVER:
+                    services.AddDbContext<SecurityDBContext>(options =>
+                        options.UseSqlServer(cs?.SCSqlConnectionString));
+                    services.AddTransient<IDbConnection>(_ =>
+                        new SqlConnection(cs?.SCSqlConnectionString));
+                    break;
+                case ConstantSupplier.ORACLE:
+                    services.AddDbContext<SecurityDBContext>(options =>
+                        options.UseOracle(cs?.SCOracleConnectionString));
+                    services.AddScoped<IDbConnection>(_ =>
+                        new Oracle.ManagedDataAccess.Client.OracleConnection(cs?.SCOracleConnectionString));
+                    break;
+                case ConstantSupplier.ODBC:
+                    services.AddDbContext<SecurityDBContext>(options =>
+                        options.UseJetOdbc(cs?.SCOdbcConnectionString));
+                    services.AddScoped<IDbConnection>(_ =>
+                        new OdbcConnection(cs?.SCOdbcConnectionString));
+                    break;
+                case ConstantSupplier.OLEDB:
+                    services.AddDbContext<SecurityDBContext>(options =>
+                        options.UseJetOleDb(cs?.SCOledbConnectionString));
+                    services.AddScoped<IDbConnection>(_ =>
+                        new OleDbConnection(cs?.SCOledbConnectionString));
+                    break;
+
+                default:
+                    services.AddDbContext<SecurityDBContext>(options =>
+                        options.UseSqlServer(cs?.SCDefaultConnectionString));
+                    services.AddTransient<IDbConnection>(_ =>
+                        new SqlConnection(cs?.SCDefaultConnectionString));
+                    break;
+            }
         }
     }
 }

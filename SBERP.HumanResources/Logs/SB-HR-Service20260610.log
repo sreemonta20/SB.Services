@@ -1,0 +1,4 @@
+[2026-06-10 05:51:49.472] [Information] () <> SBERP.HumanResources starting...
+[2026-06-10 05:51:54.444] [Warning] () <Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware> The WebRootPath was not found: "D:\Personal Work\Project\SB.Web\SBERP.Services\SBERP.HumanResources\wwwroot". Static files may be unavailable.
+[2026-06-10 05:52:07.530] [Debug] () <Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler> AuthenticationScheme: "Bearer" was not authenticated.
+[2026-06-10 05:52:07.586] [Information] () <Serilog.AspNetCore.RequestLoggingMiddleware> HTTP "GET" "/logo.png" responded 404 in 4133.9335 ms

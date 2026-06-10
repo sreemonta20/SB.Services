@@ -60,7 +60,7 @@ namespace SBERP.Security.Service
             _appSettings = options.Value;
             _securityLogService = securityLogService;
             _dbmanager = dbManager;
-            _dbmanager.InitializeDatabase(_appSettings?.ConnectionStrings?.ProdSqlConnectionString, _appSettings?.ConnectionProvider);
+            _dbmanager.InitializeDatabase(_appSettings?.ConnectionStrings?.SCSqlConnectionString, _appSettings?.ConnectionProvider);
         }
         #endregion
 
