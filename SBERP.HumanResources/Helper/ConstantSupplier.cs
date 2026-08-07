@@ -48,6 +48,23 @@ namespace SBERP.HumanResources.Helper
         public const string SP_SAVE_UPDATE_HR_SETTINGS        = "SP_SaveUpdateHRSettings";
         #endregion
 
+        #region Routes — Company
+        public const string GET_ALL_COMPANIES_ROUTE = "getAllCompanies";
+        public const string GET_ALL_COMPANIES_PAGING_ROUTE = "getAllCompaniesPagingWithSearch";
+        public const string GET_COMPANY_BY_ID_ROUTE = "getCompanyById";
+        public const string SAVE_UPDATE_COMPANY_ROUTE = "saveUpdateCompany";
+        public const string DELETE_COMPANY_ROUTE = "deleteCompany";
+        #endregion
+
+        #region Routes — Branch
+        public const string GET_ALL_BRANCHES_ROUTE = "getAllBranches";
+        public const string GET_ALL_BRANCHES_BY_COMPANY_ROUTE = "getAllBranchesByCompanyId";
+        public const string GET_ALL_BRANCHES_PAGING_ROUTE = "getAllBranchesPagingWithSearch";
+        public const string GET_BRANCH_BY_ID_ROUTE = "getBranchById";
+        public const string SAVE_UPDATE_BRANCH_ROUTE = "saveUpdateBranch";
+        public const string DELETE_BRANCH_ROUTE = "deleteBranch";
+        #endregion
+
         #region Routes — Employee
         public const string GET_ALL_EMPLOYEES_PAGING_ROUTE   = "getAllEmployeesPagingWithSearch";
         public const string GET_EMPLOYEE_BY_ID_ROUTE         = "getEmployeeById";
@@ -76,6 +93,14 @@ namespace SBERP.HumanResources.Helper
         public const string GET_HR_SETTINGS_ROUTE             = "getHRSettings";
         public const string SAVE_UPDATE_HR_SETTINGS_ROUTE     = "saveUpdateHRSettings";
         public const string UPLOAD_ATTENDANCE_EXCEL_ROUTE     = "uploadAttendanceExcel";
+        #endregion
+
+        #region Messages — Company & Branch
+        // === Messages ===
+        public const string COMPANY_LIST_EMPTY = "No companies found.";
+        public const string COMPANY_FETCH_SUCCESS = "Companies fetched successfully.";
+        public const string BRANCH_LIST_EMPTY = "No branches found.";
+        public const string BRANCH_FETCH_SUCCESS = "Branches fetched successfully.";
         #endregion
 
         #region Messages — Employee

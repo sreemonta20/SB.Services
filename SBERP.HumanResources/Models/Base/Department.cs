@@ -7,6 +7,11 @@ namespace SBERP.HumanResources.Models.Base
     /// (e.g. Engineering → Platform → Identity). HeadEmployeeId points to the
     /// department head — nullable because seed data can't reference an employee
     /// that doesn't exist yet.
+    ///
+    /// <para><b>CompanyId</b> / <b>BranchId</b> are real FKs into Company /
+    /// Branch (Module 0) — those tables live in this same HumanResourcesDB,
+    /// so unlike Employee.AppUserId (a soft reference into SecurityDB, a
+    /// genuinely separate microservice) these get normal EF navigation.</para>
     /// </summary>
     public class Department
     {
@@ -17,6 +22,10 @@ namespace SBERP.HumanResources.Models.Base
         public Guid? ParentDepartmentId { get; set; } // null for top-level
         public Guid? HeadEmployeeId { get; set; }     // department head — nullable
 
+        // === Organization (Module 0) — real FK, same DB ===
+        public Guid CompanyId { get; set; }
+        public Guid? BranchId { get; set; }
+
         public string? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? UpdatedBy { get; set; }
@@ -26,6 +35,8 @@ namespace SBERP.HumanResources.Models.Base
         public virtual Department? ParentDepartment { get; set; }
         public virtual ICollection<Department>? ChildDepartments { get; set; }
         public virtual ICollection<Employee>? Employees { get; set; }
+        public virtual Company? Company { get; set; }
+        public virtual Branch? Branch { get; set; }
     }
 
     public class DepartmentLog
@@ -37,6 +48,8 @@ namespace SBERP.HumanResources.Models.Base
         public string? Description { get; set; }
         public Guid? ParentDepartmentId { get; set; }
         public Guid? HeadEmployeeId { get; set; }
+        public Guid? CompanyId { get; set; }
+        public Guid? BranchId { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? UpdatedBy { get; set; }

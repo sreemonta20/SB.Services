@@ -10,6 +10,8 @@ namespace SBERP.HumanResources.Models.Response
         public string? EmployeeCode { get; set; }
         public string? FullName { get; set; }
         public string? OfficialEmail { get; set; }
+        public string? CompanyName { get; set; }
+        public string? BranchName { get; set; }
         public string? MobileNumber { get; set; }
         public string? DepartmentName { get; set; }
         public string? DesignationName { get; set; }
@@ -44,6 +46,11 @@ namespace SBERP.HumanResources.Models.Response
         public string? PersonalEmail { get; set; }
         public string? MobileNumber { get; set; }
         public string? AlternatePhoneNumber { get; set; }
+
+        public Guid CompanyId { get; set; }
+        public string? CompanyName { get; set; }
+        public Guid? BranchId { get; set; }
+        public string? BranchName { get; set; }
 
         public Guid? DepartmentId { get; set; }
         public string? DepartmentName { get; set; }
@@ -196,6 +203,8 @@ namespace SBERP.HumanResources.Models.Response
     /// </summary>
     public class EmployeeInitialDataResponse
     {
+        public List<LookupItem>? Companies { get; set; }          // NEW — Module 0
+        public List<BranchLookupItem>? Branches { get; set; }
         public List<LookupItem>? Departments { get; set; }
         public List<LookupItem>? Designations { get; set; }
         public List<LookupItem>? ReportingManagers { get; set; }
@@ -211,5 +220,10 @@ namespace SBERP.HumanResources.Models.Response
     {
         public string? Id { get; set; }
         public string? Name { get; set; }
+    }
+
+    public class BranchLookupItem : LookupItem
+    {
+        public string? CompanyId { get; set; }
     }
 }

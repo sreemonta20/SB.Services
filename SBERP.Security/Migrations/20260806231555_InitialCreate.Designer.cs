@@ -12,7 +12,7 @@ using SBERP.Security.Persistence;
 namespace SBERP.Security.Migrations
 {
     [DbContext(typeof(SecurityDBContext))]
-    [Migration("20260528201058_InitialCreate")]
+    [Migration("20260806231555_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -569,6 +569,46 @@ namespace SBERP.Security.Migrations
                             RouteLink = "/business/humanresources/settings",
                             RouteLinkClass = "nav-link",
                             SerialNo = 15,
+                            UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("082295e5-cd29-4693-8cf9-8082d4f8e791"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-industry nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            Name = "Company",
+                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/humanresources/company",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 16,
+                            UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("88664718-2161-44ce-b940-39c952e7f56c"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-code-branch nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            Name = "Branch",
+                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/humanresources/branch",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 17,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
                         });
                 });
@@ -1324,6 +1364,34 @@ namespace SBERP.Security.Migrations
                         {
                             Id = new Guid("0ba66610-aa06-4fcb-a350-b9f9018e5fd9"),
                             AppUserMenuId = new Guid("05fbca7e-8d98-4c4b-9529-4dfb29db65fd"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2024, 1, 1, 10, 20, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2024, 1, 1, 10, 20, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("00865190-7ecb-4c61-b2bf-ce4dcdf83092"),
+                            AppUserMenuId = new Guid("082295e5-cd29-4693-8cf9-8082d4f8e791"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2024, 1, 1, 10, 20, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2024, 1, 1, 10, 20, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("b136043f-372b-49d5-9a26-ad6331b89724"),
+                            AppUserMenuId = new Guid("88664718-2161-44ce-b940-39c952e7f56c"),
                             AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2024, 1, 1, 10, 20, 0, 0, DateTimeKind.Utc),

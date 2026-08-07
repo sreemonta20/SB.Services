@@ -193,6 +193,8 @@ services.AddResponseCompression();
 // 3.10 DI registrations
 services.AddSingleton<IHRLogService, HRLogService>();
 services.AddScoped<IDepartmentService, DepartmentService>();
+services.AddScoped<ICompanyService, CompanyService>();
+services.AddScoped<IBranchService, BranchService>();
 services.AddScoped<IDesignationService, DesignationService>();
 services.AddScoped<IEmployeeService, EmployeeService>();
 services.AddScoped<IHRSettingsService, HRSettingsService>();

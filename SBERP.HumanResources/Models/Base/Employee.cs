@@ -12,6 +12,11 @@ namespace SBERP.HumanResources.Models.Base
     /// <para><b>AppUserId</b> is a soft reference to SBERP.Security.AppUsers.Id
     /// — kept as a plain Guid because the two databases are separate
     /// (microservice boundary). No EF FK is defined for it.</para>
+    /// 
+    /// <para><b>CompanyId</b> / <b>BranchId</b> are real FKs into Company /
+    /// Branch (Module 0) — those tables live in this same HumanResourcesDB
+    /// alongside Department/Employee, so they get normal EF navigation,
+    /// unlike AppUserId.</para>
     /// </summary>
     public class Employee
     {
@@ -44,6 +49,10 @@ namespace SBERP.HumanResources.Models.Base
         public string? MobileNumber { get; set; }
         public string? AlternatePhoneNumber { get; set; }
 
+        // === Organization (Module 0) — real FK, same DB ===
+        public Guid CompanyId { get; set; }
+        public Guid? BranchId { get; set; }
+
         // === Employment ===
         public Guid? DepartmentId { get; set; }
         public Guid? DesignationId { get; set; }
@@ -73,6 +82,8 @@ namespace SBERP.HumanResources.Models.Base
         public bool? IsActive { get; set; }
 
         // === Navigation ===
+        public virtual Company? Company { get; set; }
+        public virtual Branch? Branch { get; set; }
         public virtual Department? Department { get; set; }
         public virtual Designation? Designation { get; set; }
         public virtual Employee? ReportingManager { get; set; }
@@ -96,6 +107,8 @@ namespace SBERP.HumanResources.Models.Base
         public string? EmployeeCode { get; set; }
         public string? FullName { get; set; }
         public string? OfficialEmail { get; set; }
+        public Guid? CompanyId { get; set; }
+        public Guid? BranchId { get; set; }
         public Guid? DepartmentId { get; set; }
         public Guid? DesignationId { get; set; }
         public int? EmploymentStatus { get; set; }

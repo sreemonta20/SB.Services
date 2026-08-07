@@ -12,7 +12,7 @@ using SBERP.HumanResources.Persistence;
 namespace SBERP.HumanResources.Migrations
 {
     [DbContext(typeof(HumanResourcesDBContext))]
-    [Migration("20260528181439_InitialCreate")]
+    [Migration("20260806232335_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -224,10 +224,356 @@ namespace SBERP.HumanResources.Migrations
                         });
                 });
 
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Branch", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("BranchCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("City")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Country")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsHeadOffice")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Branches_Code");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Branches", t =>
+                        {
+                            t.HasTrigger("TRG_DeleteBranches");
+
+                            t.HasTrigger("TRG_InsertBranches");
+
+                            t.HasTrigger("TRG_UpdateBranches");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            BranchCode = "HO",
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsHeadOffice = true,
+                            Name = "Head Office",
+                            UpdatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.BranchLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BranchCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsHeadOffice")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BranchesLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Company", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("City")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CompanyCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Country")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("CurrencyCode")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int?>("FinancialYearStartMonth")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LegalName")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("LogoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("RegistrationNumber")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("TaxNumber")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Website")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Companies_Code");
+
+                    b.ToTable("Companies", t =>
+                        {
+                            t.HasTrigger("TRG_DeleteCompanies");
+
+                            t.HasTrigger("TRG_InsertCompanies");
+
+                            t.HasTrigger("TRG_UpdateCompanies");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
+                            CompanyCode = "SBERP",
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CurrencyCode = "AED",
+                            FinancialYearStartMonth = 1,
+                            IsActive = true,
+                            LegalName = "SBERP Default Company LLC",
+                            Name = "SBERP Default Company",
+                            UpdatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.CompanyLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("CurrencyCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("FinancialYearStartMonth")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LegalName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LogoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RegistrationNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaxNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Website")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompaniesLog");
+                });
+
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.Department", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatedBy")
@@ -267,6 +613,10 @@ namespace SBERP.HumanResources.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("DepartmentCode")
                         .IsUnique()
                         .HasDatabaseName("UX_Departments_Code");
@@ -288,6 +638,8 @@ namespace SBERP.HumanResources.Migrations
                         new
                         {
                             Id = new Guid("28260da1-0bb1-4842-a3ec-786f859dc5ca"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentCode = "ADMIN",
@@ -298,6 +650,8 @@ namespace SBERP.HumanResources.Migrations
                         new
                         {
                             Id = new Guid("2b3c7610-f979-48f0-881c-44b9f3c93555"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentCode = "HR",
@@ -308,6 +662,8 @@ namespace SBERP.HumanResources.Migrations
                         new
                         {
                             Id = new Guid("1f8fd7ee-c9c4-484b-aeb9-3f81f2c04609"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentCode = "ENG",
@@ -318,6 +674,8 @@ namespace SBERP.HumanResources.Migrations
                         new
                         {
                             Id = new Guid("729197ee-0a7e-4910-81a1-be9060a51ae7"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentCode = "FIN",
@@ -328,6 +686,8 @@ namespace SBERP.HumanResources.Migrations
                         new
                         {
                             Id = new Guid("5232ea50-7b93-4559-8eb6-dc5f3bd78a09"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
                             DepartmentCode = "OPS",
@@ -345,6 +705,12 @@ namespace SBERP.HumanResources.Migrations
 
                     b.Property<string>("Action")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -590,6 +956,12 @@ namespace SBERP.HumanResources.Migrations
                     b.Property<int?>("BloodGroup")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("ConfirmationDate")
                         .HasColumnType("datetime");
 
@@ -710,6 +1082,10 @@ namespace SBERP.HumanResources.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("DepartmentId");
 
@@ -1111,6 +1487,12 @@ namespace SBERP.HumanResources.Migrations
 
                     b.Property<string>("Action")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -1645,19 +2027,61 @@ namespace SBERP.HumanResources.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Branch", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Company", "Company")
+                        .WithMany("Branches")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Branches_Company");
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.Department", b =>
                 {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Branch", "Branch")
+                        .WithMany("Departments")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_Departments_Branch");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.Company", "Company")
+                        .WithMany("Departments")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Departments_Company");
+
                     b.HasOne("SBERP.HumanResources.Models.Base.Department", "ParentDepartment")
                         .WithMany("ChildDepartments")
                         .HasForeignKey("ParentDepartmentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("FK_Departments_Parent");
 
+                    b.Navigation("Branch");
+
+                    b.Navigation("Company");
+
                     b.Navigation("ParentDepartment");
                 });
 
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.Employee", b =>
                 {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Branch", "Branch")
+                        .WithMany("Employees")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_Employees_Branch");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.Company", "Company")
+                        .WithMany("Employees")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Employees_Company");
+
                     b.HasOne("SBERP.HumanResources.Models.Base.Department", "Department")
                         .WithMany("Employees")
                         .HasForeignKey("DepartmentId")
@@ -1675,6 +2099,10 @@ namespace SBERP.HumanResources.Migrations
                         .HasForeignKey("ReportingManagerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("FK_Employees_ReportingManager");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Company");
 
                     b.Navigation("Department");
 
@@ -1780,6 +2208,22 @@ namespace SBERP.HumanResources.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Branch", b =>
+                {
+                    b.Navigation("Departments");
+
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Company", b =>
+                {
+                    b.Navigation("Branches");
+
+                    b.Navigation("Departments");
+
+                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.Department", b =>

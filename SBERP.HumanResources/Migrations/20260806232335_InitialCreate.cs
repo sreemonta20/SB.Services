@@ -51,15 +51,52 @@ namespace SBERP.HumanResources.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Departments",
+                name: "BranchesLog",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DepartmentCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    ParentDepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    HeadEmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BranchCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsHeadOffice = table.Column<bool>(type: "bit", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    PerformedUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Action = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BranchesLog", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Companies",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompanyCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    LegalName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    RegistrationNumber = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    TaxNumber = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Website = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    LogoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CurrencyCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    FinancialYearStartMonth = table.Column<int>(type: "int", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -68,13 +105,40 @@ namespace SBERP.HumanResources.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Departments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Departments_Parent",
-                        column: x => x.ParentDepartmentId,
-                        principalTable: "Departments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_Companies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CompaniesLog",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompanyCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LegalName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RegistrationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TaxNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Website = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LogoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CurrencyCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FinancialYearStartMonth = table.Column<int>(type: "int", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    PerformedUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Action = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompaniesLog", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,6 +152,8 @@ namespace SBERP.HumanResources.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ParentDepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     HeadEmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -153,6 +219,8 @@ namespace SBERP.HumanResources.Migrations
                     EmployeeCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OfficialEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DesignationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     EmploymentStatus = table.Column<int>(type: "int", nullable: true),
@@ -262,6 +330,78 @@ namespace SBERP.HumanResources.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Branches",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BranchCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    IsHeadOffice = table.Column<bool>(type: "bit", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Branches", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Branches_Company",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DepartmentCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    ParentDepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    HeadEmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Departments_Branch",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Departments_Company",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Departments_Parent",
+                        column: x => x.ParentDepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Employees",
                 columns: table => new
                 {
@@ -285,6 +425,8 @@ namespace SBERP.HumanResources.Migrations
                     PersonalEmail = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     MobileNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     AlternatePhoneNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DesignationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ReportingManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -308,6 +450,18 @@ namespace SBERP.HumanResources.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Employees_Branch",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Employees_Company",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Employees_Department",
                         column: x => x.DepartmentId,
@@ -640,16 +794,9 @@ namespace SBERP.HumanResources.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Departments",
-                columns: new[] { "Id", "CreatedBy", "CreatedDate", "DepartmentCode", "Description", "HeadEmployeeId", "IsActive", "Name", "ParentDepartmentId", "UpdatedBy", "UpdatedDate" },
-                values: new object[,]
-                {
-                    { new Guid("1f8fd7ee-c9c4-484b-aeb9-3f81f2c04609"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "ENG", "Software engineering and development", null, true, "Engineering", null, null, null },
-                    { new Guid("28260da1-0bb1-4842-a3ec-786f859dc5ca"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "ADMIN", "Administrative and executive office", null, true, "Administration", null, null, null },
-                    { new Guid("2b3c7610-f979-48f0-881c-44b9f3c93555"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "HR", "People operations and talent management", null, true, "Human Resources", null, null, null },
-                    { new Guid("5232ea50-7b93-4559-8eb6-dc5f3bd78a09"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "OPS", "Day-to-day business operations", null, true, "Operations", null, null, null },
-                    { new Guid("729197ee-0a7e-4910-81a1-be9060a51ae7"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "FIN", "Accounting, payroll and treasury", null, true, "Finance", null, null, null }
-                });
+                table: "Companies",
+                columns: new[] { "Id", "Address", "City", "CompanyCode", "Country", "CreatedBy", "CreatedDate", "CurrencyCode", "Email", "FinancialYearStartMonth", "IsActive", "LegalName", "LogoUrl", "Name", "Phone", "RegistrationNumber", "TaxNumber", "UpdatedBy", "UpdatedDate", "Website" },
+                values: new object[] { new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"), null, null, "SBERP", null, "SYSTEM", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "AED", null, 1, true, "SBERP Default Company LLC", null, "SBERP Default Company", null, null, null, null, new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null });
 
             migrationBuilder.InsertData(
                 table: "Designations",
@@ -719,6 +866,23 @@ namespace SBERP.HumanResources.Migrations
                     { 5, "SEPARATED", true, "Separated", 5 }
                 });
 
+            migrationBuilder.InsertData(
+                table: "Branches",
+                columns: new[] { "Id", "Address", "BranchCode", "City", "CompanyId", "Country", "CreatedBy", "CreatedDate", "Email", "IsActive", "IsHeadOffice", "Name", "Phone", "UpdatedBy", "UpdatedDate" },
+                values: new object[] { new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"), null, "HO", null, new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"), null, "SYSTEM", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), null, true, true, "Head Office", null, null, new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc) });
+
+            migrationBuilder.InsertData(
+                table: "Departments",
+                columns: new[] { "Id", "BranchId", "CompanyId", "CreatedBy", "CreatedDate", "DepartmentCode", "Description", "HeadEmployeeId", "IsActive", "Name", "ParentDepartmentId", "UpdatedBy", "UpdatedDate" },
+                values: new object[,]
+                {
+                    { new Guid("1f8fd7ee-c9c4-484b-aeb9-3f81f2c04609"), new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"), new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "ENG", "Software engineering and development", null, true, "Engineering", null, null, null },
+                    { new Guid("28260da1-0bb1-4842-a3ec-786f859dc5ca"), new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"), new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "ADMIN", "Administrative and executive office", null, true, "Administration", null, null, null },
+                    { new Guid("2b3c7610-f979-48f0-881c-44b9f3c93555"), new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"), new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "HR", "People operations and talent management", null, true, "Human Resources", null, null, null },
+                    { new Guid("5232ea50-7b93-4559-8eb6-dc5f3bd78a09"), new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"), new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "OPS", "Day-to-day business operations", null, true, "Operations", null, null, null },
+                    { new Guid("729197ee-0a7e-4910-81a1-be9060a51ae7"), new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"), new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"), "C047D662-9F0E-4358-B323-15EC3081312C", new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc), "FIN", "Accounting, payroll and treasury", null, true, "Finance", null, null, null }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "UX_Attendance_Employee_Date",
                 table: "Attendances",
@@ -730,6 +894,33 @@ namespace SBERP.HumanResources.Migrations
                 table: "BloodGroups",
                 column: "Code",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Branches_CompanyId",
+                table: "Branches",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "UX_Branches_Code",
+                table: "Branches",
+                column: "BranchCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UX_Companies_Code",
+                table: "Companies",
+                column: "CompanyCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Departments_BranchId",
+                table: "Departments",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Departments_CompanyId",
+                table: "Departments",
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Departments_ParentDepartmentId",
@@ -783,6 +974,16 @@ namespace SBERP.HumanResources.Migrations
                 name: "IX_EmployeeExperiences_EmployeeId",
                 table: "EmployeeExperiences",
                 column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_BranchId",
+                table: "Employees",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_CompanyId",
+                table: "Employees",
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_DepartmentId",
@@ -860,6 +1061,12 @@ namespace SBERP.HumanResources.Migrations
                 name: "BloodGroups");
 
             migrationBuilder.DropTable(
+                name: "BranchesLog");
+
+            migrationBuilder.DropTable(
+                name: "CompaniesLog");
+
+            migrationBuilder.DropTable(
                 name: "DepartmentsLog");
 
             migrationBuilder.DropTable(
@@ -918,6 +1125,12 @@ namespace SBERP.HumanResources.Migrations
 
             migrationBuilder.DropTable(
                 name: "Designations");
+
+            migrationBuilder.DropTable(
+                name: "Branches");
+
+            migrationBuilder.DropTable(
+                name: "Companies");
         }
     }
 }

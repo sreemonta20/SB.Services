@@ -35,6 +35,9 @@ namespace SBERP.HumanResources.Models.Request
         public string? MobileNumber { get; set; }
         public string? AlternatePhoneNumber { get; set; }
 
+        [Required] public string? CompanyId { get; set; }   // Module 0 — required
+        public string? BranchId { get; set; }                 // Module 0 — optional
+
         public string? DepartmentId { get; set; }
         public string? DesignationId { get; set; }
         public string? ReportingManagerId { get; set; }

@@ -46,6 +46,10 @@ namespace SBERP.HumanResources.Service
                     .Select(d => new DepartmentResponse
                     {
                         Id = d.Id,
+                        CompanyId = d.CompanyId,
+                        CompanyName = d.Company != null ? d.Company.Name : null,
+                        BranchId = d.BranchId,
+                        BranchName = d.Branch != null ? d.Branch.Name : null,
                         DepartmentCode = d.DepartmentCode,
                         Name = d.Name,
                         Description = d.Description,
@@ -126,6 +130,10 @@ namespace SBERP.HumanResources.Service
                     .Select(d => new DepartmentResponse
                     {
                         Id = d.Id,
+                        CompanyId = d.CompanyId,
+                        CompanyName = d.Company != null ? d.Company.Name : null,
+                        BranchId = d.BranchId,
+                        BranchName = d.Branch != null ? d.Branch.Name : null,
                         DepartmentCode = d.DepartmentCode,
                         Name = d.Name,
                         Description = d.Description,
@@ -155,8 +163,12 @@ namespace SBERP.HumanResources.Service
                 bool isSave = string.Equals(request.ActionName,
                     ConstantSupplier.SAVE_KEY, StringComparison.OrdinalIgnoreCase);
 
+                if (!Guid.TryParse(request.CompanyId, out var companyId))
+                    return Utilities.Warn("A valid CompanyId is required.");
+                Guid? branchId = Guid.TryParse(request.BranchId, out var b) ? b : null;
+
                 Guid? parentId = Guid.TryParse(request.ParentDepartmentId, out var p) ? p : null;
-                Guid? headId   = Guid.TryParse(request.HeadEmployeeId,    out var h) ? h : null;
+                Guid? headId = Guid.TryParse(request.HeadEmployeeId, out var h) ? h : null;
 
                 if (isSave)
                 {
@@ -168,14 +180,17 @@ namespace SBERP.HumanResources.Service
                     var dept = new Department
                     {
                         Id = Guid.NewGuid(),
-                        DepartmentCode     = request.DepartmentCode,
-                        Name               = request.Name,
-                        Description        = request.Description,
+
+                        DepartmentCode = request.DepartmentCode,
+                        Name = request.Name,
+                        Description = request.Description,
                         ParentDepartmentId = parentId,
-                        HeadEmployeeId     = headId,
-                        CreatedBy          = request.CreateUpdateBy,
-                        CreatedDate        = DateTime.UtcNow,
-                        IsActive           = request.IsActive ?? true
+                        HeadEmployeeId = headId,
+                        CompanyId = companyId,
+                        BranchId = branchId,
+                        CreatedBy = request.CreateUpdateBy,
+                        CreatedDate = DateTime.UtcNow,
+                        IsActive = request.IsActive ?? true
                     };
                     await _ctx.Departments!.AddAsync(dept);
                     await _ctx.SaveChangesAsync();
@@ -192,14 +207,16 @@ namespace SBERP.HumanResources.Service
                         return Utilities.Warn(ConstantSupplier.DEPARTMENT_NOT_FOUND,
                                               code: (int)HttpStatusCode.NotFound);
 
-                    dept.DepartmentCode     = request.DepartmentCode;
-                    dept.Name               = request.Name;
-                    dept.Description        = request.Description;
+                    dept.DepartmentCode = request.DepartmentCode;
+                    dept.Name = request.Name;
+                    dept.Description = request.Description;
                     dept.ParentDepartmentId = parentId;
-                    dept.HeadEmployeeId     = headId;
-                    dept.UpdatedBy          = request.CreateUpdateBy;
-                    dept.UpdatedDate        = DateTime.UtcNow;
-                    dept.IsActive           = request.IsActive ?? true;
+                    dept.HeadEmployeeId = headId;
+                    dept.CompanyId = companyId;
+                    dept.BranchId = branchId;
+                    dept.UpdatedBy = request.CreateUpdateBy;
+                    dept.UpdatedDate = DateTime.UtcNow;
+                    dept.IsActive = request.IsActive ?? true;
 
                     await _ctx.SaveChangesAsync();
                     await tx.CommitAsync();

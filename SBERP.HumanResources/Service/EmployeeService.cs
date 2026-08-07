@@ -92,6 +92,8 @@ namespace SBERP.HumanResources.Service
                 if (!string.IsNullOrWhiteSpace(raw))
                 {
                     var jo = JObject.Parse(raw);
+                    resp.Companies = ParseLookup(jo["companies"]?.ToString());              // NEW
+                    resp.Branches = ParseJsonArray<BranchLookupItem>(jo["branches"]?.ToString()); // NEW
                     resp.Departments       = ParseLookup(jo["departments"]?.ToString());
                     resp.Designations      = ParseLookup(jo["designations"]?.ToString());
                     resp.ReportingManagers = ParseLookup(jo["reportingManagers"]?.ToString());
@@ -262,6 +264,8 @@ namespace SBERP.HumanResources.Service
         public async Task<DataResponse> CreateUpdateEmployeeAsync(EmployeeRequest request)
         {
             if (request == null) return Utilities.Warn(ConstantSupplier.REQ_OR_DATA_NULL);
+            if (!Guid.TryParse(request.CompanyId, out _))
+                return Utilities.Warn("A valid CompanyId is required.");
 
             await using var tx = await _ctx.Database.BeginTransactionAsync();
             try
@@ -427,6 +431,8 @@ namespace SBERP.HumanResources.Service
             e.PassportExpiryDate    = r.PassportExpiryDate;
             e.MobileNumber          = r.MobileNumber;
             e.AlternatePhoneNumber  = r.AlternatePhoneNumber;
+            e.CompanyId = Guid.TryParse(r.CompanyId, out var co) ? co : e.CompanyId; // validated upstream in CreateUpdateEmployeeAsync
+            e.BranchId = Guid.TryParse(r.BranchId, out var br) ? br : null;
             e.DepartmentId          = Guid.TryParse(r.DepartmentId,        out var d) ? d : null;
             e.DesignationId         = Guid.TryParse(r.DesignationId,       out var dg) ? dg : null;
             e.ReportingManagerId    = Guid.TryParse(r.ReportingManagerId,  out var m) ? m : null;

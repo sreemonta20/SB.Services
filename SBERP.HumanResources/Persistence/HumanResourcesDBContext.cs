@@ -19,6 +19,10 @@ namespace SBERP.HumanResources.Persistence
             : base(options) { }
 
         // === Org structure ===
+        public virtual DbSet<Company>? Companies { get; set; }
+        public virtual DbSet<CompanyLog>? CompaniesLog { get; set; }
+        public virtual DbSet<Branch>? Branches { get; set; }
+        public virtual DbSet<BranchLog>? BranchesLog { get; set; }
         public virtual DbSet<Department>?     Departments     { get; set; }
         public virtual DbSet<DepartmentLog>?  DepartmentsLog  { get; set; }
         public virtual DbSet<Designation>?    Designations    { get; set; }
@@ -55,6 +59,78 @@ namespace SBERP.HumanResources.Persistence
         protected override void OnModelCreating(ModelBuilder mb)
         {
             // ------------------------------------------------------------
+            // Company
+            // ------------------------------------------------------------
+            mb.Entity<Company>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.CompanyCode).HasMaxLength(20).IsRequired();
+                e.Property(x => x.Name).HasMaxLength(200).IsRequired();
+                e.Property(x => x.LegalName).HasMaxLength(300);
+                e.Property(x => x.RegistrationNumber).HasMaxLength(100);
+                e.Property(x => x.TaxNumber).HasMaxLength(100);
+                e.Property(x => x.Address).HasMaxLength(500);
+                e.Property(x => x.City).HasMaxLength(100);
+                e.Property(x => x.Country).HasMaxLength(100);
+                e.Property(x => x.Phone).HasMaxLength(30);
+                e.Property(x => x.Email).HasMaxLength(200);
+                e.Property(x => x.Website).HasMaxLength(200);
+                e.Property(x => x.CurrencyCode).HasMaxLength(10);
+                e.Property(x => x.CreatedDate).HasColumnType("datetime");
+                e.Property(x => x.UpdatedDate).HasColumnType("datetime");
+                e.HasIndex(x => x.CompanyCode).IsUnique().HasDatabaseName("UX_Companies_Code");
+                e.ToTable(t =>
+                {
+                    t.HasTrigger("TRG_InsertCompanies");
+                    t.HasTrigger("TRG_UpdateCompanies");
+                    t.HasTrigger("TRG_DeleteCompanies");
+                });
+            });
+
+            mb.Entity<CompanyLog>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.CreatedDate).HasColumnType("datetime");
+                e.Property(x => x.UpdatedDate).HasColumnType("datetime");
+            });
+
+            // ------------------------------------------------------------
+            // Branch
+            // ------------------------------------------------------------
+            mb.Entity<Branch>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.BranchCode).HasMaxLength(20).IsRequired();
+                e.Property(x => x.Name).HasMaxLength(200).IsRequired();
+                e.Property(x => x.Address).HasMaxLength(500);
+                e.Property(x => x.City).HasMaxLength(100);
+                e.Property(x => x.Country).HasMaxLength(100);
+                e.Property(x => x.Phone).HasMaxLength(30);
+                e.Property(x => x.Email).HasMaxLength(200);
+                e.Property(x => x.CreatedDate).HasColumnType("datetime");
+                e.Property(x => x.UpdatedDate).HasColumnType("datetime");
+                e.HasIndex(x => x.BranchCode).IsUnique().HasDatabaseName("UX_Branches_Code");
+                e.HasOne(x => x.Company)
+                    .WithMany(c => c!.Branches)
+                    .HasForeignKey(x => x.CompanyId)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Branches_Company");
+                e.ToTable(t =>
+                {
+                    t.HasTrigger("TRG_InsertBranches");
+                    t.HasTrigger("TRG_UpdateBranches");
+                    t.HasTrigger("TRG_DeleteBranches");
+                });
+            });
+
+            mb.Entity<BranchLog>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.CreatedDate).HasColumnType("datetime");
+                e.Property(x => x.UpdatedDate).HasColumnType("datetime");
+            });
+
+            // ------------------------------------------------------------
             // Department
             // ------------------------------------------------------------
             mb.Entity<Department>(e =>
@@ -66,6 +142,16 @@ namespace SBERP.HumanResources.Persistence
                 e.Property(x => x.CreatedDate).HasColumnType("datetime");
                 e.Property(x => x.UpdatedDate).HasColumnType("datetime");
                 e.HasIndex(x => x.DepartmentCode).IsUnique().HasDatabaseName("UX_Departments_Code");
+                e.HasOne(x => x.Company)
+                    .WithMany(c => c!.Departments)
+                    .HasForeignKey(x => x.CompanyId)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Departments_Company");
+                e.HasOne(x => x.Branch)
+                    .WithMany(b => b!.Departments)
+                    .HasForeignKey(x => x.BranchId)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Departments_Branch");
                 e.HasOne(x => x.ParentDepartment)
                     .WithMany(p => p!.ChildDepartments)
                     .HasForeignKey(x => x.ParentDepartmentId)
@@ -144,6 +230,18 @@ namespace SBERP.HumanResources.Persistence
                 e.HasIndex(x => x.OfficialEmail).IsUnique()
                     .HasFilter("[OfficialEmail] IS NOT NULL")
                     .HasDatabaseName("UX_Employees_OfficialEmail");
+
+                e.HasOne(x => x.Company)
+                    .WithMany(c => c!.Employees)
+                    .HasForeignKey(x => x.CompanyId)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Employees_Company");
+
+                e.HasOne(x => x.Branch)
+                    .WithMany(b => b!.Employees)
+                    .HasForeignKey(x => x.BranchId)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Employees_Branch");
 
                 e.HasOne(x => x.Department)
                     .WithMany(d => d!.Employees)
@@ -314,15 +412,48 @@ namespace SBERP.HumanResources.Persistence
             // Menu seeds live in SBERP.Security, not here.
             // ============================================================
             var seedTime = new DateTime(2026, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+            var seedCompanyId = new Guid("EEB27F7F-F7DB-479B-923F-3BE0AD7A243A");
+            var seedBranchId = new Guid("7AA06B50-B394-41B9-B17B-A96CD0E18B8B");
             const string seedCreator = "C047D662-9F0E-4358-B323-15EC3081312C";
 
+            mb.Entity<Company>().HasData(new Company
+            {
+                Id = seedCompanyId,
+                CompanyCode = "SBERP",
+                Name = "SBERP Default Company",
+                LegalName = "SBERP Default Company LLC",
+                CurrencyCode = "AED",
+                FinancialYearStartMonth = 1,
+                CreatedBy = "SYSTEM",
+                CreatedDate = seedTime,
+                UpdatedDate = seedTime,
+                IsActive = true
+            });
+
+            mb.Entity<Branch>().HasData(new Branch
+            {
+                Id = seedBranchId,
+                CompanyId = seedCompanyId,
+                BranchCode = "HO",
+                Name = "Head Office",
+                IsHeadOffice = true,
+                CreatedBy = "SYSTEM",
+                CreatedDate = seedTime,
+                UpdatedDate = seedTime,
+                IsActive = true
+            });
+
             // --- Departments ---
+            // CompanyId/BranchId REQUIRED here — Department.CompanyId is a non-nullable
+            // Guid with a real FK to Companies. Without it, EF writes Guid.Empty for every
+            // row and Update-Database fails on the FK_Departments_Company constraint the
+            // moment it tries to apply this seed.
             mb.Entity<Department>().HasData(
-                new Department { Id = new Guid("28260DA1-0BB1-4842-A3EC-786F859DC5CA"), DepartmentCode = "ADMIN", Name = "Administration",  Description = "Administrative and executive office",   CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Department { Id = new Guid("2B3C7610-F979-48F0-881C-44B9F3C93555"), DepartmentCode = "HR",    Name = "Human Resources", Description = "People operations and talent management", CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Department { Id = new Guid("1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609"), DepartmentCode = "ENG",   Name = "Engineering",     Description = "Software engineering and development",   CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Department { Id = new Guid("729197EE-0A7E-4910-81A1-BE9060A51AE7"), DepartmentCode = "FIN",   Name = "Finance",         Description = "Accounting, payroll and treasury",       CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
-                new Department { Id = new Guid("5232EA50-7B93-4559-8EB6-DC5F3BD78A09"), DepartmentCode = "OPS",   Name = "Operations",      Description = "Day-to-day business operations",          CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true }
+                new Department { Id = new Guid("28260DA1-0BB1-4842-A3EC-786F859DC5CA"), DepartmentCode = "ADMIN", Name = "Administration", Description = "Administrative and executive office", CompanyId = seedCompanyId, BranchId = seedBranchId, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Department { Id = new Guid("2B3C7610-F979-48F0-881C-44B9F3C93555"), DepartmentCode = "HR", Name = "Human Resources", Description = "People operations and talent management", CompanyId = seedCompanyId, BranchId = seedBranchId, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Department { Id = new Guid("1F8FD7EE-C9C4-484B-AEB9-3F81F2C04609"), DepartmentCode = "ENG", Name = "Engineering", Description = "Software engineering and development", CompanyId = seedCompanyId, BranchId = seedBranchId, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Department { Id = new Guid("729197EE-0A7E-4910-81A1-BE9060A51AE7"), DepartmentCode = "FIN", Name = "Finance", Description = "Accounting, payroll and treasury", CompanyId = seedCompanyId, BranchId = seedBranchId, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true },
+                new Department { Id = new Guid("5232EA50-7B93-4559-8EB6-DC5F3BD78A09"), DepartmentCode = "OPS", Name = "Operations", Description = "Day-to-day business operations", CompanyId = seedCompanyId, BranchId = seedBranchId, CreatedBy = seedCreator, CreatedDate = seedTime, IsActive = true }
             );
 
             // --- Designations ---

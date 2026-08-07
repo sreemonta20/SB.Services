@@ -74,3 +74,46 @@ BEGIN
     RETURN ISNULL(@cnt, 0);
 END
 GO
+
+-- =============================================================================
+-- fn_CountBranchesInCompany   (Module 0)
+-- Used by the Company list view, same purpose/shape as
+-- fn_CountEmployeesInDepartment above.
+-- =============================================================================
+IF OBJECT_ID('dbo.fn_CountBranchesInCompany', 'FN') IS NOT NULL
+    DROP FUNCTION dbo.fn_CountBranchesInCompany;
+GO
+
+CREATE FUNCTION dbo.fn_CountBranchesInCompany(@CompanyId UNIQUEIDENTIFIER)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @cnt INT;
+    SELECT @cnt = COUNT(1)
+    FROM dbo.Branches
+    WHERE CompanyId = @CompanyId
+      AND ISNULL(IsActive, 0) = 1;
+    RETURN ISNULL(@cnt, 0);
+END
+GO
+
+-- =============================================================================
+-- fn_CountDepartmentsInCompany   (Module 0)
+-- Same shape, used if the Company detail view wants a department count too.
+-- =============================================================================
+IF OBJECT_ID('dbo.fn_CountDepartmentsInCompany', 'FN') IS NOT NULL
+    DROP FUNCTION dbo.fn_CountDepartmentsInCompany;
+GO
+
+CREATE FUNCTION dbo.fn_CountDepartmentsInCompany(@CompanyId UNIQUEIDENTIFIER)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @cnt INT;
+    SELECT @cnt = COUNT(1)
+    FROM dbo.Departments
+    WHERE CompanyId = @CompanyId
+      AND ISNULL(IsActive, 0) = 1;
+    RETURN ISNULL(@cnt, 0);
+END
+GO

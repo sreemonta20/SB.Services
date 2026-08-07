@@ -11,6 +11,8 @@ namespace SBERP.HumanResources.Models.Request
         public string? Description { get; set; }
         public string? ParentDepartmentId { get; set; }
         public string? HeadEmployeeId { get; set; }
+        [Required] public string? CompanyId { get; set; }   // Module 0 — required
+        public string? BranchId { get; set; }                // Module 0 — optional
         public string? CreateUpdateBy { get; set; }
         public bool? IsActive { get; set; }
     }

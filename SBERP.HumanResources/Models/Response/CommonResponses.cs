@@ -8,6 +8,10 @@ namespace SBERP.HumanResources.Models.Response
         public string? Description { get; set; }
         public Guid? ParentDepartmentId { get; set; }
         public string? ParentDepartmentName { get; set; }
+        public Guid CompanyId { get; set; }
+        public string? CompanyName { get; set; }
+        public Guid? BranchId { get; set; }
+        public string? BranchName { get; set; }
         public Guid? HeadEmployeeId { get; set; }
         public string? HeadEmployeeName { get; set; }
         public int? EmployeeCount { get; set; }
