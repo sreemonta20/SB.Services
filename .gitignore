@@ -32,3 +32,4 @@ msbuild.wrn
 /HCS.Security/Logs/*
 /.vs
 /SBERP.Security/Logs
+/SBERP.HumanResources/Logs
