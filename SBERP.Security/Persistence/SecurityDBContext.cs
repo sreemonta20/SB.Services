@@ -1,4 +1,4 @@
-﻿//using Microsoft.AspNetCore.Identity;
+//using Microsoft.AspNetCore.Identity;
 //using Microsoft.EntityFrameworkCore;
 //using SBERP.Security.Models.Base;
 //using SBERP.Security.Helper;
@@ -1229,6 +1229,7 @@ namespace SBERP.Security.Persistence
         public virtual DbSet<AppUserProfileLog>? AppUserProfilesLog { get; set; }
         public virtual DbSet<AppUser>? AppUsers { get; set; }
         public virtual DbSet<AppUserLog>? AppUsersLog { get; set; }
+        public virtual DbSet<AppUserRefreshToken>? AppUserRefreshTokens { get; set; }
         public virtual DbSet<AppUserMenu>? AppUserMenus { get; set; }
         public virtual DbSet<AppUserMenuLog>? AppUserMenusLog { get; set; }
         public virtual DbSet<AppUserRoleMenu>? AppUserRoleMenus { get; set; }
@@ -1304,6 +1305,7 @@ namespace SBERP.Security.Persistence
                 entity.Property(x => x.Name).HasMaxLength(100);
                 entity.Property(x => x.IsHeader).HasColumnName("IsHeader");
                 entity.Property(x => x.IsModule).HasColumnName("IsModule");
+                entity.Property(x => x.IsSubModule).HasColumnName("IsSubModule");
                 entity.Property(x => x.IsComponent).HasColumnName("IsComponent");
                 entity.Property(x => x.CssClass).HasMaxLength(100);
                 entity.Property(x => x.IsRouteLink).HasColumnName("IsRouteLink");
@@ -1341,6 +1343,7 @@ namespace SBERP.Security.Persistence
                 entity.Property(x => x.Name).HasMaxLength(100);
                 entity.Property(x => x.IsHeader).HasColumnName("IsHeader");
                 entity.Property(x => x.IsModule).HasColumnName("IsModule");
+                entity.Property(x => x.IsSubModule).HasColumnName("IsSubModule");
                 entity.Property(x => x.IsComponent).HasColumnName("IsComponent");
                 entity.Property(x => x.CssClass).HasMaxLength(100);
                 entity.Property(x => x.IsRouteLink).HasColumnName("IsRouteLink");
@@ -1371,6 +1374,9 @@ namespace SBERP.Security.Persistence
                 entity.Property(x => x.Address).HasMaxLength(200);
                 entity.Property(x => x.Email).HasMaxLength(200);
                 entity.Property(x => x.AppUserRoleId).HasColumnName("AppUserRoleId");
+                entity.Property(x => x.JobTitle).HasMaxLength(100);
+                entity.Property(x => x.ProfilePhotoId).HasColumnName("ProfilePhotoId");
+                entity.Property(x => x.ProfilePhotoLocation).HasMaxLength(500);
                 entity.Property(x => x.CreatedBy).HasColumnName("CreatedBy");
                 entity.Property(x => x.CreatedDate).HasColumnType("datetime");
                 entity.Property(x => x.UpdatedBy).HasColumnName("UpdatedBy");
@@ -1402,6 +1408,9 @@ namespace SBERP.Security.Persistence
                 entity.Property(x => x.Address).HasMaxLength(200);
                 entity.Property(x => x.Email).HasMaxLength(200);
                 entity.Property(x => x.AppUserRoleId).HasColumnName("AppUserRoleId");
+                entity.Property(x => x.JobTitle).HasMaxLength(100);
+                entity.Property(x => x.ProfilePhotoId).HasColumnName("ProfilePhotoId");
+                entity.Property(x => x.ProfilePhotoLocation).HasMaxLength(500);
                 entity.Property(x => x.CreatedBy).HasColumnName("CreatedBy");
                 entity.Property(x => x.CreatedDate).HasColumnType("datetime");
                 entity.Property(x => x.UpdatedBy).HasColumnName("UpdatedBy");
@@ -1482,8 +1491,8 @@ namespace SBERP.Security.Persistence
                 entity.Property(x => x.UserName).HasMaxLength(100).IsRequired();
                 entity.Property(x => x.Password).HasMaxLength(255);
                 entity.Property(x => x.SaltKey).HasMaxLength(255);
-                entity.Property(x => x.RefreshToken).HasMaxLength(255);
-                entity.Property(x => x.RefreshTokenExpiryTime).HasColumnType("datetime");
+                entity.Property(x => x.FailedLoginAttempts).HasDefaultValue(0);
+                entity.Property(x => x.LockoutEnd).HasColumnType("datetime");
                 entity.Property(x => x.IsActive).HasColumnName("IsActive");
 
                 entity.HasOne(x => x.AppUserProfile)
@@ -1502,6 +1511,34 @@ namespace SBERP.Security.Persistence
             });
 
             // ------------------------------------------------------------------
+            // AppUserRefreshToken  (hashed, rotated refresh tokens; one family per login)
+            // ------------------------------------------------------------------
+            modelBuilder.Entity<AppUserRefreshToken>(entity =>
+            {
+                entity.ToTable("AppUserRefreshTokens");
+                entity.Property(x => x.TokenHash).HasMaxLength(64).IsUnicode(false).IsRequired();
+                entity.Property(x => x.ReplacedByTokenHash).HasMaxLength(64).IsUnicode(false);
+                entity.Property(x => x.ExpiresAt).HasColumnType("datetime");
+                entity.Property(x => x.SessionExpiresAt).HasColumnType("datetime");
+                entity.Property(x => x.CreatedDate).HasColumnType("datetime");
+                entity.Property(x => x.RevokedDate).HasColumnType("datetime");
+                entity.Property(x => x.CreatedByIp).HasMaxLength(64);
+                entity.Property(x => x.RevokedByIp).HasMaxLength(64);
+                entity.Property(x => x.UserAgent).HasMaxLength(512);
+                entity.Property(x => x.RevokedReason).HasMaxLength(50);
+
+                entity.HasIndex(x => x.TokenHash).IsUnique().HasDatabaseName("UX_AppUserRefreshTokens_TokenHash");
+                entity.HasIndex(x => x.FamilyId).HasDatabaseName("IX_AppUserRefreshTokens_FamilyId");
+                entity.HasIndex(x => new { x.AppUserId, x.RevokedDate }).HasDatabaseName("IX_AppUserRefreshTokens_AppUserId_RevokedDate");
+
+                entity.HasOne(x => x.AppUser)
+                    .WithMany()
+                    .HasForeignKey(x => x.AppUserId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_AppUserRefreshTokens_AppUsers");
+            });
+
+            // ------------------------------------------------------------------
             // AppUserLog
             // ------------------------------------------------------------------
             modelBuilder.Entity<AppUserLog>(entity =>
@@ -1512,8 +1549,6 @@ namespace SBERP.Security.Persistence
                 entity.Property(x => x.UserName).HasMaxLength(100);
                 entity.Property(x => x.Password).HasMaxLength(255);
                 entity.Property(x => x.SaltKey).HasMaxLength(255);
-                entity.Property(x => x.RefreshToken).HasMaxLength(255);
-                entity.Property(x => x.RefreshTokenExpiryTime).HasColumnType("datetime");
                 entity.Property(x => x.IsActive).HasColumnName("IsActive");
                 entity.Property(x => x.PerformedUser).HasColumnName("PerformedUser");
                 entity.Property(x => x.Action).HasColumnName("Action");
@@ -1567,6 +1602,9 @@ namespace SBERP.Security.Persistence
                     Address = "Dubai",
                     Email = "sbhowmikcse08@gmail.com",
                     AppUserRoleId = new Guid("1B15CE5A-56B3-4EB9-8286-6E27F770B0DA"),
+                    JobTitle = "Chief Executive Officer",
+                    ProfilePhotoId = null,          // no photo yet: the default avatar is shown
+                    ProfilePhotoLocation = null,
                     CreatedBy = null,
                     CreatedDate = profileTime,
                     UpdatedBy = null,
@@ -1580,6 +1618,9 @@ namespace SBERP.Security.Persistence
                     Address = "Dubai",
                     Email = "rohine2008@gmail.com",
                     AppUserRoleId = new Guid("10A9E9E7-CB24-4816-9B94-9DB275A40EDD"),
+                    JobTitle = "Software Engineer",
+                    ProfilePhotoId = null,
+                    ProfilePhotoLocation = null,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                     CreatedDate = profileTime,
                     UpdatedBy = null,
@@ -1598,8 +1639,6 @@ namespace SBERP.Security.Persistence
                     UserName = "sree",
                     Password = "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa",
                     SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
-                    RefreshToken = null,
-                    RefreshTokenExpiryTime = null,
                     CreatedBy = null,
                     CreatedDate = userTime,
                     UpdatedBy = null,
@@ -1613,8 +1652,6 @@ namespace SBERP.Security.Persistence
                     UserName = "rohine",
                     Password = "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa",
                     SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
-                    RefreshToken = null,
-                    RefreshTokenExpiryTime = null,
                     CreatedBy = null,
                     CreatedDate = userTime,
                     UpdatedBy = null,
@@ -1658,7 +1695,7 @@ namespace SBERP.Security.Persistence
                     CssClass = "nav-item",
                     IsRouteLink = true,
                     RouteLink = "/business/home",
-                    RouteLinkClass = "nav-link active",
+                    RouteLinkClass = "nav-link",
                     Icon = "nav-icon fas fa-tachometer-alt",
                     Remark = "Navigation Item",
                     ParentId = new Guid("DB0085B7-695D-4751-A190-6C52E3BB44F1"),
@@ -1702,7 +1739,7 @@ namespace SBERP.Security.Persistence
                     CssClass = "nav-item",
                     IsRouteLink = false,
                     RouteLink = "",
-                    RouteLinkClass = "nav-link active",
+                    RouteLinkClass = "nav-link",
                     Icon = "fas fa-shield-alt nav-icon",
                     Remark = "Navigation Item",
                     ParentId = new Guid("F0F0183B-7F60-4EB4-97D8-D2C15A4AE62C"),
@@ -1834,7 +1871,7 @@ namespace SBERP.Security.Persistence
                     CssClass = "nav-item",
                     IsRouteLink = true,
                     RouteLink = "/business/appsettings",
-                    RouteLinkClass = "nav-link active",
+                    RouteLinkClass = "nav-link",
                     Icon = "nav-icon fas fa-cog",
                     Remark = "Navigation Item",
                     ParentId = new Guid("52D7E13B-EF24-4F17-937B-D6E8005A6658"),
@@ -1856,7 +1893,7 @@ namespace SBERP.Security.Persistence
                     CssClass = "nav-item",
                     IsRouteLink = false,
                     RouteLink = "",
-                    RouteLinkClass = "nav-link active",
+                    RouteLinkClass = "nav-link",
                     Icon = "fas fa-users nav-icon",
                     Remark = "Navigation Item",
                     ParentId = new Guid("F0F0183B-7F60-4EB4-97D8-D2C15A4AE62C"),
@@ -1881,9 +1918,9 @@ namespace SBERP.Security.Persistence
                     RouteLinkClass = "nav-link",
                     Icon = "fas fa-sitemap nav-icon",
                     Remark = "Navigation Item",
-                    ParentId = new Guid("2AC99AE0-C481-4A9C-A129-4CB3024B642E"),
+                    ParentId = OrgSetupMenuId,   // HR sub-module (HRMenuSeed.cs)
                     DropdownIcon = null,
-                    SerialNo = 12,
+                    SerialNo = 15,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                     CreatedDate = menuTime,
                     UpdatedBy = null,
@@ -1903,9 +1940,9 @@ namespace SBERP.Security.Persistence
                     RouteLinkClass = "nav-link",
                     Icon = "fas fa-briefcase nav-icon",
                     Remark = "Navigation Item",
-                    ParentId = new Guid("2AC99AE0-C481-4A9C-A129-4CB3024B642E"),
+                    ParentId = OrgSetupMenuId,   // HR sub-module (HRMenuSeed.cs)
                     DropdownIcon = null,
-                    SerialNo = 13,
+                    SerialNo = 16,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                     CreatedDate = menuTime,
                     UpdatedBy = null,
@@ -1925,9 +1962,9 @@ namespace SBERP.Security.Persistence
                     RouteLinkClass = "nav-link",
                     Icon = "fas fa-user-tie nav-icon",
                     Remark = "Navigation Item",
-                    ParentId = new Guid("2AC99AE0-C481-4A9C-A129-4CB3024B642E"),
+                    ParentId = CoreHRMenuId,   // HR sub-module (HRMenuSeed.cs)
                     DropdownIcon = null,
-                    SerialNo = 14,
+                    SerialNo = 22,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                     CreatedDate = menuTime,
                     UpdatedBy = null,
@@ -1947,18 +1984,17 @@ namespace SBERP.Security.Persistence
                     RouteLinkClass = "nav-link",
                     Icon = "fas fa-cogs nav-icon",
                     Remark = "Navigation Item",
-                    ParentId = new Guid("2AC99AE0-C481-4A9C-A129-4CB3024B642E"),
+                    ParentId = CoreHRMenuId,   // HR sub-module (HRMenuSeed.cs)
                     DropdownIcon = null,
-                    SerialNo = 15,
+                    SerialNo = 23,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                     CreatedDate = menuTime,
                     UpdatedBy = null,
                     UpdatedDate = menuTime,
                     IsActive = true
                 },
-                // === Company / Branch (Module 0) — siblings of Employee/Department/
-                // Designation/HR Settings under the same "Human Resources" module,
-                // not a separate top-level module. ===
+                // === Company / Branch (Module 0) — Organization Setup sub-module of
+                // "Human Resources" (see SecurityDBContext.HRMenuSeed.cs). ===
                 new AppUserMenu
                 {
                     Id = new Guid("082295E5-CD29-4693-8CF9-8082D4F8E791"),
@@ -1972,9 +2008,9 @@ namespace SBERP.Security.Persistence
                     RouteLinkClass = "nav-link",
                     Icon = "fas fa-industry nav-icon",
                     Remark = "Navigation Item",
-                    ParentId = new Guid("2AC99AE0-C481-4A9C-A129-4CB3024B642E"),   // "Human Resources"
+                    ParentId = OrgSetupMenuId,   // HR sub-module (HRMenuSeed.cs)
                     DropdownIcon = null,
-                    SerialNo = 16,
+                    SerialNo = 13,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                     CreatedDate = menuTime,
                     UpdatedBy = null,
@@ -1994,9 +2030,9 @@ namespace SBERP.Security.Persistence
                     RouteLinkClass = "nav-link",
                     Icon = "fas fa-code-branch nav-icon",
                     Remark = "Navigation Item",
-                    ParentId = new Guid("2AC99AE0-C481-4A9C-A129-4CB3024B642E"),   // "Human Resources"
+                    ParentId = OrgSetupMenuId,   // HR sub-module (HRMenuSeed.cs)
                     DropdownIcon = null,
-                    SerialNo = 17,
+                    SerialNo = 14,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                     CreatedDate = menuTime,
                     UpdatedBy = null,
@@ -2837,6 +2873,251 @@ namespace SBERP.Security.Persistence
             //          IsActive = true
             //      });
 
+            // HR sub-module navigation (Org Setup → Separation) — see SecurityDBContext.HRMenuSeed.cs
+            SeedHRSubModuleMenus(modelBuilder);
+
+            // Onboarding provisioning: notifications, e-mail outbox, profile -> employee link
+            ConfigureOnboardingProvisioning(modelBuilder);
         }
+
+        #region HRMenuSeed (was SecurityDBContext.HRMenuSeed.cs)
+        // Navigation for the HumanResources sub-modules (Module 0 Organization Setup
+        // through Module 8 Separation).
+        // Menu tree (any depth is supported by GetChildMenus and the sidebar):
+        //   Header (IsHeader)  "Business"
+        //     Module (IsModule)  "Human Resources"           – one per microservice
+        //       Sub-module (IsSubModule)  "Recruitment" …    – optional grouping level
+        //         Component (IsComponent)  "Requisition" … – a routed screen
+        // A module may also hold components directly (e.g. "Security") or be a routed
+        // leaf itself (e.g. "Dashboard", "App Settings").
+        // RouteLink matches the Angular lazy routes (commonService.getMenuPermission(router.url)
+        // resolves CRUD flags by URL). The Admin role gets full rights; the User role gets view
+        // rights on the self-service screens (leave applications, goals, reviews) plus the
+        // ancestor rows needed to reach them.
+        private static readonly Guid HumanResourcesMenuId = new("2AC99AE0-C481-4A9C-A129-4CB3024B642E");
+        private static readonly Guid AdminRoleId      = new("1B15CE5A-56B3-4EB9-8286-6E27F770B0DA");
+        private static readonly Guid UserRoleId       = new("10A9E9E7-CB24-4816-9B94-9DB275A40EDD");
+        private const string SeedActor                = "C047D662-9F0E-4358-B323-15EC3081312C";
+
+        private static Guid MenuId(int n) => new($"5E1D0000-0000-4000-8000-{n:D12}");
+        private static Guid RoleMenuId(int n) => new($"5E1D1000-0000-4000-8000-{n:D12}");
+
+        // Sub-modules that also hold the original Core HR screens seeded in SecurityDBContext.cs
+        // (Company/Branch/Department/Designation → Organization Setup, Employee/HR Settings → Core HR).
+        // Ids 1..31 come from the loop below in declaration order; 100+ are fixed additions.
+        private static readonly Guid OrgSetupMenuId = MenuId(1);
+        private static readonly Guid CoreHRMenuId   = MenuId(100);
+
+        private void SeedHRSubModuleMenus(ModelBuilder modelBuilder)
+        {
+            var seedTime = new DateTime(2026, 10, 1, 10, 0, 0, DateTimeKind.Utc);
+
+            // (sub-module, icon, SerialNo, first child SerialNo, children: (name, route, icon, userCanView))
+            // SerialNo follows the depth-first order of the Human Resources tree (HR = 11):
+            // Organization Setup 12 (Company 13, Branch 14, Department 15, Designation 16, then 17-20),
+            // Core HR 21 (Employee 22, HR Settings 23), Recruitment 24 …
+            var tree = new (string Module, string Icon, int Serial, int FirstItemSerial, (string Name, string Route, string Icon, bool UserView)[] Items)[]
+            {
+                ("Organization Setup", "fas fa-building nav-icon", 12, 17, new[]
+                {
+                    ("Position",         "/business/orgsetup/position",         "fas fa-chair nav-icon",           false),
+                    ("Cost Center",      "/business/orgsetup/cost-center",      "fas fa-coins nav-icon",           false),
+                    ("Job Grade",        "/business/orgsetup/job-grade",        "fas fa-layer-group nav-icon",     false),
+                    ("Holiday Calendar", "/business/orgsetup/holiday-calendar", "fas fa-calendar-alt nav-icon",    false),
+                }),
+                ("Recruitment", "fas fa-user-plus nav-icon", 24, 25, new[]
+                {
+                    ("Requisition",        "/business/recruitment/requisition", "fas fa-file-signature nav-icon", false),
+                    ("Job Posting",        "/business/recruitment/job-posting", "fas fa-bullhorn nav-icon",       false),
+                    ("Applicant Pipeline", "/business/recruitment/pipeline",    "fas fa-stream nav-icon",         false),
+                }),
+                ("Onboarding", "fas fa-handshake nav-icon", 28, 29, new[]
+                {
+                    ("Onboarding", "/business/onboarding/list", "fas fa-clipboard-check nav-icon", false),
+                }),
+                ("Time & Attendance", "fas fa-clock nav-icon", 30, 31, new[]
+                {
+                    ("Shift",              "/business/attendance/shift",    "fas fa-business-time nav-icon", false),
+                    ("Overtime",           "/business/attendance/overtime", "fas fa-hourglass-half nav-icon", false),
+                    ("Attendance Summary", "/business/attendance/summary",  "fas fa-calendar-check nav-icon", false),
+                }),
+                ("Leave", "fas fa-plane-departure nav-icon", 34, 35, new[]
+                {
+                    ("Leave Application", "/business/leave/applications", "fas fa-paper-plane nav-icon", true),
+                    ("Leave Type",        "/business/leave/types",        "fas fa-tags nav-icon",        false),
+                    ("Leave Policy",      "/business/leave/policies",     "fas fa-gavel nav-icon",       false),
+                }),
+                ("Payroll", "fas fa-money-check-alt nav-icon", 38, 39, new[]
+                {
+                    ("Payroll Run",      "/business/payroll/runs",              "fas fa-play-circle nav-icon",   false),
+                    ("Salary Structure", "/business/payroll/salary-structures", "fas fa-sitemap nav-icon",       false),
+                    ("Pay Component",    "/business/payroll/components",        "fas fa-puzzle-piece nav-icon",  false),
+                    ("Loan / Advance",   "/business/payroll/loans",             "fas fa-hand-holding-usd nav-icon", false),
+                }),
+                ("Performance", "fas fa-chart-line nav-icon", 43, 44, new[]
+                {
+                    ("Appraisal Cycle", "/business/performance/cycles",       "fas fa-sync-alt nav-icon",  false),
+                    ("Goal",            "/business/performance/goals",        "fas fa-bullseye nav-icon",  true),
+                    ("Review",          "/business/performance/reviews",      "fas fa-star-half-alt nav-icon", true),
+                    ("Competency",      "/business/performance/competencies", "fas fa-brain nav-icon",     false),
+                }),
+                ("Separation", "fas fa-sign-out-alt nav-icon", 48, 49, new[]
+                {
+                    ("Separation", "/business/separation", "fas fa-door-open nav-icon", false),
+                }),
+            };
+
+            var menus = new List<AppUserMenu>();
+            var roleMenus = new List<AppUserRoleMenu>();
+            int n = 0, rm = 0;
+
+            AppUserRoleMenu Grant(Guid id, Guid role, Guid menu, bool view, bool write) => new()
+            {
+                Id = id, AppUserRoleId = role, AppUserMenuId = menu,
+                IsView = view, IsCreate = write, IsUpdate = write, IsDelete = write,
+                CreatedBy = SeedActor, CreatedDate = seedTime, UpdatedDate = seedTime, IsActive = true
+            };
+
+            AppUserMenu SubModule(Guid id, string name, string icon, int serial) => new()
+            {
+                Id = id, Name = name, IsHeader = false, IsModule = false, IsSubModule = true, IsComponent = false,
+                CssClass = "nav-item", IsRouteLink = false, RouteLink = "", RouteLinkClass = "nav-link",
+                Icon = icon, Remark = "Navigation Item", ParentId = HumanResourcesMenuId,
+                DropdownIcon = "fas fa-angle-left right", SerialNo = serial,
+                CreatedBy = SeedActor, CreatedDate = seedTime, UpdatedDate = seedTime, IsActive = true
+            };
+
+            foreach (var (module, icon, serial, firstItemSerial, items) in tree)
+            {
+                var moduleId = MenuId(++n);
+                menus.Add(SubModule(moduleId, module, icon, serial));
+                // grouping rows carry no CRUD flags (same as the "Human Resources" module row)
+                roleMenus.Add(Grant(RoleMenuId(++rm), AdminRoleId, moduleId, false, false));
+                if (items.Any(i => i.UserView)) roleMenus.Add(Grant(RoleMenuId(++rm), UserRoleId, moduleId, false, false));
+
+                int itemSerial = firstItemSerial;
+                foreach (var (name, route, itemIcon, userView) in items)
+                {
+                    var itemId = MenuId(++n);
+                    menus.Add(new AppUserMenu
+                    {
+                        Id = itemId, Name = name, IsHeader = false, IsModule = false, IsSubModule = false, IsComponent = true,
+                        CssClass = "nav-item", IsRouteLink = true, RouteLink = route, RouteLinkClass = "nav-link",
+                        Icon = itemIcon, Remark = "Navigation Item", ParentId = moduleId, DropdownIcon = null,
+                        SerialNo = itemSerial++, CreatedBy = SeedActor, CreatedDate = seedTime, UpdatedDate = seedTime, IsActive = true
+                    });
+                    roleMenus.Add(Grant(RoleMenuId(++rm), AdminRoleId, itemId, true, true));
+                    if (userView) roleMenus.Add(Grant(RoleMenuId(++rm), UserRoleId, itemId, true, false));
+                }
+            }
+
+            // Core HR: groups Employee and HR Settings (seeded in SecurityDBContext.cs).
+            menus.Add(SubModule(CoreHRMenuId, "Core HR", "fas fa-id-card nav-icon", 21));
+            roleMenus.Add(Grant(RoleMenuId(100), AdminRoleId, CoreHRMenuId, false, false));
+
+            // The User role reaches Leave / Performance through "Human Resources", so it needs that row too.
+            roleMenus.Add(Grant(RoleMenuId(101), UserRoleId, HumanResourcesMenuId, false, false));
+
+            // Biometric attendance screens under "Time & Attendance" (MenuId(12)). Fixed ids 200+ so the
+            // loop above keeps its numbering; SerialNo orders them after Attendance Summary (33) among
+            // their siblings.
+            var timeAttendanceMenuId = MenuId(12);
+            var biometricScreens = new (string Name, string Route, string Icon)[]
+            {
+                ("Biometric Registration", "/business/attendance/biometric-registrations", "fas fa-fingerprint nav-icon"),
+                ("Attendance Punch Log",   "/business/attendance/punches",                 "fas fa-list-ol nav-icon"),
+                ("Attendance Device",      "/business/attendance/devices",                 "fas fa-tablet-alt nav-icon"),
+                ("Office Zone",            "/business/attendance/zones",                   "fas fa-wifi nav-icon"),
+            };
+            for (int i = 0; i < biometricScreens.Length; i++)
+            {
+                var (name, route, icon) = biometricScreens[i];
+                var itemId = MenuId(200 + i);
+                menus.Add(new AppUserMenu
+                {
+                    Id = itemId, Name = name, IsHeader = false, IsModule = false, IsSubModule = false, IsComponent = true,
+                    CssClass = "nav-item", IsRouteLink = true, RouteLink = route, RouteLinkClass = "nav-link",
+                    Icon = icon, Remark = "Navigation Item", ParentId = timeAttendanceMenuId, DropdownIcon = null,
+                    SerialNo = 50 + i, CreatedBy = SeedActor, CreatedDate = seedTime, UpdatedDate = seedTime, IsActive = true
+                });
+                roleMenus.Add(Grant(RoleMenuId(200 + i), AdminRoleId, itemId, true, true));
+            }
+
+            modelBuilder.Entity<AppUserMenu>().HasData(menus);
+            modelBuilder.Entity<AppUserRoleMenu>().HasData(roleMenus);
+        }
+        #endregion
+
+        #region Onboarding (was SecurityDBContext.Onboarding.cs)
+        // Tables used when HR's EmployeeOnboardedEvent provisions a login:
+        // Notifications (navbar bell), EmailOutbox (welcome e-mail), and the
+        // AppUserProfiles.EmployeeId link that makes provisioning idempotent — and,
+        // for HR's EmployeeOffboardedEvent, the LoginDeactivations schedule.
+        public virtual DbSet<Notification>? Notifications { get; set; }
+        public virtual DbSet<EmailOutbox>? EmailOutbox { get; set; }
+        public virtual DbSet<LoginDeactivation>? LoginDeactivations { get; set; }
+
+        private void ConfigureOnboardingProvisioning(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AppUserProfile>(e =>
+            {
+                // one login per employee — also the consumer's idempotency key
+                e.HasIndex(x => x.EmployeeId).IsUnique()
+                    .HasFilter("[EmployeeId] IS NOT NULL")
+                    .HasDatabaseName("UX_AppUserProfiles_EmployeeId");
+            });
+
+            modelBuilder.Entity<Notification>(e =>
+            {
+                e.ToTable("Notifications");
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Title).HasMaxLength(200).IsRequired();
+                e.Property(x => x.Message).HasMaxLength(1000);
+                e.Property(x => x.Type).HasMaxLength(50);
+                e.Property(x => x.RouteLink).HasMaxLength(300);
+                e.Property(x => x.ReadDate).HasColumnType("datetime");
+                e.Property(x => x.CreatedDate).HasColumnType("datetime");
+                e.HasIndex(x => new { x.RecipientProfileId, x.IsRead, x.CreatedDate })
+                    .HasDatabaseName("IX_Notifications_Recipient_Unread");
+                e.HasOne<AppUserProfile>().WithMany().HasForeignKey(x => x.RecipientProfileId)
+                    .OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Notifications_AppUserProfile");
+            });
+
+            modelBuilder.Entity<EmailOutbox>(e =>
+            {
+                e.ToTable("EmailOutbox");
+                e.HasKey(x => x.Id);
+                e.Property(x => x.ToAddress).HasMaxLength(300).IsRequired();
+                e.Property(x => x.ToName).HasMaxLength(200);
+                e.Property(x => x.Subject).HasMaxLength(300).IsRequired();
+                e.Property(x => x.Category).HasMaxLength(50);
+                e.Property(x => x.LastError).HasMaxLength(2000);
+                e.Property(x => x.ProcessedDate).HasColumnType("datetime");
+                e.Property(x => x.CreatedDate).HasColumnType("datetime");
+                e.HasIndex(x => new { x.ProcessedDate, x.CreatedDate })
+                    .HasFilter("[ProcessedDate] IS NULL")
+                    .HasDatabaseName("IX_EmailOutbox_Unprocessed");
+            });
+
+            modelBuilder.Entity<LoginDeactivation>(e =>
+            {
+                e.ToTable("LoginDeactivations");
+                e.HasKey(x => x.Id);
+                e.Property(x => x.SeparationCode).HasMaxLength(30);
+                e.Property(x => x.EmployeeCode).HasMaxLength(30);
+                e.Property(x => x.UserName).HasMaxLength(100);
+                e.Property(x => x.Outcome).HasMaxLength(30);
+                e.Property(x => x.LastWorkingDate).HasColumnType("datetime");
+                e.Property(x => x.DeactivateOn).HasColumnType("datetime");
+                e.Property(x => x.ProcessedDate).HasColumnType("datetime");
+                e.Property(x => x.CreatedDate).HasColumnType("datetime");
+                e.Property(x => x.UpdatedDate).HasColumnType("datetime");
+                e.HasIndex(x => x.SeparationId).IsUnique().HasDatabaseName("UX_LoginDeactivations_Separation");
+                e.HasIndex(x => x.DeactivateOn).HasFilter("[ProcessedDate] IS NULL")
+                    .HasDatabaseName("IX_LoginDeactivations_Due");
+            });
+        }
+        #endregion
+
     }
 }

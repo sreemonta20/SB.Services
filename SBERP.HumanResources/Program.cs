@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.DataProtection;
 #region Program.cs
 
 // .NET 10 / Swashbuckle 10.x — same pattern as SBERP.Security.
@@ -13,7 +14,9 @@ using SBERP.HumanResources.Helper;
 using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Persistence;
 using SBERP.HumanResources.Service;
+using SBERP.HumanResources.Messaging;
 using SBERP.Shared.Extensions;
+using SBERP.Shared.Storage;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Data;
@@ -25,13 +28,11 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Configuration
-builder.Configuration
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile(
-        $"appsettings.{builder.Environment.EnvironmentName}.json",
-        optional: true, reloadOnChange: true)
-    .AddEnvironmentVariables();
+// WebApplication.CreateBuilder already loads, lowest to highest priority: appsettings.json,
+// appsettings.{Environment}.json (both reloadOnChange), user secrets (Development), environment
+// variables, command-line arguments — all relative to the content root. Do NOT add appsettings.json
+// again here: a source added later wins, so re-adding it made the file override environment variables
+// and command-line arguments (e.g. AppSettings__ConnectionStrings__SCSqlConnectionString on a server).
 
 bool isConnectionStrInAzureVault = bool.Parse(builder.Configuration["IsConnectionStrInAzureVault"] ?? "false");
 if (isConnectionStrInAzureVault)
@@ -197,8 +198,78 @@ services.AddScoped<ICompanyService, CompanyService>();
 services.AddScoped<IBranchService, BranchService>();
 services.AddScoped<IDesignationService, DesignationService>();
 services.AddScoped<IEmployeeService, EmployeeService>();
+// employee photos: PhotoStorage section (RootPath empty = the OS Pictures folder)
+services.AddPhotoStorage(configuration);
 services.AddScoped<IHRSettingsService, HRSettingsService>();
 services.AddScoped<ValidateModelAttribute>();
+
+// Module 0 — Organization Setup (Company/Branch above)
+services.AddScoped<ICostCenterService, CostCenterService>();
+services.AddScoped<IJobGradeService, JobGradeService>();
+services.AddScoped<IHolidayCalendarService, HolidayCalendarService>();
+services.AddScoped<IPositionService, PositionService>();
+
+// Module 1 — Recruitment
+services.AddScoped<IRequisitionService, RequisitionService>();
+services.AddScoped<IJobPostingService, JobPostingService>();
+services.AddScoped<ICandidateService, CandidateService>();
+services.AddScoped<IInterviewService, InterviewService>();
+services.AddScoped<IJobOfferService, JobOfferService>();
+
+// Module 2 — Onboarding (+ transactional outbox relayed to RabbitMQ)
+services.AddScoped<IOnboardingService, OnboardingService>();
+services.Configure<RabbitMqSettings>(configuration.GetSection("RabbitMq"));
+services.AddSingleton<IEventPublisher, RabbitMqEventPublisher>();
+if (bool.Parse(configuration["RabbitMq:Enabled"] ?? "true"))
+{
+    services.AddHostedService<OutboxPublisher>();
+    services.AddHostedService<AppUserProvisionedConsumer>();   // Security → HR: sets Employees.AppUserId
+}
+
+// Module 4 — Time & Attendance
+services.AddScoped<IShiftService, ShiftService>();
+services.AddScoped<IRosterService, RosterService>();
+services.AddScoped<IOvertimeService, OvertimeService>();
+services.AddScoped<IRegularizationService, RegularizationService>();
+services.AddScoped<IAttendanceSummaryService, AttendanceSummaryService>();
+
+// Module 4 — Biometric attendance (mobile app Identification API + door terminals)
+// The vault's encryption keys live in their own folder and, on Windows, are themselves protected
+// with DPAPI for this machine. Back the key folder up: without it the vault files cannot be read.
+{
+    var keyRing = appSettings?.Attendance?.BiometricKeyRingPath ?? @"C:\SBERP\BiometricKeys";
+    var dp = services.AddDataProtection()
+        .SetApplicationName("SBERP.HumanResources")
+        .PersistKeysToFileSystem(new DirectoryInfo(keyRing));
+    if (OperatingSystem.IsWindows()) dp.ProtectKeysWithDpapi(protectToLocalMachine: true);
+}
+services.AddSingleton<IBiometricVault, BiometricVault>();
+services.AddSingleton<IBiometricChallengeStore, BiometricChallengeStore>();
+services.AddScoped<IAttendanceProcessor, AttendanceProcessor>();
+services.AddScoped<IBiometricRegistrationService, BiometricRegistrationService>();
+services.AddScoped<IAttendancePunchService, AttendancePunchService>();
+services.AddScoped<IAttendanceDeviceService, AttendanceDeviceService>();
+services.AddScoped<IAttendanceZoneService, AttendanceZoneService>();
+
+// Module 5 — Leave
+services.AddScoped<ILeaveTypeService, LeaveTypeService>();
+services.AddScoped<ILeavePolicyService, LeavePolicyService>();
+services.AddScoped<ILeaveApplicationService, LeaveApplicationService>();
+
+// Module 6 — Payroll & Compensation
+services.AddScoped<IPayComponentService, PayComponentService>();
+services.AddScoped<ISalaryStructureService, SalaryStructureService>();
+services.AddScoped<IPayrollRunService, PayrollRunService>();
+services.AddScoped<ILoanService, LoanService>();
+
+// Module 7 — Performance & Development
+services.AddScoped<IAppraisalCycleService, AppraisalCycleService>();
+services.AddScoped<ICompetencyService, CompetencyService>();
+services.AddScoped<IGoalService, GoalService>();
+services.AddScoped<IReviewService, ReviewService>();
+
+// Module 8 — Separation (Offboarding)
+services.AddScoped<ISeparationService, SeparationService>();
 
 // 4. Build
 var app = builder.Build();

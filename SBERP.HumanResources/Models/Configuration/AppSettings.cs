@@ -26,6 +26,17 @@ namespace SBERP.HumanResources.Models.Configuration
         public string? BiometricConnectionString { get; set; }
         public string? BiometricProviderName { get; set; }
         public string? UploadRootPath { get; set; }
+
+        // ---- biometric attendance ----
+        /// <summary>Folder for encrypted biometric template files (dev: local folder; prod: dedicated server folder).</summary>
+        public string? BiometricVaultPath { get; set; }
+        /// <summary>Folder for the encryption keys of the vault. Keep it apart from the vault and back it up.</summary>
+        public string? BiometricKeyRingPath { get; set; }
+        public int MaxTemplateBytes { get; set; } = 2 * 1024 * 1024;
+        /// <summary>Lifetime of the one-time challenge the phone signs.</summary>
+        public int ChallengeSeconds { get; set; } = 120;
+        /// <summary>CSV of proxies (the API gateway) whose X-Forwarded-For header is trusted.</summary>
+        public string? TrustedProxies { get; set; }
     }
 
     public class RedisSettings

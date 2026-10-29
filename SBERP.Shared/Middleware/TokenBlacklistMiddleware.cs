@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
@@ -52,9 +53,16 @@ namespace SBERP.Shared.Middleware
                         {
                             var jwt = handler.ReadJwtToken(rawToken);
                             var jti = jwt.Id; // JwtRegisteredClaimNames.Jti
+                            var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                            var issuedAt = jwt.IssuedAt == DateTime.MinValue
+                                ? 0
+                                : new DateTimeOffset(jwt.IssuedAt, TimeSpan.Zero).ToUnixTimeSeconds();
 
-                            if (!string.IsNullOrEmpty(jti) &&
-                                await blacklistService.IsBlacklistedAsync(jti))
+                            // logged out (this token), or all sessions of the user ended (password / role change, deactivation)
+                            if ((!string.IsNullOrEmpty(jti) &&
+                                 await blacklistService.IsBlacklistedAsync(jti)) ||
+                                (!string.IsNullOrEmpty(userId) &&
+                                 await blacklistService.IsRevokedForUserAsync(userId, issuedAt)))
                             {
                                 _logger.LogWarning(
                                     "Blacklisted token (JTI:{Jti}) blocked on {Path}",

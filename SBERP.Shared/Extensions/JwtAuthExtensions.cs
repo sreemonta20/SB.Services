@@ -14,6 +14,17 @@ namespace SBERP.Shared.Extensions
     public static class JwtAuthExtensions
     {
         /// <summary>
+        /// Registers the token blacklist on the shared Redis prefix (<see cref="SharedAuthCache"/>), so a
+        /// token revoked by any service is rejected by every service.
+        /// </summary>
+        public static IServiceCollection AddSharedTokenBlacklist(this IServiceCollection services)
+        {
+            services.AddSingleton<SharedAuthCache>();
+            services.AddScoped<ITokenBlacklistService, TokenBlacklistService>();
+            return services;
+        }
+
+        /// <summary>
         /// Call in every microservice's Program.cs:
         ///
         ///   builder.Services.AddSharedJwtAuthentication(builder.Configuration);
@@ -77,7 +88,7 @@ namespace SBERP.Shared.Extensions
             services.AddAuthorization();
 
             // Register the Redis blacklist service — used by TokenBlacklistMiddleware
-            services.AddScoped<ITokenBlacklistService, TokenBlacklistService>();
+            services.AddSharedTokenBlacklist();
 
             return services;
         }

@@ -57,7 +57,7 @@ namespace SBERP.Security.Controllers.v1
         public async Task<object> AuthenticateUserAsync([FromBody] LoginRequest request)
         {
             _securityLogService.LogInfo(ConstantSupplier.LOGIN_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.LOGIN_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.LOGIN_REQ_MSG, LogSafe.Serialize(new { request?.UserName }, Formatting.Indented)));
             DataResponse response;
             try
             {
@@ -138,7 +138,6 @@ namespace SBERP.Security.Controllers.v1
         public async Task<object> RefreshTokenAsync([FromBody] RefreshTokenRequest refreshTokenReq)
         {
             _securityLogService.LogInfo(ConstantSupplier.REFRESHTOKEN_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.REFRESHTOKEN_REQ_MSG, JsonConvert.SerializeObject(refreshTokenReq, Formatting.Indented)));
             DataResponse response;
 
             try
@@ -168,7 +167,9 @@ namespace SBERP.Security.Controllers.v1
 
         /// POST api/v1/Auth/revoke
         /// <summary>
-        /// It invalidates the refresh token.
+        /// Logout: signs out the session of the refresh token in the body and blacklists the access
+        /// token of the Authorization header. Anonymous, so it also works once the access token expired;
+        /// the refresh token itself is the proof of ownership.
         /// </summary>
         /// <param name="request"></param>
         /// <returns><see cref="Task{object}"/></returns>
@@ -179,33 +180,16 @@ namespace SBERP.Security.Controllers.v1
         public async Task<object> RevokeAsync([FromBody] RevokeRequest request)
         {
             _securityLogService.LogInfo(ConstantSupplier.REVOKE_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.REVOKE_STARTED_INFO_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
             DataResponse response;
-
-            _securityLogService.LogInfo($"Revoke token request received for User: {request.UserName}");
 
             try
             {
-                var authHeader = Request.Headers["Authorization"].FirstOrDefault();
-                if (!string.IsNullOrEmpty(authHeader) &&
-                    authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
-                {
-                    var rawToken = authHeader["Bearer ".Length..].Trim();
-                    var handler = new JwtSecurityTokenHandler();
-                    if (handler.CanReadToken(rawToken))
-                    {
-                        var jwt = handler.ReadJwtToken(rawToken);
-                        var jti = jwt.Id;
-                        var expiry = jwt.ValidTo - DateTime.UtcNow;
-                        if (!string.IsNullOrEmpty(jti) && expiry > TimeSpan.Zero)
-                        {
-                            await _tokenBlacklistService.BlacklistAsync(jti, expiry);
-                            _securityLogService.LogInfo(
-                                $"Token JTI {jti} blacklisted for user: {request.UserName}");
-                        }
-                    }
-                }
-                response = await _authService.RevokeAsync(request.UserName!);
+                string? authHeader = Request.Headers["Authorization"].FirstOrDefault();
+                string? accessToken = authHeader != null && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase)
+                    ? authHeader["Bearer ".Length..].Trim()
+                    : null;
+
+                response = await _authService.RevokeAsync(request, accessToken);
 
                 if (!response.Success)
                 {

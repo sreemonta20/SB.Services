@@ -26,6 +26,7 @@
         // READ-ONLY METADATA (coming from AppUserMenus)
         public bool IsHeader { get; set; }
         public bool IsModule { get; set; }
+        public bool IsSubModule { get; set; }
         public bool IsComponent { get; set; }
         public bool IsRouteLink { get; set; }
         public string Url { get; set; }

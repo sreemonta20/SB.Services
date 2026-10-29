@@ -15,5 +15,7 @@ namespace SBERP.Security.Service
         //ClaimsPrincipal GetPrincipalFromExpiredToken(string? token);
         string GenerateJwtToken(ClaimRequest oClaimRequest);
         string GenerateRefreshToken();
+        string HashToken(string token);
+        ClaimsPrincipal? GetPrincipalFromExpiredToken(string? accessToken);
     }
 }

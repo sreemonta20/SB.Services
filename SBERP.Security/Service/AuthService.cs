@@ -44,6 +44,8 @@ namespace SBERP.Security.Service
         private readonly IDistributedCache _distributedCache;
         private readonly RedisSettings _redisSettings;
         private readonly ITokenBlacklistService _tokenBlacklistService;
+        private readonly IRefreshTokenService _refreshTokenService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         /// Public Constructor
@@ -58,7 +60,8 @@ namespace SBERP.Security.Service
         /// <param name="roleMenuService"></param>
         public AuthService(IConfiguration config, SecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options,
         ISecurityLogService securityLogService, IDatabaseManager dbManager, ITokenService tokenService, IRoleMenuService roleMenuService,
-        IDistributedCache distributedCache, IOptions<RedisSettings> redisSettings, ITokenBlacklistService tokenBlacklistService)
+        IDistributedCache distributedCache, IOptions<RedisSettings> redisSettings, ITokenBlacklistService tokenBlacklistService,
+        IRefreshTokenService refreshTokenService, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = config;
             _context = context;
@@ -72,6 +75,8 @@ namespace SBERP.Security.Service
             _distributedCache = distributedCache;
             _redisSettings = redisSettings.Value;
             _tokenBlacklistService = tokenBlacklistService;
+            _refreshTokenService = refreshTokenService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         #endregion
@@ -87,14 +92,39 @@ namespace SBERP.Security.Service
         /// <returns><see cref="Task{DataResponse}"/></returns>
         public async Task<DataResponse> AuthenticateUserAsync(LoginRequest? request)
         {
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_LOGIN_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_LOGIN_REQ_MSG, LogSafe.Serialize(new { request?.UserName }, Formatting.Indented)));
             object? nullValue = null;
             try
             {
                 AppUser? oExistAppUser = await _context.AppUsers!.Include(u => u.AppUserProfile).FirstOrDefaultAsync(u => u.UserName == request.UserName && u.IsActive == true);
 
-                if (Utilities.IsNull(oExistAppUser) || !BCryptNet.Verify(request!.Password, oExistAppUser!.Password))
+                if (Utilities.IsNull(oExistAppUser))
+                {
+                    // same BCrypt cost as a real check, so the response time does not reveal unknown user names
+                    BCryptNet.Verify(request?.Password ?? string.Empty, TimingDummyHash);
                     return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.Unauthorized, null, ConstantSupplier.AUTH_INVALID_CREDENTIAL_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                }
+
+                // locked: refuse even the right password until the lockout ends
+                DateTime now = DateTime.UtcNow;
+                if (oExistAppUser!.LockoutEnd > now)
+                    return LockedResponse(oExistAppUser.LockoutEnd.Value, now);
+
+                if (!BCryptNet.Verify(request!.Password, oExistAppUser.Password))
+                {
+                    DateTime? lockedUntil = await RegisterFailedLoginAsync(oExistAppUser, now);
+                    if (lockedUntil.HasValue)
+                    {
+                        _securityLogService.LogWarning($"Login of user {oExistAppUser.Id} locked until {lockedUntil:u} after {MaxFailedAttempts} failed attempts.");
+                        await SendLockNoticeAsync(request, oExistAppUser);
+                        return LockedResponse(lockedUntil.Value, now);
+                    }
+                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.Unauthorized, null, ConstantSupplier.AUTH_INVALID_CREDENTIAL_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                }
+
+                if (oExistAppUser.FailedLoginAttempts != 0 || oExistAppUser.LockoutEnd != null)
+                    await _context.AppUsers!.Where(u => u.Id == oExistAppUser.Id)
+                        .ExecuteUpdateAsync(s => s.SetProperty(u => u.FailedLoginAttempts, 0).SetProperty(u => u.LockoutEnd, (DateTime?)null));
 
                 AppUserProfile? oAppUserProfile = await _context.AppUserProfiles!.FirstOrDefaultAsync(x => x.Id == oExistAppUser.AppUserProfileId && x.IsActive == true);
 
@@ -107,15 +137,8 @@ namespace SBERP.Security.Service
                 {
                     return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.AUTH_FAILED_GENRATE_JWT_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
                 }
-                string refreshToken = _tokenService.GenerateRefreshToken();
-
-
-
-                oExistAppUser.RefreshToken = refreshToken;
-                oExistAppUser.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_appSettings.RefreshTokenExpirationDays);
-                oExistAppUser.UpdatedBy = Convert.ToString(oExistAppUser.AppUserProfileId);
-                oExistAppUser.UpdatedDate = DateTime.UtcNow;
-                await _context.SaveChangesAsync();
+                // new login session: only the token's hash is stored, in AppUserRefreshTokens
+                string refreshToken = await _refreshTokenService.IssueAsync(oExistAppUser.Id, ClientIp(), ClientUserAgent());
 
                 TokenResponse oTokenResponse = new() { access_token = accessToken, refresh_token = refreshToken };
 
@@ -138,7 +161,7 @@ namespace SBERP.Security.Service
         /// <exception cref="Exception"></exception>
         //public async Task<DataResponse> GetAppUserProfileMenuAsync(string userId)
         //{
-        //    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_REQ_MSG, JsonConvert.SerializeObject(userId, Formatting.Indented)));
+        //    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_REQ_MSG, LogSafe.Serialize(userId, Formatting.Indented)));
         //    object? nullValue = null;
         //    try
         //    {
@@ -189,7 +212,7 @@ namespace SBERP.Security.Service
         {
             _securityLogService.LogInfo(String.Format(
                 ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_REQ_MSG,
-                JsonConvert.SerializeObject(userId, Formatting.Indented)));
+                LogSafe.Serialize(userId, Formatting.Indented)));
             object? nullValue = null;
             try
             {
@@ -200,7 +223,7 @@ namespace SBERP.Security.Service
                         ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
 
                 // ── Step 1: Try Redis cache (IDistributedCache.GetStringAsync) ────────
-                string cacheKey = $"user_menu_{userId}";
+                string cacheKey = await MenuCache.UserMenuKeyAsync(_distributedCache, userId);
                 try
                 {
                     var cached = await _distributedCache.GetStringAsync(cacheKey);
@@ -261,6 +284,10 @@ namespace SBERP.Security.Service
                         UserName = oExistAppUser!.UserName,
                         Email = oAppUserProfile.Email,
                         UserRole = oAppUserProfile.AppUserRoleId.ToString(),
+                        RoleName = await _context.AppUserRoles!.Where(r => r.Id == oAppUserProfile.AppUserRoleId)
+                                                               .Select(r => r.RoleName).FirstOrDefaultAsync(),
+                        JobTitle = oAppUserProfile.JobTitle,
+                        EmployeeId = oAppUserProfile.EmployeeId?.ToString(),
                         CreatedDate = oAppUserProfile.CreatedDate
                     },
                     userMenus = Convert.ToString(oUserMenuResponse.Result)
@@ -314,7 +341,7 @@ namespace SBERP.Security.Service
             try
             {
                 // IDistributedCache.RemoveAsync — Microsoft official pattern
-                await _distributedCache.RemoveAsync($"user_menu_{userId}");
+                await _distributedCache.RemoveAsync(await MenuCache.UserMenuKeyAsync(_distributedCache, userId));
                 _securityLogService.LogInfo(
                     $"Menu cache invalidated for userId: {userId}");
             }
@@ -326,27 +353,46 @@ namespace SBERP.Security.Service
         }
 
         /// <summary>
-        /// This method used to validate refresh token, renew a jwt token.
+        /// Renews the access token. The refresh token is rotated: the presented one is revoked and a
+        /// new one is returned, in the same session. A rotated token that comes back again was copied,
+        /// so that whole session is signed out (reuse detection). The expired access token must be one
+        /// this service signed for the same user, and the user and profile must still be active.
         /// </summary>
         /// <param name="tokenRequest"></param>
         /// <returns><see cref="Task{DataResponse}"/></returns>
         /// <exception cref="Exception"></exception>
         public async Task<DataResponse> RefreshTokenAsync(RefreshTokenRequest? tokenRequest)
         {
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REFRESHTOKEN_REQ_MSG, JsonConvert.SerializeObject(tokenRequest, Formatting.Indented)));
+            // tokens are credentials: never log them
+            _securityLogService.LogInfo(ConstantSupplier.REFRESHTOKEN_STARTED_INFO_MSG);
             object? nullValue = null;
             try
             {
-                AppUser? user = await _context.AppUsers!.FirstOrDefaultAsync(u => u.RefreshToken == tokenRequest!.Refresh_Token);
-                if (Utilities.IsNull(user) || user!.RefreshTokenExpiryTime <= DateTime.UtcNow)
+                if (string.IsNullOrWhiteSpace(tokenRequest?.Refresh_Token))
+                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.REFRESHTOKEN_REQUIRED_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+
+                ClaimsPrincipal? principal = _tokenService.GetPrincipalFromExpiredToken(tokenRequest.Access_Token);
+                if (principal == null || !Guid.TryParse(principal.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId))
+                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.Unauthorized, null, ConstantSupplier.REFRESHTOKEN_ACCESS_TOKEN_MISMATCH_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+
+                RefreshTokenRotation rotation = await _refreshTokenService.RotateAsync(tokenRequest.Refresh_Token, userId, ClientIp(), ClientUserAgent());
+                switch (rotation.Status)
                 {
-                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.Unauthorized, null, ConstantSupplier.REFRESHTOKEN_INVALID_EXPIRED_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                    case RefreshTokenStatus.Reused:
+                        return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.Unauthorized, null, ConstantSupplier.REFRESHTOKEN_REUSE_DETECTED_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                    case RefreshTokenStatus.Expired:
+                        return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.Unauthorized, null, ConstantSupplier.REFRESHTOKEN_SESSION_ENDED_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                    case RefreshTokenStatus.Invalid:
+                        return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.Unauthorized, null, ConstantSupplier.REFRESHTOKEN_INVALID_EXPIRED_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
                 }
 
-                AppUserProfile? oAppUserProfile = await _context.AppUserProfiles!.FirstOrDefaultAsync(x => x.Id == user.AppUserProfileId && x.IsActive == true);
-
+                AppUser user = rotation.User!;
+                AppUserProfile? oAppUserProfile = await _context.AppUserProfiles!.AsNoTracking().FirstOrDefaultAsync(x => x.Id == user.AppUserProfileId && x.IsActive == true);
                 if (Utilities.IsNull(oAppUserProfile))
-                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.AUTH_USER_PROFILE_NOT_FOUND_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                {
+                    await _refreshTokenService.RevokeFamilyAsync(rotation.FamilyId!.Value, ClientIp(), ConstantSupplier.TOKEN_REVOKE_USER_DEACTIVATED);
+                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.Unauthorized, null, ConstantSupplier.AUTH_USER_PROFILE_NOT_FOUND_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                }
 
                 ClaimRequest oClaimRequest = new() { UserId = user.Id.ToString(), UserName = user.UserName, Email = oAppUserProfile!.Email, Role = oAppUserProfile.AppUserRoleId.ToString() };
                 string accessToken = _tokenService.GenerateJwtToken(oClaimRequest);
@@ -354,17 +400,8 @@ namespace SBERP.Security.Service
                 {
                     return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.AUTH_FAILED_GENRATE_JWT_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
                 }
-                string refreshToken = _tokenService.GenerateRefreshToken();
 
-
-
-                user.RefreshToken = refreshToken;
-                user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_appSettings!.RefreshTokenExpirationDays);
-                user.UpdatedBy = Convert.ToString(user.AppUserProfileId);
-                user.UpdatedDate = DateTime.UtcNow;
-                await _context.SaveChangesAsync();
-
-                TokenResponse oTokenResponse = new() { access_token = accessToken, refresh_token = refreshToken };
+                TokenResponse oTokenResponse = new() { access_token = accessToken, refresh_token = rotation.NewToken };
 
                 return new DataResponse { Success = true, Message = ConstantSupplier.REFRESHTOKEN_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oTokenResponse };
             }
@@ -377,40 +414,37 @@ namespace SBERP.Security.Service
 
 
         /// <summary>
-        /// If renewing refresh token failed then it revokes the current user from loggedin  any longer.
+        /// Logout: signs out the session of the given refresh token and blacklists the access token from
+        /// the Authorization header. Only an access token this service signed is blacklisted (an
+        /// unvalidated token could name any JTI). Always succeeds, so it cannot be used to probe tokens.
         /// </summary>
-        /// <param name="userToken"></param>
+        /// <param name="request"></param>
+        /// <param name="accessToken">Raw bearer token from the Authorization header, if any.</param>
         /// <returns><see cref="Task{DataResponse}"/></returns>
-        public async Task<DataResponse> RevokeAsync(string? userName)
+        public async Task<DataResponse> RevokeAsync(RevokeRequest? request, string? accessToken)
         {
-            DataResponse? oDataResponse;
-            object? nullValue = null;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_REVOKE_REQ_MSG, JsonConvert.SerializeObject(userName, Formatting.Indented)));
-
+            _securityLogService.LogInfo(ConstantSupplier.REVOKE_STARTED_INFO_MSG);
 
             try
             {
-                // Validate input
-                if (string.IsNullOrWhiteSpace(userName))
+                Guid? userId = null;
+                if (!string.IsNullOrWhiteSpace(request?.Refresh_Token))
+                    userId = await _refreshTokenService.RevokeSessionAsync(request.Refresh_Token, ClientIp(), ConstantSupplier.TOKEN_REVOKE_LOGOUT);
+
+                ClaimsPrincipal? principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
+                if (principal != null)
                 {
-                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.INVALID_USERNAME_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+                    JwtSecurityToken jwt = new JwtSecurityTokenHandler().ReadJwtToken(accessToken);
+                    TimeSpan remaining = jwt.ValidTo - DateTime.UtcNow;
+                    if (!string.IsNullOrEmpty(jwt.Id) && remaining > TimeSpan.Zero)
+                        await _tokenBlacklistService.BlacklistAsync(jwt.Id, remaining);
+
+                    if (!userId.HasValue && Guid.TryParse(principal.FindFirstValue(ClaimTypes.NameIdentifier), out Guid tokenUserId))
+                        userId = tokenUserId;
                 }
 
-                var user = await _context.AppUsers!.FirstOrDefaultAsync(u => u.UserName == userName && u.IsActive == true);
-
-                if (Utilities.IsNull(user))
-                {
-                    return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.NotFound, null,
-                        ConstantSupplier.REVOKE_USER_NOT_FOUND_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
-                }
-
-                // Clear the refresh token and update
-                user!.RefreshToken = null;
-                user.RefreshTokenExpiryTime = null;
-                user.UpdatedBy = user.AppUserProfileId.ToString();
-                user.UpdatedDate = DateTime.UtcNow;
-
-                await _context.SaveChangesAsync();
+                if (userId.HasValue)
+                    await InvalidateMenuCacheAsync(userId.Value.ToString());
 
                 return new DataResponse
                 {
@@ -433,6 +467,69 @@ namespace SBERP.Security.Service
             }
         }
 
+        /// <summary>A valid BCrypt hash of a random value, verified against when the user name is unknown.</summary>
+        private static readonly string TimingDummyHash = BCryptNet.HashPassword(Guid.NewGuid().ToString(), BCryptNet.GenerateSalt(10));
+
+        private int MaxFailedAttempts => _appSettings?.MaxNumberOfFailedAttempts > 0 ? _appSettings.MaxNumberOfFailedAttempts : 3;
+        private int BlockMinutes => _appSettings?.BlockMinutes > 0 ? _appSettings.BlockMinutes : 15;
+
+        /// <summary>
+        /// Counts a failed login. The increment is one atomic UPDATE, so parallel attempts are all counted.
+        /// When the count reaches AppSettings:MaxNumberOfFailedAttempts the login is locked for
+        /// AppSettings:BlockMinutes and the count starts again. An expired lockout starts a new count.
+        /// </summary>
+        /// <returns>The lockout end when this failure locked the account, otherwise <c>null</c>.</returns>
+        private async Task<DateTime?> RegisterFailedLoginAsync(AppUser user, DateTime now)
+        {
+            if (user.LockoutEnd != null && user.LockoutEnd <= now)
+                await _context.AppUsers!.Where(u => u.Id == user.Id)
+                    .ExecuteUpdateAsync(s => s.SetProperty(u => u.FailedLoginAttempts, 0).SetProperty(u => u.LockoutEnd, (DateTime?)null));
+
+            await _context.AppUsers!.Where(u => u.Id == user.Id)
+                .ExecuteUpdateAsync(s => s.SetProperty(u => u.FailedLoginAttempts, u => u.FailedLoginAttempts + 1));
+            int attempts = await _context.AppUsers!.AsNoTracking().Where(u => u.Id == user.Id).Select(u => u.FailedLoginAttempts).FirstAsync();
+            if (attempts < MaxFailedAttempts)
+                return null;
+
+            DateTime lockoutEnd = now.AddMinutes(BlockMinutes);
+            await _context.AppUsers!.Where(u => u.Id == user.Id)
+                .ExecuteUpdateAsync(s => s.SetProperty(u => u.FailedLoginAttempts, 0).SetProperty(u => u.LockoutEnd, lockoutEnd));
+            return lockoutEnd;
+        }
+
+        private DataResponse LockedResponse(DateTime lockoutEnd, DateTime now)
+        {
+            int minutes = Math.Max(1, (int)Math.Ceiling((lockoutEnd - now).TotalMinutes));
+            object? nullValue = null;
+            return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.Locked, null,
+                string.Format(ConstantSupplier.AUTH_ACCOUNT_LOCKED_MSG, minutes), ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
+        }
+
+        /// <summary>Best effort: a failing mail server must not change the login response.</summary>
+        private async Task SendLockNoticeAsync(LoginRequest? request, AppUser user)
+        {
+            try
+            {
+                await SendEmail(request, user);
+            }
+            catch (Exception ex)
+            {
+                _securityLogService.LogWarning($"Lockout notice e-mail for user {user.Id} failed: {ex.Message}");
+            }
+        }
+
+        /// <summary>Client IP for the token audit columns: first X-Forwarded-For entry (set by the gateway), else the connection.</summary>
+        private string? ClientIp()
+        {
+            HttpContext? http = _httpContextAccessor.HttpContext;
+            if (http == null) return null;
+            string? forwarded = http.Request.Headers["X-Forwarded-For"].FirstOrDefault()?.Split(',')[0].Trim();
+            string? ip = string.IsNullOrWhiteSpace(forwarded) ? http.Connection.RemoteIpAddress?.ToString() : forwarded;
+            return ip == null || ip.Length <= 64 ? ip : ip[..64];
+        }
+
+        private string? ClientUserAgent() => _httpContextAccessor.HttpContext?.Request.Headers.UserAgent.ToString();
+
         /// <summary>
         /// Send email regarding the user blocked after 3 times incorrect login attempt.
         /// </summary>
@@ -446,7 +543,7 @@ namespace SBERP.Security.Service
             {
                 //string? userEmail = _context?.AppUserProfiles?.SingleOrDefault(u => u.Id == user.AppUserProfileId && u.IsActive == true)?.Email;
 
-                string body = _emailService.PopulateBody("EmailTemplates/emailblocknotice.htm", user?.UserName,
+                string body = _emailService.PopulateBody("EmailTemplates/emailblocknotice.html", user?.UserName,
                                         "User management", "https://localhost:4200/",
                                         "Please check your username and password. Please wait for mentioned time to re-login");
                 string? email = _context?.AppUserProfiles?.Where(u => u.Id == user.AppUserProfileId && u.IsActive == true)?.SingleOrDefault()?.Email;

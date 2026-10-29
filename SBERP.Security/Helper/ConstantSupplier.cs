@@ -154,6 +154,21 @@ namespace SBERP.Security.Helper
         public const string REVOKE_USER_NOT_FOUND_MSG = "User not found or already deactivated.";
         public const string REVOKE_SUCCESSFUL_MSG = "User logged out successfully. Refresh token revoked.";
         public const string REVOKE_EXCEPTION_MSG = "An error occurred while revoking the token.";
+        public const string REFRESHTOKEN_REQUIRED_MSG = "Refresh token is required.";
+        public const string AUTH_ACCOUNT_LOCKED_MSG = "Too many failed login attempts. Your account is locked for {0} minute(s); please try again later.";
+        public const string REFRESHTOKEN_ACCESS_TOKEN_MISMATCH_MSG = "The access token does not belong to this session.";
+        public const string REFRESHTOKEN_REUSE_DETECTED_MSG = "This session was signed out for your security. Please log in again.";
+        public const string REFRESHTOKEN_SESSION_ENDED_MSG = "Your session has ended. Please log in again.";
+        public const string REVOKE_TOKEN_NOT_FOUND_MSG = "Session not found or already signed out.";
+        // AppUserRefreshTokens.RevokedReason
+        public const string TOKEN_REVOKE_ROTATED = "Rotated";
+        public const string TOKEN_REVOKE_LOGOUT = "Logout";
+        public const string TOKEN_REVOKE_REUSE = "ReuseDetected";
+        public const string TOKEN_REVOKE_PASSWORD_CHANGED = "PasswordChanged";
+        public const string TOKEN_REVOKE_USER_DEACTIVATED = "UserDeactivated";
+        public const string TOKEN_REVOKE_ROLE_CHANGED = "RoleChanged";
+        public const string TOKEN_REVOKE_USER_DELETED = "UserDeleted";
+        public const string TOKEN_REVOKE_OFFBOARDED = "Offboarded";
         #endregion
 
         #region User Controller
@@ -163,6 +178,15 @@ namespace SBERP.Security.Helper
         public const string POST_APP_USER_PROFILE_ROUTE_NAME = "createUpdateAppUserProfile";
         public const string DEL_APP_USER_PROFILE_ROUTE_NAME = "deleteAppUserProfile";
         public const string POST_APP_USER_ROUTE_NAME = "createUpdateAppUser";
+        public const string POST_APP_USER_PROFILE_PHOTO_ROUTE_NAME = "uploadAppUserProfilePhoto";
+        public const string GET_APP_USER_PROFILE_PHOTO_ROUTE_NAME = "getAppUserProfilePhoto";
+        public const string DEL_APP_USER_PROFILE_PHOTO_ROUTE_NAME = "removeAppUserProfilePhoto";
+        /// <summary>Hard cap of the multipart request; the real photo limit is PhotoStorage:MaxFileSizeKB.</summary>
+        public const long APP_USER_PROFILE_PHOTO_REQUEST_LIMIT = 10 * 1024 * 1024;
+        public const string APP_USER_PROFILE_PHOTO_UPLOAD_SUCCESS = "Profile photo uploaded successfully.";
+        public const string APP_USER_PROFILE_PHOTO_REMOVE_SUCCESS = "Profile photo removed.";
+        public const string APP_USER_PROFILE_PHOTO_INVALID_ID = "A valid user profile id is required.";
+        public const string APP_USER_PROFILE_PHOTO_FILE_REQUIRED = "Please choose a JPG or PNG photo to upload.";
 
         public const string GET_ALL_USER_PROFILE_PAGING_SEARCH_RESULT_SUCCESS_MSG = "User profile list retrieved successfully.";
         public const string GET_ALL_USER_PROFILE_PAGING_SEARCH_RESULT_FAILED_MSG = "Retrieving user profile list failed.";
@@ -442,6 +466,16 @@ namespace SBERP.Security.Helper
         public const string USER_MENU_SAVE_SUCCESS = "User menu is created successfully!";
         public const string USER_MENU_UPDATE_SUCCESS = "User menu is updated successfully!";
         public const string NOT_EXIST_USER_MENU = "There is no such user menu exist.";
+        // Menu hierarchy: Header > Module > (Sub Module >)* Component
+        public const string MENU_TYPE_REQUIRED = "Select exactly one menu type: Header, Module, Sub Module or Component.";
+        public const string MENU_HEADER_HAS_PARENT = "A header menu is a top-level section and cannot have a parent menu.";
+        public const string MENU_PARENT_REQUIRED = "Select a parent menu.";
+        public const string MENU_PARENT_NOT_FOUND = "The selected parent menu does not exist.";
+        public const string MENU_MODULE_PARENT_INVALID = "A module menu must be placed under a header menu.";
+        public const string MENU_CHILD_PARENT_INVALID = "A sub module or component menu must be placed under a module or sub module menu.";
+        public const string MENU_COMPONENT_ROUTE_REQUIRED = "A component menu needs a route link.";
+        public const string MENU_COMPONENT_HAS_CHILDREN = "This menu has child menus, so it cannot become a component.";
+        public const string MENU_PARENT_CYCLE = "A menu cannot be placed under itself or under one of its own child menus.";
         public const string DELETE_USER_MENU_SUCCESS = "User menu is successfully removed";
         public const string INVALID_USERNAME_MSG = "Invalid request: Username cannot be null or empty";
 

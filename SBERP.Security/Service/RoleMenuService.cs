@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -52,6 +53,10 @@ namespace SBERP.Security.Service
         /// Dapper Database connection
         /// </summary>
         private readonly IDbConnection _dbConnection;
+        /// <summary>
+        /// Redis cache holding each user's sidebar menu (see <see cref="MenuCache"/>)
+        /// </summary>
+        private readonly IDistributedCache _distributedCache;
 
         /// <summary>
         /// 
@@ -62,7 +67,7 @@ namespace SBERP.Security.Service
         /// <param name="options"></param>
         /// <param name="securityLogService"></param>
         public RoleMenuService(IConfiguration config, SecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options,
-        ISecurityLogService securityLogService, IDatabaseManager dbManager, IDbConnection dbConnection)
+        ISecurityLogService securityLogService, IDatabaseManager dbManager, IDbConnection dbConnection, IDistributedCache distributedCache)
         {
             _configuration = config;
             _emailService = emailService;
@@ -72,7 +77,7 @@ namespace SBERP.Security.Service
             _dbmanager.InitializeDatabase(_appSettings?.ConnectionStrings?.SCSqlConnectionString, _appSettings?.ConnectionProvider);
             _context = context;
             _dbConnection = dbConnection;
-
+            _distributedCache = distributedCache;
         }
         #endregion
 
@@ -86,7 +91,7 @@ namespace SBERP.Security.Service
         public async Task<DataResponse> GetAllAppUserRolesAsync()
         {
             DataResponse? oDataResponse;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALLROLES_REQ_MSG, JsonConvert.SerializeObject(null, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALLROLES_REQ_MSG, LogSafe.Serialize(null, Formatting.Indented)));
 
             try
             {
@@ -94,7 +99,7 @@ namespace SBERP.Security.Service
                 if (Utilities.IsNull(oAppUserRoleList))
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_ROLE_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_GETALLROLES_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_GETALLROLES_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                 }
                 else
                 {
@@ -120,7 +125,7 @@ namespace SBERP.Security.Service
         {
             DataResponse? oDataResponse;
             PagingResult<AppUserRoleResponse>? oAppUserRoleResponseList = null; 
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_REQ_MSG, LogSafe.Serialize(paramRequest, Formatting.Indented)));
             try
             {
                 IQueryable<AppUserRoleResponse> oIQueryableAppUserRoleResponse = (from userRole in _context.AppUserRoles
@@ -150,7 +155,7 @@ namespace SBERP.Security.Service
                 else
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_ALL_ROLES_PAGINATION_NOT_FOUND, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = oAppUserRoleResponseList };
-                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_RES_MSG, JsonConvert.SerializeObject(oAppUserRoleResponseList, Formatting.Indented)));
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLROLESPAGINATION_RES_MSG, LogSafe.Serialize(oAppUserRoleResponseList, Formatting.Indented)));
                 }
                 return oDataResponse;
             }
@@ -171,7 +176,7 @@ namespace SBERP.Security.Service
         public async Task<DataResponse> GetAppUserRolesByIdAsync(string roleId)
         {
             DataResponse? oDataResponse;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETROLEBYID_REQ_MSG, JsonConvert.SerializeObject(roleId, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETROLEBYID_REQ_MSG, LogSafe.Serialize(roleId, Formatting.Indented)));
 
             try
             {
@@ -179,7 +184,7 @@ namespace SBERP.Security.Service
                 if (Utilities.IsNull(oAppUserRole))
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_APP_USER_ROLE_FAILED, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETROLEBYID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETROLEBYID_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                 }
                 else
                 {
@@ -205,7 +210,7 @@ namespace SBERP.Security.Service
         {
             DataResponse? oDataResponse = null;
             AppUserRole? oExistAppUserRole = null;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_REQ_MSG, JsonConvert.SerializeObject(roleSaveUpdateRequest, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_REQ_MSG, LogSafe.Serialize(roleSaveUpdateRequest, Formatting.Indented)));
             using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
             try
             {
@@ -226,7 +231,7 @@ namespace SBERP.Security.Service
                         if (Utilities.IsNotNull(oExistAppUserRole) && !String.IsNullOrEmpty(Convert.ToString(oExistAppUserRole.Id)))
                         {
                             oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_ROLE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = roleSaveUpdateRequest };
-                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                         }
                         else
                         {
@@ -258,7 +263,7 @@ namespace SBERP.Security.Service
                         else
                         {
                             oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_ROLE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = roleSaveUpdateRequest };
-                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUPDATEROLE_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                         }
 
                         break;
@@ -285,7 +290,7 @@ namespace SBERP.Security.Service
         public async Task<DataResponse> DeleteAppUserRoleAsync(string roleId)
         {
             DataResponse? oDataResponse = null;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_DELETEROLE_REQ_MSG, JsonConvert.SerializeObject(roleId, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_DELETEROLE_REQ_MSG, LogSafe.Serialize(roleId, Formatting.Indented)));
             using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
             try
             {
@@ -316,13 +321,14 @@ namespace SBERP.Security.Service
                         await _context.SaveChangesAsync();
                         await oTrasaction.CommitAsync();
                     }
+                    await MenuCache.InvalidateAllAsync(_distributedCache);
                     oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.DELETE_ROLE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = roleId };
-                    _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_DELETEROLE_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_DELETEROLE_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                 }
                 else
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_ROLE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_DELETEROLE_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_DELETEROLE_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                 }
                 return oDataResponse;
             }
@@ -346,7 +352,7 @@ namespace SBERP.Security.Service
         {
             try
             {
-                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG, LogSafe.Serialize(paramRequest, Formatting.Indented)));
                 List<IDbDataParameter> parameters = new()
                 {
                     _dbmanager.CreateParameter("@PageNumber", paramRequest.PageNumber, DbType.Int32),
@@ -363,7 +369,7 @@ namespace SBERP.Security.Service
                 //    oAppUserMenuList = Utilities.ConvertDataTable<AppUserMenu>(oDataTable);
 
                 //    PagingResult<AppUserMenu>? oAppUserMenuResult = Utilities.GetPagingResult(oAppUserMenuList, paramRequest.PageNumber, paramRequest.PageSize);
-                //    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(oAppUserMenuResult, Formatting.Indented)));
+                //    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, LogSafe.Serialize(oAppUserMenuResult, Formatting.Indented)));
                 //    return oAppUserMenuResult;
                 //}
 
@@ -375,7 +381,7 @@ namespace SBERP.Security.Service
                     // Deserialize the JSON string into PagingResult<AppUserMenu>
                     PagingResult<AppUserMenuResponse>? oAppUserMenuResult = JsonConvert.DeserializeObject<PagingResult<AppUserMenuResponse>>(resultJStr);
                     //_securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, correctedJsonString));
-                    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(oAppUserMenuResult, Formatting.Indented)));
+                    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, LogSafe.Serialize(oAppUserMenuResult, Formatting.Indented)));
                     return oAppUserMenuResult;
                 }
 
@@ -399,7 +405,7 @@ namespace SBERP.Security.Service
         public async Task<DataResponse> GetAllAppUserMenuByUserIdAsync(string? userId)
         {
             DataResponse? oDataResponse;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_REQ_MSG, JsonConvert.SerializeObject(userId, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_REQ_MSG, LogSafe.Serialize(userId, Formatting.Indented)));
 
             try
             {
@@ -414,7 +420,7 @@ namespace SBERP.Security.Service
                 if (String.IsNullOrWhiteSpace(userMenus))
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_MENU_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETALLMENUBYUSERID_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                 }
                 else
                 {
@@ -439,7 +445,16 @@ namespace SBERP.Security.Service
         {
             DataResponse? oDataResponse = null;
             AppUserMenu? oExistAppUserMenu = null;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_REQ_MSG, LogSafe.Serialize(request, Formatting.Indented)));
+            string? hierarchyError = await ValidateMenuHierarchyAsync(request);
+            if (hierarchyError != null)
+            {
+                oDataResponse = new DataResponse { Success = false, Message = hierarchyError, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
+                _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
+                return oDataResponse;
+            }
+            Guid? parentId = ParseMenuId(request!.ParentId);
+
             using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
             try
             {
@@ -452,6 +467,7 @@ namespace SBERP.Security.Service
                             Name = request.Name,
                             IsHeader = request.IsHeader,
                             IsModule = request.IsModule,
+                            IsSubModule = request.IsSubModule ?? false,
                             IsComponent = request.IsComponent,
                             CssClass = request.CssClass,
                             IsRouteLink = request.IsRouteLink,
@@ -459,7 +475,7 @@ namespace SBERP.Security.Service
                             RouteLinkClass = request.RouteLinkClass,
                             Icon = request.Icon,
                             Remark = request.Remark,
-                            ParentId = new Guid(request.ParentId),
+                            ParentId = parentId,
                             DropdownIcon = request.DropdownIcon,
                             SerialNo = request.SerialNo,
                             CreatedBy = request.CreateUpdateBy,
@@ -471,7 +487,7 @@ namespace SBERP.Security.Service
                         if (Utilities.IsNotNull(oExistAppUserMenu) && !String.IsNullOrEmpty(Convert.ToString(oExistAppUserMenu.Id)))
                         {
                             oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_USER_MENU_WITH_SAME_NAME, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
-                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                             return oDataResponse;
                         }
                         else
@@ -491,6 +507,7 @@ namespace SBERP.Security.Service
                                 _dbmanager.CreateParameter("@Name", oAppUserMenu.Name, DbType.String),
                                 _dbmanager.CreateParameter("@IsHeader", oAppUserMenu.IsHeader, DbType.Boolean),
                                 _dbmanager.CreateParameter("@IsModule", oAppUserMenu.IsModule, DbType.Boolean),
+                                _dbmanager.CreateParameter("@IsSubModule", oAppUserMenu.IsSubModule, DbType.Boolean),
                                 _dbmanager.CreateParameter("@IsComponent", oAppUserMenu.IsComponent, DbType.Boolean),
                                 _dbmanager.CreateParameter("@CssClass", oAppUserMenu.CssClass, DbType.String),
                                 _dbmanager.CreateParameter("@IsRouteLink", oAppUserMenu.IsRouteLink, DbType.Boolean),
@@ -498,7 +515,7 @@ namespace SBERP.Security.Service
                                 _dbmanager.CreateParameter("@RouteLinkClass", oAppUserMenu.RouteLinkClass, DbType.String),
                                 _dbmanager.CreateParameter("@Icon", oAppUserMenu.Icon, DbType.String),
                                 _dbmanager.CreateParameter("@Remark", oAppUserMenu.Remark, DbType.String),
-                                _dbmanager.CreateParameter("@ParentId", oAppUserMenu.ParentId, DbType.Guid),
+                                _dbmanager.CreateParameter("@ParentId", (object?)parentId ?? DBNull.Value, DbType.Guid),
                                 //_dbmanager.CreateParameter("@DropdownIcon", oAppUserMenu.DropdownIcon, DbType.String),
                                 _dbmanager.CreateParameter(
                                     "@DropdownIcon",
@@ -519,11 +536,12 @@ namespace SBERP.Security.Service
                             if (rowAffected.Equals(0))
                             {
                                 oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_USER_MENU, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.Found, Result = request };
-                                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                                 return oDataResponse;
                             }
                             #endregion
 
+                            await MenuCache.InvalidateAllAsync(_distributedCache);
                             oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.USER_MENU_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.Created, Result = request };
                         }
 
@@ -533,7 +551,7 @@ namespace SBERP.Security.Service
                         if (Utilities.IsNull(oExistAppUserMenu))
                         {
                             oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_USER_MENU, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = request };
-                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                             return oDataResponse;
                         }
                         else
@@ -567,6 +585,7 @@ namespace SBERP.Security.Service
                                 _dbmanager.CreateParameter("@Name", request.Name, DbType.String),
                                 _dbmanager.CreateParameter("@IsHeader", request.IsHeader, DbType.Boolean),
                                 _dbmanager.CreateParameter("@IsModule", request.IsModule, DbType.Boolean),
+                                _dbmanager.CreateParameter("@IsSubModule", request.IsSubModule ?? false, DbType.Boolean),
                                 _dbmanager.CreateParameter("@IsComponent", request.IsComponent, DbType.Boolean),
                                 _dbmanager.CreateParameter("@CssClass", request.CssClass, DbType.String),
                                 _dbmanager.CreateParameter("@IsRouteLink", request.IsRouteLink, DbType.Boolean),
@@ -574,7 +593,7 @@ namespace SBERP.Security.Service
                                 _dbmanager.CreateParameter("@RouteLinkClass", request.RouteLinkClass, DbType.String),
                                 _dbmanager.CreateParameter("@Icon", request.Icon, DbType.String),
                                 _dbmanager.CreateParameter("@Remark", request.Remark, DbType.String),
-                                _dbmanager.CreateParameter("@ParentId", new Guid(request.ParentId), DbType.Guid),
+                                _dbmanager.CreateParameter("@ParentId", (object?)parentId ?? DBNull.Value, DbType.Guid),
                                 //_dbmanager.CreateParameter("@DropdownIcon", request.DropdownIcon, DbType.String),
                                 _dbmanager.CreateParameter(
                                     "@DropdownIcon",
@@ -594,11 +613,12 @@ namespace SBERP.Security.Service
                             if (rowAffected.Equals(0))
                             {
                                 oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_USER_MENU, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = request };
-                                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                                _securityLogService.LogError(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_USER_MENU_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                                 return oDataResponse;
                             }
                             #endregion
 
+                            await MenuCache.InvalidateAllAsync(_distributedCache);
                             oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.USER_MENU_UPDATE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
                         }
 
@@ -617,6 +637,62 @@ namespace SBERP.Security.Service
         }
 
         /// <summary>
+        /// Checks the menu tree rules: Header (no parent) &gt; Module (under a header) &gt;
+        /// Sub Module (under a module or sub module, any depth) &gt; Component (under a module or
+        /// sub module, with a route link). A module with no children may itself be a routed link
+        /// (e.g. Dashboard, App Settings).
+        /// </summary>
+        /// <returns>An error message, or <c>null</c> when the request is valid.</returns>
+        private async Task<string?> ValidateMenuHierarchyAsync(AppUserMenuRequest? request)
+        {
+            if (request == null)
+                return ConstantSupplier.MENU_TYPE_REQUIRED;
+
+            int typeCount = new[] { request.IsHeader, request.IsModule, request.IsSubModule, request.IsComponent }.Count(flag => flag == true);
+            if (typeCount != 1)
+                return ConstantSupplier.MENU_TYPE_REQUIRED;
+
+            Guid? parentId = ParseMenuId(request.ParentId);
+            if (request.IsHeader == true)
+                return parentId.HasValue ? ConstantSupplier.MENU_HEADER_HAS_PARENT : null;
+
+            if (!parentId.HasValue)
+                return ConstantSupplier.MENU_PARENT_REQUIRED;
+
+            AppUserMenu? parent = await _context.AppUserMenus.AsNoTracking().FirstOrDefaultAsync(m => m.Id == parentId.Value);
+            if (parent == null)
+                return ConstantSupplier.MENU_PARENT_NOT_FOUND;
+
+            if (request.IsModule == true && parent.IsHeader != true)
+                return ConstantSupplier.MENU_MODULE_PARENT_INVALID;
+            if (request.IsModule != true && parent.IsModule != true && !parent.IsSubModule)
+                return ConstantSupplier.MENU_CHILD_PARENT_INVALID;
+
+            if (request.IsComponent == true && string.IsNullOrWhiteSpace(request.RouteLink))
+                return ConstantSupplier.MENU_COMPONENT_ROUTE_REQUIRED;
+
+            Guid? selfId = ParseMenuId(request.Id);
+            if (selfId.HasValue)
+            {
+                if (request.IsComponent == true && await _context.AppUserMenus.AnyAsync(m => m.ParentId == selfId.Value))
+                    return ConstantSupplier.MENU_COMPONENT_HAS_CHILDREN;
+
+                // walk up from the new parent; meeting this menu means the move would create a loop
+                Guid? cursor = parentId;
+                for (int depth = 0; cursor.HasValue && depth < 32; depth++)
+                {
+                    if (cursor.Value == selfId.Value)
+                        return ConstantSupplier.MENU_PARENT_CYCLE;
+                    cursor = await _context.AppUserMenus.AsNoTracking()
+                        .Where(m => m.Id == cursor.Value).Select(m => m.ParentId).FirstOrDefaultAsync();
+                }
+            }
+            return null;
+        }
+
+        private static Guid? ParseMenuId(string? value) => Guid.TryParse(value, out Guid id) ? id : null;
+
+        /// <summary>
         /// This method is used to delete a user menu. Delete can be happen either simply making the IsActive false or delete command. It is decided based on user settings in appsettings.json.
         /// </summary>
         /// <param name="menuId"></param>
@@ -626,7 +702,7 @@ namespace SBERP.Security.Service
         public async Task<DataResponse> DeleteAppUserMenuAsync(string menuId)
         {
             DataResponse? oDataResponse = null;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_REQ_MSG, JsonConvert.SerializeObject(menuId, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_REQ_MSG, LogSafe.Serialize(menuId, Formatting.Indented)));
             using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
             try
             {
@@ -660,7 +736,7 @@ namespace SBERP.Security.Service
                         //else
                         //{
                         //    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.DELETE_APP_USER_MENU_BUT_EXIST_ROLE_MENU, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                        //    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                        //    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                         //    return oDataResponse;
                         //}
                         #endregion
@@ -677,12 +753,13 @@ namespace SBERP.Security.Service
                         {
                             if (Utilities.IsNotNull(sPResponseRequest.success) && Convert.ToBoolean(sPResponseRequest.success).Equals(true))
                             {
+                                await MenuCache.InvalidateAllAsync(_distributedCache);
                                 oDataResponse = new DataResponse { Success = true, Message = sPResponseRequest.message, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = menuId };
                             }
                             else
                             {
                                 oDataResponse = new DataResponse { Success = false, Message = sPResponseRequest.message, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                                _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                                _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                                 return oDataResponse;
                             }
                         }
@@ -695,14 +772,14 @@ namespace SBERP.Security.Service
                     else
                     {
                         oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_BUT_DEACTIVATED_APP_USER_MENU, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                        _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                        _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                         return oDataResponse;
                     }
                 }
                 else
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NOT_EXIST_APP_USER_MENU, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                     return oDataResponse;
                 }
 
@@ -723,7 +800,7 @@ namespace SBERP.Security.Service
         public async Task<DataResponse> GetAllParentMenusAsync()
         {
             DataResponse? oDataResponse;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GET_ALL_PARENT_MENUS_REQ_MSG, JsonConvert.SerializeObject(ConstantSupplier.NOT_APPLICABLE, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GET_ALL_PARENT_MENUS_REQ_MSG, LogSafe.Serialize(ConstantSupplier.NOT_APPLICABLE, Formatting.Indented)));
 
             try
             {
@@ -744,7 +821,7 @@ namespace SBERP.Security.Service
                 if (parentMenuList.IsNullOrEmpty())
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_PARENT_MENU_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GET_ALL_PARENT_MENUS_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GET_ALL_PARENT_MENUS_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                 }
                 else
                 {
@@ -778,7 +855,7 @@ namespace SBERP.Security.Service
                 if (String.IsNullOrWhiteSpace(userMenuMgtFormInitialData))
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_USER_MENU_FORM_INITIAL_DATA, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETUSERMENUINITIALDATA_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_GETUSERMENUINITIALDATA_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                     return oDataResponse;
                 }
                 var options = new JsonSerializerOptions
@@ -841,7 +918,7 @@ namespace SBERP.Security.Service
                 else
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.NO_ACTIVE_MENU_BY_ROLE_DATA, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_GETACTIVEMENUSBYROLEID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    _securityLogService.LogWarning(string.Format(ConstantSupplier.SERVICE_GETACTIVEMENUSBYROLEID_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                 }
                 return oDataResponse;
             }
@@ -861,7 +938,7 @@ namespace SBERP.Security.Service
         {
             try
             {
-                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(filter, Formatting.Indented)));
+                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG, LogSafe.Serialize(filter, Formatting.Indented)));
                 List<IDbDataParameter> parameters = new()
                 {
                     _dbmanager.CreateParameter("@AppUserRoleId", roleId, DbType.Guid),
@@ -879,7 +956,7 @@ namespace SBERP.Security.Service
                 {
                     string resultJStr = Utilities.ConvertJObjectToJsonString(dbResult, "Items");
                     PagingResult<AppUserRoleMenuResponse>? oAppUserRoleMenuResult = JsonConvert.DeserializeObject<PagingResult<AppUserRoleMenuResponse>>(resultJStr);
-                    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(oAppUserRoleMenuResult, Formatting.Indented)));
+                    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG, LogSafe.Serialize(oAppUserRoleMenuResult, Formatting.Indented)));
                     return oAppUserRoleMenuResult;
                 }
 
@@ -899,7 +976,7 @@ namespace SBERP.Security.Service
         /// <returns></returns>
         public async Task<DataResponse> SaveUpdateRoleMenuBulkAsync(SaveRoleMenuRequest request)
         {
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_APP_USER_ROLE_MENU_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVE_UPDATE_APP_USER_ROLE_MENU_REQ_MSG, LogSafe.Serialize(request, Formatting.Indented)));
 
             try
             {
@@ -930,6 +1007,7 @@ namespace SBERP.Security.Service
                     };
                 }
 
+                await MenuCache.InvalidateAllAsync(_distributedCache);
                 return new DataResponse
                 {
                     Success = true,

@@ -78,9 +78,53 @@ namespace SBERP.Security.Service
             return new JwtSecurityTokenHandler().WriteToken(oJwtSecurityToken);
         }
 
+        /// <summary>
+        /// 512 random bits, base64url (safe in JSON, headers and URLs). Only its hash is stored (<see cref="HashToken"/>).
+        /// </summary>
         public string GenerateRefreshToken()
         {
-            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+            return Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(64));
+        }
+
+        /// <summary>
+        /// SHA-256 of a refresh token, upper-case hex. The token is already 512 random bits, so a fast
+        /// hash is enough (no salt / BCrypt needed) and it can be looked up by an index.
+        /// </summary>
+        public string HashToken(string token)
+        {
+            return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(token)));
+        }
+
+        /// <summary>
+        /// Validates an access token issued by this service (signature, issuer, audience, algorithm) while
+        /// ignoring its expiry, so the refresh endpoint can tell whose session an expired token belongs to.
+        /// Returns <c>null</c> when the token is missing, forged or malformed.
+        /// </summary>
+        public ClaimsPrincipal? GetPrincipalFromExpiredToken(string? accessToken)
+        {
+            if (string.IsNullOrWhiteSpace(accessToken))
+                return null;
+
+            TokenValidationParameters parameters = new()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = false,
+                ValidIssuer = _jwtIssuer,
+                ValidAudience = _jwtAudience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtKey!)),
+                ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha256 }
+            };
+
+            try
+            {
+                return new JwtSecurityTokenHandler().ValidateToken(accessToken, parameters, out _);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

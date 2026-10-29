@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace SBERP.HumanResources.Models.Base
 {
@@ -18,6 +18,8 @@ namespace SBERP.HumanResources.Models.Base
         public string? Phone { get; set; }
         public string? Email { get; set; }
         public bool? IsHeadOffice { get; set; }
+        public string? TimeZone { get; set; }            // e.g. "Asia/Dubai"
+        public Guid? HolidayCalendarId { get; set; }     // branch working calendar (Module 0)
 
         public string? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }

@@ -29,6 +29,8 @@ using SBERP.DataAccessLayer;
 using System.Data;
 using StackExchange.Redis;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Caching.Distributed;
+using SBERP.Shared.Storage;
 
 namespace SBERP.Security.Service
 {
@@ -43,6 +45,10 @@ namespace SBERP.Security.Service
         private readonly AppSettings? _appSettings;
         private readonly ISecurityLogService _securityLogService;
         private readonly IDatabaseManager _dbmanager;
+        private readonly IRefreshTokenService _refreshTokenService;
+        private readonly IDistributedCache _distributedCache;
+        private readonly IPhotoStorage _photoStorage;
+        private readonly PhotoStorageSettings _photoSettings;
 
         /// <summary>
         /// Public Constructor
@@ -53,13 +59,18 @@ namespace SBERP.Security.Service
         /// <param name="options"></param>
         /// <param name="securityLogService"></param>
         public UserService(IConfiguration config, SecurityDBContext context, IOptions<AppSettings> options,
-        ISecurityLogService securityLogService, IDatabaseManager dbManager)
+        ISecurityLogService securityLogService, IDatabaseManager dbManager, IRefreshTokenService refreshTokenService,
+        IDistributedCache distributedCache, IPhotoStorage photoStorage, IOptions<PhotoStorageSettings> photoSettings)
         {
             _configuration = config;
             _context = context;
             _appSettings = options.Value;
             _securityLogService = securityLogService;
             _dbmanager = dbManager;
+            _refreshTokenService = refreshTokenService;
+            _distributedCache = distributedCache;
+            _photoStorage = photoStorage;
+            _photoSettings = photoSettings.Value;
             _dbmanager.InitializeDatabase(_appSettings?.ConnectionStrings?.SCSqlConnectionString, _appSettings?.ConnectionProvider);
         }
         #endregion
@@ -76,7 +87,7 @@ namespace SBERP.Security.Service
         {
             DataResponse? oDataResponse = null;
             AppUser? oExistAppUser = null;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_REQ_MSG, LogSafe.Serialize(request, Formatting.Indented)));
             using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
             try
             {
@@ -89,7 +100,7 @@ namespace SBERP.Security.Service
                             oExistAppUser = await _context.AppUsers.FirstOrDefaultAsync(x => (x.UserName.Trim().ToLower()) == request.UserName.Trim().ToLower());
                             if (Utilities.IsNotNull(oExistAppUser))
                             {
-                                _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_RES_MSG, JsonConvert.SerializeObject(oExistAppUser, Formatting.Indented)));
+                                _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_RES_MSG, LogSafe.Serialize(oExistAppUser, Formatting.Indented)));
                                 oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_APP_USER, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
                                 return oDataResponse;
                             }
@@ -102,8 +113,6 @@ namespace SBERP.Security.Service
                                 UserName = request.UserName,
                                 Password = BCryptNet.HashPassword(request.Password, saltKey),
                                 SaltKey = saltKey,
-                                RefreshToken = null,
-                                RefreshTokenExpiryTime = null,
                                 CreatedBy = request.CreateUpdatedBy,
                                 CreatedDate = DateTime.UtcNow,
                                 IsActive = request.IsActive
@@ -115,12 +124,13 @@ namespace SBERP.Security.Service
                             await oTrasaction.CommitAsync();
 
                             request.Id = Convert.ToString(oNewAppUser.Id);
+                            request.Password = null;
                             if (!isSave.Equals(1))
                             {
-                                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(oNewAppUser, Formatting.Indented)));
+                                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, LogSafe.Serialize(oNewAppUser, Formatting.Indented)));
                             }
 
-                            oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oNewAppUser };
+                            oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.CREATE_APP_USER_SAVE_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
 
                             #endregion
 
@@ -149,7 +159,7 @@ namespace SBERP.Security.Service
                             //request.Id = Convert.ToString(oNewAppUser.Id);
                             //if (!isSave.Equals(1))
                             //{
-                            //    _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(oNewAppUser, Formatting.Indented)));
+                            //    _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, LogSafe.Serialize(oNewAppUser, Formatting.Indented)));
                             //}
 
                             //oDataResponse =  isSave > 0
@@ -168,15 +178,17 @@ namespace SBERP.Security.Service
                                 oExistAppUser.UserName = request.UserName;
                                 oExistAppUser.SaltKey = saltKey;
                                 oExistAppUser.Password = BCryptNet.HashPassword(request.Password, saltKey);
-                                oExistAppUser.RefreshToken = null;
-                                oExistAppUser.RefreshTokenExpiryTime = null;
                                 oExistAppUser.UpdatedBy = request.CreateUpdatedBy;
                                 oExistAppUser.UpdatedDate = DateTime.UtcNow;
                                 oExistAppUser.IsActive = request.IsActive;
+                                oExistAppUser.FailedLoginAttempts = 0;
+                                oExistAppUser.LockoutEnd = null;
 
                                 #region EF Codeblock of saving data
                                 await _context.SaveChangesAsync();
                                 await oTrasaction.CommitAsync();
+                                await _refreshTokenService.EndAllSessionsAsync(oExistAppUser.Id, ConstantSupplier.TOKEN_REVOKE_PASSWORD_CHANGED);
+                                request.Password = null;
                                 oDataResponse = new DataResponse { Success = true, Message = ConstantSupplier.UPDATE_APP_USER_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = request };
                                 #endregion
 
@@ -204,7 +216,7 @@ namespace SBERP.Security.Service
 
                                 //if (!isUpdate.Equals(1))
                                 //{
-                                //    _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(oExistAppUser, Formatting.Indented)));
+                                //    _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, LogSafe.Serialize(oExistAppUser, Formatting.Indented)));
                                 //}
 
                                 //oDataResponse = isUpdate > 0
@@ -222,7 +234,7 @@ namespace SBERP.Security.Service
                     return oDataResponse;
 
                 }
-                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_FAILED_RES_MSG, LogSafe.Serialize(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
                 oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.CREATE_UPDATE_APP_USER_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
             }
             catch (Exception)
@@ -245,7 +257,7 @@ namespace SBERP.Security.Service
         {
             try
             {
-                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_PROFILE_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(paramRequest, Formatting.Indented)));
+                _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_PROFILE_PAGING_SEARCH_REQ_MSG, LogSafe.Serialize(paramRequest, Formatting.Indented)));
                 List<IDbDataParameter> parameters = new()
                 {
                     _dbmanager.CreateParameter("@PageNumber", paramRequest.PageNumber, DbType.Int32),
@@ -262,7 +274,7 @@ namespace SBERP.Security.Service
 
                     // Deserialize the JSON string into PagingResult<AppUserProfile>
                     PagingResult<AppUserProfileResponse>? oAppUserProfileResult = JsonConvert.DeserializeObject<PagingResult<AppUserProfileResponse>>(resultJStr);
-                    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_PROFILE_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(oAppUserProfileResult, Formatting.Indented)));
+                    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_PROFILE_PAGING_SEARCH_RES_MSG, LogSafe.Serialize(oAppUserProfileResult, Formatting.Indented)));
                     return oAppUserProfileResult;
                 }
 
@@ -284,7 +296,7 @@ namespace SBERP.Security.Service
         public async Task<DataResponse> GetAppUserProfileByIdAsync(string id)
         {
             DataResponse oDataResponse;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_REQ_MSG, LogSafe.Serialize(id, Formatting.Indented)));
             try
             {
                 IQueryable<AppUserProfileResponse> query =
@@ -302,7 +314,10 @@ namespace SBERP.Security.Service
                     Email = profile.Email,
                     AppUserRoleId = profile.AppUserRoleId,
                     RoleName = role.RoleName,
+                    JobTitle = profile.JobTitle,
                     UserName = user.UserName,
+                    EmployeeId = profile.EmployeeId,
+                    ProfilePhotoId = profile.ProfilePhotoId,
                     CreatedBy = profile.CreatedBy,
                     CreatedDate = profile.CreatedDate,
                     UpdatedBy = profile.UpdatedBy,
@@ -315,7 +330,7 @@ namespace SBERP.Security.Service
                 if (result == null)
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                 }
                 else
                 {
@@ -341,7 +356,7 @@ namespace SBERP.Security.Service
         public async Task<DataResponse> GetAppUserProfileByIdAdoAsync(string id)
         {
             DataResponse oDataResponse;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_REQ_MSG, LogSafe.Serialize(id, Formatting.Indented)));
             try
             {
                 AppUserProfileResponse? result;
@@ -356,7 +371,7 @@ namespace SBERP.Security.Service
                 else
                 {
                     oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.GET_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.NotFound, Result = null };
-                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_RES_MSG, JsonConvert.SerializeObject(oDataResponse, Formatting.Indented)));
+                    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_GET_USER_PROFILE_BY_ID_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
                 }
                 return oDataResponse;
             }
@@ -377,12 +392,12 @@ namespace SBERP.Security.Service
         {
             _securityLogService.LogInfo(String.Format(
                 ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_REQ_MSG, 
-                JsonConvert.SerializeObject(request, Formatting.Indented)));
+                LogSafe.Serialize(request, Formatting.Indented)));
             if(request == null)
             {
                 _securityLogService.LogError(String.Format(
                     ConstantSupplier.SAVEUP_APP_USER_PROFILE_FAILED_RES_MSG, 
-                    JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                    LogSafe.Serialize(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
                 return new DataResponse 
                 { Success = false, Message = ConstantSupplier.CREATE_UPDATE_APP_USER_PROFILE_FAILED, 
                   MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null 
@@ -409,6 +424,8 @@ namespace SBERP.Security.Service
 
             bool isCreate = request.ActionName == ConstantSupplier.SAVE_KEY;
             bool hasUserCredentials = !string.IsNullOrWhiteSpace(request.UserName);
+            // set when the change must sign the user out everywhere (password, role, deactivation)
+            string? endSessionsReason = null;
 
             await using IDbContextTransaction oTrasaction = await _context.Database.BeginTransactionAsync();
             try
@@ -430,7 +447,7 @@ namespace SBERP.Security.Service
                     {
                         _securityLogService.LogWarning(string.Format(
                             ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_RES_MSG,
-                            JsonConvert.SerializeObject(oExistAppUserProfile, Formatting.Indented)));
+                            LogSafe.Serialize(oExistAppUserProfile, Formatting.Indented)));
 
                         return new DataResponse
                         {
@@ -448,6 +465,7 @@ namespace SBERP.Security.Service
                         Id = Guid.NewGuid(),
                         FullName = request.FullName,
                         Address = request.Address,
+                        JobTitle = NormalizeJobTitle(request.JobTitle),
                         Email = request.Email,
                         AppUserRoleId = new Guid(request.AppUserRoleId),
                         CreatedBy = request.CreateUpdateBy,
@@ -467,7 +485,7 @@ namespace SBERP.Security.Service
                     {
                         _securityLogService.LogWarning(String.Format(
                             ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_RES_MSG,
-                            JsonConvert.SerializeObject(request, Formatting.Indented)));
+                            LogSafe.Serialize(request, Formatting.Indented)));
 
                         return new DataResponse
                         {
@@ -479,8 +497,14 @@ namespace SBERP.Security.Service
                         };
                     }
 
+                    if (oAppUserProfile.AppUserRoleId != new Guid(request.AppUserRoleId))
+                        endSessionsReason = ConstantSupplier.TOKEN_REVOKE_ROLE_CHANGED;
+                    if (oAppUserProfile.IsActive == true && request.IsActive != true)
+                        endSessionsReason = ConstantSupplier.TOKEN_REVOKE_USER_DEACTIVATED;
+
                     oAppUserProfile.FullName = request.FullName;
                     oAppUserProfile.Address = request.Address;
+                    oAppUserProfile.JobTitle = NormalizeJobTitle(request.JobTitle);
                     oAppUserProfile.Email = request.Email;
                     oAppUserProfile.AppUserRoleId = new Guid(request.AppUserRoleId);
                     oAppUserProfile.UpdatedBy = request.CreateUpdateBy;
@@ -523,6 +547,9 @@ namespace SBERP.Security.Service
                         salt = BCryptNet.GenerateSalt(13);
                         hashedPassword = BCryptNet.HashPassword(request.Password!, salt);
                     }
+                    // the request is echoed in the response: do not send the password back
+                    request.Password = null;
+                    request.ConfirmPassword = null;
 
                     if (isCreatingUser)
                     {
@@ -546,16 +573,37 @@ namespace SBERP.Security.Service
                         {
                             oAppUser.Password = hashedPassword!;
                             oAppUser.SaltKey = salt!;
+                            endSessionsReason ??= ConstantSupplier.TOKEN_REVOKE_PASSWORD_CHANGED;
                         }
+                        if (oAppUser.IsActive == true && request.IsActive != true)
+                            endSessionsReason = ConstantSupplier.TOKEN_REVOKE_USER_DEACTIVATED;
                         oAppUser.UpdatedBy = request.CreateUpdateBy;
                         oAppUser.UpdatedDate = DateTime.UtcNow;
                         oAppUser.IsActive = request.IsActive;
+                        // saving the user is also how an administrator unlocks a locked login
+                        oAppUser.FailedLoginAttempts = 0;
+                        oAppUser.LockoutEnd = null;
                     }
                 }
 
                 await _context.SaveChangesAsync();
                 await oTrasaction.CommitAsync();
 
+                if (endSessionsReason != null && oAppUser != null)
+                {
+                    await _refreshTokenService.EndAllSessionsAsync(oAppUser.Id, endSessionsReason);
+                    // a role change changes the menu: drop every cached menu
+                    await MenuCache.InvalidateAllAsync(_distributedCache);
+                }
+                else if (oAppUser != null)
+                {
+                    // the cached login user carries FullName / Email / JobTitle: drop this user's entry
+                    try { await _distributedCache.RemoveAsync(await MenuCache.UserMenuKeyAsync(_distributedCache, oAppUser.Id.ToString())); }
+                    catch (Exception ex) { _securityLogService.LogWarning($"Menu cache of user {oAppUser.Id} not cleared: {ex.Message}"); }
+                }
+
+                // the client uploads the photo of a new profile with this id, after the save
+                request.Id = oAppUserProfile.Id.ToString();
                 return new DataResponse
                 {
                     Success = true,
@@ -588,7 +636,7 @@ namespace SBERP.Security.Service
         public async Task<DataResponse> CreateUpdateAppUserProfileAsyncTemp(AppUserProfileRegisterRequest? request)
         {
             DataResponse? oDataResponse = null;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_REQ_MSG, LogSafe.Serialize(request, Formatting.Indented)));
 
             // Validate password match if password is provided
             if (!string.IsNullOrEmpty(request!.Password) && request.Password != request.ConfirmPassword)
@@ -611,7 +659,7 @@ namespace SBERP.Security.Service
 
                         if (Utilities.IsNotNull(oExistAppUserProfile) && !String.IsNullOrWhiteSpace(Convert.ToString(request.Id)))
                         {
-                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_RES_MSG, JsonConvert.SerializeObject(oExistAppUserProfile, Formatting.Indented)));
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_RES_MSG, LogSafe.Serialize(oExistAppUserProfile, Formatting.Indented)));
                             oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_APP_USER_PROFILE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
                             return oDataResponse;
                         }
@@ -621,6 +669,7 @@ namespace SBERP.Security.Service
                             Id = Guid.NewGuid(),
                             FullName = request.FullName,
                             Address = request.Address,
+                            JobTitle = NormalizeJobTitle(request.JobTitle),
                             Email = request.Email,
                             AppUserRoleId = new Guid(request.AppUserRoleId),
                             CreatedBy = request.CreateUpdateBy,
@@ -638,7 +687,7 @@ namespace SBERP.Security.Service
 
                         if (oAppUserProfile == null)
                         {
-                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_RES_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+                            _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_RES_MSG, LogSafe.Serialize(request, Formatting.Indented)));
                             return new DataResponse
                             {
                                 Success = false,
@@ -652,6 +701,7 @@ namespace SBERP.Security.Service
                         {
                             oAppUserProfile.FullName = request.FullName;
                             oAppUserProfile.Address = request.Address;
+                            oAppUserProfile.JobTitle = NormalizeJobTitle(request.JobTitle);
                             oAppUserProfile.Email = request.Email;
                             oAppUserProfile.AppUserRoleId = new Guid(request.AppUserRoleId);
                             oAppUserProfile.UpdatedBy = request.CreateUpdateBy;
@@ -759,7 +809,7 @@ namespace SBERP.Security.Service
                     };
 
                 }
-                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_FAILED_RES_MSG, LogSafe.Serialize(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
                 oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.CREATE_UPDATE_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
                 return oDataResponse;
             }
@@ -793,7 +843,7 @@ namespace SBERP.Security.Service
         public async Task<DataResponse> CreateUpdateAppUserProfileAsyncExtn(AppUserProfileRegisterRequest? request)
         {
             DataResponse? oDataResponse = null;
-            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_REQ_MSG, LogSafe.Serialize(request, Formatting.Indented)));
             using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
             try
             {
@@ -806,7 +856,7 @@ namespace SBERP.Security.Service
 
                             if (Utilities.IsNotNull(oExistAppUserProfile) && !String.IsNullOrWhiteSpace(Convert.ToString(request.Id)))
                             {
-                                _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_RES_MSG, JsonConvert.SerializeObject(oExistAppUserProfile, Formatting.Indented)));
+                                _securityLogService.LogWarning(String.Format(ConstantSupplier.SERVICE_SAVEUP_APP_USER_PROFILE_RES_MSG, LogSafe.Serialize(oExistAppUserProfile, Formatting.Indented)));
                                 oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.EXIST_APP_USER_PROFILE, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = request };
                                 return oDataResponse;
                             }
@@ -816,6 +866,7 @@ namespace SBERP.Security.Service
                                 Id = Guid.NewGuid(),
                                 FullName = request.FullName,
                                 Address = request.Address,
+                                JobTitle = NormalizeJobTitle(request.JobTitle),
                                 Email = request.Email,
                                 AppUserRoleId = new Guid(request.AppUserRoleId),
                                 CreatedBy = request.CreateUpdateBy,
@@ -876,6 +927,7 @@ namespace SBERP.Security.Service
                             {
                                 oOldAppUserProfile.FullName = request.FullName;
                                 oOldAppUserProfile.Address = request.Address;
+                                oOldAppUserProfile.JobTitle = NormalizeJobTitle(request.JobTitle);
                                 oOldAppUserProfile.Email = request.Email;
                                 oOldAppUserProfile.AppUserRoleId = new Guid(request.AppUserRoleId);
                                 oOldAppUserProfile.UpdatedBy = request.CreateUpdateBy;
@@ -927,7 +979,7 @@ namespace SBERP.Security.Service
                     }
                     return oDataResponse;
                 }
-                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                _securityLogService.LogError(String.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_FAILED_RES_MSG, LogSafe.Serialize(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
                 oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.CREATE_UPDATE_APP_USER_PROFILE_FAILED, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
                 return oDataResponse;
             }
@@ -956,7 +1008,7 @@ namespace SBERP.Security.Service
 
                 if (oAppUserProfile == null)
                 {
-                    _securityLogService.LogError(String.Format(ConstantSupplier.DEL_APP_USER_PROFILE_FAILED_RES_MSG, JsonConvert.SerializeObject(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
+                    _securityLogService.LogError(String.Format(ConstantSupplier.DEL_APP_USER_PROFILE_FAILED_RES_MSG, LogSafe.Serialize(ConstantSupplier.REQ_OR_DATA_NULL, Formatting.Indented)));
                     return new DataResponse { Success = false, Message = ConstantSupplier.CREATE_APP_USER_PROFILE_NOT_FOUND, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = id };
                 }
 
@@ -999,6 +1051,10 @@ namespace SBERP.Security.Service
                 else
                 {
                     await oTransaction.CommitAsync();
+                    if (_appSettings!.IsUserDelate)
+                        _photoStorage.Delete(oAppUserProfile.ProfilePhotoLocation);
+                    if (oAppUser != null)
+                        await _refreshTokenService.EndAllSessionsAsync(oAppUser.Id, ConstantSupplier.TOKEN_REVOKE_USER_DELETED);
                     return new DataResponse
                     {
                         Success = true,
@@ -1057,6 +1113,111 @@ namespace SBERP.Security.Service
             }
         }
 
+        #endregion
+
+        #region AppUserProfile photo
+        /// <summary>
+        /// Stores the uploaded photo as {PhotoStorage:UserProfileFolder}/{new ProfilePhotoId}.{jpg|png} and saves the id and
+        /// location on the profile. The previous photo file is deleted only after the database update succeeded.
+        /// </summary>
+        /// <summary>Trims the free-text role name / designation; blank becomes null; capped at the column size.</summary>
+        private static string? NormalizeJobTitle(string? jobTitle)
+        {
+            if (string.IsNullOrWhiteSpace(jobTitle)) return null;
+            string value = jobTitle.Trim();
+            return value.Length > 100 ? value[..100] : value;
+        }
+
+        public async Task<DataResponse> UploadAppUserProfilePhotoAsync(string id, Stream content, long length, string? updatedBy)
+        {
+            if (!Guid.TryParse(id, out Guid profileId))
+                return PhotoResponse(false, HttpStatusCode.BadRequest, ConstantSupplier.APP_USER_PROFILE_PHOTO_INVALID_ID);
+
+            AppUserProfile? oAppUserProfile = await _context.AppUserProfiles!.FirstOrDefaultAsync(p => p.Id == profileId);
+            if (oAppUserProfile == null)
+                return PhotoResponse(false, HttpStatusCode.NotFound, ConstantSupplier.CREATE_APP_USER_PROFILE_NOT_FOUND);
+
+            StoredPhoto stored;
+            try
+            {
+                stored = await _photoStorage.SaveAsync(_photoSettings.UserProfileFolder, content, length);
+            }
+            catch (PhotoValidationException ex)
+            {
+                return PhotoResponse(false, HttpStatusCode.BadRequest, ex.Message);
+            }
+
+            string? oldLocation = oAppUserProfile.ProfilePhotoLocation;
+            oAppUserProfile.ProfilePhotoId = stored.PhotoId;
+            oAppUserProfile.ProfilePhotoLocation = stored.Location;
+            oAppUserProfile.UpdatedBy = updatedBy;
+            oAppUserProfile.UpdatedDate = DateTime.UtcNow;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                _photoStorage.Delete(stored.Location);   // no orphan file when the row was not updated
+                throw;
+            }
+            _photoStorage.Delete(oldLocation);
+
+            _securityLogService.LogInfo($"Profile photo {stored.PhotoId} stored for profile {profileId}.");
+            return PhotoResponse(true, HttpStatusCode.OK, ConstantSupplier.APP_USER_PROFILE_PHOTO_UPLOAD_SUCCESS,
+                new { Id = profileId, ProfilePhotoId = stored.PhotoId });
+        }
+
+        /// <summary>The stored photo of a profile, or null when it has none (the client shows the default avatar).</summary>
+        public async Task<PhotoFile?> GetAppUserProfilePhotoAsync(string id)
+        {
+            if (!Guid.TryParse(id, out Guid profileId)) return null;
+            var photo = await _context.AppUserProfiles!.AsNoTracking()
+                .Where(p => p.Id == profileId && p.ProfilePhotoId != null)
+                .Select(p => new { p.ProfilePhotoId, p.ProfilePhotoLocation })
+                .FirstOrDefaultAsync();
+            if (photo?.ProfilePhotoLocation == null) return null;
+
+            Stream? stream = _photoStorage.OpenRead(photo.ProfilePhotoLocation);
+            if (stream == null)
+            {
+                _securityLogService.LogWarning($"Profile photo file {photo.ProfilePhotoLocation} of profile {profileId} is missing.");
+                return null;
+            }
+            return new PhotoFile(stream, _photoStorage.GetContentType(photo.ProfilePhotoLocation), photo.ProfilePhotoId!.Value);
+        }
+
+        /// <summary>Clears the profile photo (back to the default avatar) and deletes its file.</summary>
+        public async Task<DataResponse> RemoveAppUserProfilePhotoAsync(string id, string? updatedBy)
+        {
+            if (!Guid.TryParse(id, out Guid profileId))
+                return PhotoResponse(false, HttpStatusCode.BadRequest, ConstantSupplier.APP_USER_PROFILE_PHOTO_INVALID_ID);
+
+            AppUserProfile? oAppUserProfile = await _context.AppUserProfiles!.FirstOrDefaultAsync(p => p.Id == profileId);
+            if (oAppUserProfile == null)
+                return PhotoResponse(false, HttpStatusCode.NotFound, ConstantSupplier.CREATE_APP_USER_PROFILE_NOT_FOUND);
+
+            string? oldLocation = oAppUserProfile.ProfilePhotoLocation;
+            if (oAppUserProfile.ProfilePhotoId != null || oldLocation != null)
+            {
+                oAppUserProfile.ProfilePhotoId = null;
+                oAppUserProfile.ProfilePhotoLocation = null;
+                oAppUserProfile.UpdatedBy = updatedBy;
+                oAppUserProfile.UpdatedDate = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+                _photoStorage.Delete(oldLocation);
+            }
+            return PhotoResponse(true, HttpStatusCode.OK, ConstantSupplier.APP_USER_PROFILE_PHOTO_REMOVE_SUCCESS, new { Id = profileId });
+        }
+
+        private static DataResponse PhotoResponse(bool success, HttpStatusCode code, string message, object? result = null) => new()
+        {
+            Success = success,
+            Message = message,
+            MessageType = success ? Enum.EnumResponseType.Success : Enum.EnumResponseType.Warning,
+            ResponseCode = (int)code,
+            Result = result
+        };
         #endregion
     }
 }

@@ -8,7 +8,7 @@ namespace SBERP.HumanResources.Helper
     /// Menu / role-permission constants are NOT here — Security owns that
     /// domain and exposes it via its own controllers.
     /// </summary>
-    public static class ConstantSupplier
+    public static partial class ConstantSupplier
     {
         #region Common
         public const string SQLSERVER = "SqlServer";
@@ -69,9 +69,20 @@ namespace SBERP.HumanResources.Helper
         public const string GET_ALL_EMPLOYEES_PAGING_ROUTE   = "getAllEmployeesPagingWithSearch";
         public const string GET_EMPLOYEE_BY_ID_ROUTE         = "getEmployeeById";
         public const string GET_EMPLOYEE_INITIAL_DATA_ROUTE  = "getEmployeeInitialData";
+        public const string GET_ALL_EMPLOYEES_ROUTE          = "getAllEmployees";
         public const string CREATE_EMPLOYEE_ROUTE            = "createEmployee";
         public const string UPDATE_EMPLOYEE_ROUTE            = "updateEmployee";
         public const string DELETE_EMPLOYEE_ROUTE            = "deleteEmployee";
+        public const string UPLOAD_EMPLOYEE_PHOTO_ROUTE      = "uploadEmployeePhoto";
+        public const string GET_EMPLOYEE_PHOTO_ROUTE         = "getEmployeePhoto";
+        public const string REMOVE_EMPLOYEE_PHOTO_ROUTE      = "removeEmployeePhoto";
+        public const string GET_MY_EMPLOYEE_BRIEF_ROUTE      = "getMyEmployeeBrief";
+        /// <summary>Hard cap of the multipart request; the real photo limit is PhotoStorage:MaxFileSizeKB.</summary>
+        public const long   EMPLOYEE_PHOTO_REQUEST_LIMIT     = 10 * 1024 * 1024;
+        public const string EMPLOYEE_PHOTO_UPLOAD_SUCCESS    = "Employee photo uploaded successfully.";
+        public const string EMPLOYEE_PHOTO_REMOVE_SUCCESS    = "Employee photo removed.";
+        public const string EMPLOYEE_PHOTO_FILE_REQUIRED     = "Please choose a JPG or PNG photo to upload.";
+        public const string EMPLOYEE_BRIEF_NOT_LINKED        = "No employee is linked to this login.";
         #endregion
 
         #region Routes — Department

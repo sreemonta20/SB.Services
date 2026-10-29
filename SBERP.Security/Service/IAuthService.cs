@@ -11,7 +11,7 @@ namespace SBERP.Security.Service
         Task<DataResponse> AuthenticateUserAsync(LoginRequest? request);
         Task<DataResponse> GetAppUserProfileMenuAsync(string userId);
         Task<DataResponse> RefreshTokenAsync(RefreshTokenRequest? refreshTokenReq);
-        Task<DataResponse> RevokeAsync(string userName);
+        Task<DataResponse> RevokeAsync(RevokeRequest? request, string? accessToken);
         // NEW — invalidate cached menu for a user.
         // Call this after any role-menu save, update, or delete.
         Task InvalidateMenuCacheAsync(string userId);

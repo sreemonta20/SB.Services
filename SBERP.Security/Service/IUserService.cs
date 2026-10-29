@@ -24,5 +24,11 @@ namespace SBERP.Security.Service
         Task<DataResponse> DeleteAppUserProfileAsync(string id);
         #endregion
 
+        #region AppUserProfile photo
+        Task<DataResponse> UploadAppUserProfilePhotoAsync(string id, Stream content, long length, string? updatedBy);
+        Task<SBERP.Shared.Storage.PhotoFile?> GetAppUserProfilePhotoAsync(string id);
+        Task<DataResponse> RemoveAppUserProfilePhotoAsync(string id, string? updatedBy);
+        #endregion
+
     }
 }

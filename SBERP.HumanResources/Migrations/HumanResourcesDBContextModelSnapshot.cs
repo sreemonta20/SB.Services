@@ -17,10 +17,266 @@ namespace SBERP.HumanResources.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.5")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.HasSequence("SEQ_BiometricRegistrationNo");
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ApplicationStageLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationStages", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "APPLIED",
+                            IsActive = true,
+                            Name = "Applied",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "SCREENING",
+                            IsActive = true,
+                            Name = "Screening",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "SHORTLISTED",
+                            IsActive = true,
+                            Name = "Shortlisted",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "INTERVIEW",
+                            IsActive = true,
+                            Name = "Interviewing",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "OFFER",
+                            IsActive = true,
+                            Name = "Offer",
+                            SortOrder = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Code = "HIRED",
+                            IsActive = true,
+                            Name = "Hired",
+                            SortOrder = 6
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Code = "REJECTED",
+                            IsActive = true,
+                            Name = "Rejected",
+                            SortOrder = 7
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Code = "WITHDRAWN",
+                            IsActive = true,
+                            Name = "Withdrawn",
+                            SortOrder = 8
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.AppraisalCycle", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CycleCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("GoalDueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PeriodEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("PeriodStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RatingScaleMax")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ReviewDueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CycleCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_AppraisalCycles_Code");
+
+                    b.ToTable("AppraisalCycles", t =>
+                        {
+                            t.HasTrigger("TRG_InsertAppraisalCycles");
+
+                            t.HasTrigger("TRG_UpdateAppraisalCycles");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.AppraisalCycleLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("AppraisalCycleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CycleCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppraisalCyclesLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.AppraisalCycleStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppraisalCycleStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "DRAFT",
+                            IsActive = true,
+                            Name = "Draft",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "ACTIVE",
+                            IsActive = true,
+                            Name = "Active",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "CLOSED",
+                            IsActive = true,
+                            Name = "Closed",
+                            SortOrder = 3
+                        });
+                });
 
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.Attendance", b =>
                 {
@@ -68,6 +324,7 @@ namespace SBERP.HumanResources.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal?>("WorkingHours")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(5, 2)");
 
                     b.HasKey("Id");
@@ -77,6 +334,381 @@ namespace SBERP.HumanResources.Migrations
                         .HasDatabaseName("UX_Attendance_Employee_Date");
 
                     b.ToTable("Attendances");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.AttendanceDevice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApiKeyHash")
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("DeviceCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastPunchDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("LastSeenDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Location")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Model")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Protocol")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("SerialNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Vendor")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeviceCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_AttendanceDevices_Code");
+
+                    b.HasIndex("SerialNumber")
+                        .IsUnique()
+                        .HasDatabaseName("UX_AttendanceDevices_Serial");
+
+                    b.ToTable("AttendanceDevices", t =>
+                        {
+                            t.HasTrigger("TRG_InsertAttendanceDevices");
+
+                            t.HasTrigger("TRG_UpdateAttendanceDevices");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.AttendanceDeviceLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("AttendanceDeviceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeviceCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Protocol")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SerialNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AttendanceDevicesLog", (string)null);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.AttendancePunch", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("AttendanceDate")
+                        .HasColumnType("date");
+
+                    b.Property<Guid?>("AttendanceDeviceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BiometricRegistrationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("BiometricTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClientIp")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("ClientRequestId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("ClientTime")
+                        .HasColumnType("datetime2(0)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("DeviceUserPin")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsWithinOffice")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("Latitude")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(9,6)");
+
+                    b.Property<string>("LocationCheck")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal?>("Longitude")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(9,6)");
+
+                    b.Property<DateTime>("PunchLocalTime")
+                        .HasColumnType("datetime2(0)");
+
+                    b.Property<DateTime>("PunchTimeUtc")
+                        .HasColumnType("datetime2(0)");
+
+                    b.Property<int>("PunchTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RawData")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("RejectReason")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("SourceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WifiBssid")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("WifiSsid")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PunchTimeUtc")
+                        .HasDatabaseName("IX_AttendancePunches_Time");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("SourceId", "ClientRequestId")
+                        .IsUnique()
+                        .HasDatabaseName("UX_AttendancePunches_Request")
+                        .HasFilter("[ClientRequestId] IS NOT NULL");
+
+                    b.HasIndex("EmployeeId", "AttendanceDate", "StatusId")
+                        .HasDatabaseName("IX_AttendancePunches_Emp_Date");
+
+                    b.ToTable("AttendancePunches");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.AttendanceRegularizationRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ApprovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ApproverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApproverRemarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("AttendanceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("AttendanceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RequestCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<TimeSpan?>("RequestedCheckIn")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan?>("RequestedCheckOut")
+                        .HasColumnType("time");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Reg_Code");
+
+                    b.HasIndex("EmployeeId", "AttendanceDate")
+                        .HasDatabaseName("IX_Reg_Emp_Date");
+
+                    b.ToTable("AttendanceRegularizationRequests", t =>
+                        {
+                            t.HasTrigger("TRG_InsertRegularization");
+
+                            t.HasTrigger("TRG_UpdateRegularization");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.AttendanceRegularizationRequestLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("AttendanceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RegTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("RegularizationRequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RequestCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AttendanceRegularizationRequestsLog");
                 });
 
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.AttendanceUploadLog", b =>
@@ -123,6 +755,235 @@ namespace SBERP.HumanResources.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AttendanceUploadLogs");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.AttendanceZone", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AllowedIpRanges")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("AllowedWifiBssids")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("Latitude")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(9,6)");
+
+                    b.Property<decimal?>("Longitude")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(9,6)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("RadiusMeters")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("ZoneCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ZoneCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_AttendanceZones_Code");
+
+                    b.ToTable("AttendanceZones", t =>
+                        {
+                            t.HasTrigger("TRG_InsertAttendanceZones");
+
+                            t.HasTrigger("TRG_UpdateAttendanceZones");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0a7e0001-0000-4000-8000-000000000001"),
+                            AllowedIpRanges = "127.0.0.1/32,::1/128,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Office LAN (default)",
+                            Remarks = "Seeded: private network ranges. Narrow to the office subnet / public IP before go-live.",
+                            ZoneCode = "ZONE-LAN"
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.AttendanceZoneLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AllowedIpRanges")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AllowedWifiBssids")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("AttendanceZoneId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ZoneCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AttendanceZonesLog", (string)null);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.BiometricRegistrationStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BiometricRegistrationStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "PENDING",
+                            IsActive = true,
+                            Name = "Pending Verification",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "ACTIVE",
+                            IsActive = true,
+                            Name = "Active",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "REVOKED",
+                            IsActive = true,
+                            Name = "Revoked",
+                            SortOrder = 3
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.BiometricTypeLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BiometricTypes", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "FINGERPRINT",
+                            IsActive = true,
+                            Name = "Fingerprint",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "FACE",
+                            IsActive = true,
+                            Name = "Face",
+                            SortOrder = 2
+                        });
                 });
 
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.BloodGroupLookup", b =>
@@ -257,6 +1118,9 @@ namespace SBERP.HumanResources.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<Guid?>("HolidayCalendarId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
@@ -272,6 +1136,10 @@ namespace SBERP.HumanResources.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<string>("TimeZone")
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -285,6 +1153,8 @@ namespace SBERP.HumanResources.Migrations
                         .HasDatabaseName("UX_Branches_Code");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("HolidayCalendarId");
 
                     b.ToTable("Branches", t =>
                         {
@@ -305,9 +1175,11 @@ namespace SBERP.HumanResources.Migrations
                             CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
                             CreatedBy = "SYSTEM",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            HolidayCalendarId = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
                             IsActive = true,
                             IsHeadOffice = true,
                             Name = "Head Office",
+                            TimeZone = "Asia/Dubai",
                             UpdatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
@@ -372,6 +1244,286 @@ namespace SBERP.HumanResources.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BranchesLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Candidate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CandidateCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("CurrentDesignation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CurrentEmployer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CurrentLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("CurrentSalary")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<decimal?>("ExpectedSalary")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HighestQualification")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsBlacklisted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LinkedInUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nationality")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("NoticePeriodDays")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ReferredByEmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ResumeUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Source")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("TotalExperienceYears")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(4,1)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Candidates_Code");
+
+                    b.HasIndex("Email")
+                        .HasDatabaseName("IX_Candidates_Email");
+
+                    b.ToTable("Candidates", t =>
+                        {
+                            t.HasTrigger("TRG_InsertCandidates");
+
+                            t.HasTrigger("TRG_UpdateCandidates");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.CandidateLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CandidateCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CandidateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsBlacklisted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CandidatesLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ClearanceDepartmentLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClearanceDepartments", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "IT",
+                            IsActive = true,
+                            Name = "IT / Systems",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "FINANCE",
+                            IsActive = true,
+                            Name = "Finance / Accounts",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "HR",
+                            IsActive = true,
+                            Name = "Human Resources",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "ADMIN",
+                            IsActive = true,
+                            Name = "Admin / Facilities",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "MANAGER",
+                            IsActive = true,
+                            Name = "Reporting Manager",
+                            SortOrder = 5
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ClearanceStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClearanceStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "PENDING",
+                            IsActive = true,
+                            Name = "Pending",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "CLEARED",
+                            IsActive = true,
+                            Name = "Cleared",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "BLOCKED",
+                            IsActive = true,
+                            Name = "Blocked",
+                            SortOrder = 3
+                        });
                 });
 
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.Company", b =>
@@ -559,6 +1711,318 @@ namespace SBERP.HumanResources.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CompaniesLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Competency", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CompetencyCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompetencyCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Competencies_Code");
+
+                    b.ToTable("Competencies", t =>
+                        {
+                            t.HasTrigger("TRG_InsertCompetencies");
+
+                            t.HasTrigger("TRG_UpdateCompetencies");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0c0e0000-0000-4000-8000-000000000001"),
+                            CompetencyCode = "COMM",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Clarity, listening, and stakeholder updates",
+                            IsActive = true,
+                            Name = "Communication",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0c0e0000-0000-4000-8000-000000000002"),
+                            CompetencyCode = "OWN",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Accountability and follow-through",
+                            IsActive = true,
+                            Name = "Ownership",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = new Guid("0c0e0000-0000-4000-8000-000000000003"),
+                            CompetencyCode = "TEAM",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Collaboration and supporting peers",
+                            IsActive = true,
+                            Name = "Teamwork",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = new Guid("0c0e0000-0000-4000-8000-000000000004"),
+                            CompetencyCode = "QUAL",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Accuracy and attention to detail",
+                            IsActive = true,
+                            Name = "Quality",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = new Guid("0c0e0000-0000-4000-8000-000000000005"),
+                            CompetencyCode = "INNO",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Initiative and process improvement",
+                            IsActive = true,
+                            Name = "Innovation",
+                            SortOrder = 5
+                        },
+                        new
+                        {
+                            Id = new Guid("0c0e0000-0000-4000-8000-000000000006"),
+                            CompetencyCode = "CUST",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Understands and serves internal and external customers",
+                            IsActive = true,
+                            Name = "Customer Focus",
+                            SortOrder = 6
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.CompetencyLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompetencyCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CompetencyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompetenciesLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.CostCenter", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CostCenterCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid?>("OwnerEmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ParentCostCenterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CostCenterCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_CostCenters_Code");
+
+                    b.HasIndex("ParentCostCenterId");
+
+                    b.ToTable("CostCenters", t =>
+                        {
+                            t.HasTrigger("TRG_InsertCostCenters");
+
+                            t.HasTrigger("TRG_UpdateCostCenters");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0cc00001-0000-4000-8000-000000000001"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
+                            CostCenterCode = "CC-0001",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Executive office, HR and Finance",
+                            IsActive = true,
+                            Name = "Corporate & Administration"
+                        },
+                        new
+                        {
+                            Id = new Guid("0cc00001-0000-4000-8000-000000000002"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
+                            CostCenterCode = "CC-0002",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Product and software engineering",
+                            IsActive = true,
+                            Name = "Engineering",
+                            ParentCostCenterId = new Guid("0cc00001-0000-4000-8000-000000000001")
+                        },
+                        new
+                        {
+                            Id = new Guid("0cc00001-0000-4000-8000-000000000003"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
+                            CostCenterCode = "CC-0003",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Business operations",
+                            IsActive = true,
+                            Name = "Operations",
+                            ParentCostCenterId = new Guid("0cc00001-0000-4000-8000-000000000001")
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.CostCenterLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CostCenterCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CostCenterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CostCentersLog");
                 });
 
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.Department", b =>
@@ -948,6 +2412,7 @@ namespace SBERP.HumanResources.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal?>("BasicSalary")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<int?>("BloodGroup")
@@ -961,6 +2426,9 @@ namespace SBERP.HumanResources.Migrations
 
                     b.Property<DateTime?>("ConfirmationDate")
                         .HasColumnType("datetime");
+
+                    b.Property<Guid?>("CostCenterId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -1008,6 +2476,9 @@ namespace SBERP.HumanResources.Migrations
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<Guid?>("JobGradeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("LastName")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -1046,9 +2517,19 @@ namespace SBERP.HumanResources.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<Guid?>("PhotoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PhotoLocation")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<string>("PhotoUrl")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid?>("PositionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("ProbationEndDate")
                         .HasColumnType("datetime");
@@ -1084,6 +2565,8 @@ namespace SBERP.HumanResources.Migrations
 
                     b.HasIndex("CompanyId");
 
+                    b.HasIndex("CostCenterId");
+
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("DesignationId");
@@ -1092,10 +2575,14 @@ namespace SBERP.HumanResources.Migrations
                         .IsUnique()
                         .HasDatabaseName("UX_Employees_EmployeeCode");
 
+                    b.HasIndex("JobGradeId");
+
                     b.HasIndex("OfficialEmail")
                         .IsUnique()
                         .HasDatabaseName("UX_Employees_OfficialEmail")
                         .HasFilter("[OfficialEmail] IS NOT NULL");
+
+                    b.HasIndex("PositionId");
 
                     b.HasIndex("ReportingManagerId");
 
@@ -1222,6 +2709,202 @@ namespace SBERP.HumanResources.Migrations
                     b.ToTable("EmployeeBanks");
                 });
 
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.EmployeeBiometricRegistration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AppVersion")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid?>("AttendanceDeviceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BiometricTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CapturedAngles")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ConsentDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<bool>("ConsentGiven")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("DeviceInstallationId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DeviceModel")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DevicePlatform")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("DeviceUserPin")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("KeyAlgorithm")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("LastUsedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("MethodId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PublicKey")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("RegistrationNo")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<DateTime?>("RevokedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("RevokedReason")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TemplateFileName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("TemplateFormat")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("TemplateSha256")
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<int?>("TemplateSizeBytes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("VerifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttendanceDeviceId");
+
+                    b.HasIndex("BiometricTypeId");
+
+                    b.HasIndex("RegistrationNo")
+                        .IsUnique()
+                        .HasDatabaseName("UX_BiometricRegistrations_No");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("DeviceUserPin", "StatusId")
+                        .HasDatabaseName("IX_BiometricRegistrations_Pin");
+
+                    b.HasIndex("EmployeeId", "StatusId")
+                        .HasDatabaseName("IX_BiometricRegistrations_Emp_Status");
+
+                    b.ToTable("EmployeeBiometricRegistrations", t =>
+                        {
+                            t.HasTrigger("TRG_InsertEmployeeBiometricRegistrations");
+
+                            t.HasTrigger("TRG_UpdateEmployeeBiometricRegistrations");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.EmployeeBiometricRegistrationLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("AttendanceDeviceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("BiometricTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeviceInstallationId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeviceUserPin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MethodId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RegistrationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RegistrationNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RevokedReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmployeeBiometricRegistrationsLog", (string)null);
+                });
+
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.EmployeeCertification", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1342,6 +3025,7 @@ namespace SBERP.HumanResources.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal?>("Grade")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(5, 2)");
 
                     b.Property<string>("Institution")
@@ -1529,6 +3213,13 @@ namespace SBERP.HumanResources.Migrations
 
                     b.Property<string>("PerformedUser")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("PhotoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PhotoLocation")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -1790,6 +3481,106 @@ namespace SBERP.HumanResources.Migrations
                         });
                 });
 
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ExitInterview", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Feedback")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("InterviewDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<Guid?>("InterviewerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("OverallExperienceRating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PrimaryReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SeparationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Suggestions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("WouldRecommend")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SeparationId");
+
+                    b.ToTable("ExitInterviews", t =>
+                        {
+                            t.HasTrigger("TRG_InsertExitInterviews");
+
+                            t.HasTrigger("TRG_UpdateExitInterviews");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ExitInterviewLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ExitInterviewId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("OverallExperienceRating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("SeparationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExitInterviewsLog");
+                });
+
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.GenderLookup", b =>
                 {
                     b.Property<int>("Id")
@@ -1846,6 +3637,203 @@ namespace SBERP.HumanResources.Migrations
                         });
                 });
 
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Goal", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AppraisalCycleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("GoalCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("ProgressPercent")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TargetValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Weight")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("GoalCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Goals_Code");
+
+                    b.HasIndex("AppraisalCycleId", "EmployeeId", "StatusId")
+                        .HasDatabaseName("IX_Goals_Cycle_Emp");
+
+                    b.ToTable("Goals", t =>
+                        {
+                            t.HasTrigger("TRG_InsertGoals");
+
+                            t.HasTrigger("TRG_UpdateGoals");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.GoalLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("AppraisalCycleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("GoalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("GoalId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("ProgressPercent")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("Weight")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GoalsLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.GoalStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GoalStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "DRAFT",
+                            IsActive = true,
+                            Name = "Draft",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "ACTIVE",
+                            IsActive = true,
+                            Name = "Active",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "COMPLETED",
+                            IsActive = true,
+                            Name = "Completed",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "CANCELLED",
+                            IsActive = true,
+                            Name = "Cancelled",
+                            SortOrder = 4
+                        });
+                });
+
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.HRSettings", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1854,6 +3842,10 @@ namespace SBERP.HumanResources.Migrations
 
                     b.Property<int?>("AnnualLeaveDays")
                         .HasColumnType("int");
+
+                    b.Property<string>("AttendanceDayCutoffTime")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<int>("AttendanceSource")
                         .HasColumnType("int");
@@ -1885,6 +3877,9 @@ namespace SBERP.HumanResources.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
+                    b.Property<int?>("DuplicatePunchMinutes")
+                        .HasColumnType("int");
+
                     b.Property<int?>("GracePeriodMinutes")
                         .HasColumnType("int");
 
@@ -1892,6 +3887,12 @@ namespace SBERP.HumanResources.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsHardDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MinMinutesBetweenInOut")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("MobileAttendanceEnabled")
                         .HasColumnType("bit");
 
                     b.Property<string>("OfficeEndTime")
@@ -1902,8 +3903,15 @@ namespace SBERP.HumanResources.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
+                    b.Property<bool?>("RequireOfficeNetwork")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("SickLeaveDays")
                         .HasColumnType("int");
+
+                    b.Property<string>("TimeZoneId")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -1924,6 +3932,7 @@ namespace SBERP.HumanResources.Migrations
                         {
                             Id = new Guid("feed0001-0000-4000-8000-000000000001"),
                             AnnualLeaveDays = 22,
+                            AttendanceDayCutoffTime = "04:00",
                             AttendanceSource = 1,
                             AutoProcessEnabled = false,
                             AutoProcessTime = "23:30",
@@ -1931,14 +3940,2401 @@ namespace SBERP.HumanResources.Migrations
                             CasualLeaveDays = 5,
                             CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                             CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            DuplicatePunchMinutes = 1,
                             GracePeriodMinutes = 15,
                             IsActive = true,
                             IsHardDelete = true,
+                            MinMinutesBetweenInOut = 30,
+                            MobileAttendanceEnabled = true,
                             OfficeEndTime = "17:30",
                             OfficeStartTime = "08:30",
+                            RequireOfficeNetwork = true,
                             SickLeaveDays = 10,
+                            TimeZoneId = "Asia/Dubai",
                             WeeklyOffDays = "5,6"
                         });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.HolidayCalendar", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CalendarCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Country")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CalendarCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_HolidayCalendars_Code");
+
+                    b.ToTable("HolidayCalendars", t =>
+                        {
+                            t.HasTrigger("TRG_InsertHolidayCalendars");
+
+                            t.HasTrigger("TRG_UpdateHolidayCalendars");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
+                            CalendarCode = "HC-0001",
+                            Country = "United Arab Emirates",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Islamic holiday dates are moon-sighting estimates — confirm against the official announcement.",
+                            IsActive = true,
+                            Name = "UAE Public Holidays 2026",
+                            Year = 2026
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.HolidayCalendarLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CalendarCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("HolidayCalendarId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HolidayCalendarsLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.HolidayDate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<Guid>("HolidayCalendarId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("HolidayDate1")
+                        .HasColumnType("date")
+                        .HasColumnName("HolidayDate");
+
+                    b.Property<int>("HolidayTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRecurring")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HolidayTypeId");
+
+                    b.HasIndex("HolidayCalendarId", "HolidayDate1")
+                        .HasDatabaseName("IX_HolidayDates_Calendar_Date");
+
+                    b.ToTable("HolidayDates");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0d0a1d00-0000-4000-8000-000000000001"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            HolidayCalendarId = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
+                            HolidayDate1 = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HolidayTypeId = 1,
+                            IsActive = true,
+                            IsRecurring = true,
+                            Name = "New Year's Day"
+                        },
+                        new
+                        {
+                            Id = new Guid("0d0a1d00-0000-4000-8000-000000000002"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            HolidayCalendarId = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
+                            HolidayDate1 = new DateTime(2026, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HolidayTypeId = 2,
+                            IsActive = true,
+                            IsRecurring = false,
+                            Name = "Eid Al Fitr (Day 1)"
+                        },
+                        new
+                        {
+                            Id = new Guid("0d0a1d00-0000-4000-8000-000000000003"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            HolidayCalendarId = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
+                            HolidayDate1 = new DateTime(2026, 3, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HolidayTypeId = 2,
+                            IsActive = true,
+                            IsRecurring = false,
+                            Name = "Eid Al Fitr (Day 2)"
+                        },
+                        new
+                        {
+                            Id = new Guid("0d0a1d00-0000-4000-8000-000000000004"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            HolidayCalendarId = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
+                            HolidayDate1 = new DateTime(2026, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HolidayTypeId = 2,
+                            IsActive = true,
+                            IsRecurring = false,
+                            Name = "Eid Al Fitr (Day 3)"
+                        },
+                        new
+                        {
+                            Id = new Guid("0d0a1d00-0000-4000-8000-000000000005"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            HolidayCalendarId = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
+                            HolidayDate1 = new DateTime(2026, 5, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HolidayTypeId = 2,
+                            IsActive = true,
+                            IsRecurring = false,
+                            Name = "Arafat Day"
+                        },
+                        new
+                        {
+                            Id = new Guid("0d0a1d00-0000-4000-8000-000000000006"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            HolidayCalendarId = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
+                            HolidayDate1 = new DateTime(2026, 5, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HolidayTypeId = 2,
+                            IsActive = true,
+                            IsRecurring = false,
+                            Name = "Eid Al Adha (Day 1)"
+                        },
+                        new
+                        {
+                            Id = new Guid("0d0a1d00-0000-4000-8000-000000000007"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            HolidayCalendarId = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
+                            HolidayDate1 = new DateTime(2026, 5, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HolidayTypeId = 2,
+                            IsActive = true,
+                            IsRecurring = false,
+                            Name = "Eid Al Adha (Day 2)"
+                        },
+                        new
+                        {
+                            Id = new Guid("0d0a1d00-0000-4000-8000-000000000008"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            HolidayCalendarId = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
+                            HolidayDate1 = new DateTime(2026, 5, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HolidayTypeId = 2,
+                            IsActive = true,
+                            IsRecurring = false,
+                            Name = "Eid Al Adha (Day 3)"
+                        },
+                        new
+                        {
+                            Id = new Guid("0d0a1d00-0000-4000-8000-000000000009"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            HolidayCalendarId = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
+                            HolidayDate1 = new DateTime(2026, 6, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HolidayTypeId = 2,
+                            IsActive = true,
+                            IsRecurring = false,
+                            Name = "Islamic New Year"
+                        },
+                        new
+                        {
+                            Id = new Guid("0d0a1d00-0000-4000-8000-000000000010"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            HolidayCalendarId = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
+                            HolidayDate1 = new DateTime(2026, 8, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HolidayTypeId = 2,
+                            IsActive = true,
+                            IsRecurring = false,
+                            Name = "Prophet Muhammad's Birthday"
+                        },
+                        new
+                        {
+                            Id = new Guid("0d0a1d00-0000-4000-8000-000000000011"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            HolidayCalendarId = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
+                            HolidayDate1 = new DateTime(2026, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HolidayTypeId = 3,
+                            IsActive = true,
+                            IsRecurring = true,
+                            Name = "Commemoration Day"
+                        },
+                        new
+                        {
+                            Id = new Guid("0d0a1d00-0000-4000-8000-000000000012"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            HolidayCalendarId = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
+                            HolidayDate1 = new DateTime(2026, 12, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HolidayTypeId = 3,
+                            IsActive = true,
+                            IsRecurring = true,
+                            Name = "UAE National Day (Day 1)"
+                        },
+                        new
+                        {
+                            Id = new Guid("0d0a1d00-0000-4000-8000-000000000013"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            HolidayCalendarId = new Guid("0c0a1d00-0000-4000-8000-000000002026"),
+                            HolidayDate1 = new DateTime(2026, 12, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            HolidayTypeId = 3,
+                            IsActive = true,
+                            IsRecurring = true,
+                            Name = "UAE National Day (Day 2)"
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.HolidayTypeLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HolidayTypes", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "PUBLIC",
+                            IsActive = true,
+                            Name = "Public Holiday",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "RELIGIOUS",
+                            IsActive = true,
+                            Name = "Religious",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "NATIONAL",
+                            IsActive = true,
+                            Name = "National",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "COMPANY",
+                            IsActive = true,
+                            Name = "Company Holiday",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "OPTIONAL",
+                            IsActive = true,
+                            Name = "Optional / Restricted",
+                            SortOrder = 5
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.IntegrationOutbox", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AggregateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AggregateType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Attempts")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("LastError")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OccurredOn")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Payload")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ProcessedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("RoutingKey")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcessedDate", "OccurredOn")
+                        .HasDatabaseName("IX_IntegrationOutbox_Unprocessed");
+
+                    b.ToTable("IntegrationOutbox");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Interview", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("DurationMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Feedback")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("InterviewModeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("JobApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MeetingLink")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("OverallRating")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(3,1)");
+
+                    b.Property<int?>("Recommendation")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RoundName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoundNumber")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ScheduledAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Strengths")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Weaknesses")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Interviews");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.InterviewModeLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InterviewModes", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "INPERSON",
+                            IsActive = true,
+                            Name = "In Person",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "VIDEO",
+                            IsActive = true,
+                            Name = "Video Call",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "PHONE",
+                            IsActive = true,
+                            Name = "Phone",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "TEST",
+                            IsActive = true,
+                            Name = "Assessment Test",
+                            SortOrder = 4
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.InterviewPanelMember", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IndividualNotes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("IndividualRating")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(3,1)");
+
+                    b.Property<Guid>("InterviewId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("InterviewerEmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsPanelLead")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InterviewId");
+
+                    b.ToTable("InterviewPanelMembers");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.JobApplication", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApplicationCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateTime?>("AppliedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("AssignedRecruiterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CandidateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("JobPostingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("RejectedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RejectionReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ScreeningNotes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("ScreeningScore")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("StageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_JobApplications_Code");
+
+                    b.HasIndex("CandidateId");
+
+                    b.HasIndex("JobPostingId");
+
+                    b.ToTable("JobApplications", t =>
+                        {
+                            t.HasTrigger("TRG_InsertJobApplications");
+
+                            t.HasTrigger("TRG_UpdateJobApplications");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.JobApplicationLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApplicationCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("JobApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RejectionReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("JobApplicationsLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.JobGrade", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Band")
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("CurrencyCode")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("GradeCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("GradeLevel")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<decimal?>("RefMaxSalary")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("RefMidSalary")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("RefMinSalary")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GradeCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_JobGrades_Code");
+
+                    b.ToTable("JobGrades", t =>
+                        {
+                            t.HasTrigger("TRG_InsertJobGrades");
+
+                            t.HasTrigger("TRG_UpdateJobGrades");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("06ad0001-0000-4000-8000-000000000001"),
+                            Band = "Leadership",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CurrencyCode = "AED",
+                            GradeCode = "GR-0001",
+                            GradeLevel = 1,
+                            IsActive = true,
+                            Name = "Executive",
+                            RefMaxSalary = 100000m,
+                            RefMidSalary = 80000m,
+                            RefMinSalary = 60000m
+                        },
+                        new
+                        {
+                            Id = new Guid("06ad0001-0000-4000-8000-000000000002"),
+                            Band = "Management",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CurrencyCode = "AED",
+                            GradeCode = "GR-0002",
+                            GradeLevel = 2,
+                            IsActive = true,
+                            Name = "Senior Manager",
+                            RefMaxSalary = 60000m,
+                            RefMidSalary = 50000m,
+                            RefMinSalary = 40000m
+                        },
+                        new
+                        {
+                            Id = new Guid("06ad0001-0000-4000-8000-000000000003"),
+                            Band = "Management",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CurrencyCode = "AED",
+                            GradeCode = "GR-0003",
+                            GradeLevel = 3,
+                            IsActive = true,
+                            Name = "Manager",
+                            RefMaxSalary = 40000m,
+                            RefMidSalary = 34000m,
+                            RefMinSalary = 28000m
+                        },
+                        new
+                        {
+                            Id = new Guid("06ad0001-0000-4000-8000-000000000004"),
+                            Band = "Professional",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CurrencyCode = "AED",
+                            GradeCode = "GR-0004",
+                            GradeLevel = 4,
+                            IsActive = true,
+                            Name = "Senior Specialist",
+                            RefMaxSalary = 28000m,
+                            RefMidSalary = 23000m,
+                            RefMinSalary = 18000m
+                        },
+                        new
+                        {
+                            Id = new Guid("06ad0001-0000-4000-8000-000000000005"),
+                            Band = "Professional",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CurrencyCode = "AED",
+                            GradeCode = "GR-0005",
+                            GradeLevel = 5,
+                            IsActive = true,
+                            Name = "Specialist",
+                            RefMaxSalary = 18000m,
+                            RefMidSalary = 14000m,
+                            RefMinSalary = 10000m
+                        },
+                        new
+                        {
+                            Id = new Guid("06ad0001-0000-4000-8000-000000000006"),
+                            Band = "Support",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CurrencyCode = "AED",
+                            GradeCode = "GR-0006",
+                            GradeLevel = 6,
+                            IsActive = true,
+                            Name = "Associate",
+                            RefMaxSalary = 10000m,
+                            RefMidSalary = 7500m,
+                            RefMinSalary = 5000m
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.JobGradeLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GradeCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("GradeLevel")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("JobGradeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("JobGradesLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.JobOffer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CandidateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ConvertedEmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("DeclineReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DesignationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("IssuedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("JobApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("JoiningDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OfferCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("OfferLetterUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("OfferValidTill")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("OfferedSalary")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("PositionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("RespondedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SalaryCurrency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
+
+                    b.HasIndex("JobApplicationId");
+
+                    b.HasIndex("OfferCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_JobOffers_Code");
+
+                    b.ToTable("JobOffers", t =>
+                        {
+                            t.HasTrigger("TRG_InsertJobOffers");
+
+                            t.HasTrigger("TRG_UpdateJobOffers");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.JobOfferLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ConvertedEmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("JobOfferId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OfferCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("OfferedSalary")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("JobOffersLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.JobPosting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ClosingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("EmploymentType")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsRemote")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("ManpowerRequisitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("PostedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PostingCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("PublishChannels")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Requirements")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Responsibilities")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SalaryRangeText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("WorkLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ManpowerRequisitionId");
+
+                    b.HasIndex("PostingCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_JobPostings_Code");
+
+                    b.ToTable("JobPostings", t =>
+                        {
+                            t.HasTrigger("TRG_DeleteJobPostings");
+
+                            t.HasTrigger("TRG_InsertJobPostings");
+
+                            t.HasTrigger("TRG_UpdateJobPostings");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.JobPostingLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("JobPostingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostingCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("JobPostingsLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.JobPostingStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("JobPostingStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "DRAFT",
+                            IsActive = true,
+                            Name = "Draft",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "PUBLISHED",
+                            IsActive = true,
+                            Name = "Published",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "PAUSED",
+                            IsActive = true,
+                            Name = "Paused",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "CLOSED",
+                            IsActive = true,
+                            Name = "Closed",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "CANCELLED",
+                            IsActive = true,
+                            Name = "Cancelled",
+                            SortOrder = 5
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LeaveApplication", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApplicationCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateTime?>("ApprovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ApproverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApproverRemarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AttachmentUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactDuringLeave")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsHalfDay")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LeaveTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("TotalDays")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,1)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_LeaveApplications_Code");
+
+                    b.HasIndex("LeaveTypeId");
+
+                    b.HasIndex("EmployeeId", "Year", "StatusId")
+                        .HasDatabaseName("IX_LeaveApps_Emp_Year");
+
+                    b.ToTable("LeaveApplications", t =>
+                        {
+                            t.HasTrigger("TRG_InsertLeaveApplications");
+
+                            t.HasTrigger("TRG_UpdateLeaveApplications");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LeaveApplicationLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApplicationCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LeaveApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("LeaveTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("TotalDays")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,1)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeaveApplicationsLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LeaveApplicationStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeaveApplicationStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "PENDING",
+                            IsActive = true,
+                            Name = "Pending",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "APPROVED",
+                            IsActive = true,
+                            Name = "Approved",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "REJECTED",
+                            IsActive = true,
+                            Name = "Rejected",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "CANCELLED",
+                            IsActive = true,
+                            Name = "Cancelled",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "WITHDRAWN",
+                            IsActive = true,
+                            Name = "Withdrawn",
+                            SortOrder = 5
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LeaveBalance", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("CarriedForward")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(6,1)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Entitled")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(6,1)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LeaveTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Pending")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(6,1)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Used")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(6,1)");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LeaveTypeId");
+
+                    b.HasIndex("EmployeeId", "LeaveTypeId", "Year")
+                        .IsUnique()
+                        .HasDatabaseName("UX_LeaveBalances_Emp_Type_Year");
+
+                    b.ToTable("LeaveBalances");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LeavePolicy", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("AnnualEntitlement")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,1)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("EffectiveYear")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LeaveTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("MaxConsecutiveDays")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MinServiceMonths")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PolicyCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LeaveTypeId");
+
+                    b.HasIndex("PolicyCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_LeavePolicies_Code");
+
+                    b.ToTable("LeavePolicies", t =>
+                        {
+                            t.HasTrigger("TRG_InsertLeavePolicies");
+
+                            t.HasTrigger("TRG_UpdateLeavePolicies");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LeavePolicyLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("AnnualEntitlement")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,1)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("EffectiveYear")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LeavePolicyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("LeaveTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PolicyCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeavePoliciesLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LeaveTransaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Days")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(6,1)");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("LeaveApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LeaveTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TransactionTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId", "LeaveTypeId", "Year")
+                        .HasDatabaseName("IX_LeaveTxn_Emp_Type_Year");
+
+                    b.ToTable("LeaveTransactions");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LeaveTransactionTypeLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeaveTransactionTypes", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "GRANT",
+                            IsActive = true,
+                            Name = "Annual Grant",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "ACCRUAL",
+                            IsActive = true,
+                            Name = "Monthly Accrual",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "CARRY_FORWARD",
+                            IsActive = true,
+                            Name = "Carry Forward",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "DEDUCTION",
+                            IsActive = true,
+                            Name = "Deduction (Approved Leave)",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "REVERSAL",
+                            IsActive = true,
+                            Name = "Reversal (Cancelled Leave)",
+                            SortOrder = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Code = "ADJUSTMENT",
+                            IsActive = true,
+                            Name = "Manual Adjustment",
+                            SortOrder = 6
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Code = "ENCASHMENT",
+                            IsActive = true,
+                            Name = "Encashment",
+                            SortOrder = 7
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LeaveType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("AccrualPerMonth")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<bool>("AllowHalfDay")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ColorHex")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCarryForward")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LeaveTypeCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<decimal?>("MaxCarryForward")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("RequiresAttachment")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LeaveTypeCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_LeaveTypes_Code");
+
+                    b.ToTable("LeaveTypes", t =>
+                        {
+                            t.HasTrigger("TRG_InsertLeaveTypes");
+
+                            t.HasTrigger("TRG_UpdateLeaveTypes");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("01ea0000-0000-4000-8000-000000000001"),
+                            AccrualPerMonth = 2.5m,
+                            AllowHalfDay = true,
+                            ColorHex = "#28a745",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "30 calendar days/year after 1 year of service (UAE)",
+                            IsActive = true,
+                            IsCarryForward = true,
+                            IsPaid = true,
+                            LeaveTypeCode = "ANNUAL",
+                            MaxCarryForward = 10m,
+                            Name = "Annual Leave",
+                            RequiresAttachment = false
+                        },
+                        new
+                        {
+                            Id = new Guid("01ea0000-0000-4000-8000-000000000002"),
+                            AllowHalfDay = true,
+                            ColorHex = "#dc3545",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Medical certificate required",
+                            IsActive = true,
+                            IsCarryForward = false,
+                            IsPaid = true,
+                            LeaveTypeCode = "SICK",
+                            Name = "Sick Leave",
+                            RequiresAttachment = true
+                        },
+                        new
+                        {
+                            Id = new Guid("01ea0000-0000-4000-8000-000000000003"),
+                            AllowHalfDay = true,
+                            ColorHex = "#17a2b8",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Short personal absence",
+                            IsActive = true,
+                            IsCarryForward = false,
+                            IsPaid = true,
+                            LeaveTypeCode = "CASUAL",
+                            Name = "Casual Leave",
+                            RequiresAttachment = false
+                        },
+                        new
+                        {
+                            Id = new Guid("01ea0000-0000-4000-8000-000000000004"),
+                            AllowHalfDay = true,
+                            ColorHex = "#6c757d",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Leave without pay",
+                            IsActive = true,
+                            IsCarryForward = false,
+                            IsPaid = false,
+                            LeaveTypeCode = "UNPAID",
+                            Name = "Unpaid Leave",
+                            RequiresAttachment = false
+                        },
+                        new
+                        {
+                            Id = new Guid("01ea0000-0000-4000-8000-000000000005"),
+                            AllowHalfDay = false,
+                            ColorHex = "#e83e8c",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "60 days (UAE Labour Law)",
+                            IsActive = true,
+                            IsCarryForward = false,
+                            IsPaid = true,
+                            LeaveTypeCode = "MATERNITY",
+                            Name = "Maternity Leave",
+                            RequiresAttachment = true
+                        },
+                        new
+                        {
+                            Id = new Guid("01ea0000-0000-4000-8000-000000000006"),
+                            AllowHalfDay = false,
+                            ColorHex = "#fd7e14",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "5 working days (UAE Labour Law)",
+                            IsActive = true,
+                            IsCarryForward = false,
+                            IsPaid = true,
+                            LeaveTypeCode = "PATERNITY",
+                            Name = "Paternity Leave",
+                            RequiresAttachment = false
+                        },
+                        new
+                        {
+                            Id = new Guid("01ea0000-0000-4000-8000-000000000007"),
+                            AllowHalfDay = false,
+                            ColorHex = "#6f42c1",
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Once during service",
+                            IsActive = true,
+                            IsCarryForward = false,
+                            IsPaid = false,
+                            LeaveTypeCode = "HAJJ",
+                            Name = "Hajj Leave",
+                            RequiresAttachment = false
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LeaveTypeLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LeaveTypeCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("LeaveTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeaveTypesLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Loan", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("InstallmentAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LoanCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<decimal>("OutstandingAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("PaidInstallments")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PrincipalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StartMonth")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StartYear")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalInstallments")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LoanCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Loans_Code");
+
+                    b.HasIndex("EmployeeId", "StatusId")
+                        .HasDatabaseName("IX_Loans_Emp");
+
+                    b.ToTable("Loans", t =>
+                        {
+                            t.HasTrigger("TRG_InsertLoans");
+
+                            t.HasTrigger("TRG_UpdateLoans");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LoanInstallment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("LoanId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("PayMonth")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PayYear")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("PayslipId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LoanInstallments");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LoanLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LoanCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("LoanId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("OutstandingAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("PrincipalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LoansLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LoanStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LoanStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "ACTIVE",
+                            IsActive = true,
+                            Name = "Active",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "CLOSED",
+                            IsActive = true,
+                            Name = "Closed",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "CANCELLED",
+                            IsActive = true,
+                            Name = "Cancelled",
+                            SortOrder = 3
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ManpowerRequisition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApprovalRemark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ApprovedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ApprovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("BudgetMax")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("BudgetMin")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<Guid?>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DesignationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsReplacement")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Justification")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MinExperienceYears")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfVacancies")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("PositionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ReplacingEmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RequestedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("RequiredByDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RequiredQualification")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequisitionCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PositionId");
+
+                    b.HasIndex("RequisitionCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_ManpowerRequisitions_Code");
+
+                    b.ToTable("ManpowerRequisitions", t =>
+                        {
+                            t.HasTrigger("TRG_DeleteManpowerRequisitions");
+
+                            t.HasTrigger("TRG_InsertManpowerRequisitions");
+
+                            t.HasTrigger("TRG_UpdateManpowerRequisitions");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ManpowerRequisitionLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApprovalRemark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ApprovedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("ManpowerRequisitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("NumberOfVacancies")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("PositionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RequisitionCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ManpowerRequisitionsLog");
                 });
 
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.MaritalStatusLookup", b =>
@@ -2013,12 +6409,3046 @@ namespace SBERP.HumanResources.Migrations
                         });
                 });
 
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.OfferStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OfferStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "DRAFT",
+                            IsActive = true,
+                            Name = "Draft",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "ISSUED",
+                            IsActive = true,
+                            Name = "Issued",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "ACCEPTED",
+                            IsActive = true,
+                            Name = "Accepted",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "DECLINED",
+                            IsActive = true,
+                            Name = "Declined",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "EXPIRED",
+                            IsActive = true,
+                            Name = "Expired",
+                            SortOrder = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Code = "WITHDRAWN",
+                            IsActive = true,
+                            Name = "Withdrawn",
+                            SortOrder = 6
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Onboarding", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CandidateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ChecklistDone")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChecklistTotal")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CompletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<Guid?>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DesignationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("JobOfferId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("JoiningDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OnboardingCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<Guid?>("PositionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ReportingManagerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobOfferId")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Onboardings_Offer");
+
+                    b.HasIndex("OnboardingCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Onboardings_Code");
+
+                    b.ToTable("Onboardings", t =>
+                        {
+                            t.HasTrigger("TRG_InsertOnboardings");
+
+                            t.HasTrigger("TRG_UpdateOnboardings");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.OnboardingLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("JobOfferId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OnboardingCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("OnboardingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OnboardingsLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.OnboardingStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OnboardingStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "INITIATED",
+                            IsActive = true,
+                            Name = "Initiated",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "INPROGRESS",
+                            IsActive = true,
+                            Name = "In Progress",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "COMPLETED",
+                            IsActive = true,
+                            Name = "Completed",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "CANCELLED",
+                            IsActive = true,
+                            Name = "Cancelled",
+                            SortOrder = 4
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.OnboardingTask", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AssignedToId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CompletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("OnboardingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OwnerRole")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OnboardingId");
+
+                    b.ToTable("OnboardingTasks");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.OnboardingTaskStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OnboardingTaskStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "PENDING",
+                            IsActive = true,
+                            Name = "Pending",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "INPROGRESS",
+                            IsActive = true,
+                            Name = "In Progress",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "DONE",
+                            IsActive = true,
+                            Name = "Done",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "NA",
+                            IsActive = true,
+                            Name = "Not Applicable",
+                            SortOrder = 4
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.OvertimeRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ApprovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ApproverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApproverRemarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<TimeSpan>("FromTime")
+                        .HasColumnType("time");
+
+                    b.Property<decimal?>("Hours")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("OvertimeDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequestCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("ToTime")
+                        .HasColumnType("time");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Overtime_Code");
+
+                    b.HasIndex("EmployeeId", "OvertimeDate")
+                        .HasDatabaseName("IX_Overtime_Emp_Date");
+
+                    b.ToTable("OvertimeRequests", t =>
+                        {
+                            t.HasTrigger("TRG_InsertOvertimeRequests");
+
+                            t.HasTrigger("TRG_UpdateOvertimeRequests");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.OvertimeRequestLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("Hours")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("OvertimeDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("OvertimeRequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequestCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OvertimeRequestsLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.OvertimeStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OvertimeStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "PENDING",
+                            IsActive = true,
+                            Name = "Pending",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "APPROVED",
+                            IsActive = true,
+                            Name = "Approved",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "REJECTED",
+                            IsActive = true,
+                            Name = "Rejected",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "CANCELLED",
+                            IsActive = true,
+                            Name = "Cancelled",
+                            SortOrder = 4
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.PayComponent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CalcMethod")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ComponentCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("ComponentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("DefaultValue")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsProrated")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTaxable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComponentCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_PayComponents_Code");
+
+                    b.ToTable("PayComponents", t =>
+                        {
+                            t.HasTrigger("TRG_InsertPayComponents");
+
+                            t.HasTrigger("TRG_UpdatePayComponents");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0fa10000-0000-4000-8000-000000000001"),
+                            CalcMethod = 2,
+                            ComponentCode = "HRA",
+                            ComponentTypeId = 1,
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            DefaultValue = 25m,
+                            Description = "% of basic",
+                            IsActive = true,
+                            IsProrated = true,
+                            IsTaxable = false,
+                            Name = "Housing Allowance",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0fa10000-0000-4000-8000-000000000002"),
+                            CalcMethod = 1,
+                            ComponentCode = "TRANS",
+                            ComponentTypeId = 1,
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            DefaultValue = 800m,
+                            Description = "Fixed monthly",
+                            IsActive = true,
+                            IsProrated = true,
+                            IsTaxable = false,
+                            Name = "Transport Allowance",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = new Guid("0fa10000-0000-4000-8000-000000000003"),
+                            CalcMethod = 1,
+                            ComponentCode = "PHONE",
+                            ComponentTypeId = 1,
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            DefaultValue = 200m,
+                            Description = "Fixed monthly",
+                            IsActive = true,
+                            IsProrated = true,
+                            IsTaxable = false,
+                            Name = "Telephone Allowance",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = new Guid("0fa10000-0000-4000-8000-000000000004"),
+                            CalcMethod = 2,
+                            ComponentCode = "OTHER",
+                            ComponentTypeId = 1,
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            DefaultValue = 10m,
+                            Description = "% of basic",
+                            IsActive = true,
+                            IsProrated = true,
+                            IsTaxable = false,
+                            Name = "Other Allowance",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = new Guid("0fa10000-0000-4000-8000-000000000005"),
+                            CalcMethod = 2,
+                            ComponentCode = "GPSSA",
+                            ComponentTypeId = 2,
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            DefaultValue = 11m,
+                            Description = "Employee share, UAE/GCC nationals only",
+                            IsActive = true,
+                            IsProrated = false,
+                            IsTaxable = false,
+                            Name = "Pension (GPSSA) — UAE nationals",
+                            SortOrder = 5
+                        },
+                        new
+                        {
+                            Id = new Guid("0fa10000-0000-4000-8000-000000000006"),
+                            CalcMethod = 1,
+                            ComponentCode = "LOAN",
+                            ComponentTypeId = 2,
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            DefaultValue = 0m,
+                            Description = "Driven by Loans module",
+                            IsActive = true,
+                            IsProrated = false,
+                            IsTaxable = false,
+                            Name = "Loan / Advance Recovery",
+                            SortOrder = 6
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.PayComponentLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CalcMethod")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ComponentCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ComponentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PayComponentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PayComponentsLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.PayComponentTypeLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PayComponentTypes", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "EARNING",
+                            IsActive = true,
+                            Name = "Earning",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "DEDUCTION",
+                            IsActive = true,
+                            Name = "Deduction",
+                            SortOrder = 2
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.PayrollRun", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApprovedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ApprovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("EmployeeCount")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PayMonth")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PayYear")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PeriodEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("PeriodStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ProcessedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ProcessedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RunCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("TotalDeductions")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("TotalGross")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("TotalNet")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("WorkingDays")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,1)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RunCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_PayrollRuns_Code");
+
+                    b.ToTable("PayrollRuns", t =>
+                        {
+                            t.HasTrigger("TRG_InsertPayrollRuns");
+
+                            t.HasTrigger("TRG_UpdatePayrollRuns");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.PayrollRunLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("PayMonth")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PayYear")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("PayrollRunId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RunCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("TotalNet")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PayrollRunsLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.PayrollRunStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PayrollRunStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "DRAFT",
+                            IsActive = true,
+                            Name = "Draft",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "PROCESSED",
+                            IsActive = true,
+                            Name = "Processed",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "APPROVED",
+                            IsActive = true,
+                            Name = "Approved",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "PAID",
+                            IsActive = true,
+                            Name = "Paid",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "CANCELLED",
+                            IsActive = true,
+                            Name = "Cancelled",
+                            SortOrder = 5
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Payslip", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("BasicEarned")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Currency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("GrossEarnings")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("LoanDeduction")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("LopDays")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,1)");
+
+                    b.Property<decimal>("NetPay")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PaidDays")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,1)");
+
+                    b.Property<Guid>("PayrollRunId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PayslipCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalDeductions")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId")
+                        .HasDatabaseName("IX_Payslips_Emp");
+
+                    b.HasIndex("PayrollRunId")
+                        .HasDatabaseName("IX_Payslips_Run");
+
+                    b.ToTable("Payslips");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.PayslipLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ComponentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ComponentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("PayComponentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PayslipId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PayslipId");
+
+                    b.ToTable("PayslipLines");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Position", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BudgetedHeadcount")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CostCenterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<Guid?>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid?>("DesignationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("EffectiveFrom")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("EffectiveTo")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("EmploymentType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FilledHeadcount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("JobGradeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("MaxSalary")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("MinSalary")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PositionCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<Guid?>("ReportsToPositionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SalaryCurrency")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("StatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(2);
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("WorkLocation")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CostCenterId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("DesignationId");
+
+                    b.HasIndex("JobGradeId");
+
+                    b.HasIndex("PositionCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Positions_Code");
+
+                    b.HasIndex("ReportsToPositionId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Positions", t =>
+                        {
+                            t.HasTrigger("TRG_DeletePositions");
+
+                            t.HasTrigger("TRG_InsertPositions");
+
+                            t.HasTrigger("TRG_UpdatePositions");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0b050000-0000-4000-8000-000000000001"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            BudgetedHeadcount = 1,
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
+                            CostCenterId = new Guid("0cc00001-0000-4000-8000-000000000001"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            DepartmentId = new Guid("28260da1-0bb1-4842-a3ec-786f859dc5ca"),
+                            DesignationId = new Guid("4e2e6864-b92c-4224-8bef-20f7e72df648"),
+                            EffectiveFrom = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            EmploymentType = 1,
+                            FilledHeadcount = 0,
+                            IsActive = true,
+                            JobGradeId = new Guid("06ad0001-0000-4000-8000-000000000001"),
+                            PositionCode = "POS-0001",
+                            SalaryCurrency = "AED",
+                            StatusId = 2,
+                            Title = "Chief Executive Officer",
+                            WorkLocation = "Dubai"
+                        },
+                        new
+                        {
+                            Id = new Guid("0b050000-0000-4000-8000-000000000002"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            BudgetedHeadcount = 1,
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
+                            CostCenterId = new Guid("0cc00001-0000-4000-8000-000000000001"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            DepartmentId = new Guid("2b3c7610-f979-48f0-881c-44b9f3c93555"),
+                            DesignationId = new Guid("60bbb9db-3a9e-4560-bb0f-c93dbaf9c7db"),
+                            EffectiveFrom = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            EmploymentType = 1,
+                            FilledHeadcount = 0,
+                            IsActive = true,
+                            JobGradeId = new Guid("06ad0001-0000-4000-8000-000000000003"),
+                            PositionCode = "POS-0002",
+                            ReportsToPositionId = new Guid("0b050000-0000-4000-8000-000000000001"),
+                            SalaryCurrency = "AED",
+                            StatusId = 2,
+                            Title = "HR Manager",
+                            WorkLocation = "Dubai"
+                        },
+                        new
+                        {
+                            Id = new Guid("0b050000-0000-4000-8000-000000000003"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            BudgetedHeadcount = 1,
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
+                            CostCenterId = new Guid("0cc00001-0000-4000-8000-000000000002"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            DepartmentId = new Guid("1f8fd7ee-c9c4-484b-aeb9-3f81f2c04609"),
+                            DesignationId = new Guid("e619d48f-bd89-404f-a406-f466f1b62088"),
+                            EffectiveFrom = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            EmploymentType = 1,
+                            FilledHeadcount = 0,
+                            IsActive = true,
+                            JobGradeId = new Guid("06ad0001-0000-4000-8000-000000000003"),
+                            PositionCode = "POS-0003",
+                            ReportsToPositionId = new Guid("0b050000-0000-4000-8000-000000000001"),
+                            SalaryCurrency = "AED",
+                            StatusId = 2,
+                            Title = "Engineering Manager",
+                            WorkLocation = "Dubai"
+                        },
+                        new
+                        {
+                            Id = new Guid("0b050000-0000-4000-8000-000000000004"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            BudgetedHeadcount = 3,
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
+                            CostCenterId = new Guid("0cc00001-0000-4000-8000-000000000002"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            DepartmentId = new Guid("1f8fd7ee-c9c4-484b-aeb9-3f81f2c04609"),
+                            DesignationId = new Guid("51da7cd0-7d22-4c3b-a01e-21e1eafd27e9"),
+                            EffectiveFrom = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            EmploymentType = 1,
+                            FilledHeadcount = 0,
+                            IsActive = true,
+                            JobGradeId = new Guid("06ad0001-0000-4000-8000-000000000004"),
+                            PositionCode = "POS-0004",
+                            ReportsToPositionId = new Guid("0b050000-0000-4000-8000-000000000003"),
+                            SalaryCurrency = "AED",
+                            StatusId = 2,
+                            Title = "Senior Software Engineer",
+                            WorkLocation = "Dubai"
+                        },
+                        new
+                        {
+                            Id = new Guid("0b050000-0000-4000-8000-000000000005"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            BudgetedHeadcount = 5,
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
+                            CostCenterId = new Guid("0cc00001-0000-4000-8000-000000000002"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            DepartmentId = new Guid("1f8fd7ee-c9c4-484b-aeb9-3f81f2c04609"),
+                            DesignationId = new Guid("368c0e9b-e60d-40cf-912c-43744db1b19f"),
+                            EffectiveFrom = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            EmploymentType = 1,
+                            FilledHeadcount = 0,
+                            IsActive = true,
+                            JobGradeId = new Guid("06ad0001-0000-4000-8000-000000000005"),
+                            PositionCode = "POS-0005",
+                            ReportsToPositionId = new Guid("0b050000-0000-4000-8000-000000000003"),
+                            SalaryCurrency = "AED",
+                            StatusId = 2,
+                            Title = "Software Engineer",
+                            WorkLocation = "Dubai"
+                        },
+                        new
+                        {
+                            Id = new Guid("0b050000-0000-4000-8000-000000000006"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            BudgetedHeadcount = 2,
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
+                            CostCenterId = new Guid("0cc00001-0000-4000-8000-000000000001"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            DepartmentId = new Guid("729197ee-0a7e-4910-81a1-be9060a51ae7"),
+                            DesignationId = new Guid("82b5f6d0-5403-48d0-8d1c-8ef510762631"),
+                            EffectiveFrom = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            EmploymentType = 1,
+                            FilledHeadcount = 0,
+                            IsActive = true,
+                            JobGradeId = new Guid("06ad0001-0000-4000-8000-000000000005"),
+                            PositionCode = "POS-0006",
+                            ReportsToPositionId = new Guid("0b050000-0000-4000-8000-000000000001"),
+                            SalaryCurrency = "AED",
+                            StatusId = 2,
+                            Title = "Accountant",
+                            WorkLocation = "Dubai"
+                        },
+                        new
+                        {
+                            Id = new Guid("0b050000-0000-4000-8000-000000000007"),
+                            BranchId = new Guid("7aa06b50-b394-41b9-b17b-a96cd0e18b8b"),
+                            BudgetedHeadcount = 1,
+                            CompanyId = new Guid("eeb27f7f-f7db-479b-923f-3be0ad7a243a"),
+                            CostCenterId = new Guid("0cc00001-0000-4000-8000-000000000001"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            DepartmentId = new Guid("2b3c7610-f979-48f0-881c-44b9f3c93555"),
+                            DesignationId = new Guid("f2597dae-b3c6-47bb-b2a1-5caa5dcfd770"),
+                            EffectiveFrom = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            EmploymentType = 1,
+                            FilledHeadcount = 0,
+                            IsActive = true,
+                            JobGradeId = new Guid("06ad0001-0000-4000-8000-000000000006"),
+                            PositionCode = "POS-0007",
+                            ReportsToPositionId = new Guid("0b050000-0000-4000-8000-000000000002"),
+                            SalaryCurrency = "AED",
+                            StatusId = 2,
+                            Title = "HR Intern",
+                            WorkLocation = "Dubai"
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.PositionLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BudgetedHeadcount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DesignationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("FilledHeadcount")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PositionCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PositionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PositionsLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.PositionStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PositionStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "DRAFT",
+                            IsActive = true,
+                            Name = "Draft",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "OPEN",
+                            IsActive = true,
+                            Name = "Open",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "FILLED",
+                            IsActive = true,
+                            Name = "Filled",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "ON_HOLD",
+                            IsActive = true,
+                            Name = "On Hold",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "CLOSED",
+                            IsActive = true,
+                            Name = "Closed",
+                            SortOrder = 5
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.PunchSourceLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PunchSources", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "MOBILE",
+                            IsActive = true,
+                            Name = "Mobile App",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "TERMINAL",
+                            IsActive = true,
+                            Name = "Door Terminal",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "MANUAL",
+                            IsActive = true,
+                            Name = "Manual",
+                            SortOrder = 3
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.PunchStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PunchStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "ACCEPTED",
+                            IsActive = true,
+                            Name = "Accepted",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "DUPLICATE",
+                            IsActive = true,
+                            Name = "Duplicate",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "REJECTED",
+                            IsActive = true,
+                            Name = "Rejected",
+                            SortOrder = 3
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.RatingItemTypeLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RatingItemTypes", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "GOAL",
+                            IsActive = true,
+                            Name = "Goal",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "COMPETENCY",
+                            IsActive = true,
+                            Name = "Competency",
+                            SortOrder = 2
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.RegularizationStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RegularizationStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "PENDING",
+                            IsActive = true,
+                            Name = "Pending",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "APPROVED",
+                            IsActive = true,
+                            Name = "Approved",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "REJECTED",
+                            IsActive = true,
+                            Name = "Rejected",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "CANCELLED",
+                            IsActive = true,
+                            Name = "Cancelled",
+                            SortOrder = 4
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.RegularizationTypeLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RegularizationTypes", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "MISSED_IN",
+                            IsActive = true,
+                            Name = "Missed Check-In",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "MISSED_OUT",
+                            IsActive = true,
+                            Name = "Missed Check-Out",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "WRONG_TIME",
+                            IsActive = true,
+                            Name = "Wrong Punch Time",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "FORGOT",
+                            IsActive = true,
+                            Name = "Forgot to Punch",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "ON_DUTY",
+                            IsActive = true,
+                            Name = "On Duty / Field Work",
+                            SortOrder = 5
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.RequisitionStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RequisitionStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "DRAFT",
+                            IsActive = true,
+                            Name = "Draft",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "PENDING",
+                            IsActive = true,
+                            Name = "Pending Approval",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "APPROVED",
+                            IsActive = true,
+                            Name = "Approved",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "REJECTED",
+                            IsActive = true,
+                            Name = "Rejected",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "ONHOLD",
+                            IsActive = true,
+                            Name = "On Hold",
+                            SortOrder = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Code = "CLOSED",
+                            IsActive = true,
+                            Name = "Closed",
+                            SortOrder = 6
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Code = "FILLED",
+                            IsActive = true,
+                            Name = "Filled",
+                            SortOrder = 7
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Review", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("AcknowledgedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("AppraisalCycleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CompletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmployeeAcknowledgement")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ManagerComments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("ManagerRating")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(4,2)");
+
+                    b.Property<decimal?>("OverallRating")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(4,2)");
+
+                    b.Property<string>("ReviewCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<Guid?>("ReviewerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SelfComments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("SelfRating")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(4,2)");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("SubmittedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppraisalCycleId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("ReviewCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Reviews_Code");
+
+                    b.ToTable("Reviews", t =>
+                        {
+                            t.HasTrigger("TRG_InsertReviews");
+
+                            t.HasTrigger("TRG_UpdateReviews");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ReviewLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("AppraisalCycleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("OverallRating")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(4,2)");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReviewCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReviewsLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ReviewRating", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Comments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ItemName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ItemTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("ManagerScore")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(4,2)");
+
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("SelfScore")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(4,2)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Weight")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReviewId")
+                        .HasDatabaseName("IX_ReviewRatings_Review");
+
+                    b.ToTable("ReviewRatings");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ReviewStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReviewStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "NOT_STARTED",
+                            IsActive = true,
+                            Name = "Not Started",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "SELF_ASSESSMENT",
+                            IsActive = true,
+                            Name = "Self Assessment",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "MANAGER_REVIEW",
+                            IsActive = true,
+                            Name = "Manager Review",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "COMPLETED",
+                            IsActive = true,
+                            Name = "Completed",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "ACKNOWLEDGED",
+                            IsActive = true,
+                            Name = "Acknowledged",
+                            SortOrder = 5
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.SalaryStructure", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("BasicSalary")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Currency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EffectiveFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EffectiveTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StructureCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StructureCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_SalaryStructures_Code");
+
+                    b.HasIndex("EmployeeId", "EffectiveFrom")
+                        .HasDatabaseName("IX_SalaryStructures_Emp");
+
+                    b.ToTable("SalaryStructures", t =>
+                        {
+                            t.HasTrigger("TRG_InsertSalaryStructures");
+
+                            t.HasTrigger("TRG_UpdateSalaryStructures");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.SalaryStructureLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CalcMethod")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("PayComponentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SalaryStructureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Value")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PayComponentId");
+
+                    b.HasIndex("SalaryStructureId");
+
+                    b.ToTable("SalaryStructureLines");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.SalaryStructureLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("BasicSalary")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EffectiveFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EffectiveTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SalaryStructureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("StructureCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SalaryStructuresLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Separation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ApprovedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ApprovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("ExitInterviewDone")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNoticeWaived")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsRehireEligible")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastWorkingDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("NoticeDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("NoticePeriodDays")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RequestedLastWorkingDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("SeparationCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("SeparationTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("SettlementDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SettlementRemarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("SeparationCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Separations_Code");
+
+                    b.ToTable("Separations", t =>
+                        {
+                            t.HasTrigger("TRG_InsertSeparations");
+
+                            t.HasTrigger("TRG_UpdateSeparations");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.SeparationClearance", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ClearanceStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ClearedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ClearedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("DuesAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SeparationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SeparationId", "DepartmentId")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Clearances_Sep_Dept");
+
+                    b.ToTable("SeparationClearances", t =>
+                        {
+                            t.HasTrigger("TRG_InsertSeparationClearances");
+
+                            t.HasTrigger("TRG_UpdateSeparationClearances");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.SeparationClearanceLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ClearanceStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SeparationClearanceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SeparationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SeparationClearancesLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.SeparationLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastWorkingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SeparationCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SeparationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("SeparationTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SeparationsLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.SeparationStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SeparationStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "DRAFT",
+                            IsActive = true,
+                            Name = "Draft",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "PENDING",
+                            IsActive = true,
+                            Name = "Pending Approval",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "APPROVED",
+                            IsActive = true,
+                            Name = "Approved",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "IN_CLEARANCE",
+                            IsActive = true,
+                            Name = "In Clearance",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "SETTLED",
+                            IsActive = true,
+                            Name = "Settled",
+                            SortOrder = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Code = "COMPLETED",
+                            IsActive = true,
+                            Name = "Completed",
+                            SortOrder = 6
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Code = "CANCELLED",
+                            IsActive = true,
+                            Name = "Cancelled",
+                            SortOrder = 7
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.SeparationTypeLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SeparationTypes", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "RESIGNATION",
+                            IsActive = true,
+                            Name = "Resignation",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "TERMINATION",
+                            IsActive = true,
+                            Name = "Termination",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "RETIREMENT",
+                            IsActive = true,
+                            Name = "Retirement",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "END_OF_CONTRACT",
+                            IsActive = true,
+                            Name = "End of Contract",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "DEATH",
+                            IsActive = true,
+                            Name = "Death",
+                            SortOrder = 5
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Shift", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BreakMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<decimal?>("FullDayHours")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("GraceInMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GraceOutMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("HalfDayHours")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNightShift")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ShiftCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("WeekOffDays")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShiftCode")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Shifts_Code");
+
+                    b.ToTable("Shifts", t =>
+                        {
+                            t.HasTrigger("TRG_DeleteShifts");
+
+                            t.HasTrigger("TRG_InsertShifts");
+
+                            t.HasTrigger("TRG_UpdateShifts");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("05f10000-0000-4000-8000-000000000001"),
+                            BreakMinutes = 60,
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "UAE standard office hours, Fri–Sat weekend",
+                            EndTime = new TimeSpan(0, 17, 30, 0, 0),
+                            FullDayHours = 8m,
+                            GraceInMinutes = 15,
+                            GraceOutMinutes = 10,
+                            HalfDayHours = 4m,
+                            IsActive = true,
+                            IsNightShift = false,
+                            Name = "General Shift",
+                            ShiftCode = "SH-0001",
+                            StartTime = new TimeSpan(0, 8, 30, 0, 0),
+                            WeekOffDays = "5,6"
+                        },
+                        new
+                        {
+                            Id = new Guid("05f10000-0000-4000-8000-000000000002"),
+                            BreakMinutes = 0,
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Reduced hours during Ramadan (UAE Labour Law)",
+                            EndTime = new TimeSpan(0, 15, 0, 0, 0),
+                            FullDayHours = 6m,
+                            GraceInMinutes = 15,
+                            GraceOutMinutes = 10,
+                            HalfDayHours = 3m,
+                            IsActive = true,
+                            IsNightShift = false,
+                            Name = "Ramadan Shift",
+                            ShiftCode = "SH-0002",
+                            StartTime = new TimeSpan(0, 9, 0, 0, 0),
+                            WeekOffDays = "5,6"
+                        },
+                        new
+                        {
+                            Id = new Guid("05f10000-0000-4000-8000-000000000003"),
+                            BreakMinutes = 30,
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 1, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Operations night cover",
+                            EndTime = new TimeSpan(0, 6, 0, 0, 0),
+                            FullDayHours = 7.5m,
+                            GraceInMinutes = 15,
+                            GraceOutMinutes = 10,
+                            HalfDayHours = 4m,
+                            IsActive = true,
+                            IsNightShift = true,
+                            Name = "Night Shift",
+                            ShiftCode = "SH-0003",
+                            StartTime = new TimeSpan(0, 22, 0, 0, 0),
+                            WeekOffDays = "5"
+                        });
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ShiftLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan?>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShiftCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<TimeSpan?>("StartTime")
+                        .HasColumnType("time");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ShiftsLog");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ShiftRoster", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EffectiveFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EffectiveTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShiftId");
+
+                    b.HasIndex("EmployeeId", "EffectiveFrom", "EffectiveTo")
+                        .HasDatabaseName("IX_ShiftRosters_Emp_Eff");
+
+                    b.ToTable("ShiftRosters", t =>
+                        {
+                            t.HasTrigger("TRG_InsertShiftRosters");
+
+                            t.HasTrigger("TRG_UpdateShiftRosters");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ShiftRosterLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EffectiveFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EffectiveTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PerformedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ShiftRosterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ShiftRostersLog");
+                });
+
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.Attendance", b =>
                 {
                     b.HasOne("SBERP.HumanResources.Models.Base.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.AttendancePunch", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasConstraintName("FK_AttendancePunches_Employee");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.PunchSourceLookup", null)
+                        .WithMany()
+                        .HasForeignKey("SourceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_AttendancePunches_Source");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.PunchStatusLookup", null)
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_AttendancePunches_Status");
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.AttendanceRegularizationRequest", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Employee");
@@ -2033,7 +9463,34 @@ namespace SBERP.HumanResources.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Branches_Company");
 
+                    b.HasOne("SBERP.HumanResources.Models.Base.HolidayCalendar", null)
+                        .WithMany()
+                        .HasForeignKey("HolidayCalendarId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_Branches_HolidayCalendar");
+
                     b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.CostCenter", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Branch", null)
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_CostCenters_Branch");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_CostCenters_Company");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.CostCenter", null)
+                        .WithMany()
+                        .HasForeignKey("ParentCostCenterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_CostCenters_Parent");
                 });
 
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.Department", b =>
@@ -2079,6 +9536,12 @@ namespace SBERP.HumanResources.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Employees_Company");
 
+                    b.HasOne("SBERP.HumanResources.Models.Base.CostCenter", null)
+                        .WithMany()
+                        .HasForeignKey("CostCenterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_Employees_CostCenter");
+
                     b.HasOne("SBERP.HumanResources.Models.Base.Department", "Department")
                         .WithMany("Employees")
                         .HasForeignKey("DepartmentId")
@@ -2090,6 +9553,18 @@ namespace SBERP.HumanResources.Migrations
                         .HasForeignKey("DesignationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("FK_Employees_Designation");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.JobGrade", null)
+                        .WithMany()
+                        .HasForeignKey("JobGradeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_Employees_JobGrade");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.Position", null)
+                        .WithMany()
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_Employees_Position");
 
                     b.HasOne("SBERP.HumanResources.Models.Base.Employee", "ReportingManager")
                         .WithMany("DirectReports")
@@ -2126,6 +9601,38 @@ namespace SBERP.HumanResources.Migrations
                         .HasForeignKey("SBERP.HumanResources.Models.Base.EmployeeBank", "EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.EmployeeBiometricRegistration", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.AttendanceDevice", null)
+                        .WithMany()
+                        .HasForeignKey("AttendanceDeviceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasConstraintName("FK_BiometricRegistrations_Device");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.BiometricTypeLookup", null)
+                        .WithMany()
+                        .HasForeignKey("BiometricTypeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_BiometricRegistrations_Type");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_BiometricRegistrations_Employee");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.BiometricRegistrationStatusLookup", null)
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_BiometricRegistrations_Status");
 
                     b.Navigation("Employee");
                 });
@@ -2207,6 +9714,390 @@ namespace SBERP.HumanResources.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ExitInterview", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Separation", null)
+                        .WithMany()
+                        .HasForeignKey("SeparationId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Goal", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.AppraisalCycle", "AppraisalCycle")
+                        .WithMany()
+                        .HasForeignKey("AppraisalCycleId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("AppraisalCycle");
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.HolidayDate", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.HolidayCalendar", "Calendar")
+                        .WithMany("HolidayDates")
+                        .HasForeignKey("HolidayCalendarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_HolidayDates_Calendar");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.HolidayTypeLookup", null)
+                        .WithMany()
+                        .HasForeignKey("HolidayTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_HolidayDates_Type");
+
+                    b.Navigation("Calendar");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.InterviewPanelMember", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Interview", null)
+                        .WithMany("PanelMembers")
+                        .HasForeignKey("InterviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Panel_Interview");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.JobApplication", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Candidate", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_JobApplications_Candidate");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.JobPosting", "JobPosting")
+                        .WithMany()
+                        .HasForeignKey("JobPostingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_JobApplications_Posting");
+
+                    b.Navigation("Candidate");
+
+                    b.Navigation("JobPosting");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.JobOffer", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Candidate", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_JobOffers_Candidate");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.JobApplication", "JobApplication")
+                        .WithMany()
+                        .HasForeignKey("JobApplicationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_JobOffers_Application");
+
+                    b.Navigation("Candidate");
+
+                    b.Navigation("JobApplication");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.JobPosting", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.ManpowerRequisition", "ManpowerRequisition")
+                        .WithMany()
+                        .HasForeignKey("ManpowerRequisitionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_JobPostings_MRF");
+
+                    b.Navigation("ManpowerRequisition");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LeaveApplication", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.LeaveType", "LeaveType")
+                        .WithMany()
+                        .HasForeignKey("LeaveTypeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("LeaveType");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LeaveBalance", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.LeaveType", "LeaveType")
+                        .WithMany()
+                        .HasForeignKey("LeaveTypeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("LeaveType");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LeavePolicy", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.LeaveType", "LeaveType")
+                        .WithMany()
+                        .HasForeignKey("LeaveTypeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("LeaveType");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.LeaveTransaction", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Loan", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ManpowerRequisition", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Position", "Position")
+                        .WithMany()
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_MRF_Positions");
+
+                    b.Navigation("Position");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.OnboardingTask", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Onboarding", null)
+                        .WithMany("Tasks")
+                        .HasForeignKey("OnboardingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_OnboardingTasks_Onboarding");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.OvertimeRequest", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Payslip", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.PayslipLine", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Payslip", null)
+                        .WithMany("Lines")
+                        .HasForeignKey("PayslipId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Position", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Branch", null)
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_Positions_Branch");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_Positions_Company");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.CostCenter", null)
+                        .WithMany()
+                        .HasForeignKey("CostCenterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_Positions_CostCenter");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_Positions_Departments");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.Designation", "Designation")
+                        .WithMany()
+                        .HasForeignKey("DesignationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_Positions_Designations");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.JobGrade", null)
+                        .WithMany()
+                        .HasForeignKey("JobGradeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_Positions_JobGrade");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.Position", null)
+                        .WithMany()
+                        .HasForeignKey("ReportsToPositionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_Positions_ReportsTo");
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.PositionStatusLookup", null)
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Positions_Status");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Designation");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Review", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.AppraisalCycle", "AppraisalCycle")
+                        .WithMany()
+                        .HasForeignKey("AppraisalCycleId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("AppraisalCycle");
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ReviewRating", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Review", null)
+                        .WithMany("Ratings")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.SalaryStructure", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.SalaryStructureLine", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.PayComponent", "PayComponent")
+                        .WithMany()
+                        .HasForeignKey("PayComponentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.SalaryStructure", null)
+                        .WithMany("Lines")
+                        .HasForeignKey("SalaryStructureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PayComponent");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Separation", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.SeparationClearance", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Separation", null)
+                        .WithMany("Clearances")
+                        .HasForeignKey("SeparationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.ShiftRoster", b =>
+                {
+                    b.HasOne("SBERP.HumanResources.Models.Base.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("SBERP.HumanResources.Models.Base.Shift", "Shift")
+                        .WithMany()
+                        .HasForeignKey("ShiftId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Shift");
+                });
+
             modelBuilder.Entity("SBERP.HumanResources.Models.Base.Branch", b =>
                 {
                     b.Navigation("Departments");
@@ -2256,6 +10147,41 @@ namespace SBERP.HumanResources.Migrations
                     b.Navigation("Skills");
 
                     b.Navigation("Trainings");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.HolidayCalendar", b =>
+                {
+                    b.Navigation("HolidayDates");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Interview", b =>
+                {
+                    b.Navigation("PanelMembers");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Onboarding", b =>
+                {
+                    b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Payslip", b =>
+                {
+                    b.Navigation("Lines");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Review", b =>
+                {
+                    b.Navigation("Ratings");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.SalaryStructure", b =>
+                {
+                    b.Navigation("Lines");
+                });
+
+            modelBuilder.Entity("SBERP.HumanResources.Models.Base.Separation", b =>
+                {
+                    b.Navigation("Clearances");
                 });
 #pragma warning restore 612, 618
         }

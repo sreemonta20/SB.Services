@@ -10,6 +10,7 @@ namespace SBERP.Security.Models.Base
         public string? Name { get; set; }
         public bool? IsHeader { get; set; }
         public bool? IsModule { get; set; }
+        public bool IsSubModule { get; set; }
         public bool? IsComponent { get; set; }
         public string? CssClass { get; set; }
         public bool? IsRouteLink { get; set; }

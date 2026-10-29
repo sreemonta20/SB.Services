@@ -11,8 +11,6 @@ namespace SBERP.Security.Models.Base
         public string? UserName { get; set; }
         public string? Password { get; set; }
         public string? SaltKey { get; set; }
-        public string? RefreshToken { get; set; }
-        public DateTime? RefreshTokenExpiryTime { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? UpdatedBy { get; set; }

@@ -8,6 +8,8 @@ using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Models.Response;
 using SBERP.HumanResources.Persistence;
+using SBERP.Shared.Storage;
+using Microsoft.Extensions.Options;
 using System.Net;
 
 namespace SBERP.HumanResources.Service
@@ -22,10 +24,14 @@ namespace SBERP.HumanResources.Service
     {
         private readonly HumanResourcesDBContext _ctx;
         private readonly IHRLogService _log;
+        private readonly IPhotoStorage _photoStorage;
+        private readonly PhotoStorageSettings _photoSettings;
 
-        public EmployeeService(HumanResourcesDBContext ctx, IHRLogService log)
+        public EmployeeService(HumanResourcesDBContext ctx, IHRLogService log,
+                               IPhotoStorage photoStorage, IOptions<PhotoStorageSettings> photoSettings)
         {
             _ctx = ctx; _log = log;
+            _photoStorage = photoStorage; _photoSettings = photoSettings.Value;
         }
 
         // -----------------------------------------------------------------
@@ -41,7 +47,7 @@ namespace SBERP.HumanResources.Service
                 using var cmd = conn.CreateCommand();
                 cmd.CommandText = "EXEC dbo." + ConstantSupplier.SP_GET_EMPLOYEE_INITIAL_DATA;
 
-                var raw = (string?)await cmd.ExecuteScalarAsync();
+                var raw = (await cmd.ExecuteScalarAsync()) as string;
 
                 // Build static enum dropdowns in C# — no point storing in DB.
                 //var resp = new EmployeeInitialDataResponse
@@ -111,6 +117,34 @@ namespace SBERP.HumanResources.Service
         }
 
         // -----------------------------------------------------------------
+        // Lookup — active (not separated) employees for pickers in the
+        // Attendance / Leave / Payroll / Performance / Separation screens.
+        // -----------------------------------------------------------------
+        public async Task<DataResponse> GetAllEmployeesAsync()
+        {
+            try
+            {
+                var list = await (from e in _ctx.Employees!.AsNoTracking()
+                                  join d in _ctx.Departments!.AsNoTracking() on e.DepartmentId equals d.Id into dj
+                                  from d in dj.DefaultIfEmpty()
+                                  join g in _ctx.Designations!.AsNoTracking() on e.DesignationId equals g.Id into gj
+                                  from g in gj.DefaultIfEmpty()
+                                  where e.IsActive == true
+                                     && (e.EmploymentStatus == null || e.EmploymentStatus <= (int)EnumEmploymentStatus.Suspended)
+                                  orderby e.FullName
+                                  select new EmployeeListResponse
+                                  {
+                                      Id = e.Id, EmployeeCode = e.EmployeeCode, FullName = e.FullName,
+                                      OfficialEmail = e.OfficialEmail, DepartmentName = d != null ? d.Name : null,
+                                      DesignationName = g != null ? g.Name : null, DateOfJoining = e.DateOfJoining,
+                                      EmploymentStatus = e.EmploymentStatus
+                                  }).ToListAsync();
+                return Utilities.Ok(ConstantSupplier.EMPLOYEE_FETCH_SUCCESS, list);
+            }
+            catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(GetAllEmployeesAsync)); }
+        }
+
+        // -----------------------------------------------------------------
         // Paging
         // -----------------------------------------------------------------
         public async Task<PagingResult<EmployeeListResponse>?> GetAllEmployeesPagingWithSearchAsync(
@@ -133,7 +167,7 @@ namespace SBERP.HumanResources.Service
                 AddParam(cmd, "@p3", filter.PageNumber);
                 AddParam(cmd, "@p4", filter.PageSize);
 
-                var raw = (string?)await cmd.ExecuteScalarAsync();
+                var raw = (await cmd.ExecuteScalarAsync()) as string;
                 if (string.IsNullOrWhiteSpace(raw)) return null;
 
                 var jo = JObject.Parse(raw);
@@ -399,6 +433,8 @@ namespace SBERP.HumanResources.Service
                 }
                 await _ctx.SaveChangesAsync();
                 await tx.CommitAsync();
+                if (isHardDelete)
+                    _photoStorage.Delete(emp.PhotoLocation);
                 return Utilities.Ok(ConstantSupplier.EMPLOYEE_DELETE_SUCCESS, emp.Id);
             }
             catch (Exception ex)
@@ -406,6 +442,119 @@ namespace SBERP.HumanResources.Service
                 await tx.RollbackAsync();
                 return Utilities.Exception(ex, _log, nameof(DeleteEmployeeAsync));
             }
+        }
+
+        // -----------------------------------------------------------------
+        // Photo — stored as {PhotoStorage:EmployeeFolder}/{PhotoId}.jpg|png
+        // -----------------------------------------------------------------
+        public async Task<DataResponse> UploadEmployeePhotoAsync(string id, Stream content, long length, string? updatedBy)
+        {
+            if (!Guid.TryParse(id, out var g))
+                return Utilities.Warn("Invalid employee id");
+
+            var emp = await _ctx.Employees!.FirstOrDefaultAsync(e => e.Id == g);
+            if (emp == null)
+                return Utilities.Warn(ConstantSupplier.EMPLOYEE_NOT_FOUND, code: (int)HttpStatusCode.NotFound);
+
+            StoredPhoto stored;
+            try
+            {
+                stored = await _photoStorage.SaveAsync(_photoSettings.EmployeeFolder, content, length);
+            }
+            catch (PhotoValidationException ex)
+            {
+                return Utilities.Warn(ex.Message);
+            }
+
+            string? oldLocation = emp.PhotoLocation;
+            emp.PhotoId = stored.PhotoId;
+            emp.PhotoLocation = stored.Location;
+            emp.UpdatedBy = updatedBy;
+            emp.UpdatedDate = DateTime.UtcNow;
+            try
+            {
+                await _ctx.SaveChangesAsync();
+            }
+            catch
+            {
+                _photoStorage.Delete(stored.Location);   // no orphan file when the row was not updated
+                throw;
+            }
+            _photoStorage.Delete(oldLocation);
+
+            _log.LogInfo($"Employee photo {stored.PhotoId} stored for employee {g}.");
+            return Utilities.Ok(ConstantSupplier.EMPLOYEE_PHOTO_UPLOAD_SUCCESS, new { Id = g, PhotoId = stored.PhotoId });
+        }
+
+        public async Task<PhotoFile?> GetEmployeePhotoAsync(string id)
+        {
+            if (!Guid.TryParse(id, out var g)) return null;
+            var photo = await _ctx.Employees!.AsNoTracking()
+                .Where(e => e.Id == g && e.PhotoId != null)
+                .Select(e => new { e.PhotoId, e.PhotoLocation })
+                .FirstOrDefaultAsync();
+            if (photo?.PhotoLocation == null) return null;
+
+            Stream? stream = _photoStorage.OpenRead(photo.PhotoLocation);
+            if (stream == null)
+            {
+                _log.LogWarning($"Employee photo file {photo.PhotoLocation} of employee {g} is missing.");
+                return null;
+            }
+            return new PhotoFile(stream, _photoStorage.GetContentType(photo.PhotoLocation), photo.PhotoId!.Value);
+        }
+
+        public async Task<DataResponse> RemoveEmployeePhotoAsync(string id, string? updatedBy)
+        {
+            if (!Guid.TryParse(id, out var g))
+                return Utilities.Warn("Invalid employee id");
+
+            var emp = await _ctx.Employees!.FirstOrDefaultAsync(e => e.Id == g);
+            if (emp == null)
+                return Utilities.Warn(ConstantSupplier.EMPLOYEE_NOT_FOUND, code: (int)HttpStatusCode.NotFound);
+
+            string? oldLocation = emp.PhotoLocation;
+            if (emp.PhotoId != null || oldLocation != null)
+            {
+                emp.PhotoId = null;
+                emp.PhotoLocation = null;
+                emp.UpdatedBy = updatedBy;
+                emp.UpdatedDate = DateTime.UtcNow;
+                await _ctx.SaveChangesAsync();
+                _photoStorage.Delete(oldLocation);
+            }
+            return Utilities.Ok(ConstantSupplier.EMPLOYEE_PHOTO_REMOVE_SUCCESS, new { Id = g });
+        }
+
+        /// <summary>
+        /// The employee linked to the signed-in login: Employees.AppUserId = the token's user id (AppUsers.Id),
+        /// or else the employee id stored on the user profile (AppUserProfiles.EmployeeId). Null when not linked.
+        /// </summary>
+        public async Task<DataResponse> GetMyEmployeeBriefAsync(string? appUserId, string? employeeId)
+        {
+            Guid? userId = Guid.TryParse(appUserId, out var u) ? u : null;
+            Guid? empId = Guid.TryParse(employeeId, out var e) ? e : null;
+            if (userId == null && empId == null)
+                return Utilities.Ok(ConstantSupplier.EMPLOYEE_BRIEF_NOT_LINKED, null);
+
+            var brief = await (
+                from emp in _ctx.Employees!.AsNoTracking()
+                where (userId != null && emp.AppUserId == userId) || (empId != null && emp.Id == empId)
+                orderby (userId != null && emp.AppUserId == userId) ? 0 : 1
+                select new EmployeeBriefResponse
+                {
+                    Id = emp.Id,
+                    EmployeeCode = emp.EmployeeCode,
+                    FullName = emp.FullName,
+                    DesignationName = emp.Designation != null ? emp.Designation.Name : null,
+                    DepartmentName = emp.Department != null ? emp.Department.Name : null,
+                    PhotoId = emp.PhotoId,
+                    DateOfJoining = emp.DateOfJoining
+                }).FirstOrDefaultAsync();
+
+            return brief == null
+                ? Utilities.Ok(ConstantSupplier.EMPLOYEE_BRIEF_NOT_LINKED, null)
+                : Utilities.Ok(ConstantSupplier.EMPLOYEE_FETCH_SUCCESS, brief);
         }
 
         // =================================================================

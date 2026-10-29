@@ -14,8 +14,10 @@ namespace SBERP.Security.Models.Base
         public string? UserName { get; set; }
         public string? Password { get; set; }
         public string? SaltKey { get; set; }
-        public string? RefreshToken { get; set; }
-        public DateTime? RefreshTokenExpiryTime { get; set; }
+        /// <summary>Consecutive failed logins since the last success or lockout (AppSettings:MaxNumberOfFailedAttempts).</summary>
+        public int FailedLoginAttempts { get; set; }
+        /// <summary>UTC time until which login is refused (AppSettings:BlockMinutes after the last allowed failure).</summary>
+        public DateTime? LockoutEnd { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? UpdatedBy { get; set; }

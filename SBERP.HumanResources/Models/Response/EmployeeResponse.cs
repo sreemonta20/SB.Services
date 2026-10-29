@@ -18,6 +18,8 @@ namespace SBERP.HumanResources.Models.Response
         public DateTime? DateOfJoining { get; set; }
         public int? EmploymentStatus { get; set; }
         public string? EmploymentStatusName { get; set; }
+        /// <summary>Null when no photo was uploaded (show the default avatar).</summary>
+        public Guid? PhotoId { get; set; }
         public bool? IsActive { get; set; }
     }
 
@@ -71,6 +73,8 @@ namespace SBERP.HumanResources.Models.Response
         public string? SalaryCurrency { get; set; }
 
         public string? PhotoUrl { get; set; }
+        /// <summary>Null when no photo was uploaded (show the default avatar).</summary>
+        public Guid? PhotoId { get; set; }
         public string? SignatureUrl { get; set; }
 
         public bool? IsActive { get; set; }
@@ -225,5 +229,20 @@ namespace SBERP.HumanResources.Models.Response
     public class BranchLookupItem : LookupItem
     {
         public string? CompanyId { get; set; }
+    }
+
+    /// <summary>
+    /// Small card of the employee linked to the signed-in user: the header / sidebar show its photo and
+    /// designation instead of the user profile ones.
+    /// </summary>
+    public class EmployeeBriefResponse
+    {
+        public Guid Id { get; set; }
+        public string? EmployeeCode { get; set; }
+        public string? FullName { get; set; }
+        public string? DesignationName { get; set; }
+        public string? DepartmentName { get; set; }
+        public Guid? PhotoId { get; set; }
+        public DateTime? DateOfJoining { get; set; }
     }
 }

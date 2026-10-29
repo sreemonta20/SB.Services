@@ -45,6 +45,12 @@ namespace SBERP.HumanResources.Models.Request
         public int? CasualLeaveDays { get; set; }
         public string? AutoProcessTime { get; set; }
         public bool? AutoProcessEnabled { get; set; }
+        public string? TimeZoneId { get; set; }
+        public string? AttendanceDayCutoffTime { get; set; }
+        public int? MinMinutesBetweenInOut { get; set; }
+        public int? DuplicatePunchMinutes { get; set; }
+        public bool? MobileAttendanceEnabled { get; set; }
+        public bool? RequireOfficeNetwork { get; set; }
         public string? CreateUpdateBy { get; set; }
         public bool? IsActive { get; set; }
         public bool? IsHardDelete { get; set; }

@@ -10,6 +10,7 @@ using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Models.Response;
 using SBERP.HumanResources.Service;
 using System.Net;
+using System.Security.Claims;
 
 namespace SBERP.HumanResources.Controllers.v1
 {
@@ -30,6 +31,15 @@ namespace SBERP.HumanResources.Controllers.v1
         {
             _employeeService = employeeService;
             _log = log;
+        }
+
+        // GET api/v1/Employee/getAllEmployees — lightweight picker list
+        [HttpGet]
+        [Route(ConstantSupplier.GET_ALL_EMPLOYEES_ROUTE)]
+        public async Task<object> GetAllEmployeesAsync()
+        {
+            try { return await _employeeService.GetAllEmployeesAsync(); }
+            catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(GetAllEmployeesAsync)); }
         }
 
         // GET api/v1/Employee/getEmployeeInitialData
@@ -136,6 +146,61 @@ namespace SBERP.HumanResources.Controllers.v1
                 return await _employeeService.DeleteEmployeeAsync(id);
             }
             catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(DeleteEmployeeAsync)); }
+        }
+
+        // POST api/v1/Employee/uploadEmployeePhoto  (multipart/form-data: Id, File, CreateUpdateBy)
+        [HttpPost]
+        [Route(ConstantSupplier.UPLOAD_EMPLOYEE_PHOTO_ROUTE)]
+        [Consumes("multipart/form-data")]
+        [RequestSizeLimit(ConstantSupplier.EMPLOYEE_PHOTO_REQUEST_LIMIT)]
+        [RequestFormLimits(MultipartBodyLengthLimit = ConstantSupplier.EMPLOYEE_PHOTO_REQUEST_LIMIT)]
+        public async Task<object> UploadEmployeePhotoAsync([FromForm] EmployeePhotoRequest request)
+        {
+            _log.LogInfo(string.Format(ConstantSupplier.LOG_API_REQ, nameof(UploadEmployeePhotoAsync), request?.Id));
+            if (request?.File == null || request.File.Length == 0)
+                return Utilities.Warn(ConstantSupplier.EMPLOYEE_PHOTO_FILE_REQUIRED);
+            try
+            {
+                await using var content = request.File.OpenReadStream();
+                return await _employeeService.UploadEmployeePhotoAsync(request.Id!, content, request.File.Length, request.CreateUpdateBy);
+            }
+            catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(UploadEmployeePhotoAsync)); }
+        }
+
+        // GET api/v1/Employee/getEmployeePhoto?id={id} — image/jpeg|png, or 204 when there is no photo
+        [HttpGet]
+        [Route(ConstantSupplier.GET_EMPLOYEE_PHOTO_ROUTE)]
+        public async Task<IActionResult> GetEmployeePhotoAsync([FromQuery] string id)
+        {
+            var photo = await _employeeService.GetEmployeePhotoAsync(id);
+            if (photo == null)
+                return NoContent();
+            Response.Headers.CacheControl = "private, no-cache";
+            return File(photo.Content, photo.ContentType, lastModified: null,
+                entityTag: new Microsoft.Net.Http.Headers.EntityTagHeaderValue($"\"{photo.PhotoId:N}\""));
+        }
+
+        // DELETE api/v1/Employee/removeEmployeePhoto?id={id}&updatedBy={profileId}
+        [HttpDelete]
+        [Route(ConstantSupplier.REMOVE_EMPLOYEE_PHOTO_ROUTE)]
+        public async Task<object> RemoveEmployeePhotoAsync([FromQuery] string id, [FromQuery] string? updatedBy)
+        {
+            try { return await _employeeService.RemoveEmployeePhotoAsync(id, updatedBy); }
+            catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(RemoveEmployeePhotoAsync)); }
+        }
+
+        // GET api/v1/Employee/getMyEmployeeBrief?employeeId={AppUserProfiles.EmployeeId}
+        // Employee linked to the signed-in user (by the token's user id, else the given employee id); result null when none.
+        [HttpGet]
+        [Route(ConstantSupplier.GET_MY_EMPLOYEE_BRIEF_ROUTE)]
+        public async Task<object> GetMyEmployeeBriefAsync([FromQuery] string? employeeId)
+        {
+            try
+            {
+                string? appUserId = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                return await _employeeService.GetMyEmployeeBriefAsync(appUserId, employeeId);
+            }
+            catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(GetMyEmployeeBriefAsync)); }
         }
     }
 }

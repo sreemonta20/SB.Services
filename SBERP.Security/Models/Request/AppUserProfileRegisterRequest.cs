@@ -21,6 +21,8 @@ namespace SBERP.Security.Models.Request
         public string? Address { get; set; }
         public string? Email { get; set; }
         public string? AppUserRoleId { get; set; }
+        /// <summary>Role name / designation / position shown beside the name (optional, max 100).</summary>
+        public string? JobTitle { get; set; }
         public string? CreateUpdateBy { get; set; }
         public bool? IsActive { get; set; }
 

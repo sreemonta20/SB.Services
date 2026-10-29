@@ -53,7 +53,7 @@ namespace SBERP.Security.Controllers.v1
         public async Task<object> CreateUpdateAppUserAsync(AppUserRequest request)
         {
             _securityLogService.LogInfo(ConstantSupplier.SAVEUP_APP_USER_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVEUP_APP_USER_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVEUP_APP_USER_REQ_MSG, LogSafe.Serialize(request, Formatting.Indented)));
             DataResponse response;
             try
             {
@@ -61,7 +61,7 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUP_APP_USER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUP_APP_USER_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
                 return new DataResponse
                 {
                     Message = Ex.Message,
@@ -71,7 +71,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVEUP_APP_USER_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVEUP_APP_USER_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
         #endregion
@@ -92,7 +92,7 @@ namespace SBERP.Security.Controllers.v1
         {
             _securityLogService.LogInfo(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_STARTED_INFO_MSG);
             DataResponse response;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(param, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_REQ_MSG, LogSafe.Serialize(param, Formatting.Indented)));
             try
             {
                 #region ADO.NET Codeblock
@@ -107,8 +107,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -118,7 +118,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALL_USER_PROFILE_PAGING_SEARCH_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -134,7 +134,7 @@ namespace SBERP.Security.Controllers.v1
         public async Task<object> GetAppUserProfileByIdAsync([FromQuery] string id)
         {
             _securityLogService.LogInfo(ConstantSupplier.GET_USER_PROFILE_BY_ID_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_REQ_MSG, LogSafe.Serialize(id, Formatting.Indented)));
             DataResponse response;
             try
             {
@@ -148,8 +148,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Message = Ex.Message,
@@ -159,7 +159,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -175,7 +175,7 @@ namespace SBERP.Security.Controllers.v1
         public async Task<object> CreateUpdateAppUserProfileAsync(AppUserProfileRegisterRequest request)
         {
             _securityLogService.LogInfo(ConstantSupplier.SAVEUP_APP_USER_PROFILE_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_REQ_MSG, LogSafe.Serialize(request, Formatting.Indented)));
             DataResponse response;
             try
             {
@@ -183,8 +183,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Message = Ex.Message,
@@ -194,7 +194,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -210,7 +210,7 @@ namespace SBERP.Security.Controllers.v1
         public async Task<object> DeleteAppUserProfileAsync([FromQuery] string id)
         {
             _securityLogService.LogInfo(ConstantSupplier.DEL_APP_USER_PROFILE_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.DEL_APP_USER_PROFILE_REQ_MSG, JsonConvert.SerializeObject(id, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.DEL_APP_USER_PROFILE_REQ_MSG, LogSafe.Serialize(id, Formatting.Indented)));
             DataResponse response;
             try
             {
@@ -218,7 +218,7 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.DEL_APP_USER_PROFILE_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.DEL_APP_USER_PROFILE_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
                 return new DataResponse
                 {
                     Message = Ex.Message,
@@ -228,8 +228,71 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.DEL_APP_USER_PROFILE_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.DEL_APP_USER_PROFILE_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
+        }
+        #endregion
+
+        #region AppUserProfile photo http methods
+        // POST api/v1/User/uploadAppUserProfilePhoto  (multipart/form-data: Id, File, CreateUpdateBy)
+        /// <summary>
+        /// Uploads (or replaces) the photo of a user profile. Only JPG / PNG up to PhotoStorage:MaxFileSizeKB are accepted;
+        /// the file is stored as {ProfilePhotoId}.jpg|png under PhotoStorage:RootPath/UserProfileFolder.
+        /// </summary>
+        [HttpPost]
+        [Route(ConstantSupplier.POST_APP_USER_PROFILE_PHOTO_ROUTE_NAME)]
+        [Consumes("multipart/form-data")]
+        [RequestSizeLimit(ConstantSupplier.APP_USER_PROFILE_PHOTO_REQUEST_LIMIT)]
+        [RequestFormLimits(MultipartBodyLengthLimit = ConstantSupplier.APP_USER_PROFILE_PHOTO_REQUEST_LIMIT)]
+        public async Task<object> UploadAppUserProfilePhotoAsync([FromForm] AppUserProfilePhotoRequest request)
+        {
+            _securityLogService.LogInfo($"UploadAppUserProfilePhoto api method started for profile {request?.Id}.");
+            if (request?.File == null || request.File.Length == 0)
+                return new DataResponse { Success = false, Message = ConstantSupplier.APP_USER_PROFILE_PHOTO_FILE_REQUIRED, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
+            try
+            {
+                await using Stream content = request.File.OpenReadStream();
+                return await _userService.UploadAppUserProfilePhotoAsync(request.Id!, content, request.File.Length, request.CreateUpdateBy);
+            }
+            catch (Exception Ex)
+            {
+                _securityLogService.LogError($"UploadAppUserProfilePhoto Exception: {Ex.Message}");
+                return new DataResponse { Success = false, Message = Ex.Message, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.InternalServerError, Result = null };
+            }
+        }
+
+        // GET api/v1/User/getAppUserProfilePhoto?id={profileId}
+        /// <summary>
+        /// Streams the profile photo (image/jpeg or image/png). 204 No Content when the profile has no photo, so the
+        /// client shows the default avatar. The ETag is the ProfilePhotoId, which changes on every upload.
+        /// </summary>
+        [HttpGet]
+        [Route(ConstantSupplier.GET_APP_USER_PROFILE_PHOTO_ROUTE_NAME)]
+        public async Task<IActionResult> GetAppUserProfilePhotoAsync([FromQuery] string id)
+        {
+            var photo = await _userService.GetAppUserProfilePhotoAsync(id);
+            if (photo == null)
+                return NoContent();
+            Response.Headers.CacheControl = "private, no-cache";
+            return File(photo.Content, photo.ContentType, lastModified: null,
+                entityTag: new Microsoft.Net.Http.Headers.EntityTagHeaderValue($"\"{photo.PhotoId:N}\""));
+        }
+
+        // DELETE api/v1/User/removeAppUserProfilePhoto?id={profileId}&updatedBy={profileId}
+        /// <summary>Removes the profile photo; the default avatar is shown again.</summary>
+        [HttpDelete]
+        [Route(ConstantSupplier.DEL_APP_USER_PROFILE_PHOTO_ROUTE_NAME)]
+        public async Task<object> RemoveAppUserProfilePhotoAsync([FromQuery] string id, [FromQuery] string? updatedBy)
+        {
+            try
+            {
+                return await _userService.RemoveAppUserProfilePhotoAsync(id, updatedBy);
+            }
+            catch (Exception Ex)
+            {
+                _securityLogService.LogError($"RemoveAppUserProfilePhoto Exception: {Ex.Message}");
+                return new DataResponse { Success = false, Message = Ex.Message, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.InternalServerError, Result = null };
+            }
         }
         #endregion
     }

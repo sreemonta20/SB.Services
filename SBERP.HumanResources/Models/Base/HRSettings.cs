@@ -44,6 +44,19 @@ namespace SBERP.HumanResources.Models.Base
         public string? AutoProcessTime { get; set; }
         public bool? AutoProcessEnabled { get; set; }
 
+        // ---- Biometric attendance (mobile app / door terminal) ----
+        /// <summary>Office time zone for punches, IANA or Windows id. "Asia/Dubai".</summary>
+        public string? TimeZoneId { get; set; }
+        /// <summary>"04:00" — a punch before this time belongs to the previous work day (night shifts).</summary>
+        public string? AttendanceDayCutoffTime { get; set; }
+        /// <summary>The latest punch only counts as check-out when it is at least this many minutes after the earliest.</summary>
+        public int? MinMinutesBetweenInOut { get; set; }
+        /// <summary>A second punch within this many minutes of an accepted one is recorded as a duplicate.</summary>
+        public int? DuplicatePunchMinutes { get; set; }
+        public bool? MobileAttendanceEnabled { get; set; }
+        /// <summary>Mobile punches must come from inside an active AttendanceZone.</summary>
+        public bool? RequireOfficeNetwork { get; set; }
+
         public string? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? UpdatedBy { get; set; }

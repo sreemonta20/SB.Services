@@ -1,6 +1,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Models.Response;
 using SBERP.HumanResources.Persistence;
@@ -25,6 +26,29 @@ namespace SBERP.HumanResources.Helper
 
         public static bool IsNullOrEmptyOrWhiteSpace(string? value)
             => string.IsNullOrWhiteSpace(value ?? string.Empty);
+
+        /// <summary>
+        /// SP JSON passed through as JObject/JArray keeps the SQL column casing
+        /// (PascalCase); typed DTOs are camelCased by the serializer. Normalise raw
+        /// JSON so every endpoint returns the same camelCase contract to the SPA.
+        /// </summary>
+        public static object? CamelCaseJson(object? value)
+        {
+            if (value is not JToken token) return value;
+            return Camel(token);
+
+            static JToken Camel(JToken t) => t switch
+            {
+                JObject o => new JObject(o.Properties().Select(p =>
+                    new JProperty(p.Name.Length > 0 ? char.ToLowerInvariant(p.Name[0]) + p.Name[1..] : p.Name, Camel(p.Value)))),
+                JArray a => new JArray(a.Select(Camel)),
+                _ => t.DeepClone()
+            };
+        }
+
+        /// <summary>Parse an optional id coming from the SPA ("" / null / bad text → null).</summary>
+        public static Guid? ToGuid(string? value)
+            => Guid.TryParse(value, out var g) && g != Guid.Empty ? g : null;
 
         /// <summary>
         /// Detect SQL Server unique-key violation (2601 / 2627). Useful when
@@ -56,7 +80,7 @@ namespace SBERP.HumanResources.Helper
                 Message = message,
                 MessageType = Enum.EnumResponseType.Error,
                 ResponseCode = code,
-                Result = result
+                Result = CamelCaseJson(result)
             };
 
         public static DataResponse Ok(string message, object? result = null,
@@ -67,7 +91,7 @@ namespace SBERP.HumanResources.Helper
                 Message = message,
                 MessageType = Enum.EnumResponseType.Success,
                 ResponseCode = code,
-                Result = result
+                Result = CamelCaseJson(result)
             };
 
         public static DataResponse Warn(string message, object? result = null,
@@ -78,7 +102,7 @@ namespace SBERP.HumanResources.Helper
                 Message = message,
                 MessageType = Enum.EnumResponseType.Warning,
                 ResponseCode = code,
-                Result = result
+                Result = CamelCaseJson(result)
             };
 
         public static DataResponse Exception(Exception ex, IHRLogService log,

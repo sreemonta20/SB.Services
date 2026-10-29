@@ -17,7 +17,7 @@ namespace SBERP.Security.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.5")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -39,20 +39,21 @@ namespace SBERP.Security.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("FailedLoginAttempts")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit")
                         .HasColumnName("IsActive");
 
+                    b.Property<DateTime?>("LockoutEnd")
+                        .HasColumnType("datetime");
+
                     b.Property<string>("Password")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("RefreshToken")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime?>("RefreshTokenExpiryTime")
-                        .HasColumnType("datetime");
 
                     b.Property<string>("SaltKey")
                         .HasMaxLength(255)
@@ -96,6 +97,7 @@ namespace SBERP.Security.Migrations
                             Id = new Guid("5fd67aaf-183e-48f8-bb53-15b7628a3e0a"),
                             AppUserProfileId = new Guid("c047d662-9f0e-4358-b323-15ec3081312c"),
                             CreatedDate = new DateTime(2024, 1, 1, 10, 10, 0, 0, DateTimeKind.Utc),
+                            FailedLoginAttempts = 0,
                             IsActive = true,
                             Password = "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa",
                             SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
@@ -107,6 +109,7 @@ namespace SBERP.Security.Migrations
                             Id = new Guid("a9e00f47-89ec-46a3-a5e8-31ebd52ac121"),
                             AppUserProfileId = new Guid("efedc118-3459-4c2e-9158-ad69196a59e0"),
                             CreatedDate = new DateTime(2024, 1, 1, 10, 10, 0, 0, DateTimeKind.Utc),
+                            FailedLoginAttempts = 0,
                             IsActive = true,
                             Password = "$2b$10$dqPNaHnCGjUcvxXHTRXmDeNwNRQ0YI8kT9376noZw8i8tDj8KKoEa",
                             SaltKey = "$2b$10$dqPNaHnCGjUcvxXHTRXmDe",
@@ -151,13 +154,6 @@ namespace SBERP.Security.Migrations
                     b.Property<string>("PerformedUser")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("PerformedUser");
-
-                    b.Property<string>("RefreshToken")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime?>("RefreshTokenExpiryTime")
-                        .HasColumnType("datetime");
 
                     b.Property<string>("SaltKey")
                         .HasMaxLength(255)
@@ -224,6 +220,10 @@ namespace SBERP.Security.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("IsRouteLink");
 
+                    b.Property<bool>("IsSubModule")
+                        .HasColumnType("bit")
+                        .HasColumnName("IsSubModule");
+
                     b.Property<string>("Name")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -281,6 +281,7 @@ namespace SBERP.Security.Migrations
                             IsHeader = true,
                             IsModule = false,
                             IsRouteLink = false,
+                            IsSubModule = false,
                             Name = "Home",
                             Remark = "Header",
                             RouteLink = "",
@@ -300,11 +301,12 @@ namespace SBERP.Security.Migrations
                             IsHeader = false,
                             IsModule = true,
                             IsRouteLink = true,
+                            IsSubModule = false,
                             Name = "Dashboard",
                             ParentId = new Guid("db0085b7-695d-4751-a190-6c52e3bb44f1"),
                             Remark = "Navigation Item",
                             RouteLink = "/business/home",
-                            RouteLinkClass = "nav-link active",
+                            RouteLinkClass = "nav-link",
                             SerialNo = 2,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
                         },
@@ -320,6 +322,7 @@ namespace SBERP.Security.Migrations
                             IsHeader = true,
                             IsModule = false,
                             IsRouteLink = false,
+                            IsSubModule = false,
                             Name = "Business",
                             Remark = "Header",
                             RouteLink = "",
@@ -340,11 +343,12 @@ namespace SBERP.Security.Migrations
                             IsHeader = false,
                             IsModule = true,
                             IsRouteLink = false,
+                            IsSubModule = false,
                             Name = "Security",
                             ParentId = new Guid("f0f0183b-7f60-4eb4-97d8-d2c15a4ae62c"),
                             Remark = "Navigation Item",
                             RouteLink = "",
-                            RouteLinkClass = "nav-link active",
+                            RouteLinkClass = "nav-link",
                             SerialNo = 4,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
                         },
@@ -360,6 +364,7 @@ namespace SBERP.Security.Migrations
                             IsHeader = false,
                             IsModule = false,
                             IsRouteLink = true,
+                            IsSubModule = false,
                             Name = "User Role",
                             ParentId = new Guid("c15215c8-32ca-4182-9510-b57419708a80"),
                             Remark = "Navigation Item",
@@ -380,6 +385,7 @@ namespace SBERP.Security.Migrations
                             IsHeader = false,
                             IsModule = false,
                             IsRouteLink = true,
+                            IsSubModule = false,
                             Name = "User Menu",
                             ParentId = new Guid("c15215c8-32ca-4182-9510-b57419708a80"),
                             Remark = "Navigation Item",
@@ -400,6 +406,7 @@ namespace SBERP.Security.Migrations
                             IsHeader = false,
                             IsModule = false,
                             IsRouteLink = true,
+                            IsSubModule = false,
                             Name = "User Role Menu",
                             ParentId = new Guid("c15215c8-32ca-4182-9510-b57419708a80"),
                             Remark = "Navigation Item",
@@ -420,6 +427,7 @@ namespace SBERP.Security.Migrations
                             IsHeader = false,
                             IsModule = false,
                             IsRouteLink = true,
+                            IsSubModule = false,
                             Name = "User Profile",
                             ParentId = new Guid("c15215c8-32ca-4182-9510-b57419708a80"),
                             Remark = "Navigation Item",
@@ -440,6 +448,7 @@ namespace SBERP.Security.Migrations
                             IsHeader = true,
                             IsModule = false,
                             IsRouteLink = false,
+                            IsSubModule = false,
                             Name = "Settings",
                             Remark = "Header",
                             RouteLink = "",
@@ -459,11 +468,12 @@ namespace SBERP.Security.Migrations
                             IsHeader = false,
                             IsModule = true,
                             IsRouteLink = true,
+                            IsSubModule = false,
                             Name = "App Settings",
                             ParentId = new Guid("52d7e13b-ef24-4f17-937b-d6e8005a6658"),
                             Remark = "Navigation Item",
                             RouteLink = "/business/appsettings",
-                            RouteLinkClass = "nav-link active",
+                            RouteLinkClass = "nav-link",
                             SerialNo = 10,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
                         },
@@ -480,11 +490,12 @@ namespace SBERP.Security.Migrations
                             IsHeader = false,
                             IsModule = true,
                             IsRouteLink = false,
+                            IsSubModule = false,
                             Name = "Human Resources",
                             ParentId = new Guid("f0f0183b-7f60-4eb4-97d8-d2c15a4ae62c"),
                             Remark = "Navigation Item",
                             RouteLink = "",
-                            RouteLinkClass = "nav-link active",
+                            RouteLinkClass = "nav-link",
                             SerialNo = 11,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
                         },
@@ -500,12 +511,13 @@ namespace SBERP.Security.Migrations
                             IsHeader = false,
                             IsModule = false,
                             IsRouteLink = true,
+                            IsSubModule = false,
                             Name = "Department",
-                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
                             Remark = "Navigation Item",
                             RouteLink = "/business/humanresources/department",
                             RouteLinkClass = "nav-link",
-                            SerialNo = 12,
+                            SerialNo = 15,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -520,12 +532,13 @@ namespace SBERP.Security.Migrations
                             IsHeader = false,
                             IsModule = false,
                             IsRouteLink = true,
+                            IsSubModule = false,
                             Name = "Designation",
-                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
                             Remark = "Navigation Item",
                             RouteLink = "/business/humanresources/designation",
                             RouteLinkClass = "nav-link",
-                            SerialNo = 13,
+                            SerialNo = 16,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -540,12 +553,13 @@ namespace SBERP.Security.Migrations
                             IsHeader = false,
                             IsModule = false,
                             IsRouteLink = true,
+                            IsSubModule = false,
                             Name = "Employee",
-                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000100"),
                             Remark = "Navigation Item",
                             RouteLink = "/business/humanresources/employee",
                             RouteLinkClass = "nav-link",
-                            SerialNo = 14,
+                            SerialNo = 22,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -560,12 +574,13 @@ namespace SBERP.Security.Migrations
                             IsHeader = false,
                             IsModule = false,
                             IsRouteLink = true,
+                            IsSubModule = false,
                             Name = "HR Settings",
-                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000100"),
                             Remark = "Navigation Item",
                             RouteLink = "/business/humanresources/settings",
                             RouteLinkClass = "nav-link",
-                            SerialNo = 15,
+                            SerialNo = 23,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -580,12 +595,13 @@ namespace SBERP.Security.Migrations
                             IsHeader = false,
                             IsModule = false,
                             IsRouteLink = true,
+                            IsSubModule = false,
                             Name = "Company",
-                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
                             Remark = "Navigation Item",
                             RouteLink = "/business/humanresources/company",
                             RouteLinkClass = "nav-link",
-                            SerialNo = 16,
+                            SerialNo = 13,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -600,13 +616,779 @@ namespace SBERP.Security.Migrations
                             IsHeader = false,
                             IsModule = false,
                             IsRouteLink = true,
+                            IsSubModule = false,
                             Name = "Branch",
-                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
                             Remark = "Navigation Item",
                             RouteLink = "/business/humanresources/branch",
                             RouteLinkClass = "nav-link",
-                            SerialNo = 17,
+                            SerialNo = 14,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000001"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            DropdownIcon = "fas fa-angle-left right",
+                            Icon = "fas fa-building nav-icon",
+                            IsActive = true,
+                            IsComponent = false,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = false,
+                            IsSubModule = true,
+                            Name = "Organization Setup",
+                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            Remark = "Navigation Item",
+                            RouteLink = "",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 12,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000002"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-chair nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Position",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/orgsetup/position",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 17,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000003"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-coins nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Cost Center",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/orgsetup/cost-center",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 18,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000004"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-layer-group nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Job Grade",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/orgsetup/job-grade",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 19,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000005"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-calendar-alt nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Holiday Calendar",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/orgsetup/holiday-calendar",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 20,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000006"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            DropdownIcon = "fas fa-angle-left right",
+                            Icon = "fas fa-user-plus nav-icon",
+                            IsActive = true,
+                            IsComponent = false,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = false,
+                            IsSubModule = true,
+                            Name = "Recruitment",
+                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            Remark = "Navigation Item",
+                            RouteLink = "",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 24,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000007"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-file-signature nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Requisition",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000006"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/recruitment/requisition",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 25,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000008"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-bullhorn nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Job Posting",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000006"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/recruitment/job-posting",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 26,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000009"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-stream nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Applicant Pipeline",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000006"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/recruitment/pipeline",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 27,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000010"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            DropdownIcon = "fas fa-angle-left right",
+                            Icon = "fas fa-handshake nav-icon",
+                            IsActive = true,
+                            IsComponent = false,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = false,
+                            IsSubModule = true,
+                            Name = "Onboarding",
+                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            Remark = "Navigation Item",
+                            RouteLink = "",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 28,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000011"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-clipboard-check nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Onboarding",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000010"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/onboarding/list",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 29,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000012"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            DropdownIcon = "fas fa-angle-left right",
+                            Icon = "fas fa-clock nav-icon",
+                            IsActive = true,
+                            IsComponent = false,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = false,
+                            IsSubModule = true,
+                            Name = "Time & Attendance",
+                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            Remark = "Navigation Item",
+                            RouteLink = "",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 30,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000013"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-business-time nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Shift",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/attendance/shift",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 31,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000014"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-hourglass-half nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Overtime",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/attendance/overtime",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 32,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000015"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-calendar-check nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Attendance Summary",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/attendance/summary",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 33,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000016"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            DropdownIcon = "fas fa-angle-left right",
+                            Icon = "fas fa-plane-departure nav-icon",
+                            IsActive = true,
+                            IsComponent = false,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = false,
+                            IsSubModule = true,
+                            Name = "Leave",
+                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            Remark = "Navigation Item",
+                            RouteLink = "",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 34,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000017"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-paper-plane nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Leave Application",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000016"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/leave/applications",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 35,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000018"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-tags nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Leave Type",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000016"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/leave/types",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 36,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000019"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-gavel nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Leave Policy",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000016"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/leave/policies",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 37,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000020"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            DropdownIcon = "fas fa-angle-left right",
+                            Icon = "fas fa-money-check-alt nav-icon",
+                            IsActive = true,
+                            IsComponent = false,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = false,
+                            IsSubModule = true,
+                            Name = "Payroll",
+                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            Remark = "Navigation Item",
+                            RouteLink = "",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 38,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000021"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-play-circle nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Payroll Run",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000020"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/payroll/runs",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 39,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000022"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-sitemap nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Salary Structure",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000020"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/payroll/salary-structures",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 40,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000023"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-puzzle-piece nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Pay Component",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000020"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/payroll/components",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 41,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000024"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-hand-holding-usd nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Loan / Advance",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000020"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/payroll/loans",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 42,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000025"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            DropdownIcon = "fas fa-angle-left right",
+                            Icon = "fas fa-chart-line nav-icon",
+                            IsActive = true,
+                            IsComponent = false,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = false,
+                            IsSubModule = true,
+                            Name = "Performance",
+                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            Remark = "Navigation Item",
+                            RouteLink = "",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 43,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000026"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-sync-alt nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Appraisal Cycle",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000025"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/performance/cycles",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 44,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000027"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-bullseye nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Goal",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000025"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/performance/goals",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 45,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000028"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-star-half-alt nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Review",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000025"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/performance/reviews",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 46,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000029"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-brain nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Competency",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000025"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/performance/competencies",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 47,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000030"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            DropdownIcon = "fas fa-angle-left right",
+                            Icon = "fas fa-sign-out-alt nav-icon",
+                            IsActive = true,
+                            IsComponent = false,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = false,
+                            IsSubModule = true,
+                            Name = "Separation",
+                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            Remark = "Navigation Item",
+                            RouteLink = "",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 48,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000031"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-door-open nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Separation",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000030"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/separation",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 49,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000100"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            DropdownIcon = "fas fa-angle-left right",
+                            Icon = "fas fa-id-card nav-icon",
+                            IsActive = true,
+                            IsComponent = false,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = false,
+                            IsSubModule = true,
+                            Name = "Core HR",
+                            ParentId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            Remark = "Navigation Item",
+                            RouteLink = "",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 21,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000200"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-fingerprint nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Biometric Registration",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/attendance/biometric-registrations",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 50,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000201"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-list-ol nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Attendance Punch Log",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/attendance/punches",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 51,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000202"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-tablet-alt nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Attendance Device",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/attendance/devices",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 52,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d0000-0000-4000-8000-000000000203"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            CssClass = "nav-item",
+                            Icon = "fas fa-wifi nav-icon",
+                            IsActive = true,
+                            IsComponent = true,
+                            IsHeader = false,
+                            IsModule = false,
+                            IsRouteLink = true,
+                            IsSubModule = false,
+                            Name = "Office Zone",
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
+                            Remark = "Navigation Item",
+                            RouteLink = "/business/attendance/zones",
+                            RouteLinkClass = "nav-link",
+                            SerialNo = 53,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -663,6 +1445,10 @@ namespace SBERP.Security.Migrations
                     b.Property<bool?>("IsRouteLink")
                         .HasColumnType("bit")
                         .HasColumnName("IsRouteLink");
+
+                    b.Property<bool?>("IsSubModule")
+                        .HasColumnType("bit")
+                        .HasColumnName("IsSubModule");
 
                     b.Property<string>("Name")
                         .HasMaxLength(100)
@@ -730,6 +1516,9 @@ namespace SBERP.Security.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("FullName")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -737,6 +1526,18 @@ namespace SBERP.Security.Migrations
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit")
                         .HasColumnName("IsActive");
+
+                    b.Property<string>("JobTitle")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid?>("ProfilePhotoId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ProfilePhotoId");
+
+                    b.Property<string>("ProfilePhotoLocation")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)")
@@ -748,6 +1549,11 @@ namespace SBERP.Security.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserRoleId");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique()
+                        .HasDatabaseName("UX_AppUserProfiles_EmployeeId")
+                        .HasFilter("[EmployeeId] IS NOT NULL");
 
                     b.ToTable("AppUserProfiles", t =>
                         {
@@ -770,6 +1576,7 @@ namespace SBERP.Security.Migrations
                             Email = "sbhowmikcse08@gmail.com",
                             FullName = "Sreemonta Bhowmik",
                             IsActive = true,
+                            JobTitle = "Chief Executive Officer",
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 5, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -782,6 +1589,7 @@ namespace SBERP.Security.Migrations
                             Email = "rohine2008@gmail.com",
                             FullName = "Anannya Rohine",
                             IsActive = true,
+                            JobTitle = "Software Engineer",
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 5, 0, 0, DateTimeKind.Utc)
                         });
                 });
@@ -828,9 +1636,21 @@ namespace SBERP.Security.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("IsActive");
 
+                    b.Property<string>("JobTitle")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("PerformedUser")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("PerformedUser");
+
+                    b.Property<Guid?>("ProfilePhotoId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ProfilePhotoId");
+
+                    b.Property<string>("ProfilePhotoLocation")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)")
@@ -842,6 +1662,72 @@ namespace SBERP.Security.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppUserProfilesLog");
+                });
+
+            modelBuilder.Entity("SBERP.Security.Models.Base.AppUserRefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedByIp")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<Guid>("FamilyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ReplacedByTokenHash")
+                        .HasMaxLength(64)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("RevokedByIp")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime?>("RevokedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("RevokedReason")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("SessionExpiresAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FamilyId")
+                        .HasDatabaseName("IX_AppUserRefreshTokens_FamilyId");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique()
+                        .HasDatabaseName("UX_AppUserRefreshTokens_TokenHash");
+
+                    b.HasIndex("AppUserId", "RevokedDate")
+                        .HasDatabaseName("IX_AppUserRefreshTokens_AppUserId_RevokedDate");
+
+                    b.ToTable("AppUserRefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("SBERP.Security.Models.Base.AppUserRole", b =>
@@ -1026,6 +1912,160 @@ namespace SBERP.Security.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppUserRoleMenusLog");
+                });
+
+            modelBuilder.Entity("SBERP.Security.Models.Base.EmailOutbox", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Attempts")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Category")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastError")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime?>("ProcessedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("ToAddress")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("ToName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcessedDate", "CreatedDate")
+                        .HasDatabaseName("IX_EmailOutbox_Unprocessed")
+                        .HasFilter("[ProcessedDate] IS NULL");
+
+                    b.ToTable("EmailOutbox", (string)null);
+                });
+
+            modelBuilder.Entity("SBERP.Security.Models.Base.LoginDeactivation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AppUserProfileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("DeactivateOn")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("EmployeeCode")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastWorkingDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Outcome")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateTime?>("ProcessedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("SeparationCode")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<Guid>("SeparationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeactivateOn")
+                        .HasDatabaseName("IX_LoginDeactivations_Due")
+                        .HasFilter("[ProcessedDate] IS NULL");
+
+                    b.HasIndex("SeparationId")
+                        .IsUnique()
+                        .HasDatabaseName("UX_LoginDeactivations_Separation");
+
+                    b.ToTable("LoginDeactivations", (string)null);
+                });
+
+            modelBuilder.Entity("SBERP.Security.Models.Base.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime?>("ReadDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<Guid>("RecipientProfileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RouteLink")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Type")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipientProfileId", "IsRead", "CreatedDate")
+                        .HasDatabaseName("IX_Notifications_Recipient_Unread");
+
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("SSBERP.Security.Models.Base.AppUserRoleMenu", b =>
@@ -1398,6 +2438,594 @@ namespace SBERP.Security.Migrations
                             IsUpdate = true,
                             IsView = true,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 20, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000001"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = false,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000002"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000002"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000003"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000003"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000004"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000004"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000005"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000005"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000006"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000006"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = false,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000007"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000007"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000008"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000008"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000009"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000009"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000010"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000010"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = false,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000011"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000011"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000012"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = false,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000013"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000013"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000014"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000014"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000015"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000015"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000016"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000016"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = false,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000017"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000016"),
+                            AppUserRoleId = new Guid("10a9e9e7-cb24-4816-9b94-9db275a40edd"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = false,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000018"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000017"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000019"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000017"),
+                            AppUserRoleId = new Guid("10a9e9e7-cb24-4816-9b94-9db275a40edd"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000020"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000018"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000021"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000019"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000022"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000020"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = false,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000023"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000021"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000024"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000022"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000025"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000023"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000026"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000024"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000027"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000025"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = false,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000028"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000025"),
+                            AppUserRoleId = new Guid("10a9e9e7-cb24-4816-9b94-9db275a40edd"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = false,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000029"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000026"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000030"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000027"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000031"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000027"),
+                            AppUserRoleId = new Guid("10a9e9e7-cb24-4816-9b94-9db275a40edd"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000032"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000028"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000033"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000028"),
+                            AppUserRoleId = new Guid("10a9e9e7-cb24-4816-9b94-9db275a40edd"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000034"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000029"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000035"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000030"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = false,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000036"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000031"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000100"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000100"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = false,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000101"),
+                            AppUserMenuId = new Guid("2ac99ae0-c481-4a9c-a129-4cb3024b642e"),
+                            AppUserRoleId = new Guid("10a9e9e7-cb24-4816-9b94-9db275a40edd"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = false,
+                            IsDelete = false,
+                            IsUpdate = false,
+                            IsView = false,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000200"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000200"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000201"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000201"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000202"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000202"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e1d1000-0000-4000-8000-000000000203"),
+                            AppUserMenuId = new Guid("5e1d0000-0000-4000-8000-000000000203"),
+                            AppUserRoleId = new Guid("1b15ce5a-56b3-4eb9-8286-6e27f770b0da"),
+                            CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
+                            CreatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            IsCreate = true,
+                            IsDelete = true,
+                            IsUpdate = true,
+                            IsView = true,
+                            UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -1419,6 +3047,28 @@ namespace SBERP.Security.Migrations
                         .HasConstraintName("FK_AppUserProfiles_AppUserRole");
 
                     b.Navigation("AppUserRole");
+                });
+
+            modelBuilder.Entity("SBERP.Security.Models.Base.AppUserRefreshToken", b =>
+                {
+                    b.HasOne("SBERP.Security.Models.Base.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_AppUserRefreshTokens_AppUsers");
+
+                    b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("SBERP.Security.Models.Base.Notification", b =>
+                {
+                    b.HasOne("SBERP.Security.Models.Base.AppUserProfile", null)
+                        .WithMany()
+                        .HasForeignKey("RecipientProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Notifications_AppUserProfile");
                 });
 
             modelBuilder.Entity("SSBERP.Security.Models.Base.AppUserRoleMenu", b =>

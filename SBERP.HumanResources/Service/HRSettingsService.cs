@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -74,6 +75,12 @@ namespace SBERP.HumanResources.Service
                     CasualLeaveDays = s.CasualLeaveDays,
                     AutoProcessTime = s.AutoProcessTime,
                     AutoProcessEnabled = s.AutoProcessEnabled,
+                    TimeZoneId = s.TimeZoneId,
+                    AttendanceDayCutoffTime = s.AttendanceDayCutoffTime,
+                    MinMinutesBetweenInOut = s.MinMinutesBetweenInOut,
+                    DuplicatePunchMinutes = s.DuplicatePunchMinutes,
+                    MobileAttendanceEnabled = s.MobileAttendanceEnabled,
+                    RequireOfficeNetwork = s.RequireOfficeNetwork,
                     IsActive = s.IsActive,
                     IsHardDelete = s.IsHardDelete
                 };
@@ -88,6 +95,15 @@ namespace SBERP.HumanResources.Service
             await using var tx = await _ctx.Database.BeginTransactionAsync();
             try
             {
+                if (!string.IsNullOrWhiteSpace(r.AttendanceDayCutoffTime) &&
+                    !TimeSpan.TryParseExact(r.AttendanceDayCutoffTime, new[] { @"hh\:mm", @"h\:mm" }, CultureInfo.InvariantCulture, out _))
+                    return Utilities.Warn("Day cut-off time must be HH:mm, e.g. 04:00.");
+                if (!string.IsNullOrWhiteSpace(r.TimeZoneId))
+                {
+                    try { TimeZoneInfo.FindSystemTimeZoneById(r.TimeZoneId); }
+                    catch (Exception) { return Utilities.Warn("Unknown time zone. Use e.g. Asia/Dubai or Arabian Standard Time."); }
+                }
+
                 HRSettings? s = null;
                 if (Guid.TryParse(r.Id, out var g))
                     s = await _ctx.HRSettings!.FirstOrDefaultAsync(x => x.Id == g);
@@ -120,6 +136,13 @@ namespace SBERP.HumanResources.Service
                 s.CasualLeaveDays          = r.CasualLeaveDays;
                 s.AutoProcessTime          = r.AutoProcessTime;
                 s.AutoProcessEnabled       = r.AutoProcessEnabled;
+                // biometric attendance: keep the stored value when an older client omits a field
+                if (r.TimeZoneId != null) s.TimeZoneId = r.TimeZoneId;
+                if (r.AttendanceDayCutoffTime != null) s.AttendanceDayCutoffTime = r.AttendanceDayCutoffTime;
+                s.MinMinutesBetweenInOut   = r.MinMinutesBetweenInOut ?? s.MinMinutesBetweenInOut;
+                s.DuplicatePunchMinutes    = r.DuplicatePunchMinutes ?? s.DuplicatePunchMinutes;
+                s.MobileAttendanceEnabled  = r.MobileAttendanceEnabled ?? s.MobileAttendanceEnabled;
+                s.RequireOfficeNetwork     = r.RequireOfficeNetwork ?? s.RequireOfficeNetwork;
                 s.IsActive                 = r.IsActive ?? true;
                 s.IsHardDelete = r.IsHardDelete ?? true;
 

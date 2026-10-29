@@ -54,7 +54,7 @@ namespace SBERP.Security.Controllers.v1
         {
             _securityLogService.LogInfo(ConstantSupplier.GETALLROLES_STARTED_INFO_MSG);
             DataResponse response;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLROLES_REQ_MSG, JsonConvert.SerializeObject(null, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLROLES_REQ_MSG, LogSafe.Serialize(null, Formatting.Indented)));
             try
             {
                 #region EF Codeblock
@@ -63,8 +63,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLROLES_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLROLES_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLROLES_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLROLES_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -74,7 +74,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLROLES_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLROLES_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -95,7 +95,7 @@ namespace SBERP.Security.Controllers.v1
         {
             DataResponse response;
             _securityLogService.LogInfo(ConstantSupplier.GETALLROLESPAGINATION_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLROLESPAGINATION_REQ_MSG, JsonConvert.SerializeObject(null, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLROLESPAGINATION_REQ_MSG, LogSafe.Serialize(null, Formatting.Indented)));
             try
             {
                 #region EF Codeblock
@@ -104,8 +104,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLROLESPAGINATION_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLROLESPAGINATION_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLROLESPAGINATION_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLROLESPAGINATION_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -115,7 +115,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLROLESPAGINATION_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLROLESPAGINATION_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -134,7 +134,7 @@ namespace SBERP.Security.Controllers.v1
         {
             DataResponse response;
             _securityLogService.LogInfo(ConstantSupplier.GETROLEBYID_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETROLEBYID_REQ_MSG, JsonConvert.SerializeObject(roleId, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETROLEBYID_REQ_MSG, LogSafe.Serialize(roleId, Formatting.Indented)));
             try
             {
                 #region EF Codeblock
@@ -143,8 +143,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETROLEBYID_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETROLEBYID_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETROLEBYID_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETROLEBYID_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -154,7 +154,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLROLESPAGINATION_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLROLESPAGINATION_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -173,7 +173,7 @@ namespace SBERP.Security.Controllers.v1
         {
             DataResponse response;
             _securityLogService.LogInfo(ConstantSupplier.SAVEUPDATEROLE_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVEUPDATEROLE_REQ_MSG, JsonConvert.SerializeObject(roleSaveUpdateRequest, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVEUPDATEROLE_REQ_MSG, LogSafe.Serialize(roleSaveUpdateRequest, Formatting.Indented)));
             try
             {
                 #region EF Codeblock
@@ -182,8 +182,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUPDATEROLE_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUPDATEROLE_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUPDATEROLE_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUPDATEROLE_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -193,7 +193,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVEUPDATEROLE_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVEUPDATEROLE_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -212,7 +212,7 @@ namespace SBERP.Security.Controllers.v1
         {
             DataResponse response;
             _securityLogService.LogInfo(ConstantSupplier.DELETEROLE_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.DELETEROLE_REQ_MSG, JsonConvert.SerializeObject(roleId, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.DELETEROLE_REQ_MSG, LogSafe.Serialize(roleId, Formatting.Indented)));
             try
             {
                 #region EF Codeblock
@@ -221,8 +221,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.DELETEROLE_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.DELETEROLE_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.DELETEROLE_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.DELETEROLE_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -232,7 +232,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.DELETEROLE_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.DELETEROLE_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -253,7 +253,7 @@ namespace SBERP.Security.Controllers.v1
         {
             _securityLogService.LogInfo(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_STARTED_INFO_MSG);
             DataResponse response;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(param, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_REQ_MSG, LogSafe.Serialize(param, Formatting.Indented)));
             try
             {
                 #region ADO.NET Codeblock
@@ -272,8 +272,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -283,7 +283,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -301,7 +301,7 @@ namespace SBERP.Security.Controllers.v1
         {
             _securityLogService.LogInfo(ConstantSupplier.GETALLMENUBYUSERID_STARTED_INFO_MSG);
             DataResponse response;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLMENUBYUSERID_REQ_MSG, JsonConvert.SerializeObject(userId, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLMENUBYUSERID_REQ_MSG, LogSafe.Serialize(userId, Formatting.Indented)));
             try
             {
                 #region EF Codeblock
@@ -310,8 +310,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLMENUBYUSERID_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLMENUBYUSERID_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLMENUBYUSERID_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETALLMENUBYUSERID_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -321,7 +321,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLMENUBYUSERID_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLMENUBYUSERID_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -340,7 +340,7 @@ namespace SBERP.Security.Controllers.v1
         {
             DataResponse response;
             _securityLogService.LogInfo(ConstantSupplier.SAVE_UPDATE_USER_MENU_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVE_UPDATE_USER_MENU_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVE_UPDATE_USER_MENU_REQ_MSG, LogSafe.Serialize(request, Formatting.Indented)));
             try
             {
                 #region ADO.NET & EF Codeblock
@@ -349,8 +349,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.SAVE_UPDATE_USER_MENU_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.SAVE_UPDATE_USER_MENU_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.SAVE_UPDATE_USER_MENU_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.SAVE_UPDATE_USER_MENU_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -360,7 +360,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVE_UPDATE_USER_MENU_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVE_UPDATE_USER_MENU_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -377,7 +377,7 @@ namespace SBERP.Security.Controllers.v1
         {
             DataResponse response;
             _securityLogService.LogInfo(ConstantSupplier.DELETE_APP_USER_MENU_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.DELETE_APP_USER_MENU_REQ_MSG, JsonConvert.SerializeObject(menuId, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.DELETE_APP_USER_MENU_REQ_MSG, LogSafe.Serialize(menuId, Formatting.Indented)));
             try
             {
                 #region ADO.NET & EF Codeblock
@@ -386,8 +386,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.DELETE_APP_USER_MENU_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.DELETE_APP_USER_MENU_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.DELETE_APP_USER_MENU_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.DELETE_APP_USER_MENU_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -397,7 +397,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.DELETE_APP_USER_MENU_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.DELETE_APP_USER_MENU_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -415,15 +415,15 @@ namespace SBERP.Security.Controllers.v1
         {
             _securityLogService.LogInfo(ConstantSupplier.GET_ALL_PARENT_MENUS_STARTED_INFO_MSG);
             DataResponse response;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_ALL_PARENT_MENUS_REQ_MSG, JsonConvert.SerializeObject(ConstantSupplier.NOT_APPLICABLE, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_ALL_PARENT_MENUS_REQ_MSG, LogSafe.Serialize(ConstantSupplier.NOT_APPLICABLE, Formatting.Indented)));
             try
             {
                 response = await _roleMenuService.GetAllParentMenusAsync();
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.GET_ALL_PARENT_MENUS_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.GET_ALL_PARENT_MENUS_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GET_ALL_PARENT_MENUS_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GET_ALL_PARENT_MENUS_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -433,7 +433,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_ALL_PARENT_MENUS_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_ALL_PARENT_MENUS_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -464,8 +464,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETUSERMENUINITIALDATA_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETUSERMENUINITIALDATA_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETUSERMENUINITIALDATA_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETUSERMENUINITIALDATA_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -475,7 +475,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETUSERMENUINITIALDATA_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETUSERMENUINITIALDATA_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -495,7 +495,7 @@ namespace SBERP.Security.Controllers.v1
         {
             _securityLogService.LogInfo(ConstantSupplier.GETACTIVEMENUSBYROLEID_STARTED_INFO_MSG);
             DataResponse response;
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETACTIVEMENUSBYROLEID_REQ_MSG, JsonConvert.SerializeObject(null, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETACTIVEMENUSBYROLEID_REQ_MSG, LogSafe.Serialize(null, Formatting.Indented)));
             try
             {
                 #region ADO.NET Codeblock
@@ -504,8 +504,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETACTIVEMENUSBYROLEID_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.GETACTIVEMENUSBYROLEID_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETACTIVEMENUSBYROLEID_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GETACTIVEMENUSBYROLEID_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -515,7 +515,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETACTIVEMENUSBYROLEID_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GETACTIVEMENUSBYROLEID_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -535,7 +535,7 @@ namespace SBERP.Security.Controllers.v1
         {
             DataResponse response;
             _securityLogService.LogInfo(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG, JsonConvert.SerializeObject(param, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_REQ_MSG, LogSafe.Serialize(param, Formatting.Indented)));
             try
             {
                 PagingSearchFilter filter = JsonConvert.DeserializeObject<PagingSearchFilter>(param);
@@ -565,8 +565,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 response = new DataResponse
                 {
                     Success = false,
@@ -576,7 +576,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_ALL_APP_USER_ROLE_MENU_PAGING_SEARCH_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
 
@@ -595,7 +595,7 @@ namespace SBERP.Security.Controllers.v1
         {
             DataResponse response;
             _securityLogService.LogInfo(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_STARTED_INFO_MSG);
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_REQ_MSG, JsonConvert.SerializeObject(request, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_REQ_MSG, LogSafe.Serialize(request, Formatting.Indented)));
             try
             {
                 #region ADO.NET & EF Codeblock
@@ -604,8 +604,8 @@ namespace SBERP.Security.Controllers.v1
             }
             catch (Exception Ex)
             {
-                _securityLogService.LogError(string.Format(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex.Message, Formatting.Indented)));
-                _securityLogService.LogError(string.Format(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_INNER_EXCEPTION_MSG, JsonConvert.SerializeObject(Ex, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
+                _securityLogService.LogError(string.Format(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
                     Success = false,
@@ -615,7 +615,7 @@ namespace SBERP.Security.Controllers.v1
                     Result = null
                 };
             }
-            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_RES_MSG, JsonConvert.SerializeObject(response, Formatting.Indented)));
+            _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_RES_MSG, LogSafe.Serialize(response, Formatting.Indented)));
             return response;
         }
         #endregion

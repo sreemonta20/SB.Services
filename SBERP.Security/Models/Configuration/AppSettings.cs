@@ -14,6 +14,8 @@ namespace SBERP.Security.Models.Configuration
         public int Expires { get; set; }
         public int AccessTokenExpirationMinutes { get; set; }
         public int RefreshTokenExpirationDays { get; set; }
+        /// <summary>Absolute lifetime of a login session in days; refreshing never extends past it (0 = 7 days).</summary>
+        public int RefreshTokenSessionLifetimeDays { get; set; }
         public JWT? JWT { get; set; }
         public int MaxNumberOfFailedAttempts { get; set; }
         public int BlockMinutes { get; set; }

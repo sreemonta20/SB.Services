@@ -11,6 +11,9 @@ namespace SBERP.Security.Models.Base
         public string? Address { get; set; }
         public string? Email { get; set; }
         public Guid? AppUserRoleId { get; set; }
+        public string? JobTitle { get; set; }
+        public Guid? ProfilePhotoId { get; set; }
+        public string? ProfilePhotoLocation { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? UpdatedBy { get; set; }

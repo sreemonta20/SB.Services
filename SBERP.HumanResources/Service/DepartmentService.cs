@@ -91,7 +91,7 @@ namespace SBERP.HumanResources.Service
                 AddParam(cmd, "@p3", filter.PageNumber);
                 AddParam(cmd, "@p4", filter.PageSize);
 
-                var raw = (string?)await cmd.ExecuteScalarAsync();
+                var raw = (await cmd.ExecuteScalarAsync()) as string;
                 if (string.IsNullOrWhiteSpace(raw)) return null;
 
                 // The SP returns a JSON object with RowCount/CurrentPage/PageSize/PageCount/Items

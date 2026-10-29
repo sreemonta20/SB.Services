@@ -77,7 +77,7 @@ namespace SBERP.HumanResources.Service
             AddParam(cmd, "@p3", filter.PageNumber);
             AddParam(cmd, "@p4", filter.PageSize);
 
-            var raw = (string?)await cmd.ExecuteScalarAsync();
+            var raw = (await cmd.ExecuteScalarAsync()) as string;
             if (string.IsNullOrWhiteSpace(raw)) return null;
 
             var jo = JObject.Parse(raw);

@@ -52,6 +52,9 @@ namespace SBERP.HumanResources.Models.Base
         // === Organization (Module 0) — real FK, same DB ===
         public Guid CompanyId { get; set; }
         public Guid? BranchId { get; set; }
+        public Guid? CostCenterId { get; set; }          // Module 0 — budget unit
+        public Guid? PositionId { get; set; }            // Module 0 — the seat occupied
+        public Guid? JobGradeId { get; set; }            // Module 0 — seniority grade
 
         // === Employment ===
         public Guid? DepartmentId { get; set; }
@@ -71,7 +74,11 @@ namespace SBERP.HumanResources.Models.Base
         public string? SalaryCurrency { get; set; }      // ISO 4217, e.g. AED
 
         // === Photo / signature ===
-        public string? PhotoUrl { get; set; }
+        public string? PhotoUrl { get; set; }            // legacy external link; uploads use PhotoId / PhotoLocation
+        /// <summary>Id of the uploaded photo (new Guid on every upload); also the stored file name. Null = default avatar.</summary>
+        public Guid? PhotoId { get; set; }
+        /// <summary>Photo path relative to PhotoStorage:RootPath, e.g. "employee/{PhotoId}.jpg".</summary>
+        public string? PhotoLocation { get; set; }
         public string? SignatureUrl { get; set; }
 
         // === Audit ===
@@ -114,6 +121,8 @@ namespace SBERP.HumanResources.Models.Base
         public int? EmploymentStatus { get; set; }
         public DateTime? DateOfJoining { get; set; }
         public DateTime? DateOfLeaving { get; set; }
+        public Guid? PhotoId { get; set; }
+        public string? PhotoLocation { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? UpdatedBy { get; set; }

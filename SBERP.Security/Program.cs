@@ -1,4 +1,4 @@
-﻿#region Program.cs
+#region Program.cs
 
 // .NET 10 / Swashbuckle 10.x NAMESPACE CHANGES vs .NET 9 / Swashbuckle 6.x:
 //
@@ -26,7 +26,9 @@ using SBERP.Security.Helper;
 using SBERP.Security.Middlewares;
 using SBERP.Security.Models.Configuration;
 using SBERP.Security.Persistence;
+using SBERP.Security.Messaging;
 using SBERP.Security.Service;
+using SBERP.Shared.Storage;
 using SBERP.Shared.Extensions;
 using SBERP.Shared.Services;
 using Serilog;
@@ -40,12 +42,11 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Configuration
-//builder.Configuration
-//    .SetBasePath(Directory.GetCurrentDirectory())
-//    .AddJsonFile(ConstantSupplier.APP_SETTINGS_FILE_NAME);
-builder.Configuration
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile(ConstantSupplier.APP_SETTINGS_FILE_NAME, optional: false, reloadOnChange: true);
+// WebApplication.CreateBuilder already loads, lowest to highest priority: appsettings.json,
+// appsettings.{Environment}.json (both reloadOnChange), user secrets (Development), environment
+// variables, command-line arguments — all relative to the content root. Do NOT add appsettings.json
+// again here: a source added later wins, so re-adding it made the file override environment variables
+// and command-line arguments (e.g. AppSettings__ConnectionStrings__SCSqlConnectionString on a server).
 
 bool isConnectionStrInAzureVault = bool.Parse(builder.Configuration["IsConnectionStrInAzureVault"] ?? "false");
 if (isConnectionStrInAzureVault)
@@ -96,6 +97,25 @@ Utilities.RegisterDatabase(services, appSettings);
 
 // 3.3 Core Services
 services.AddScoped<IEmailService, EmailSender>();
+// user profile photos: PhotoStorage section (RootPath empty = the OS Pictures folder)
+services.AddPhotoStorage(configuration);
+
+// 3.3.1 Integration events (RabbitMQ) — onboarding provisioning
+services.Configure<RabbitMqSettings>(configuration.GetSection("RabbitMq"));
+services.Configure<OnboardingProvisioningSettings>(configuration.GetSection("Onboarding"));
+services.AddSingleton<IIntegrationEventPublisher, RabbitMqIntegrationEventPublisher>();
+services.Configure<OffboardingSettings>(configuration.GetSection("Offboarding"));
+services.AddScoped<IIntegrationEventHandler<EmployeeOnboardedEvent>, EmployeeOnboardedHandler>();
+services.AddScoped<IIntegrationEventHandler<EmployeeOffboardedEvent>, EmployeeOffboardedHandler>();
+services.AddScoped<ILoginDeactivationService, LoginDeactivationService>();
+services.AddHostedService<LoginDeactivationScheduler>();   // disables leavers whose last day has passed
+if (bool.Parse(configuration["RabbitMq:Enabled"] ?? "true"))
+{
+    services.AddHostedService<EmployeeOnboardedConsumer>();
+    services.AddHostedService<EmployeeOffboardedConsumer>();
+}
+if (bool.Parse(configuration["Onboarding:SendWelcomeEmail"] ?? "false"))
+    services.AddHostedService<EmailOutboxSender>();
 
 services.AddControllers()
     .AddJsonOptions(options =>
@@ -252,7 +272,9 @@ services.AddScoped<ITokenService, TokenService>();
 services.AddScoped<IDatabaseManager, DatabaseManager>();
 services.AddScoped<IDatabaseHandlerFactory, DatabaseHandlerFactory>();
 services.AddScoped<ValidateModelAttribute>();
-services.AddScoped<ITokenBlacklistService, TokenBlacklistService>();
+// token blacklist on the Redis prefix shared by all services (SharedAuthCache)
+services.AddSharedTokenBlacklist();
+services.AddTransient<IRefreshTokenService, RefreshTokenService>();
 
 // 4. Build App
 var app = builder.Build();
