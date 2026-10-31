@@ -1914,11 +1914,11 @@ namespace SBERP.Security.Persistence
                     IsComponent = true,
                     CssClass = "nav-item",
                     IsRouteLink = true,
-                    RouteLink = "/business/humanresources/department",
+                    RouteLink = "/business/humanresources/corehr/department",
                     RouteLinkClass = "nav-link",
                     Icon = "fas fa-sitemap nav-icon",
                     Remark = "Navigation Item",
-                    ParentId = OrgSetupMenuId,   // HR sub-module (HRMenuSeed.cs)
+                    ParentId = CoreHRMenuId,   // HR sub-module (HRMenuSeed.cs)
                     DropdownIcon = null,
                     SerialNo = 15,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
@@ -1936,11 +1936,11 @@ namespace SBERP.Security.Persistence
                     IsComponent = true,
                     CssClass = "nav-item",
                     IsRouteLink = true,
-                    RouteLink = "/business/humanresources/designation",
+                    RouteLink = "/business/humanresources/corehr/designation",
                     RouteLinkClass = "nav-link",
                     Icon = "fas fa-briefcase nav-icon",
                     Remark = "Navigation Item",
-                    ParentId = OrgSetupMenuId,   // HR sub-module (HRMenuSeed.cs)
+                    ParentId = CoreHRMenuId,   // HR sub-module (HRMenuSeed.cs)
                     DropdownIcon = null,
                     SerialNo = 16,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
@@ -1958,13 +1958,13 @@ namespace SBERP.Security.Persistence
                     IsComponent = true,
                     CssClass = "nav-item",
                     IsRouteLink = true,
-                    RouteLink = "/business/humanresources/employee",
+                    RouteLink = "/business/humanresources/corehr/employee",
                     RouteLinkClass = "nav-link",
                     Icon = "fas fa-user-tie nav-icon",
                     Remark = "Navigation Item",
                     ParentId = CoreHRMenuId,   // HR sub-module (HRMenuSeed.cs)
                     DropdownIcon = null,
-                    SerialNo = 22,
+                    SerialNo = 17,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                     CreatedDate = menuTime,
                     UpdatedBy = null,
@@ -1980,13 +1980,13 @@ namespace SBERP.Security.Persistence
                     IsComponent = true,
                     CssClass = "nav-item",
                     IsRouteLink = true,
-                    RouteLink = "/business/humanresources/settings",
+                    RouteLink = "/business/humanresources/corehr/settings",
                     RouteLinkClass = "nav-link",
                     Icon = "fas fa-cogs nav-icon",
                     Remark = "Navigation Item",
                     ParentId = CoreHRMenuId,   // HR sub-module (HRMenuSeed.cs)
                     DropdownIcon = null,
-                    SerialNo = 23,
+                    SerialNo = 18,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
                     CreatedDate = menuTime,
                     UpdatedBy = null,
@@ -2004,11 +2004,11 @@ namespace SBERP.Security.Persistence
                     IsComponent = true,
                     CssClass = "nav-item",
                     IsRouteLink = true,
-                    RouteLink = "/business/humanresources/company",
+                    RouteLink = "/business/humanresources/corehr/company",
                     RouteLinkClass = "nav-link",
                     Icon = "fas fa-industry nav-icon",
                     Remark = "Navigation Item",
-                    ParentId = OrgSetupMenuId,   // HR sub-module (HRMenuSeed.cs)
+                    ParentId = CoreHRMenuId,   // HR sub-module (HRMenuSeed.cs)
                     DropdownIcon = null,
                     SerialNo = 13,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
@@ -2026,11 +2026,11 @@ namespace SBERP.Security.Persistence
                     IsComponent = true,
                     CssClass = "nav-item",
                     IsRouteLink = true,
-                    RouteLink = "/business/humanresources/branch",
+                    RouteLink = "/business/humanresources/corehr/branch",
                     RouteLinkClass = "nav-link",
                     Icon = "fas fa-code-branch nav-icon",
                     Remark = "Navigation Item",
-                    ParentId = OrgSetupMenuId,   // HR sub-module (HRMenuSeed.cs)
+                    ParentId = CoreHRMenuId,   // HR sub-module (HRMenuSeed.cs)
                     DropdownIcon = null,
                     SerialNo = 14,
                     CreatedBy = "C047D662-9F0E-4358-B323-15EC3081312C",
@@ -2902,11 +2902,10 @@ namespace SBERP.Security.Persistence
         private static Guid MenuId(int n) => new($"5E1D0000-0000-4000-8000-{n:D12}");
         private static Guid RoleMenuId(int n) => new($"5E1D1000-0000-4000-8000-{n:D12}");
 
-        // Sub-modules that also hold the original Core HR screens seeded in SecurityDBContext.cs
-        // (Company/Branch/Department/Designation → Organization Setup, Employee/HR Settings → Core HR).
+        // Core HR holds the original Core HR screens seeded in SecurityDBContext.cs (Company, Branch,
+        // Department, Designation, Employee, HR Settings — /business/humanresources/corehr/*).
         // Ids 1..31 come from the loop below in declaration order; 100+ are fixed additions.
-        private static readonly Guid OrgSetupMenuId = MenuId(1);
-        private static readonly Guid CoreHRMenuId   = MenuId(100);
+        private static readonly Guid CoreHRMenuId = MenuId(100);
 
         private void SeedHRSubModuleMenus(ModelBuilder modelBuilder)
         {
@@ -2914,56 +2913,56 @@ namespace SBERP.Security.Persistence
 
             // (sub-module, icon, SerialNo, first child SerialNo, children: (name, route, icon, userCanView))
             // SerialNo follows the depth-first order of the Human Resources tree (HR = 11):
-            // Organization Setup 12 (Company 13, Branch 14, Department 15, Designation 16, then 17-20),
-            // Core HR 21 (Employee 22, HR Settings 23), Recruitment 24 …
+            // Core HR 12 (Company 13, Branch 14, Department 15, Designation 16, Employee 17, HR Settings 18),
+            // Organization Setup 19 (20-23), Recruitment 24 …
             var tree = new (string Module, string Icon, int Serial, int FirstItemSerial, (string Name, string Route, string Icon, bool UserView)[] Items)[]
             {
-                ("Organization Setup", "fas fa-building nav-icon", 12, 17, new[]
+                ("Organization Setup", "fas fa-building nav-icon", 19, 20, new[]
                 {
-                    ("Position",         "/business/orgsetup/position",         "fas fa-chair nav-icon",           false),
-                    ("Cost Center",      "/business/orgsetup/cost-center",      "fas fa-coins nav-icon",           false),
-                    ("Job Grade",        "/business/orgsetup/job-grade",        "fas fa-layer-group nav-icon",     false),
-                    ("Holiday Calendar", "/business/orgsetup/holiday-calendar", "fas fa-calendar-alt nav-icon",    false),
+                    ("Position",         "/business/humanresources/orgsetup/position",         "fas fa-chair nav-icon",           false),
+                    ("Cost Center",      "/business/humanresources/orgsetup/cost-center",      "fas fa-coins nav-icon",           false),
+                    ("Job Grade",        "/business/humanresources/orgsetup/job-grade",        "fas fa-layer-group nav-icon",     false),
+                    ("Holiday Calendar", "/business/humanresources/orgsetup/holiday-calendar", "fas fa-calendar-alt nav-icon",    false),
                 }),
                 ("Recruitment", "fas fa-user-plus nav-icon", 24, 25, new[]
                 {
-                    ("Requisition",        "/business/recruitment/requisition", "fas fa-file-signature nav-icon", false),
-                    ("Job Posting",        "/business/recruitment/job-posting", "fas fa-bullhorn nav-icon",       false),
-                    ("Applicant Pipeline", "/business/recruitment/pipeline",    "fas fa-stream nav-icon",         false),
+                    ("Requisition",        "/business/humanresources/recruitment/requisition", "fas fa-file-signature nav-icon", false),
+                    ("Job Posting",        "/business/humanresources/recruitment/job-posting", "fas fa-bullhorn nav-icon",       false),
+                    ("Applicant Pipeline", "/business/humanresources/recruitment/pipeline",    "fas fa-stream nav-icon",         false),
                 }),
                 ("Onboarding", "fas fa-handshake nav-icon", 28, 29, new[]
                 {
-                    ("Onboarding", "/business/onboarding/list", "fas fa-clipboard-check nav-icon", false),
+                    ("Onboarding", "/business/humanresources/onboarding/list", "fas fa-clipboard-check nav-icon", false),
                 }),
                 ("Time & Attendance", "fas fa-clock nav-icon", 30, 31, new[]
                 {
-                    ("Shift",              "/business/attendance/shift",    "fas fa-business-time nav-icon", false),
-                    ("Overtime",           "/business/attendance/overtime", "fas fa-hourglass-half nav-icon", false),
-                    ("Attendance Summary", "/business/attendance/summary",  "fas fa-calendar-check nav-icon", false),
+                    ("Shift",              "/business/humanresources/attendance/shift",    "fas fa-business-time nav-icon", false),
+                    ("Overtime",           "/business/humanresources/attendance/overtime", "fas fa-hourglass-half nav-icon", false),
+                    ("Attendance Summary", "/business/humanresources/attendance/summary",  "fas fa-calendar-check nav-icon", false),
                 }),
                 ("Leave", "fas fa-plane-departure nav-icon", 34, 35, new[]
                 {
-                    ("Leave Application", "/business/leave/applications", "fas fa-paper-plane nav-icon", true),
-                    ("Leave Type",        "/business/leave/types",        "fas fa-tags nav-icon",        false),
-                    ("Leave Policy",      "/business/leave/policies",     "fas fa-gavel nav-icon",       false),
+                    ("Leave Application", "/business/humanresources/leave/applications", "fas fa-paper-plane nav-icon", true),
+                    ("Leave Type",        "/business/humanresources/leave/types",        "fas fa-tags nav-icon",        false),
+                    ("Leave Policy",      "/business/humanresources/leave/policies",     "fas fa-gavel nav-icon",       false),
                 }),
                 ("Payroll", "fas fa-money-check-alt nav-icon", 38, 39, new[]
                 {
-                    ("Payroll Run",      "/business/payroll/runs",              "fas fa-play-circle nav-icon",   false),
-                    ("Salary Structure", "/business/payroll/salary-structures", "fas fa-sitemap nav-icon",       false),
-                    ("Pay Component",    "/business/payroll/components",        "fas fa-puzzle-piece nav-icon",  false),
-                    ("Loan / Advance",   "/business/payroll/loans",             "fas fa-hand-holding-usd nav-icon", false),
+                    ("Payroll Run",      "/business/humanresources/payroll/runs",              "fas fa-play-circle nav-icon",   false),
+                    ("Salary Structure", "/business/humanresources/payroll/salary-structures", "fas fa-sitemap nav-icon",       false),
+                    ("Pay Component",    "/business/humanresources/payroll/components",        "fas fa-puzzle-piece nav-icon",  false),
+                    ("Loan / Advance",   "/business/humanresources/payroll/loans",             "fas fa-hand-holding-usd nav-icon", false),
                 }),
                 ("Performance", "fas fa-chart-line nav-icon", 43, 44, new[]
                 {
-                    ("Appraisal Cycle", "/business/performance/cycles",       "fas fa-sync-alt nav-icon",  false),
-                    ("Goal",            "/business/performance/goals",        "fas fa-bullseye nav-icon",  true),
-                    ("Review",          "/business/performance/reviews",      "fas fa-star-half-alt nav-icon", true),
-                    ("Competency",      "/business/performance/competencies", "fas fa-brain nav-icon",     false),
+                    ("Appraisal Cycle", "/business/humanresources/performance/cycles",       "fas fa-sync-alt nav-icon",  false),
+                    ("Goal",            "/business/humanresources/performance/goals",        "fas fa-bullseye nav-icon",  true),
+                    ("Review",          "/business/humanresources/performance/reviews",      "fas fa-star-half-alt nav-icon", true),
+                    ("Competency",      "/business/humanresources/performance/competencies", "fas fa-brain nav-icon",     false),
                 }),
                 ("Separation", "fas fa-sign-out-alt nav-icon", 48, 49, new[]
                 {
-                    ("Separation", "/business/separation", "fas fa-door-open nav-icon", false),
+                    ("Separation", "/business/humanresources/separation", "fas fa-door-open nav-icon", false),
                 }),
             };
 
@@ -3011,8 +3010,8 @@ namespace SBERP.Security.Persistence
                 }
             }
 
-            // Core HR: groups Employee and HR Settings (seeded in SecurityDBContext.cs).
-            menus.Add(SubModule(CoreHRMenuId, "Core HR", "fas fa-id-card nav-icon", 21));
+            // Core HR: groups the 6 Core HR screens (seeded in SecurityDBContext.cs).
+            menus.Add(SubModule(CoreHRMenuId, "Core HR", "fas fa-id-card nav-icon", 12));
             roleMenus.Add(Grant(RoleMenuId(100), AdminRoleId, CoreHRMenuId, false, false));
 
             // The User role reaches Leave / Performance through "Human Resources", so it needs that row too.
@@ -3024,10 +3023,10 @@ namespace SBERP.Security.Persistence
             var timeAttendanceMenuId = MenuId(12);
             var biometricScreens = new (string Name, string Route, string Icon)[]
             {
-                ("Biometric Registration", "/business/attendance/biometric-registrations", "fas fa-fingerprint nav-icon"),
-                ("Attendance Punch Log",   "/business/attendance/punches",                 "fas fa-list-ol nav-icon"),
-                ("Attendance Device",      "/business/attendance/devices",                 "fas fa-tablet-alt nav-icon"),
-                ("Office Zone",            "/business/attendance/zones",                   "fas fa-wifi nav-icon"),
+                ("Biometric Registration", "/business/humanresources/attendance/biometric-registrations", "fas fa-fingerprint nav-icon"),
+                ("Attendance Punch Log",   "/business/humanresources/attendance/punches",                 "fas fa-list-ol nav-icon"),
+                ("Attendance Device",      "/business/humanresources/attendance/devices",                 "fas fa-tablet-alt nav-icon"),
+                ("Office Zone",            "/business/humanresources/attendance/zones",                   "fas fa-wifi nav-icon"),
             };
             for (int i = 0; i < biometricScreens.Length; i++)
             {

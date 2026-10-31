@@ -513,9 +513,9 @@ namespace SBERP.Security.Migrations
                             IsRouteLink = true,
                             IsSubModule = false,
                             Name = "Department",
-                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000100"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/humanresources/department",
+                            RouteLink = "/business/humanresources/corehr/department",
                             RouteLinkClass = "nav-link",
                             SerialNo = 15,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
@@ -534,9 +534,9 @@ namespace SBERP.Security.Migrations
                             IsRouteLink = true,
                             IsSubModule = false,
                             Name = "Designation",
-                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000100"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/humanresources/designation",
+                            RouteLink = "/business/humanresources/corehr/designation",
                             RouteLinkClass = "nav-link",
                             SerialNo = 16,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
@@ -557,9 +557,9 @@ namespace SBERP.Security.Migrations
                             Name = "Employee",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000100"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/humanresources/employee",
+                            RouteLink = "/business/humanresources/corehr/employee",
                             RouteLinkClass = "nav-link",
-                            SerialNo = 22,
+                            SerialNo = 17,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -578,9 +578,9 @@ namespace SBERP.Security.Migrations
                             Name = "HR Settings",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000100"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/humanresources/settings",
+                            RouteLink = "/business/humanresources/corehr/settings",
                             RouteLinkClass = "nav-link",
-                            SerialNo = 23,
+                            SerialNo = 18,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -597,9 +597,9 @@ namespace SBERP.Security.Migrations
                             IsRouteLink = true,
                             IsSubModule = false,
                             Name = "Company",
-                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000100"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/humanresources/company",
+                            RouteLink = "/business/humanresources/corehr/company",
                             RouteLinkClass = "nav-link",
                             SerialNo = 13,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
@@ -618,9 +618,9 @@ namespace SBERP.Security.Migrations
                             IsRouteLink = true,
                             IsSubModule = false,
                             Name = "Branch",
-                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
+                            ParentId = new Guid("5e1d0000-0000-4000-8000-000000000100"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/humanresources/branch",
+                            RouteLink = "/business/humanresources/corehr/branch",
                             RouteLinkClass = "nav-link",
                             SerialNo = 14,
                             UpdatedDate = new DateTime(2024, 1, 1, 10, 15, 0, 0, DateTimeKind.Utc)
@@ -644,7 +644,7 @@ namespace SBERP.Security.Migrations
                             Remark = "Navigation Item",
                             RouteLink = "",
                             RouteLinkClass = "nav-link",
-                            SerialNo = 12,
+                            SerialNo = 19,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -663,9 +663,9 @@ namespace SBERP.Security.Migrations
                             Name = "Position",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/orgsetup/position",
+                            RouteLink = "/business/humanresources/orgsetup/position",
                             RouteLinkClass = "nav-link",
-                            SerialNo = 17,
+                            SerialNo = 20,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -684,9 +684,9 @@ namespace SBERP.Security.Migrations
                             Name = "Cost Center",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/orgsetup/cost-center",
+                            RouteLink = "/business/humanresources/orgsetup/cost-center",
                             RouteLinkClass = "nav-link",
-                            SerialNo = 18,
+                            SerialNo = 21,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -705,9 +705,9 @@ namespace SBERP.Security.Migrations
                             Name = "Job Grade",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/orgsetup/job-grade",
+                            RouteLink = "/business/humanresources/orgsetup/job-grade",
                             RouteLinkClass = "nav-link",
-                            SerialNo = 19,
+                            SerialNo = 22,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -726,9 +726,9 @@ namespace SBERP.Security.Migrations
                             Name = "Holiday Calendar",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000001"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/orgsetup/holiday-calendar",
+                            RouteLink = "/business/humanresources/orgsetup/holiday-calendar",
                             RouteLinkClass = "nav-link",
-                            SerialNo = 20,
+                            SerialNo = 23,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -769,7 +769,7 @@ namespace SBERP.Security.Migrations
                             Name = "Requisition",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000006"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/recruitment/requisition",
+                            RouteLink = "/business/humanresources/recruitment/requisition",
                             RouteLinkClass = "nav-link",
                             SerialNo = 25,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -790,7 +790,7 @@ namespace SBERP.Security.Migrations
                             Name = "Job Posting",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000006"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/recruitment/job-posting",
+                            RouteLink = "/business/humanresources/recruitment/job-posting",
                             RouteLinkClass = "nav-link",
                             SerialNo = 26,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -811,7 +811,7 @@ namespace SBERP.Security.Migrations
                             Name = "Applicant Pipeline",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000006"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/recruitment/pipeline",
+                            RouteLink = "/business/humanresources/recruitment/pipeline",
                             RouteLinkClass = "nav-link",
                             SerialNo = 27,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -854,7 +854,7 @@ namespace SBERP.Security.Migrations
                             Name = "Onboarding",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000010"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/onboarding/list",
+                            RouteLink = "/business/humanresources/onboarding/list",
                             RouteLinkClass = "nav-link",
                             SerialNo = 29,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -897,7 +897,7 @@ namespace SBERP.Security.Migrations
                             Name = "Shift",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/attendance/shift",
+                            RouteLink = "/business/humanresources/attendance/shift",
                             RouteLinkClass = "nav-link",
                             SerialNo = 31,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -918,7 +918,7 @@ namespace SBERP.Security.Migrations
                             Name = "Overtime",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/attendance/overtime",
+                            RouteLink = "/business/humanresources/attendance/overtime",
                             RouteLinkClass = "nav-link",
                             SerialNo = 32,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -939,7 +939,7 @@ namespace SBERP.Security.Migrations
                             Name = "Attendance Summary",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/attendance/summary",
+                            RouteLink = "/business/humanresources/attendance/summary",
                             RouteLinkClass = "nav-link",
                             SerialNo = 33,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -982,7 +982,7 @@ namespace SBERP.Security.Migrations
                             Name = "Leave Application",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000016"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/leave/applications",
+                            RouteLink = "/business/humanresources/leave/applications",
                             RouteLinkClass = "nav-link",
                             SerialNo = 35,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1003,7 +1003,7 @@ namespace SBERP.Security.Migrations
                             Name = "Leave Type",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000016"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/leave/types",
+                            RouteLink = "/business/humanresources/leave/types",
                             RouteLinkClass = "nav-link",
                             SerialNo = 36,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1024,7 +1024,7 @@ namespace SBERP.Security.Migrations
                             Name = "Leave Policy",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000016"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/leave/policies",
+                            RouteLink = "/business/humanresources/leave/policies",
                             RouteLinkClass = "nav-link",
                             SerialNo = 37,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1067,7 +1067,7 @@ namespace SBERP.Security.Migrations
                             Name = "Payroll Run",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000020"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/payroll/runs",
+                            RouteLink = "/business/humanresources/payroll/runs",
                             RouteLinkClass = "nav-link",
                             SerialNo = 39,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1088,7 +1088,7 @@ namespace SBERP.Security.Migrations
                             Name = "Salary Structure",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000020"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/payroll/salary-structures",
+                            RouteLink = "/business/humanresources/payroll/salary-structures",
                             RouteLinkClass = "nav-link",
                             SerialNo = 40,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1109,7 +1109,7 @@ namespace SBERP.Security.Migrations
                             Name = "Pay Component",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000020"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/payroll/components",
+                            RouteLink = "/business/humanresources/payroll/components",
                             RouteLinkClass = "nav-link",
                             SerialNo = 41,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1130,7 +1130,7 @@ namespace SBERP.Security.Migrations
                             Name = "Loan / Advance",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000020"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/payroll/loans",
+                            RouteLink = "/business/humanresources/payroll/loans",
                             RouteLinkClass = "nav-link",
                             SerialNo = 42,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1173,7 +1173,7 @@ namespace SBERP.Security.Migrations
                             Name = "Appraisal Cycle",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000025"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/performance/cycles",
+                            RouteLink = "/business/humanresources/performance/cycles",
                             RouteLinkClass = "nav-link",
                             SerialNo = 44,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1194,7 +1194,7 @@ namespace SBERP.Security.Migrations
                             Name = "Goal",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000025"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/performance/goals",
+                            RouteLink = "/business/humanresources/performance/goals",
                             RouteLinkClass = "nav-link",
                             SerialNo = 45,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1215,7 +1215,7 @@ namespace SBERP.Security.Migrations
                             Name = "Review",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000025"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/performance/reviews",
+                            RouteLink = "/business/humanresources/performance/reviews",
                             RouteLinkClass = "nav-link",
                             SerialNo = 46,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1236,7 +1236,7 @@ namespace SBERP.Security.Migrations
                             Name = "Competency",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000025"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/performance/competencies",
+                            RouteLink = "/business/humanresources/performance/competencies",
                             RouteLinkClass = "nav-link",
                             SerialNo = 47,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1279,7 +1279,7 @@ namespace SBERP.Security.Migrations
                             Name = "Separation",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000030"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/separation",
+                            RouteLink = "/business/humanresources/separation",
                             RouteLinkClass = "nav-link",
                             SerialNo = 49,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1303,7 +1303,7 @@ namespace SBERP.Security.Migrations
                             Remark = "Navigation Item",
                             RouteLink = "",
                             RouteLinkClass = "nav-link",
-                            SerialNo = 21,
+                            SerialNo = 12,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -1322,7 +1322,7 @@ namespace SBERP.Security.Migrations
                             Name = "Biometric Registration",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/attendance/biometric-registrations",
+                            RouteLink = "/business/humanresources/attendance/biometric-registrations",
                             RouteLinkClass = "nav-link",
                             SerialNo = 50,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1343,7 +1343,7 @@ namespace SBERP.Security.Migrations
                             Name = "Attendance Punch Log",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/attendance/punches",
+                            RouteLink = "/business/humanresources/attendance/punches",
                             RouteLinkClass = "nav-link",
                             SerialNo = 51,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1364,7 +1364,7 @@ namespace SBERP.Security.Migrations
                             Name = "Attendance Device",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/attendance/devices",
+                            RouteLink = "/business/humanresources/attendance/devices",
                             RouteLinkClass = "nav-link",
                             SerialNo = 52,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -1385,7 +1385,7 @@ namespace SBERP.Security.Migrations
                             Name = "Office Zone",
                             ParentId = new Guid("5e1d0000-0000-4000-8000-000000000012"),
                             Remark = "Navigation Item",
-                            RouteLink = "/business/attendance/zones",
+                            RouteLink = "/business/humanresources/attendance/zones",
                             RouteLinkClass = "nav-link",
                             SerialNo = 53,
                             UpdatedDate = new DateTime(2026, 10, 1, 10, 0, 0, 0, DateTimeKind.Utc)
