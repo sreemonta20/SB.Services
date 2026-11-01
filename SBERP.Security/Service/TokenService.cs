@@ -3,6 +3,7 @@ using SBERP.Security.Helper;
 using SBERP.Security.Models.Base;
 using SBERP.Security.Models.Configuration;
 using SBERP.Security.Models.Request;
+using SBERP.Shared.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -28,41 +29,28 @@ namespace SBERP.Security.Service
             _jwtIssuer = _configuration["AppSettings:JWT:Issuer"];
             _jwtAudience = _configuration["AppSettings:JWT:Audience"];
             _jwtSubject = _configuration["AppSettings:JWT:Subject"];
-            //_expiresInTime = Convert.ToInt32(_configuration["AppSettings:Expires"]);
             _expiresInTime = Convert.ToInt32(_configuration["AppSettings:AccessTokenExpirationMinutes"]);
         }
 
         
         public string GenerateJwtToken(ClaimRequest oClaimRequest)
         {
-            //var oClaim = new[]
-            //{
-            //    new Claim(ClaimTypes.NameIdentifier, oClaimRequest.UserId!.ToString()),
-            //    new Claim(ClaimTypes.Name, oClaimRequest.UserName!),
-            //    new Claim(ClaimTypes.Email, oClaimRequest.Email!),
-            //    new Claim(ClaimTypes.Role, oClaimRequest.Role!)
-            //};
-            var oClaim = new[]
+            var oClaim = new List<Claim>
             {
-                // ── Existing claims — keep exactly as they are ─────────────────────
-                new Claim(ClaimTypes.NameIdentifier, oClaimRequest.UserId!.ToString()),
-                new Claim(ClaimTypes.Name,           oClaimRequest.UserName!),
-                new Claim(ClaimTypes.Email,          oClaimRequest.Email!),
-                new Claim(ClaimTypes.Role,           oClaimRequest.Role!),
-
-                // ── NEW: unique token ID — required for Redis blacklist on logout ───
-    
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-
-
-                // ── NEW: issued-at timestamp ────────────────────────────────────────
-    
-            new Claim(
-                    JwtRegisteredClaimNames.Iat,
-                    DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),
-                    ClaimValueTypes.Integer64)
-
+                new(ClaimTypes.NameIdentifier, oClaimRequest.UserId!),
+                new(ClaimTypes.Name, oClaimRequest.UserName!),
+                new(ClaimTypes.Email, oClaimRequest.Email ?? string.Empty),
+                new(ClaimTypes.Role, oClaimRequest.Role!),
+                // unique token id: required for the Redis blacklist on logout
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+                // an empty value still counts: it means "no rights", which is not the same as an old token without the claim
+                new(SberpClaims.Permissions, oClaimRequest.Permissions ?? string.Empty)
             };
+            if (!string.IsNullOrEmpty(oClaimRequest.ProfileId))
+                oClaim.Add(new Claim(SberpClaims.ProfileId, oClaimRequest.ProfileId));
+            if (!string.IsNullOrEmpty(oClaimRequest.EmployeeId))
+                oClaim.Add(new Claim(SberpClaims.EmployeeId, oClaimRequest.EmployeeId));
 
             SymmetricSecurityKey oSymmetricSecurityKey = new(Encoding.UTF8.GetBytes(_jwtKey!));
             SigningCredentials oSigningCredentials = new(oSymmetricSecurityKey, SecurityAlgorithms.HmacSha256);

@@ -29,6 +29,7 @@ using SBERP.Security.Persistence;
 using SBERP.Security.Messaging;
 using SBERP.Security.Service;
 using SBERP.Shared.Storage;
+using SBERP.Shared.Authorization;
 using SBERP.Shared.Extensions;
 using SBERP.Shared.Services;
 using Serilog;
@@ -40,6 +41,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(o => o.AddServerHeader = false);
 
 // 1. Configuration
 // WebApplication.CreateBuilder already loads, lowest to highest priority: appsettings.json,
@@ -142,8 +144,7 @@ services.AddApiVersioning(options =>
 });
 
 // 3.4 CORS
-var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>()
-    ?? new[] { "http://localhost:5201", "https://localhost:5200", "http://localhost:5201", "https://localhost:4200", "http://localhost:4200", };
+var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? ["https://localhost:4200", "http://localhost:4200"];
 
 services.AddCors(options =>
 {
@@ -213,7 +214,8 @@ services.AddSwaggerGen(c =>
 });
 
 // 3.6 JWT Authentication
-var key = Encoding.ASCII.GetBytes(appSettings?.JWT?.Key ?? "");
+// UTF-8, the same as TokenService when it signs
+var key = Encoding.UTF8.GetBytes(appSettings?.JWT?.Key ?? "");
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -244,9 +246,10 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 services.AddAuthorization();
+// menu rights on every controller action (deny by default)
+services.AddScreenPermissions(configuration);
 services.AddHttpContextAccessor();
 services.AddResponseCompression();
-//services.AddDistributedMemoryCache();
 var redisSettings = configuration
     .GetSection("RedisSettings")
     .Get<RedisSettings>();
@@ -281,7 +284,7 @@ var app = builder.Build();
 
 try
 {
-    app.UseMiddleware<GlobalExceptionMiddleware>();
+    app.UseApiExceptionHandler();
 
     if (app.Environment.IsDevelopment())
     {
@@ -305,7 +308,7 @@ try
     app.UseStaticFiles();
     app.UseRouting();
     app.UseCors(ConstantSupplier.CORSS_POLICY_NAME);
-    app.UseMiddleware<SecurityHeadersMiddleware>();
+    app.UseSecurityHeaders();
     app.UseMiddleware<HttpVerbsConstraintMiddleware>();
     app.UseAuthentication();
     app.UseTokenBlacklist();
@@ -318,44 +321,5 @@ finally
 {
     Log.CloseAndFlush();
 }
-
-//static void RegisterDatabase(IServiceCollection services, AppSettings? appSettings)
-//{
-//    var cs = appSettings?.ConnectionStrings;
-//    switch (appSettings?.AppDB)
-//    {
-//        case ConstantSupplier.SQLSERVER:
-//            services.AddDbContext<SecurityDBContext>(options =>
-//                options.UseSqlServer(cs?.SCSqlConnectionString));
-//            services.AddTransient<IDbConnection>(_ =>
-//                new SqlConnection(cs?.SCSqlConnectionString));
-//            break;
-//        case ConstantSupplier.ORACLE:
-//            services.AddDbContext<SecurityDBContext>(options =>
-//                options.UseOracle(cs?.SCOracleConnectionString));
-//            services.AddScoped<IDbConnection>(_ =>
-//                new Oracle.ManagedDataAccess.Client.OracleConnection(cs?.SCOracleConnectionString));
-//            break;
-//        case ConstantSupplier.ODBC:
-//            services.AddDbContext<SecurityDBContext>(options =>
-//                options.UseJetOdbc(cs?.SCOdbcConnectionString));
-//            services.AddScoped<IDbConnection>(_ =>
-//                new OdbcConnection(cs?.SCOdbcConnectionString));
-//            break;
-//        case ConstantSupplier.OLEDB:
-//            services.AddDbContext<SecurityDBContext>(options =>
-//                options.UseJetOleDb(cs?.SCOledbConnectionString));
-//            services.AddScoped<IDbConnection>(_ =>
-//                new OleDbConnection(cs?.SCOledbConnectionString));
-//            break;
-
-//        default:
-//            services.AddDbContext<SecurityDBContext>(options =>
-//                options.UseSqlServer(cs?.SCDefaultConnectionString));
-//            services.AddTransient<IDbConnection>(_ =>
-//                new SqlConnection(cs?.SCDefaultConnectionString));
-//            break;
-//    }
-//}
 
 #endregion

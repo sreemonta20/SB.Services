@@ -49,49 +49,6 @@ namespace SBERP.HumanResources.Service
 
                 var raw = (await cmd.ExecuteScalarAsync()) as string;
 
-                // Build static enum dropdowns in C# — no point storing in DB.
-                //var resp = new EmployeeInitialDataResponse
-                //{
-                //    Genders = new List<LookupItem>
-                //    {
-                //        new() { Id = "1", Name = "Male"   },
-                //        new() { Id = "2", Name = "Female" },
-                //        new() { Id = "3", Name = "Other"  }
-                //    },
-                //    MaritalStatuses = new List<LookupItem>
-                //    {
-                //        new() { Id = "1", Name = "Single"   },
-                //        new() { Id = "2", Name = "Married"  },
-                //        new() { Id = "3", Name = "Divorced" },
-                //        new() { Id = "4", Name = "Widowed"  },
-                //        new() { Id = "5", Name = "Separated"}
-                //    },
-                //    BloodGroups = new List<LookupItem>
-                //    {
-                //        new() { Id = "1", Name = "A+"  }, new() { Id = "2", Name = "A-"  },
-                //        new() { Id = "3", Name = "B+"  }, new() { Id = "4", Name = "B-"  },
-                //        new() { Id = "5", Name = "AB+" }, new() { Id = "6", Name = "AB-" },
-                //        new() { Id = "7", Name = "O+"  }, new() { Id = "8", Name = "O-"  }
-                //    },
-                //    EmploymentTypes = new List<LookupItem>
-                //    {
-                //        new() { Id = "1", Name = "Full Time"  },
-                //        new() { Id = "2", Name = "Part Time"  },
-                //        new() { Id = "3", Name = "Contract"   },
-                //        new() { Id = "4", Name = "Intern"     },
-                //        new() { Id = "5", Name = "Consultant" },
-                //        new() { Id = "6", Name = "Probation"  }
-                //    },
-                //    EmploymentStatuses = new List<LookupItem>
-                //    {
-                //        new() { Id = "1", Name = "Active"     },
-                //        new() { Id = "2", Name = "On Leave"   },
-                //        new() { Id = "3", Name = "Suspended"  },
-                //        new() { Id = "4", Name = "Resigned"   },
-                //        new() { Id = "5", Name = "Terminated" },
-                //        new() { Id = "6", Name = "Retired"    }
-                //    }
-                //};
 
                 var resp = new EmployeeInitialDataResponse();
 
@@ -190,56 +147,6 @@ namespace SBERP.HumanResources.Service
                 return null;
             }
         }
-
-        // -----------------------------------------------------------------
-        // Get by id — returns the full nested record (JSON from SP)
-        // -----------------------------------------------------------------
-        //public async Task<DataResponse> GetEmployeeByIdAsync(string id)
-        //{
-        //    try
-        //    {
-        //        if (!Guid.TryParse(id, out var g))
-        //            return Utilities.Warn("Invalid employee id");
-
-        //        var conn = _ctx.Database.GetDbConnection();
-        //        if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
-
-        //        using var cmd = conn.CreateCommand();
-        //        cmd.CommandText = "EXEC dbo." + ConstantSupplier.SP_GET_EMPLOYEE_BY_ID + " @Id=@p0";
-        //        AddParam(cmd, "@p0", g);
-
-        //        // SP returns JSON in a single-column row
-        //        using var reader = await cmd.ExecuteReaderAsync();
-        //        var sb = new System.Text.StringBuilder();
-        //        while (await reader.ReadAsync())
-        //            sb.Append(reader.GetValue(0)?.ToString());
-
-        //        var json = sb.ToString();
-        //        if (string.IsNullOrWhiteSpace(json))
-        //            return Utilities.Warn(ConstantSupplier.EMPLOYEE_NOT_FOUND,
-        //                                  code: (int)HttpStatusCode.NotFound);
-
-        //        // Inner FOR JSON columns come back as escaped strings — parse them.
-        //        var jo = JObject.Parse(json);
-        //        var detail = jo.ToObject<EmployeeDetailResponse>()!;
-
-        //        detail.Addresses         = ParseJsonArray<EmployeeAddressDto>(jo["Addresses"]?.ToString());
-        //        detail.Educations        = ParseJsonArray<EmployeeEducationDto>(jo["Educations"]?.ToString());
-        //        detail.Experiences       = ParseJsonArray<EmployeeExperienceDto>(jo["Experiences"]?.ToString());
-        //        detail.Skills            = ParseJsonArray<EmployeeSkillDto>(jo["Skills"]?.ToString());
-        //        detail.Trainings         = ParseJsonArray<EmployeeTrainingDto>(jo["Trainings"]?.ToString());
-        //        detail.Certifications    = ParseJsonArray<EmployeeCertificationDto>(jo["Certifications"]?.ToString());
-        //        detail.Documents         = ParseJsonArray<EmployeeDocumentDto>(jo["Documents"]?.ToString());
-        //        detail.EmergencyContacts = ParseJsonArray<EmployeeEmergencyContactDto>(jo["EmergencyContacts"]?.ToString());
-
-        //        var bankRaw = jo["BankInfo"]?.ToString();
-        //        if (!string.IsNullOrWhiteSpace(bankRaw))
-        //            detail.BankInfo = JsonConvert.DeserializeObject<EmployeeBankDto>(bankRaw);
-
-        //        return Utilities.Ok(ConstantSupplier.EMPLOYEE_FETCH_SUCCESS, detail);
-        //    }
-        //    catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(GetEmployeeByIdAsync)); }
-        //}
 
         public async Task<DataResponse> GetEmployeeByIdAsync(string id)
         {

@@ -18,6 +18,7 @@ namespace SBERP.HumanResources.Helper
         public const string REQ_OR_DATA_NULL = "Request is found null or data not found";
         public const string SAVE_KEY = "Save";
         public const string UPDATE_KEY = "Update";
+        public const string UNEXPECTED_ERROR_MSG = "An unexpected error occurred. Please try again later.";
         public const string FAILED_MSG = "Operation failed.";
         public const string SUCCESS_MSG = "Operation completed successfully.";
         #endregion

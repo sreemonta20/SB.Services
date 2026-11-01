@@ -8,6 +8,7 @@ using SBERP.HumanResources.Helper;
 using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Service;
+using SBERP.Shared.Authorization;
 using System.Net;
 
 namespace SBERP.HumanResources.Controllers.v1
@@ -21,6 +22,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.CostCenter)]
     public class CostCenterController : ControllerBase
     {
         private readonly ICostCenterService _service;
@@ -29,6 +31,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_COSTCENTERS_ROUTE)]
+        [AuthenticatedOnly]
         public async Task<object> GetAllCostCentersAsync()
         {
             try { return await _service.GetAllCostCentersAsync(); }
@@ -38,6 +41,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_COSTCENTERS_PAGING_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.CostCenter, Screens.Position)]
         public async Task<object> GetAllCostCentersPagingWithSearchAsync([FromQuery] string param)
         {
             try
@@ -77,6 +81,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.JobGrade)]
     public class JobGradeController : ControllerBase
     {
         private readonly IJobGradeService _service;
@@ -85,6 +90,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_JOBGRADES_ROUTE)]
+        [AuthenticatedOnly]
         public async Task<object> GetAllJobGradesAsync()
         {
             try { return await _service.GetAllJobGradesAsync(); }
@@ -94,6 +100,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_JOBGRADES_PAGING_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.JobGrade, Screens.Position)]
         public async Task<object> GetAllJobGradesPagingWithSearchAsync([FromQuery] string param)
         {
             try
@@ -133,6 +140,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.HolidayCalendar)]
     public class HolidayCalendarController : ControllerBase
     {
         private readonly IHolidayCalendarService _service;
@@ -141,6 +149,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_HOLIDAYCALENDARS_ROUTE)]
+        [AuthenticatedOnly]
         public async Task<object> GetAllHolidayCalendarsAsync()
         {
             try { return await _service.GetAllHolidayCalendarsAsync(); }

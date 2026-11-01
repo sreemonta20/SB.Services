@@ -10,7 +10,6 @@ namespace SBERP.Security.Models.Configuration
         public string? AppDB { get; set; }
         public ConnectionStrings? ConnectionStrings { get; set; }
         public string? ConnectionProvider { get; set; }
-        //public double AccessTokenExpireTime { get; set; }
         public int Expires { get; set; }
         public int AccessTokenExpirationMinutes { get; set; }
         public int RefreshTokenExpirationDays { get; set; }
@@ -20,8 +19,6 @@ namespace SBERP.Security.Models.Configuration
         public int MaxNumberOfFailedAttempts { get; set; }
         public int BlockMinutes { get; set; }
         public EmailConfiguration? EmailConfiguration { get; set; }
-        public string? EncryptKey { get; set; }
-        public string? EncryptIV { get; set; }
         public bool IsUserDelate { get; set; } 
     }
 }

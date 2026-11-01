@@ -10,35 +10,6 @@ namespace SBERP.DataAccessLayer
     public class DatabaseHandlerFactory : IDatabaseHandlerFactory
     {
 
-        #region Deprecated
-        //public IDatabaseHandler CreateDatabaseHandler(string connectionString, string provider)
-        //{
-        //    IDatabaseHandler? database;
-        //    switch (provider)
-        //    {
-        //        case "Microsoft.Data.SqlClient":
-        //            database = new SqlServerDataHandler(connectionString);
-        //            break;
-
-        //        case "System.Data.OracleClient":
-        //            database = new OracleDataHandler(connectionString);
-        //            break;
-
-        //        case "System.Data.OleDb":
-        //            database = new OleDataHandler(connectionString);
-        //            break;
-
-        //        case "System.Data.Odbc":
-        //            database = new OdbcDataHandler(connectionString);
-        //            break;
-        //        default:
-        //            database = null;
-        //            break;
-        //    }
-        //    return database;
-
-        //}
-        #endregion
 
         public IDatabaseHandler CreateDatabaseHandler(string connectionString, string provider)
         {

@@ -15,44 +15,8 @@ namespace SBERP.DataAccessLayer
     {
         #region Deprecated
         //public static IDbDataParameter CreateParameter(string providerName, string name, object value, DbType dbType, ParameterDirection direction = ParameterDirection.Input)
-        //{
-        //    IDbDataParameter? parameter = null;
-        //    switch (providerName)
-        //    {
-        //        case "Microsoft.Data.SqlClient":
-        //            return CreateSqlParameter(name, value, dbType, direction);
-        //        case "System.Data.OracleClient":
-        //            return CreateOracleParameter(name, value, dbType, direction);
-        //        case "System.Data.OleDb":
-        //            break;
-        //        case "System.Data.Odbc":
-        //            break;
-        //        default:
-        //            break;
-        //    }
 
-        //    return parameter;
-        //}
 
-        //public static IDbDataParameter CreateParameter(string providerName, string name, int size, object value, DbType dbType, ParameterDirection direction = ParameterDirection.Input)
-        //{
-        //    IDbDataParameter? parameter = null;
-        //    switch (providerName)
-        //    {
-        //        case "Microsoft.Data.SqlClient":
-        //            return CreateSqlParameter(name, size, value, dbType, direction);
-        //        case "System.Data.OracleClient":
-        //            return CreateOracleParameter(name, size, value, dbType, direction);
-        //        case "System.Data.OleDb":
-        //            break;
-        //        case "System.Data.Odbc":
-        //            break;
-        //        default:
-        //            break;
-        //    }
-
-        //    return parameter;
-        //}
         #endregion
 
         public static IDbDataParameter CreateParameter(string providerName,string name, object value,DbType dbType,ParameterDirection direction = ParameterDirection.Input)

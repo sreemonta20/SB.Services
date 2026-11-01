@@ -9,6 +9,7 @@ using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Models.Response;
 using SBERP.HumanResources.Service;
+using SBERP.Shared.Authorization;
 using System.Net;
 
 namespace SBERP.HumanResources.Controllers.v1
@@ -18,6 +19,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Designation)]
     public class DesignationController : ControllerBase
     {
         private readonly IDesignationService _service;
@@ -30,6 +32,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_DESIGNATIONS_ROUTE)]
+        [AuthenticatedOnly]
         public async Task<object> GetAllDesignationsAsync()
         {
             try { return await _service.GetAllDesignationsAsync(); }

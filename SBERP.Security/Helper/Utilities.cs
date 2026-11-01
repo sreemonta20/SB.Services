@@ -25,7 +25,6 @@ namespace SBERP.Security.Helper
             // set the item
             SetItemFromRow(item, row);
 
-            // return 
             return item;
         }
         public static List<T> CreateListFromTable<T>(DataTable tbl) where T : new()
@@ -40,7 +39,6 @@ namespace SBERP.Security.Helper
                 lst.Add(CreateItemFromRow<T>(r));
             }
 
-            // return the list
             return lst;
         }
         public static T CreateItemFromRow<T>(DataRow row) where T : new()
@@ -51,7 +49,6 @@ namespace SBERP.Security.Helper
             // set the item
             SetItemFromRow(item, row);
 
-            // return 
             return item;
         }
 
@@ -77,8 +74,6 @@ namespace SBERP.Security.Helper
             result.CurrentPage = page;
             result.PageSize = pageSize;
             result.RowCount = query.Count();
-            
-
 
             var pageCount = (double)result.RowCount / pageSize;
             result.PageCount = (int)Math.Ceiling(pageCount);
@@ -98,8 +93,6 @@ namespace SBERP.Security.Helper
                 RowCount = query.Count()
             };
 
-
-
             double pageCount = (double)result.RowCount / pageSize;
             result.PageCount = (int)Math.Ceiling(pageCount);
 
@@ -117,8 +110,6 @@ namespace SBERP.Security.Helper
                 PageSize = pageSize,
                 RowCount = query.Count()
             };
-
-
 
             double pageCount = (double)result.RowCount / pageSize;
             result.PageCount = (int)Math.Ceiling(pageCount);

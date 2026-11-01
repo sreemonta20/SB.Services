@@ -18,9 +18,7 @@ namespace SBERP.Security.Service
         #region AppUserProfile related methods
         Task<PagingResult<AppUserProfileResponse>?> GetAllAppUserProfilePagingWithSearchAsync(PagingSearchFilter paramRequest);
         Task<DataResponse> GetAppUserProfileByIdAsync(string id);
-        Task<DataResponse> GetAppUserProfileByIdAdoAsync(string id);
-        Task<DataResponse> CreateUpdateAppUserProfileAsync(AppUserProfileRegisterRequest request);
-        Task<DataResponse> CreateUpdateAppUserProfileAsyncExtn(AppUserProfileRegisterRequest request);
+        Task<DataResponse> CreateUpdateAppUserProfileAsync(AppUserProfileRegisterRequest? request, bool selfService = false);
         Task<DataResponse> DeleteAppUserProfileAsync(string id);
         #endregion
 

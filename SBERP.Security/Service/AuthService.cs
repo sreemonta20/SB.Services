@@ -1,13 +1,8 @@
-﻿using Azure;
-using Azure.Core;
-using FluentEmail.Core.Models;
+﻿using FluentEmail.Core.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using SBERP.DataAccessLayer;
 using SBERP.EmailService.Models;
 using SBERP.EmailService.Service;
 using SBERP.Security.Helper;
@@ -16,10 +11,9 @@ using SBERP.Security.Models.Configuration;
 using SBERP.Security.Models.Request;
 using SBERP.Security.Models.Response;
 using SBERP.Security.Persistence;
+using SBERP.Shared.Authorization;
 using SBERP.Shared.Services;
-using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Security.Claims;
 using BCryptNet = BCrypt.Net.BCrypt;
@@ -33,12 +27,11 @@ namespace SBERP.Security.Service
     {
         #region Variable declaration & constructor initialization
 
-        public IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
         private readonly SecurityDBContext _context;
         private readonly IEmailService _emailService;
         private readonly AppSettings? _appSettings;
         private readonly ISecurityLogService _securityLogService;
-        private readonly IDatabaseManager _dbmanager;
         private readonly ITokenService _tokenService;
         private readonly IRoleMenuService _roleMenuService;
         private readonly IDistributedCache _distributedCache;
@@ -55,11 +48,10 @@ namespace SBERP.Security.Service
         /// <param name="emailService"></param>
         /// <param name="options"></param>
         /// <param name="securityLogService"></param>
-        /// <param name="dbManager"></param>
         /// <param name="tokenService"></param>
         /// <param name="roleMenuService"></param>
         public AuthService(IConfiguration config, SecurityDBContext context, IEmailService emailService, IOptions<AppSettings> options,
-        ISecurityLogService securityLogService, IDatabaseManager dbManager, ITokenService tokenService, IRoleMenuService roleMenuService,
+        ISecurityLogService securityLogService, ITokenService tokenService, IRoleMenuService roleMenuService,
         IDistributedCache distributedCache, IOptions<RedisSettings> redisSettings, ITokenBlacklistService tokenBlacklistService,
         IRefreshTokenService refreshTokenService, IHttpContextAccessor httpContextAccessor)
         {
@@ -68,8 +60,6 @@ namespace SBERP.Security.Service
             _emailService = emailService;
             _appSettings = options.Value;
             _securityLogService = securityLogService;
-            _dbmanager = dbManager;
-            _dbmanager.InitializeDatabase(_appSettings?.ConnectionStrings?.SCSqlConnectionString, _appSettings?.ConnectionProvider);
             _tokenService = tokenService;
             _roleMenuService = roleMenuService;
             _distributedCache = distributedCache;
@@ -131,13 +121,12 @@ namespace SBERP.Security.Service
                 if (Utilities.IsNull(oAppUserProfile))
                     return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.AUTH_USER_PROFILE_NOT_FOUND_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
 
-                ClaimRequest oClaimRequest = new() { UserId = oExistAppUser.Id.ToString(), UserName = request.UserName, Email = oAppUserProfile.Email, Role = oAppUserProfile.AppUserRoleId.ToString() };
+                ClaimRequest oClaimRequest = await BuildClaimsAsync(oExistAppUser.Id, oExistAppUser.UserName, oAppUserProfile!);
                 string accessToken = _tokenService.GenerateJwtToken(oClaimRequest);
                 if (Utilities.IsNullOrEmptyOrWhiteSpace(accessToken))
                 {
                     return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.AUTH_FAILED_GENRATE_JWT_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
                 }
-                // new login session: only the token's hash is stored, in AppUserRefreshTokens
                 string refreshToken = await _refreshTokenService.IssueAsync(oExistAppUser.Id, ClientIp(), ClientUserAgent());
 
                 TokenResponse oTokenResponse = new() { access_token = accessToken, refresh_token = refreshToken };
@@ -152,61 +141,6 @@ namespace SBERP.Security.Service
                 throw new Exception(ConstantSupplier.AUTH_EXCEPTION_MSG);
             }
         }
-
-        /// <summary>
-        /// This method is used to pull the application user profile and user menu with permissin details after successful authentication.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns><see cref="Task{DataResponse}"/></returns>
-        /// <exception cref="Exception"></exception>
-        //public async Task<DataResponse> GetAppUserProfileMenuAsync(string userId)
-        //{
-        //    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_REQ_MSG, LogSafe.Serialize(userId, Formatting.Indented)));
-        //    object? nullValue = null;
-        //    try
-        //    {
-        //        if (Utilities.IsNullOrEmptyOrWhiteSpace(userId))
-        //            return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.Unauthorized, null, ConstantSupplier.APP_USER_PROFILE_MENU_INVALID_TOKEN_MSG, ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
-
-        //        AppUser? oExistAppUser = await _context.AppUsers!.Include(u => u.AppUserProfile).FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId) && u.IsActive == true);
-
-        //        if (Utilities.IsNull(oExistAppUser))
-        //            return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.NotFound, null, ConstantSupplier.INVALID_USER_MSG, ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
-
-        //        AppUserProfile? oAppUserProfile = await _context.AppUserProfiles!.FirstOrDefaultAsync(x => x.Id == oExistAppUser!.AppUserProfileId && x.IsActive == true);
-
-        //        if (Utilities.IsNull(oAppUserProfile))
-        //            return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.AUTH_USER_PROFILE_NOT_FOUND_MSG, ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
-
-        //        DataResponse oUserMenuResponse = await _roleMenuService.GetAllAppUserMenuByUserIdAsync(oAppUserProfile!.Id.ToString());
-        //        if (!oUserMenuResponse.Success)
-        //            return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.BadRequest, null, ConstantSupplier.AUTH_FAILED_RETRIEVE_MENU_MSG, ConstantSupplier.SERVICE_APP_USER_PROFILE_MENU_FAILED_MSG);
-
-
-        //        ProfileMenuResponse oProfileMenuResponse = new()
-        //        {
-        //            user = new User
-        //            {
-        //                Id = Convert.ToString(oAppUserProfile.Id),
-        //                FullName = oAppUserProfile.FullName,
-        //                UserName = oExistAppUser!.UserName,
-        //                Email = oAppUserProfile.Email,
-        //                UserRole = oAppUserProfile.AppUserRoleId.ToString(),
-        //                CreatedDate = oAppUserProfile.CreatedDate
-        //            },
-        //            userMenus = Convert.ToString(oUserMenuResponse.Result)
-        //        };
-
-
-        //        return new DataResponse { Success = true, Message = ConstantSupplier.APP_USER_PROFILE_MENU_SUCCESS_MSG, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = oProfileMenuResponse };
-
-        //    }
-        //    catch (Exception Ex)
-        //    {
-        //        _securityLogService.LogError($"Service: Exception in GetAppUserProfileMenuAsync: {Ex.Message}");
-        //        throw new Exception(ConstantSupplier.APP_USER_PROFILE_MENU_SERVICE_EXCEPTION_MSG);
-        //    }
-        //}
 
         public async Task<DataResponse> GetAppUserProfileMenuAsync(string userId)
         {
@@ -394,7 +328,7 @@ namespace SBERP.Security.Service
                     return Utilities.FailedResponse(nullValue, _securityLogService, (int)HttpStatusCode.Unauthorized, null, ConstantSupplier.AUTH_USER_PROFILE_NOT_FOUND_MSG, ConstantSupplier.SERVICE_LOGIN_FAILED_MSG);
                 }
 
-                ClaimRequest oClaimRequest = new() { UserId = user.Id.ToString(), UserName = user.UserName, Email = oAppUserProfile!.Email, Role = oAppUserProfile.AppUserRoleId.ToString() };
+                ClaimRequest oClaimRequest = await BuildClaimsAsync(user.Id, user.UserName, oAppUserProfile!);
                 string accessToken = _tokenService.GenerateJwtToken(oClaimRequest);
                 if (Utilities.IsNullOrEmptyOrWhiteSpace(accessToken))
                 {
@@ -465,6 +399,32 @@ namespace SBERP.Security.Service
                     ResponseCode = (int)HttpStatusCode.InternalServerError
                 };
             }
+        }
+
+        /// <summary>
+        /// The token's claims, with the role's current rights from AppUserRoleMenus. Rebuilt on every refresh,
+        /// so a change to a role reaches its users within one access token lifetime.
+        /// </summary>
+        private async Task<ClaimRequest> BuildClaimsAsync(Guid userId, string? userName, AppUserProfile profile)
+        {
+            var rows = await _context.AppUserRoleMenus!.AsNoTracking()
+                .Where(rm => rm.AppUserRoleId == profile.AppUserRoleId && rm.IsActive == true
+                             && rm.AppUserMenu!.IsActive == true && rm.AppUserMenu.RouteLink != null && rm.AppUserMenu.RouteLink != "")
+                .Select(rm => new { rm.AppUserMenu!.RouteLink, rm.IsView, rm.IsCreate, rm.IsUpdate, rm.IsDelete })
+                .ToListAsync();
+
+            return new ClaimRequest
+            {
+                UserId = userId.ToString(),
+                UserName = userName,
+                Email = profile.Email,
+                Role = profile.AppUserRoleId.ToString(),
+                ProfileId = profile.Id.ToString(),
+                EmployeeId = profile.EmployeeId?.ToString(),
+                Permissions = ScreenPermissions.Encode(rows.Select(r => (r.RouteLink!,
+                    (r.IsView == true ? ScreenAction.View : 0) | (r.IsCreate == true ? ScreenAction.Create : 0)
+                    | (r.IsUpdate == true ? ScreenAction.Update : 0) | (r.IsDelete == true ? ScreenAction.Delete : 0))))
+            };
         }
 
         /// <summary>A valid BCrypt hash of a random value, verified against when the user name is unknown.</summary>
@@ -538,30 +498,15 @@ namespace SBERP.Security.Service
         /// <returns><see cref="Task{SendResponse}"/></returns>
         private async Task<SendResponse> SendEmail(LoginRequest? request, AppUser? user)
         {
-            SendResponse response;
-            try
-            {
-                //string? userEmail = _context?.AppUserProfiles?.SingleOrDefault(u => u.Id == user.AppUserProfileId && u.IsActive == true)?.Email;
+            string body = _emailService.PopulateBody("EmailTemplates/emailblocknotice.html", user?.UserName,
+                                    "User management", _configuration["Onboarding:LoginUrl"] ?? "http://localhost:4200/",
+                                    "Please check your username and password. Please wait for mentioned time to re-login");
+            string? email = _context.AppUserProfiles?.Where(u => u.Id == user!.AppUserProfileId && u.IsActive == true).SingleOrDefault()?.Email;
+            if (Utilities.IsNullOrEmpty(email))
+                return new() { ErrorMessages = new List<string> { "No valid email address found" }, MessageId = "" };
 
-                string body = _emailService.PopulateBody("EmailTemplates/emailblocknotice.html", user?.UserName,
-                                        "User management", "https://localhost:4200/",
-                                        "Please check your username and password. Please wait for mentioned time to re-login");
-                string? email = _context?.AppUserProfiles?.Where(u => u.Id == user.AppUserProfileId && u.IsActive == true)?.SingleOrDefault()?.Email;
-                if (!Utilities.IsNullOrEmpty(email))
-                {
-                    Message message = new() { To = email, Name = request?.UserName, Subject = "Email Blocked", Body = body };
-                    response = await _emailService.SendEmailAsync(_appSettings.EmailConfiguration, message);
-                }
-                else
-                {
-                    return new() { ErrorMessages = new List<string> { "No valid email address found" }, MessageId = "" };
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return response;
+            Message message = new() { To = email, Name = request?.UserName, Subject = "Email Blocked", Body = body };
+            return await _emailService.SendEmailAsync(_appSettings!.EmailConfiguration, message);
         }
 
     }

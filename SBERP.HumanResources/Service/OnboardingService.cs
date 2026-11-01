@@ -47,7 +47,7 @@ namespace SBERP.HumanResources.Service
         {
             try
             {
-                var json = await ScalarSpAsync(ConstantSupplier.SP_GET_ACCEPTED_OFFERS_AWAITING_ONB);
+                var json = await AdoHelper.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_ACCEPTED_OFFERS_AWAITING_ONB);
                 var items = string.IsNullOrWhiteSpace(json)
                     ? new List<AcceptedOfferResponse>()
                     : JsonConvert.DeserializeObject<List<AcceptedOfferResponse>>(json!) ?? new();
@@ -97,7 +97,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(onboardingId, out var g)) return Utilities.Warn("Invalid onboarding id");
-                var json = await ScalarSpAsync(ConstantSupplier.SP_GET_ONBOARDING_TASKS, ("@OnboardingId", g));
+                var json = await AdoHelper.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_ONBOARDING_TASKS, ("@OnboardingId", g));
                 var items = string.IsNullOrWhiteSpace(json)
                     ? new List<OnboardingTaskResponse>()
                     : JsonConvert.DeserializeObject<List<OnboardingTaskResponse>>(json!) ?? new();
@@ -200,19 +200,6 @@ namespace SBERP.HumanResources.Service
                 return Utilities.Ok(okMsg, onb.Id);
             }
             catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(TransitionAsync)); }
-        }
-
-        // ---- small ADO helpers (same approach as the recruitment services) ----
-        private async Task<string?> ScalarSpAsync(string sp, params (string name, object? value)[] ps)
-        {
-            var conn = _ctx.Database.GetDbConnection();
-            if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = ps.Length == 0
-                ? $"EXEC dbo.{sp}"
-                : $"EXEC dbo.{sp} " + string.Join(", ", ps.Select((p, i) => $"{p.name}=@p{i}"));
-            for (int i = 0; i < ps.Length; i++) AddParam(cmd, $"@p{i}", ps[i].value);
-            return (await cmd.ExecuteScalarAsync()) as string;
         }
 
         private static int TryOrdinal(System.Data.Common.DbDataReader r, string name)

@@ -5,6 +5,7 @@ using SBERP.Security.Models.Configuration;
 using SBERP.Security.Models.Request;
 using SBERP.Security.Models.Response;
 using SBERP.Security.Service;
+using SBERP.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -25,6 +26,7 @@ namespace SBERP.Security.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Profiles)]
     public class UserController : ControllerBase
     {
         #region Variable declaration & constructor initialization
@@ -38,6 +40,19 @@ namespace SBERP.Security.Controllers.v1
             _tokenService = tokenService;
         }
         #endregion
+
+        /// <summary>The screen right, or the caller's own profile.</summary>
+        private bool MayChangeProfile(string? profileId, ScreenAction action) =>
+            User.HasScreen(Screens.Profiles, action) || User.IsOwnProfile(profileId);
+
+        private ObjectResult NoPermission() => StatusCode(StatusCodes.Status403Forbidden, new DataResponse
+        {
+            Success = false,
+            Message = ConstantSupplier.GLOBAL_ERR_AUTH_FAILED_NO_PERMISSION_MSG,
+            MessageType = Enum.EnumResponseType.Error,
+            ResponseCode = StatusCodes.Status403Forbidden,
+            Result = null
+        });
 
         #region AppUser related all http methods
         // POST api/v1/User/createUpdateAppUser
@@ -64,7 +79,7 @@ namespace SBERP.Security.Controllers.v1
                 _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUP_APP_USER_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
                 return new DataResponse
                 {
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     Success = false,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
@@ -112,7 +127,7 @@ namespace SBERP.Security.Controllers.v1
                 return new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
@@ -131,8 +146,11 @@ namespace SBERP.Security.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_APP_USER_PROFILE_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [AuthenticatedOnly] // screen rights, or one's own profile: checked in the action
         public async Task<object> GetAppUserProfileByIdAsync([FromQuery] string id)
         {
+            if (!MayChangeProfile(id, ScreenAction.View))
+                return NoPermission();
             _securityLogService.LogInfo(ConstantSupplier.GET_USER_PROFILE_BY_ID_STARTED_INFO_MSG);
             _securityLogService.LogInfo(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_REQ_MSG, LogSafe.Serialize(id, Formatting.Indented)));
             DataResponse response;
@@ -142,9 +160,6 @@ namespace SBERP.Security.Controllers.v1
                 response = await _userService.GetAppUserProfileByIdAsync(id);
                 #endregion
 
-                #region ADO.NET Codeblock
-                //response = await _userService.GetAppUserProfileByIdAdoAsync(id);
-                #endregion
             }
             catch (Exception Ex)
             {
@@ -152,7 +167,7 @@ namespace SBERP.Security.Controllers.v1
                 _securityLogService.LogError(string.Format(ConstantSupplier.GET_USER_PROFILE_BY_ID_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     Success = false,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
@@ -172,14 +187,21 @@ namespace SBERP.Security.Controllers.v1
         [HttpPost]
         [Route(ConstantSupplier.POST_APP_USER_PROFILE_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [AuthenticatedOnly] // screen rights, or one's own profile: checked in the action
         public async Task<object> CreateUpdateAppUserProfileAsync(AppUserProfileRegisterRequest request)
         {
+            bool isCreate = request.ActionName == ConstantSupplier.SAVE_KEY;
+            bool hasScreenRight = User.HasScreen(Screens.Profiles, isCreate ? ScreenAction.Create : ScreenAction.Update);
+            // without the screen right a user may only edit their own details, never their role or status
+            bool selfService = !hasScreenRight && !isCreate && User.IsOwnProfile(request.Id);
+            if (!hasScreenRight && !selfService)
+                return NoPermission();
             _securityLogService.LogInfo(ConstantSupplier.SAVEUP_APP_USER_PROFILE_STARTED_INFO_MSG);
             _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_REQ_MSG, LogSafe.Serialize(request, Formatting.Indented)));
             DataResponse response;
             try
             {
-                response = await _userService.CreateUpdateAppUserProfileAsync(request);
+                response = await _userService.CreateUpdateAppUserProfileAsync(request, selfService);
             }
             catch (Exception Ex)
             {
@@ -187,7 +209,7 @@ namespace SBERP.Security.Controllers.v1
                 _securityLogService.LogError(string.Format(ConstantSupplier.SAVEUP_APP_USER_PROFILE_INNER_EXCEPTION_MSG, LogSafe.Serialize(Ex, Formatting.Indented)));
                 return new DataResponse
                 {
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     Success = false,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
@@ -221,7 +243,7 @@ namespace SBERP.Security.Controllers.v1
                 _securityLogService.LogError(string.Format(ConstantSupplier.DEL_APP_USER_PROFILE_EXCEPTION_MSG, LogSafe.Serialize(Ex.Message, Formatting.Indented)));
                 return new DataResponse
                 {
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     Success = false,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
@@ -244,9 +266,12 @@ namespace SBERP.Security.Controllers.v1
         [Consumes("multipart/form-data")]
         [RequestSizeLimit(ConstantSupplier.APP_USER_PROFILE_PHOTO_REQUEST_LIMIT)]
         [RequestFormLimits(MultipartBodyLengthLimit = ConstantSupplier.APP_USER_PROFILE_PHOTO_REQUEST_LIMIT)]
+        [AuthenticatedOnly] // screen rights, or one's own profile: checked in the action
         public async Task<object> UploadAppUserProfilePhotoAsync([FromForm] AppUserProfilePhotoRequest request)
         {
             _securityLogService.LogInfo($"UploadAppUserProfilePhoto api method started for profile {request?.Id}.");
+            if (!MayChangeProfile(request?.Id, ScreenAction.Update))
+                return NoPermission();
             if (request?.File == null || request.File.Length == 0)
                 return new DataResponse { Success = false, Message = ConstantSupplier.APP_USER_PROFILE_PHOTO_FILE_REQUIRED, MessageType = Enum.EnumResponseType.Warning, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
             try
@@ -257,17 +282,17 @@ namespace SBERP.Security.Controllers.v1
             catch (Exception Ex)
             {
                 _securityLogService.LogError($"UploadAppUserProfilePhoto Exception: {Ex.Message}");
-                return new DataResponse { Success = false, Message = Ex.Message, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.InternalServerError, Result = null };
+                return new DataResponse { Success = false, Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.InternalServerError, Result = null };
             }
         }
 
-        // GET api/v1/User/getAppUserProfilePhoto?id={profileId}
         /// <summary>
         /// Streams the profile photo (image/jpeg or image/png). 204 No Content when the profile has no photo, so the
         /// client shows the default avatar. The ETag is the ProfilePhotoId, which changes on every upload.
         /// </summary>
         [HttpGet]
         [Route(ConstantSupplier.GET_APP_USER_PROFILE_PHOTO_ROUTE_NAME)]
+        [AuthenticatedOnly] // photos of colleagues are visible to any signed-in user
         public async Task<IActionResult> GetAppUserProfilePhotoAsync([FromQuery] string id)
         {
             var photo = await _userService.GetAppUserProfilePhotoAsync(id);
@@ -278,20 +303,22 @@ namespace SBERP.Security.Controllers.v1
                 entityTag: new Microsoft.Net.Http.Headers.EntityTagHeaderValue($"\"{photo.PhotoId:N}\""));
         }
 
-        // DELETE api/v1/User/removeAppUserProfilePhoto?id={profileId}&updatedBy={profileId}
         /// <summary>Removes the profile photo; the default avatar is shown again.</summary>
         [HttpDelete]
         [Route(ConstantSupplier.DEL_APP_USER_PROFILE_PHOTO_ROUTE_NAME)]
+        [AuthenticatedOnly] // screen rights, or one's own profile: checked in the action
         public async Task<object> RemoveAppUserProfilePhotoAsync([FromQuery] string id, [FromQuery] string? updatedBy)
         {
+            if (!MayChangeProfile(id, ScreenAction.Update))
+                return NoPermission();
             try
             {
-                return await _userService.RemoveAppUserProfilePhotoAsync(id, updatedBy);
+                return await _userService.RemoveAppUserProfilePhotoAsync(id, User.FindFirst(SberpClaims.ProfileId)?.Value ?? updatedBy);
             }
             catch (Exception Ex)
             {
                 _securityLogService.LogError($"RemoveAppUserProfilePhoto Exception: {Ex.Message}");
-                return new DataResponse { Success = false, Message = Ex.Message, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.InternalServerError, Result = null };
+                return new DataResponse { Success = false, Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.InternalServerError, Result = null };
             }
         }
         #endregion

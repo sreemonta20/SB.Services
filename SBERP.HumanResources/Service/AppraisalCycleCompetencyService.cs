@@ -10,43 +10,6 @@ using System.Net;
 
 namespace SBERP.HumanResources.Service
 {
-    /// <summary>Shared ADO helper for the performance services — JSON scalar reads
-    /// plus the RowsAffected/Message reader for the transactional SPs.</summary>
-    internal static class PerformanceAdo
-    {
-        public static async Task<string?> ScalarSpAsync(HumanResourcesDBContext ctx, string sp, params (string name, object? value)[] ps)
-        {
-            var conn = ctx.Database.GetDbConnection();
-            if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = ps.Length == 0 ? $"EXEC dbo.{sp}"
-                : $"EXEC dbo.{sp} " + string.Join(", ", ps.Select((p, i) => $"{p.name}=@p{i}"));
-            for (int i = 0; i < ps.Length; i++) AddParam(cmd, $"@p{i}", ps[i].value);
-            return (await cmd.ExecuteScalarAsync()) as string;
-        }
-
-        public static async Task<(int rows, string msg)> StatusSpAsync(HumanResourcesDBContext ctx, string sp, params (string name, object? value)[] ps)
-        {
-            var conn = ctx.Database.GetDbConnection();
-            if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = $"EXEC dbo.{sp} " + string.Join(", ", ps.Select((p, i) => $"{p.name}=@p{i}"));
-            for (int i = 0; i < ps.Length; i++) AddParam(cmd, $"@p{i}", ps[i].value);
-            using var reader = await cmd.ExecuteReaderAsync();
-            int rows = 0; string msg = ConstantSupplier.FAILED_MSG;
-            if (await reader.ReadAsync())
-            {
-                rows = reader.GetInt32(reader.GetOrdinal("RowsAffected"));
-                msg = reader.GetString(reader.GetOrdinal("Message"));
-            }
-            await reader.CloseAsync();
-            return (rows, msg);
-        }
-
-        public static void AddParam(DbCommand cmd, string name, object? value)
-        { var p = cmd.CreateParameter(); p.ParameterName = name; p.Value = value ?? DBNull.Value; cmd.Parameters.Add(p); }
-    }
-
     public class AppraisalCycleService : IAppraisalCycleService
     {
         private readonly HumanResourcesDBContext _ctx;
@@ -134,7 +97,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(request.Id, out var id)) return Utilities.Warn("Invalid cycle id");
-                var (rows, msg) = await PerformanceAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_APPRAISAL_CYCLE_STATUS,
+                var (rows, msg) = await AdoHelper.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_APPRAISAL_CYCLE_STATUS,
                     ("@Id", id), ("@StatusId", request.StatusId), ("@UpdatedBy", request.CreateUpdateBy));
                 return rows > 0 ? Utilities.Ok(msg, null) : Utilities.Warn(msg);
             }
@@ -146,7 +109,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(request.CycleId, out var id)) return Utilities.Warn("Invalid cycle id");
-                var (rows, msg) = await PerformanceAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_INITIATE_REVIEWS_FOR_CYCLE,
+                var (rows, msg) = await AdoHelper.StatusSpAsync(_ctx, ConstantSupplier.SP_INITIATE_REVIEWS_FOR_CYCLE,
                     ("@CycleId", id), ("@CreatedBy", request.CreateUpdateBy));
                 return rows > 0 ? Utilities.Ok(msg, null) : Utilities.Warn(msg);
             }

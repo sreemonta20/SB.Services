@@ -11,44 +11,6 @@ using System.Net;
 
 namespace SBERP.HumanResources.Service
 {
-    /// <summary>Small ADO helper shared by the leave services (same pattern as
-    /// the attendance services): SP reads returning one JSON string, plus the
-    /// RowsAffected/Message reader for the balance-moving SPs.</summary>
-    internal static class LeaveAdo
-    {
-        public static async Task<string?> ScalarSpAsync(HumanResourcesDBContext ctx, string sp, params (string name, object? value)[] ps)
-        {
-            var conn = ctx.Database.GetDbConnection();
-            if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = ps.Length == 0 ? $"EXEC dbo.{sp}"
-                : $"EXEC dbo.{sp} " + string.Join(", ", ps.Select((p, i) => $"{p.name}=@p{i}"));
-            for (int i = 0; i < ps.Length; i++) AddParam(cmd, $"@p{i}", ps[i].value);
-            return (await cmd.ExecuteScalarAsync()) as string;
-        }
-
-        public static async Task<(int rows, string msg)> StatusSpAsync(HumanResourcesDBContext ctx, string sp, params (string name, object? value)[] ps)
-        {
-            var conn = ctx.Database.GetDbConnection();
-            if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = $"EXEC dbo.{sp} " + string.Join(", ", ps.Select((p, i) => $"{p.name}=@p{i}"));
-            for (int i = 0; i < ps.Length; i++) AddParam(cmd, $"@p{i}", ps[i].value);
-            using var reader = await cmd.ExecuteReaderAsync();
-            int rows = 0; string msg = ConstantSupplier.FAILED_MSG;
-            if (await reader.ReadAsync())
-            {
-                rows = reader.GetInt32(reader.GetOrdinal("RowsAffected"));
-                msg = reader.GetString(reader.GetOrdinal("Message"));
-            }
-            await reader.CloseAsync();
-            return (rows, msg);
-        }
-
-        public static void AddParam(DbCommand cmd, string name, object? value)
-        { var p = cmd.CreateParameter(); p.ParameterName = name; p.Value = value ?? DBNull.Value; cmd.Parameters.Add(p); }
-    }
-
     public class LeaveTypeService : ILeaveTypeService
     {
         private readonly HumanResourcesDBContext _ctx;
@@ -202,7 +164,7 @@ namespace SBERP.HumanResources.Service
         {
             try
             {
-                var (rows, msg) = await LeaveAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_GRANT_LEAVE_ENTITLEMENTS,
+                var (rows, msg) = await AdoHelper.StatusSpAsync(_ctx, ConstantSupplier.SP_GRANT_LEAVE_ENTITLEMENTS,
                     ("@Year", request.Year), ("@CreatedBy", request.CreateUpdateBy));
                 return rows > 0 ? Utilities.Ok(msg, null) : Utilities.Warn(msg);
             }

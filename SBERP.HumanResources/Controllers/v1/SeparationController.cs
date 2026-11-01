@@ -8,6 +8,7 @@ using SBERP.HumanResources.Helper;
 using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Service;
+using SBERP.Shared.Authorization;
 using System.Net;
 
 namespace SBERP.HumanResources.Controllers.v1
@@ -17,6 +18,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Separation)]
     public class SeparationController : ControllerBase
     {
         private readonly ISeparationService _service;
@@ -61,6 +63,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.SET_SEPARATION_STATUS_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Separation, Action = ScreenAction.Update)]
         public async Task<object> SetSeparationStatusAsync([FromBody] SeparationStatusRequest request)
         {
             try { return await _service.SetSeparationStatusAsync(request); }
@@ -69,6 +72,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.APPROVE_SEPARATION_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Separation, Action = ScreenAction.Update)]
         public async Task<object> ApproveSeparationAsync([FromBody] ApproveSeparationRequest request)
         {
             try { return await _service.ApproveSeparationAsync(request); }
@@ -77,6 +81,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.SETTLE_SEPARATION_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Separation, Action = ScreenAction.Update)]
         public async Task<object> SettleSeparationAsync([FromBody] SettleSeparationRequest request)
         {
             try { return await _service.SettleSeparationAsync(request); }
@@ -85,6 +90,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.SET_CLEARANCE_STATUS_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Separation, Action = ScreenAction.Update)]
         public async Task<object> SetClearanceStatusAsync([FromBody] ClearanceStatusRequest request)
         {
             try { return await _service.SetClearanceStatusAsync(request); }

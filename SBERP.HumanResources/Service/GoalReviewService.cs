@@ -111,7 +111,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(id, out var g)) return Utilities.Warn("Invalid review id");
-                var json = await PerformanceAdo.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_REVIEW_DETAIL, ("@Id", g));
+                var json = await AdoHelper.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_REVIEW_DETAIL, ("@Id", g));
                 if (string.IsNullOrWhiteSpace(json)) return Utilities.Warn("Review not found", code: (int)HttpStatusCode.NotFound);
                 var obj = JsonConvert.DeserializeObject<object>(json!);
                 return Utilities.Ok(ConstantSupplier.REVIEW_FETCH, obj);
@@ -125,7 +125,7 @@ namespace SBERP.HumanResources.Service
             {
                 if (!Guid.TryParse(request.ReviewId, out var id)) return Utilities.Warn("Invalid review id");
                 var ratingsJson = JsonConvert.SerializeObject(request.Ratings ?? new List<ReviewRatingItem>());
-                var (rows, msg) = await PerformanceAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_SAVE_REVIEW_RATINGS,
+                var (rows, msg) = await AdoHelper.StatusSpAsync(_ctx, ConstantSupplier.SP_SAVE_REVIEW_RATINGS,
                     ("@ReviewId", id), ("@Ratings", ratingsJson),
                     ("@SelfComments", request.SelfComments), ("@ManagerComments", request.ManagerComments),
                     ("@UpdatedBy", request.CreateUpdateBy));
@@ -139,7 +139,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(request.Id, out var id)) return Utilities.Warn("Invalid review id");
-                var (rows, msg) = await PerformanceAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_REVIEW_STATUS,
+                var (rows, msg) = await AdoHelper.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_REVIEW_STATUS,
                     ("@Id", id), ("@StatusId", request.StatusId),
                     ("@Acknowledgement", request.Acknowledgement), ("@UpdatedBy", request.CreateUpdateBy));
                 return rows > 0 ? Utilities.Ok(msg, null) : Utilities.Warn(msg);

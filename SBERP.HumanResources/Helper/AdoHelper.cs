@@ -36,6 +36,21 @@ namespace SBERP.HumanResources.Helper
             return (rows, msg);
         }
 
+        /// <summary>Same as <see cref="StatusSpAsync"/>, plus one extra column when the SP returns it.</summary>
+        public static async Task<(int rows, string msg, string? extra)> StatusSpWithExtraAsync(HumanResourcesDBContext ctx, string sp, string? extraColumn,
+            params (string name, object? value)[] ps)
+        {
+            using var cmd = await CreateCommandAsync(ctx, sp, ps);
+            using var reader = await cmd.ExecuteReaderAsync();
+            if (!await reader.ReadAsync())
+                return (0, ConstantSupplier.FAILED_MSG, null);
+
+            string? extra = null;
+            if (extraColumn != null && Enumerable.Range(0, reader.FieldCount).Any(i => reader.GetName(i).Equals(extraColumn, StringComparison.OrdinalIgnoreCase)))
+                extra = await reader.IsDBNullAsync(reader.GetOrdinal(extraColumn)) ? null : reader[extraColumn].ToString();
+            return (Convert.ToInt32(reader["RowsAffected"]), reader["Message"]?.ToString() ?? ConstantSupplier.FAILED_MSG, extra);
+        }
+
         /// <summary>Next code for PREFIX-0001 style business keys from the codes already used.</summary>
         public static string NextCode(string prefix, IEnumerable<string?> existing)
         {

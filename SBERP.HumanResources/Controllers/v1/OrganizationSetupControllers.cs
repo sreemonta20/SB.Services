@@ -9,6 +9,7 @@ using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Models.Response;
 using SBERP.HumanResources.Service;
+using SBERP.Shared.Authorization;
 using System.Net;
 
 namespace SBERP.HumanResources.Controllers.v1
@@ -23,6 +24,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Company)]
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _service;
@@ -35,6 +37,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_COMPANIES_ROUTE)]
+        [AuthenticatedOnly]
         public async Task<object> GetAllCompaniesAsync()
         {
             try { return await _service.GetAllCompaniesAsync(); }
@@ -44,6 +47,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_COMPANIES_PAGING_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Company, Screens.CostCenter, Screens.JobGrade, Screens.Position)]
         public async Task<object> GetAllCompaniesPagingWithSearchAsync([FromQuery] string param)
         {
             try
@@ -107,6 +111,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Branch)]
     public class BranchController : ControllerBase
     {
         private readonly IBranchService _service;
@@ -119,6 +124,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_BRANCHES_ROUTE)]
+        [AuthenticatedOnly]
         public async Task<object> GetAllBranchesAsync()
         {
             try { return await _service.GetAllBranchesAsync(); }
@@ -127,6 +133,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_BRANCHES_BY_COMPANY_ROUTE)]
+        [AuthenticatedOnly]
         public async Task<object> GetAllBranchesByCompanyIdAsync([FromQuery] string companyId)
         {
             try { return await _service.GetAllBranchesByCompanyIdAsync(companyId); }
@@ -136,6 +143,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_BRANCHES_PAGING_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Branch, Screens.CostCenter, Screens.JobGrade, Screens.Position)]
         public async Task<object> GetAllBranchesPagingWithSearchAsync([FromQuery] string param)
         {
             try

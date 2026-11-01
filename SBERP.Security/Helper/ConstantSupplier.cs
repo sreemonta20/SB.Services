@@ -107,7 +107,6 @@ namespace SBERP.Security.Helper
         public const string REFRESHTOKEN_STARTED_INFO_MSG = "RefreshToken api method started.\n";
         public const string REFRESHTOKEN_REQ_MSG = "RefreshToken api method request is: \n{0}\n";
         public const string REFRESHTOKEN_FAILED_MSG = "Exception is: \t\t\t{0}\nResponse is: \n{1}\n";
-        //public const string REFRESHTOKEN_EXCEPTION_MSG = "Exception is: \t\t\t{0}\nResponse is: \n{1}\n";
         public const string SERVICE_REFRESHTOKEN_REQ_MSG = "RefreshToken (Auth service) method request is: \n{0}\n";
         public const string SERVICE_REFRESHTOKEN_FAILED_MSG = "RefreshToken Failed (Auth service) : api method response is: \n{0}\n";
         public const string SERVICE_REFRESHTOKEN_RES_MSG = "RefreshToken (Auth service) method response is: \n{0}\n";
@@ -118,7 +117,6 @@ namespace SBERP.Security.Helper
         public const string REVOKE_STARTED_INFO_MSG = "Revoke api method started.\n";
         public const string REVOKE_REQ_MSG = "Revoke api method request is: \n{0}\n";
         public const string REVOKE_FAILED_MSG = "Failed Message is: \t\t\t{0}\nResponse is: \n{1}\n";
-        //public const string REVOKE_EXCEPTION_MSG = "Exception is: \t\t\t{0}\nResponse is: \n{1}\n";
         public const string REVOKE_RES_MSG = "Revoke api method response is: \n{0}\n";
         public const string SERVICE_REVOKE_REQ_MSG = "Revoke (Auth service) method request is: \n{0}\n";
         public const string SERVICE_REVOKE_FAILED_MSG = "Revoke failed (User service) :: api method response is: \n{0}\n";
@@ -500,14 +498,6 @@ namespace SBERP.Security.Helper
 
         public const string USER_ROLE_MENU_CREATE_UPDATE_SUCCESS = "User role menu permission saved successfully!";
         public const string USER_ROLE_MENU_CREATE_UPDATE_FAILED = "Saving user role menu permission failed!";
-
-        #endregion
-
-        #region Data Analytics Controller
-
-        #endregion
-
-        #region Data Analytics Service
 
         #endregion
 

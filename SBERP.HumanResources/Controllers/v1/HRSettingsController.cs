@@ -7,6 +7,7 @@ using SBERP.HumanResources.Filter;
 using SBERP.HumanResources.Helper;
 using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Service;
+using SBERP.Shared.Authorization;
 using System.Security.Claims;
 
 namespace SBERP.HumanResources.Controllers.v1
@@ -19,6 +20,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.HrSettings)]
     public class HRSettingsController : ControllerBase
     {
         private readonly IHRSettingsService _service;
@@ -53,6 +55,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [HttpPost]
         [Route(ConstantSupplier.UPLOAD_ATTENDANCE_EXCEL_ROUTE)]
         [Consumes("multipart/form-data")]
+        [RequireScreen(Screens.HrSettings, Action = ScreenAction.Update)]
         public async Task<object> UploadAttendanceExcelAsync(IFormFile file)
         {
             try

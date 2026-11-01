@@ -8,6 +8,7 @@ using SBERP.HumanResources.Helper;
 using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Service;
+using SBERP.Shared.Authorization;
 using System.Net;
 
 namespace SBERP.HumanResources.Controllers.v1
@@ -17,6 +18,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Onboarding)]
     public class OnboardingController : ControllerBase
     {
         private readonly IOnboardingService _service;
@@ -50,6 +52,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [HttpPost]
         [Route(ConstantSupplier.START_ONBOARDING_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Onboarding, Action = ScreenAction.Create)]
         public async Task<object> StartOnboardingAsync([FromBody] StartOnboardingRequest request)
         {
             try { return await _service.StartOnboardingAsync(request); }
@@ -66,6 +69,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost]
         [Route(ConstantSupplier.UPDATE_ONBOARDING_TASK_ROUTE)]
+        [RequireScreen(Screens.Onboarding, Action = ScreenAction.Update)]
         public async Task<object> UpdateOnboardingTaskAsync([FromBody] UpdateOnboardingTaskRequest request)
         {
             try { return await _service.UpdateOnboardingTaskAsync(request); }
@@ -75,6 +79,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [HttpPost]
         [Route(ConstantSupplier.ADD_ONBOARDING_TASK_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Onboarding, Action = ScreenAction.Update)]
         public async Task<object> AddOnboardingTaskAsync([FromBody] AddOnboardingTaskRequest request)
         {
             try { return await _service.AddOnboardingTaskAsync(request); }
@@ -83,6 +88,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost]
         [Route(ConstantSupplier.COMPLETE_ONBOARDING_ROUTE)]
+        [RequireScreen(Screens.Onboarding, Action = ScreenAction.Update)]
         public async Task<object> CompleteOnboardingAsync([FromBody] OnboardingActionRequest request)
         {
             try { return await _service.CompleteOnboardingAsync(request); }
@@ -91,6 +97,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost]
         [Route(ConstantSupplier.CANCEL_ONBOARDING_ROUTE)]
+        [RequireScreen(Screens.Onboarding, Action = ScreenAction.Update)]
         public async Task<object> CancelOnboardingAsync([FromBody] OnboardingActionRequest request)
         {
             try { return await _service.CancelOnboardingAsync(request); }

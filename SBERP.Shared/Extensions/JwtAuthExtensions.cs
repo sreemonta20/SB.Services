@@ -46,7 +46,8 @@ namespace SBERP.Shared.Extensions
                     "SharedJwtSettings is missing or incomplete in appsettings.json. " +
                     "Key, Issuer and Audience must match SBERP.Security AppSettings:JWT exactly.");
 
-            var keyBytes = Encoding.ASCII.GetBytes(jwtSettings.Key);
+            // UTF-8, the same as TokenService when it signs: other encodings differ for a non-ASCII key
+            var keyBytes = Encoding.UTF8.GetBytes(jwtSettings.Key);
 
             services
                 .AddAuthentication(options =>

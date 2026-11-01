@@ -11,6 +11,7 @@ using SBERP.Security.Models.Configuration;
 using SBERP.Security.Models.Request;
 using SBERP.Security.Models.Response;
 using SBERP.Security.Service;
+using SBERP.Shared.Authorization;
 using StackExchange.Redis;
 using System.Net;
 
@@ -26,6 +27,7 @@ namespace SBERP.Security.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.RoleMenus)]
     public class RoleMenuController : ControllerBase
     {
         #region Variable declaration & constructor initialization
@@ -50,6 +52,7 @@ namespace SBERP.Security.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_ROLES_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Roles, Screens.RoleMenus, Screens.Profiles)]
         public async Task<object> GetAllAppUserRolesAsync()
         {
             _securityLogService.LogInfo(ConstantSupplier.GETALLROLES_STARTED_INFO_MSG);
@@ -68,7 +71,7 @@ namespace SBERP.Security.Controllers.v1
                 return new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
@@ -91,6 +94,7 @@ namespace SBERP.Security.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_ROLES_PAGINATION_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Roles)]
         public async Task<object> GetAllAppUserRolesPaginationAsync(int pageNumber = 0, int pageSize = 0)
         {
             DataResponse response;
@@ -109,7 +113,7 @@ namespace SBERP.Security.Controllers.v1
                 return new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
@@ -130,6 +134,7 @@ namespace SBERP.Security.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_ROLE_BY_ID_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Roles)]
         public async Task<object> GetAppUserRolesByIdAsync([FromQuery] string roleId)
         {
             DataResponse response;
@@ -148,7 +153,7 @@ namespace SBERP.Security.Controllers.v1
                 return new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
@@ -169,6 +174,7 @@ namespace SBERP.Security.Controllers.v1
         [HttpPost]
         [Route(ConstantSupplier.POST_SAVE_UPDATE_ROLE_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Roles)]
         public async Task<object> CreateUpdateAppUserRoleAsync(RoleSaveUpdateRequest roleSaveUpdateRequest)
         {
             DataResponse response;
@@ -187,7 +193,7 @@ namespace SBERP.Security.Controllers.v1
                 return new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
@@ -208,6 +214,7 @@ namespace SBERP.Security.Controllers.v1
         [HttpDelete]
         [Route(ConstantSupplier.DELETE_ROLE_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Roles)]
         public async Task<object> DeleteAppUserRoleAsync([FromQuery] string roleId)
         {
             DataResponse response;
@@ -226,7 +233,7 @@ namespace SBERP.Security.Controllers.v1
                 return new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
@@ -249,6 +256,7 @@ namespace SBERP.Security.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_USER_MENU_PAGING_WITH_SEARCH_TERM_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Menus)]
         public async Task<object> GetAllAppUserMenuPagingWithSearchAsync([FromQuery] string param)
         {
             _securityLogService.LogInfo(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_STARTED_INFO_MSG);
@@ -257,10 +265,6 @@ namespace SBERP.Security.Controllers.v1
             try
             {
                 #region ADO.NET Codeblock
-                //dynamic? paramRequest = JsonConvert.DeserializeObject(param);
-                //PagingSearchFilter? oPagingSearchFilter = JsonConvert.DeserializeObject<PagingSearchFilter>(paramRequest[0].ToString());
-                //dynamic? paramRequest = JsonConvert.DeserializeObject(param);
-                //PagingSearchFilter? oPagingSearchFilter = JsonConvert.DeserializeObject<PagingSearchFilter>(paramRequest.ToString());
                 PagingSearchFilter? oPagingSearchFilter = JsonConvert.DeserializeObject<PagingSearchFilter>(param);
                 PagingResult<AppUserMenuResponse>? usermenuList = await _roleMenuService.GetAllAppUserMenuPagingWithSearchAsync(oPagingSearchFilter);
                 if (Utilities.IsNull(usermenuList))
@@ -277,7 +281,7 @@ namespace SBERP.Security.Controllers.v1
                 return new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
@@ -297,8 +301,11 @@ namespace SBERP.Security.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_MENU_BY_USER_ID_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [AuthenticatedOnly] // own menu, or RoleMenus view: checked in the action
         public async Task<object> GetAllAppUserMenuByUserIdAsync([FromQuery] string userId)
         {
+            if (!User.IsOwnProfile(userId) && !User.HasScreen(Screens.RoleMenus, ScreenAction.View))
+                return StatusCode(StatusCodes.Status403Forbidden, new DataResponse { Success = false, Message = ConstantSupplier.GLOBAL_ERR_AUTH_FAILED_NO_PERMISSION_MSG, MessageType = Enum.EnumResponseType.Error, ResponseCode = StatusCodes.Status403Forbidden, Result = null });
             _securityLogService.LogInfo(ConstantSupplier.GETALLMENUBYUSERID_STARTED_INFO_MSG);
             DataResponse response;
             _securityLogService.LogInfo(string.Format(ConstantSupplier.GETALLMENUBYUSERID_REQ_MSG, LogSafe.Serialize(userId, Formatting.Indented)));
@@ -315,7 +322,7 @@ namespace SBERP.Security.Controllers.v1
                 return new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
@@ -336,6 +343,7 @@ namespace SBERP.Security.Controllers.v1
         [HttpPost]
         [Route(ConstantSupplier.POST_SAVE_UPDATE_USER_MENU_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Menus)]
         public async Task<object> CreateUpdateAppUserMenuAsync(AppUserMenuRequest request)
         {
             DataResponse response;
@@ -354,7 +362,7 @@ namespace SBERP.Security.Controllers.v1
                 return new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
@@ -373,6 +381,7 @@ namespace SBERP.Security.Controllers.v1
         [HttpDelete]
         [Route(ConstantSupplier.DELETE_USER_MENU_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Menus)]
         public async Task<object> DeleteAppUserMenuAsync([FromQuery] string menuId)
         {
             DataResponse response;
@@ -391,7 +400,7 @@ namespace SBERP.Security.Controllers.v1
                 return new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
@@ -411,6 +420,7 @@ namespace SBERP.Security.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_PARENT_MENUS_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Menus)]
         public async Task<object> GetAllParentMenusAsync()
         {
             _securityLogService.LogInfo(ConstantSupplier.GET_ALL_PARENT_MENUS_STARTED_INFO_MSG);
@@ -427,7 +437,7 @@ namespace SBERP.Security.Controllers.v1
                 return new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
@@ -451,6 +461,7 @@ namespace SBERP.Security.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_USER_MENU_INITIAL_DATA_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [AuthenticatedOnly] // role and menu names for dropdowns, also on one's own profile page
         public async Task<object> GetAppUserRoleMenuInitialDataAsync()
         {
             _securityLogService.LogInfo(ConstantSupplier.GETUSERMENUINITIALDATA_STARTED_INFO_MSG);
@@ -469,7 +480,7 @@ namespace SBERP.Security.Controllers.v1
                 return new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
@@ -509,7 +520,7 @@ namespace SBERP.Security.Controllers.v1
                 return new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
@@ -570,7 +581,7 @@ namespace SBERP.Security.Controllers.v1
                 response = new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null
@@ -593,6 +604,7 @@ namespace SBERP.Security.Controllers.v1
         [ServiceFilter(typeof(ValidateModelAttribute))]
         public async Task<object> SaveUpdateRoleMenuBulkAsync([FromBody] SaveRoleMenuRequest request)
         {
+            request.UserId = User.FindFirst(SberpClaims.ProfileId)?.Value ?? request.UserId; // audit: from the token, not the browser
             DataResponse response;
             _securityLogService.LogInfo(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_STARTED_INFO_MSG);
             _securityLogService.LogInfo(string.Format(ConstantSupplier.SAVE_UPDATE_APP_USER_ROLE_MENU_REQ_MSG, LogSafe.Serialize(request, Formatting.Indented)));
@@ -609,7 +621,7 @@ namespace SBERP.Security.Controllers.v1
                 return new DataResponse
                 {
                     Success = false,
-                    Message = Ex.Message,
+                    Message = ConstantSupplier.GLOBAL_ERR_UNEXPECTED_MSG,
                     MessageType = Enum.EnumResponseType.Error,
                     ResponseCode = (int)HttpStatusCode.InternalServerError,
                     Result = null

@@ -24,10 +24,6 @@ namespace SBERP.HumanResources.Persistence
         {
             var basePath = Directory.GetCurrentDirectory();
 
-            //IConfigurationRoot configuration = new ConfigurationBuilder()
-            //    .SetBasePath(basePath)
-            //    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            //    .Build();
 
             // 1. Base configuration from the project root
             var configBuilder = new ConfigurationBuilder()

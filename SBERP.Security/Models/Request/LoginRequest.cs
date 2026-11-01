@@ -10,12 +10,8 @@ namespace SBERP.Security.Models.Request
     public class LoginRequest
     {
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        //[Required]
-        //[JsonPropertyName("UserName")]
         public string? UserName { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        //[JsonPropertyName("Password")]
-        //[Required]
         public string? Password { get; set; }
     }
 }

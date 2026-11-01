@@ -12,44 +12,6 @@ using System.Net;
 
 namespace SBERP.HumanResources.Service
 {
-    /// <summary>Small ADO helper shared by the attendance services for SP reads
-    /// returning a single JSON string (same pattern the recruitment services use).</summary>
-    internal static class AttendanceAdo
-    {
-        public static async Task<string?> ScalarSpAsync(HumanResourcesDBContext ctx, string sp, params (string name, object? value)[] ps)
-        {
-            var conn = ctx.Database.GetDbConnection();
-            if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = ps.Length == 0
-                ? $"EXEC dbo.{sp}"
-                : $"EXEC dbo.{sp} " + string.Join(", ", ps.Select((p, i) => $"{p.name}=@p{i}"));
-            for (int i = 0; i < ps.Length; i++) AddParam(cmd, $"@p{i}", ps[i].value);
-            return (await cmd.ExecuteScalarAsync()) as string;
-        }
-
-        public static async Task<(int rows, string msg)> StatusSpAsync(HumanResourcesDBContext ctx, string sp, params (string name, object? value)[] ps)
-        {
-            var conn = ctx.Database.GetDbConnection();
-            if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = $"EXEC dbo.{sp} " + string.Join(", ", ps.Select((p, i) => $"{p.name}=@p{i}"));
-            for (int i = 0; i < ps.Length; i++) AddParam(cmd, $"@p{i}", ps[i].value);
-            using var reader = await cmd.ExecuteReaderAsync();
-            int rows = 0; string msg = ConstantSupplier.FAILED_MSG;
-            if (await reader.ReadAsync())
-            {
-                rows = reader.GetInt32(reader.GetOrdinal("RowsAffected"));
-                msg = reader.GetString(reader.GetOrdinal("Message"));
-            }
-            await reader.CloseAsync();
-            return (rows, msg);
-        }
-
-        public static void AddParam(DbCommand cmd, string name, object? value)
-        { var p = cmd.CreateParameter(); p.ParameterName = name; p.Value = value ?? DBNull.Value; cmd.Parameters.Add(p); }
-    }
-
     public class OvertimeService : IOvertimeService
     {
         private readonly HumanResourcesDBContext _ctx;
@@ -107,7 +69,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(request.Id, out var id)) return Utilities.Warn("Invalid request id");
-                var (rows, msg) = await AttendanceAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_OVERTIME_STATUS,
+                var (rows, msg) = await AdoHelper.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_OVERTIME_STATUS,
                     ("@Id", id), ("@StatusId", request.StatusId),
                     ("@ApproverId", Guid.TryParse(request.ApproverId, out var ap) ? ap : (object?)null),
                     ("@ApproverRemarks", request.ApproverRemarks), ("@UpdatedBy", request.CreateUpdateBy));
@@ -190,7 +152,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(request.Id, out var id)) return Utilities.Warn("Invalid request id");
-                var (rows, msg) = await AttendanceAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_REGULARIZATION_STATUS,
+                var (rows, msg) = await AdoHelper.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_REGULARIZATION_STATUS,
                     ("@Id", id), ("@StatusId", request.StatusId),
                     ("@ApproverId", Guid.TryParse(request.ApproverId, out var ap) ? ap : (object?)null),
                     ("@ApproverRemarks", request.ApproverRemarks), ("@UpdatedBy", request.CreateUpdateBy));
@@ -221,7 +183,7 @@ namespace SBERP.HumanResources.Service
         {
             try
             {
-                var json = await AttendanceAdo.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_MONTHLY_ATTENDANCE_SUMMARY,
+                var json = await AdoHelper.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_MONTHLY_ATTENDANCE_SUMMARY,
                     ("@Month", month),
                     ("@DepartmentId", Guid.TryParse(departmentId, out var d) ? d : (object?)null),
                     ("@EmployeeId", Guid.TryParse(employeeId, out var e) ? e : (object?)null));

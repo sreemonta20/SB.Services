@@ -41,11 +41,9 @@ namespace SBERP.Shared.Storage
                 throw new PhotoValidationException($"The photo is larger than {_settings.MaxFileSizeKB} KB.");
 
             // the extension comes from the file content, never from the client's file name
-            var buffer = new MemoryStream();
-            await content.CopyToAsync(buffer, ct);
-            if (buffer.Length > maxBytes)
-                throw new PhotoValidationException($"The photo is larger than {_settings.MaxFileSizeKB} KB.");
-            byte[] bytes = buffer.ToArray();
+            // length was checked above, so a body larger than the limit is never read into memory
+            byte[] bytes = new byte[length];
+            await content.ReadExactlyAsync(bytes, ct);
             string extension = StartsWith(bytes, JpegSignature) ? ".jpg"
                              : StartsWith(bytes, PngSignature) ? ".png"
                              : throw new PhotoValidationException("Only JPG and PNG images are allowed.");

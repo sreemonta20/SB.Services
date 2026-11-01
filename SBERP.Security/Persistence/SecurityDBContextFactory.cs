@@ -27,11 +27,6 @@ namespace SBERP.Security.Persistence
             // to the SBERP.Security project root where appsettings.json is located.
             var basePath = Path.Combine(Directory.GetCurrentDirectory(), "");
 
-            // 1. Load Configuration from the project root
-            //IConfigurationRoot configuration = new ConfigurationBuilder()
-            //    .SetBasePath(basePath)
-            //    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            //    .Build();
 
             var configBuilder = new ConfigurationBuilder()
                 .SetBasePath(basePath)

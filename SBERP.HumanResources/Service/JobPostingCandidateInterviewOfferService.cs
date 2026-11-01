@@ -150,23 +150,13 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(jobPostingId, out var g)) return Utilities.Warn("Invalid job posting id");
-                var json = await ExecJsonAsync(ConstantSupplier.SP_GET_APPLICATIONS_BY_POSTING, "@JobPostingId", g);
+                var json = await AdoHelper.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_APPLICATIONS_BY_POSTING, ("@JobPostingId", g));
                 var items = string.IsNullOrWhiteSpace(json)
                     ? new List<ApplicationCardResponse>()
                     : Newtonsoft.Json.JsonConvert.DeserializeObject<List<ApplicationCardResponse>>(json!) ?? new();
                 return Utilities.Ok(ConstantSupplier.APPLICATION_FETCH_SUCCESS, items);
             }
             catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(GetApplicationsByPostingAsync)); }
-        }
-
-        private async Task<string?> ExecJsonAsync(string sp, string paramName, object value)
-        {
-            var conn = _ctx.Database.GetDbConnection();
-            if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = $"EXEC dbo.{sp} {paramName}=@p0";
-            var p = cmd.CreateParameter(); p.ParameterName = "@p0"; p.Value = value; cmd.Parameters.Add(p);
-            return (await cmd.ExecuteScalarAsync()) as string;
         }
 
         private async Task<string> NextCodeAsync(string prefix)

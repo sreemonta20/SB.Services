@@ -8,6 +8,7 @@ using SBERP.HumanResources.Helper;
 using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Service;
+using SBERP.Shared.Authorization;
 using System.Net;
 
 namespace SBERP.HumanResources.Controllers.v1
@@ -17,6 +18,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.PayComponents)]
     public class PayComponentController : ControllerBase
     {
         private readonly IPayComponentService _service;
@@ -38,6 +40,7 @@ namespace SBERP.HumanResources.Controllers.v1
         }
 
         [HttpGet, Route(ConstantSupplier.GET_PAY_COMPONENTS_LOOKUP_ROUTE)]
+        [AuthenticatedOnly]
         public async Task<object> GetPayComponentsLookupAsync()
         {
             try { return await _service.GetPayComponentsLookupAsync(); }
@@ -65,6 +68,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.SalaryStructures)]
     public class SalaryStructureController : ControllerBase
     {
         private readonly ISalaryStructureService _service;
@@ -113,6 +117,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.PayrollRuns)]
     public class PayrollRunController : ControllerBase
     {
         private readonly IPayrollRunService _service;
@@ -143,6 +148,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.SET_PAYROLL_RUN_STATUS_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.PayrollRuns, Action = ScreenAction.Update)]
         public async Task<object> SetPayrollRunStatusAsync([FromBody] PayrollRunActionRequest request)
         {
             try { return await _service.SetPayrollRunStatusAsync(request); }
@@ -169,6 +175,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Loans)]
     public class LoanController : ControllerBase
     {
         private readonly ILoanService _service;
@@ -199,6 +206,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.SET_LOAN_STATUS_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Loans, Action = ScreenAction.Update)]
         public async Task<object> SetLoanStatusAsync([FromBody] LoanActionRequest request)
         {
             try { return await _service.SetLoanStatusAsync(request); }

@@ -11,50 +11,6 @@ using System.Net;
 
 namespace SBERP.HumanResources.Service
 {
-    /// <summary>Shared ADO helper for the payroll services — JSON scalar reads
-    /// plus the RowsAffected/Message reader for the run/loan SPs.</summary>
-    internal static class PayrollAdo
-    {
-        public static async Task<string?> ScalarSpAsync(HumanResourcesDBContext ctx, string sp, params (string name, object? value)[] ps)
-        {
-            var conn = ctx.Database.GetDbConnection();
-            if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = ps.Length == 0 ? $"EXEC dbo.{sp}"
-                : $"EXEC dbo.{sp} " + string.Join(", ", ps.Select((p, i) => $"{p.name}=@p{i}"));
-            for (int i = 0; i < ps.Length; i++) AddParam(cmd, $"@p{i}", ps[i].value);
-            return (await cmd.ExecuteScalarAsync()) as string;
-        }
-
-        public static async Task<(int rows, string msg, string? extra)> StatusSpAsync(HumanResourcesDBContext ctx, string sp, string? extraCol, params (string name, object? value)[] ps)
-        {
-            var conn = ctx.Database.GetDbConnection();
-            if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = $"EXEC dbo.{sp} " + string.Join(", ", ps.Select((p, i) => $"{p.name}=@p{i}"));
-            for (int i = 0; i < ps.Length; i++) AddParam(cmd, $"@p{i}", ps[i].value);
-            using var reader = await cmd.ExecuteReaderAsync();
-            int rows = 0; string msg = ConstantSupplier.FAILED_MSG; string? extra = null;
-            if (await reader.ReadAsync())
-            {
-                rows = reader.GetInt32(reader.GetOrdinal("RowsAffected"));
-                msg = reader.GetString(reader.GetOrdinal("Message"));
-                if (extraCol != null && HasColumn(reader, extraCol) && !await reader.IsDBNullAsync(reader.GetOrdinal(extraCol)))
-                    extra = reader.GetValue(reader.GetOrdinal(extraCol))?.ToString();
-            }
-            await reader.CloseAsync();
-            return (rows, msg, extra);
-        }
-
-        private static bool HasColumn(DbDataReader r, string name)
-        {
-            for (int i = 0; i < r.FieldCount; i++) if (string.Equals(r.GetName(i), name, StringComparison.OrdinalIgnoreCase)) return true;
-            return false;
-        }
-        public static void AddParam(DbCommand cmd, string name, object? value)
-        { var p = cmd.CreateParameter(); p.ParameterName = name; p.Value = value ?? DBNull.Value; cmd.Parameters.Add(p); }
-    }
-
     public class PayComponentService : IPayComponentService
     {
         private readonly HumanResourcesDBContext _ctx;
@@ -153,7 +109,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(id, out var g)) return Utilities.Warn("Invalid structure id");
-                var json = await PayrollAdo.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_SALARY_STRUCTURE_DETAIL, ("@Id", g));
+                var json = await AdoHelper.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_SALARY_STRUCTURE_DETAIL, ("@Id", g));
                 if (string.IsNullOrWhiteSpace(json)) return Utilities.Warn("Structure not found", code: (int)HttpStatusCode.NotFound);
                 var obj = JsonConvert.DeserializeObject<object>(json!);
                 return Utilities.Ok(ConstantSupplier.SALARY_STRUCTURE_FETCH, obj);

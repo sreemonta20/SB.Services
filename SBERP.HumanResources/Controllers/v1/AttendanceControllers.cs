@@ -8,6 +8,7 @@ using SBERP.HumanResources.Helper;
 using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Service;
+using SBERP.Shared.Authorization;
 using System.Net;
 
 namespace SBERP.HumanResources.Controllers.v1
@@ -17,6 +18,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Shift)]
     public class ShiftController : ControllerBase
     {
         private readonly IShiftService _service;
@@ -58,6 +60,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Shift)]
     public class RosterController : ControllerBase
     {
         private readonly IRosterService _service;
@@ -92,6 +95,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Overtime)]
     public class OvertimeController : ControllerBase
     {
         private readonly IOvertimeService _service;
@@ -122,6 +126,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.SET_OVERTIME_STATUS_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Overtime, Action = ScreenAction.Update)]
         public async Task<object> SetOvertimeStatusAsync([FromBody] AttendanceApprovalRequest request)
         {
             try { return await _service.SetOvertimeStatusAsync(request); }
@@ -134,6 +139,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Overtime)]
     public class RegularizationController : ControllerBase
     {
         private readonly IRegularizationService _service;
@@ -164,6 +170,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.SET_REGULARIZATION_STATUS_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Overtime, Action = ScreenAction.Update)]
         public async Task<object> SetRegularizationStatusAsync([FromBody] AttendanceApprovalRequest request)
         {
             try { return await _service.SetRegularizationStatusAsync(request); }
@@ -176,6 +183,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.AttendanceSummary)]
     public class AttendanceSummaryController : ControllerBase
     {
         private readonly IAttendanceSummaryService _service;

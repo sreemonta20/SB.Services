@@ -162,7 +162,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(employeeId, out var g)) return Utilities.Warn("Invalid employee id");
-                var json = await AttendanceAdo.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_EMPLOYEE_ROSTER, ("@EmployeeId", g));
+                var json = await AdoHelper.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_EMPLOYEE_ROSTER, ("@EmployeeId", g));
                 var items = string.IsNullOrWhiteSpace(json)
                     ? new List<RosterResponse>()
                     : JsonConvert.DeserializeObject<List<RosterResponse>>(json!) ?? new();

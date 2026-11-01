@@ -9,6 +9,7 @@ using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Models.Response;
 using SBERP.HumanResources.Service;
+using SBERP.Shared.Authorization;
 using System.Net;
 using System.Security.Claims;
 
@@ -22,6 +23,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Employee)]
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
@@ -36,6 +38,8 @@ namespace SBERP.HumanResources.Controllers.v1
         // GET api/v1/Employee/getAllEmployees — lightweight picker list
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_EMPLOYEES_ROUTE)]
+        [RequireScreen(Screens.Employee, Screens.Punches, Screens.BiometricRegistrations, Screens.Overtime, Screens.LeaveApplications,
+            Screens.Loans, Screens.SalaryStructures, Screens.Goals, Screens.Separation)]
         public async Task<object> GetAllEmployeesAsync()
         {
             try { return await _employeeService.GetAllEmployeesAsync(); }
@@ -58,7 +62,6 @@ namespace SBERP.HumanResources.Controllers.v1
             catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(GetEmployeeInitialDataAsync)); }
         }
 
-        // GET api/v1/Employee/getAllEmployeesPagingWithSearch?param={...}
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_EMPLOYEES_PAGING_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
@@ -110,6 +113,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [HttpPost]
         [Route(ConstantSupplier.CREATE_EMPLOYEE_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Employee, Action = ScreenAction.Create)]
         public async Task<object> CreateEmployeeAsync([FromBody] EmployeeRequest request)
         {
             request.ActionName ??= ConstantSupplier.SAVE_KEY;
@@ -123,6 +127,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [HttpPut]
         [Route(ConstantSupplier.UPDATE_EMPLOYEE_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Employee, Action = ScreenAction.Update)]
         public async Task<object> UpdateEmployeeAsync([FromBody] EmployeeRequest request)
         {
             request.ActionName ??= ConstantSupplier.UPDATE_KEY;
@@ -154,6 +159,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [Consumes("multipart/form-data")]
         [RequestSizeLimit(ConstantSupplier.EMPLOYEE_PHOTO_REQUEST_LIMIT)]
         [RequestFormLimits(MultipartBodyLengthLimit = ConstantSupplier.EMPLOYEE_PHOTO_REQUEST_LIMIT)]
+        [RequireScreen(Screens.Employee, Action = ScreenAction.Update)]
         public async Task<object> UploadEmployeePhotoAsync([FromForm] EmployeePhotoRequest request)
         {
             _log.LogInfo(string.Format(ConstantSupplier.LOG_API_REQ, nameof(UploadEmployeePhotoAsync), request?.Id));
@@ -170,6 +176,7 @@ namespace SBERP.HumanResources.Controllers.v1
         // GET api/v1/Employee/getEmployeePhoto?id={id} — image/jpeg|png, or 204 when there is no photo
         [HttpGet]
         [Route(ConstantSupplier.GET_EMPLOYEE_PHOTO_ROUTE)]
+        [AuthenticatedOnly]
         public async Task<IActionResult> GetEmployeePhotoAsync([FromQuery] string id)
         {
             var photo = await _employeeService.GetEmployeePhotoAsync(id);
@@ -180,9 +187,9 @@ namespace SBERP.HumanResources.Controllers.v1
                 entityTag: new Microsoft.Net.Http.Headers.EntityTagHeaderValue($"\"{photo.PhotoId:N}\""));
         }
 
-        // DELETE api/v1/Employee/removeEmployeePhoto?id={id}&updatedBy={profileId}
         [HttpDelete]
         [Route(ConstantSupplier.REMOVE_EMPLOYEE_PHOTO_ROUTE)]
+        [RequireScreen(Screens.Employee, Action = ScreenAction.Update)]
         public async Task<object> RemoveEmployeePhotoAsync([FromQuery] string id, [FromQuery] string? updatedBy)
         {
             try { return await _employeeService.RemoveEmployeePhotoAsync(id, updatedBy); }
@@ -190,15 +197,18 @@ namespace SBERP.HumanResources.Controllers.v1
         }
 
         // GET api/v1/Employee/getMyEmployeeBrief?employeeId={AppUserProfiles.EmployeeId}
-        // Employee linked to the signed-in user (by the token's user id, else the given employee id); result null when none.
+        // Employee linked to the signed-in user, by the token's user id, else the employee id in the token. The query value
+        // is ignored: anyone could have put another employee's id there. Result null when none.
         [HttpGet]
         [Route(ConstantSupplier.GET_MY_EMPLOYEE_BRIEF_ROUTE)]
+        [AuthenticatedOnly]
         public async Task<object> GetMyEmployeeBriefAsync([FromQuery] string? employeeId)
         {
             try
             {
                 string? appUserId = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                return await _employeeService.GetMyEmployeeBriefAsync(appUserId, employeeId);
+                string? ownEmployeeId = User?.FindFirst(SberpClaims.EmployeeId)?.Value;
+                return await _employeeService.GetMyEmployeeBriefAsync(appUserId, ownEmployeeId);
             }
             catch (Exception ex) { return Utilities.Exception(ex, _log, nameof(GetMyEmployeeBriefAsync)); }
         }

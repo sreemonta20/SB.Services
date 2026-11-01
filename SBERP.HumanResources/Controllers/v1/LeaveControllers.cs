@@ -8,6 +8,7 @@ using SBERP.HumanResources.Helper;
 using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Service;
+using SBERP.Shared.Authorization;
 using System.Net;
 
 namespace SBERP.HumanResources.Controllers.v1
@@ -17,6 +18,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.LeaveTypes)]
     public class LeaveTypeController : ControllerBase
     {
         private readonly ILeaveTypeService _service;
@@ -38,6 +40,7 @@ namespace SBERP.HumanResources.Controllers.v1
         }
 
         [HttpGet, Route(ConstantSupplier.GET_ALL_LEAVE_TYPES_LOOKUP_ROUTE)]
+        [AuthenticatedOnly]
         public async Task<object> GetLeaveTypesLookupAsync()
         {
             try { return await _service.GetLeaveTypesLookupAsync(); }
@@ -65,6 +68,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.LeavePolicies)]
     public class LeavePolicyController : ControllerBase
     {
         private readonly ILeavePolicyService _service;
@@ -114,6 +118,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.LeaveApplications)]
     public class LeaveApplicationController : ControllerBase
     {
         private readonly ILeaveApplicationService _service;
@@ -136,6 +141,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.APPLY_LEAVE_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.LeaveApplications, Action = ScreenAction.Create)]
         public async Task<object> ApplyLeaveAsync([FromBody] ApplyLeaveRequest request)
         {
             try { return await _service.ApplyLeaveAsync(request); }
@@ -144,6 +150,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.SET_LEAVE_STATUS_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.LeaveApplications, Action = ScreenAction.Update)]
         public async Task<object> SetLeaveApplicationStatusAsync([FromBody] LeaveActionRequest request)
         {
             try { return await _service.SetLeaveApplicationStatusAsync(request); }

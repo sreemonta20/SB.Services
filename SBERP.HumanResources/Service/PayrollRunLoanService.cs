@@ -26,7 +26,7 @@ namespace SBERP.HumanResources.Service
         {
             try
             {
-                var (rows, msg, runId) = await PayrollAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_PROCESS_PAYROLL_RUN, "RunId",
+                var (rows, msg, runId) = await AdoHelper.StatusSpWithExtraAsync(_ctx, ConstantSupplier.SP_PROCESS_PAYROLL_RUN, "RunId",
                     ("@PayMonth", request.PayMonth), ("@PayYear", request.PayYear),
                     ("@PeriodStart", request.PeriodStart), ("@PeriodEnd", request.PeriodEnd),
                     ("@WorkingDays", request.WorkingDays), ("@CreatedBy", request.CreateUpdateBy));
@@ -40,7 +40,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(request.Id, out var id)) return Utilities.Warn("Invalid run id");
-                var (rows, msg, _) = await PayrollAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_PAYROLL_RUN_STATUS, null,
+                var (rows, msg, _) = await AdoHelper.StatusSpWithExtraAsync(_ctx, ConstantSupplier.SP_SET_PAYROLL_RUN_STATUS, null,
                     ("@Id", id), ("@StatusId", request.StatusId), ("@ActionBy", request.CreateUpdateBy));
                 return rows > 0 ? Utilities.Ok(msg, null) : Utilities.Warn(msg);
             }
@@ -52,7 +52,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(runId, out var g)) return Utilities.Warn("Invalid run id");
-                var json = await PayrollAdo.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_PAYSLIPS_BY_RUN, ("@RunId", g));
+                var json = await AdoHelper.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_PAYSLIPS_BY_RUN, ("@RunId", g));
                 var items = string.IsNullOrWhiteSpace(json) ? new List<object>() : JsonConvert.DeserializeObject<List<object>>(json!) ?? new();
                 return Utilities.Ok(ConstantSupplier.PAYSLIP_FETCH, items);
             }
@@ -64,7 +64,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(id, out var g)) return Utilities.Warn("Invalid payslip id");
-                var json = await PayrollAdo.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_PAYSLIP_DETAIL, ("@Id", g));
+                var json = await AdoHelper.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_PAYSLIP_DETAIL, ("@Id", g));
                 if (string.IsNullOrWhiteSpace(json)) return Utilities.Warn("Payslip not found", code: (int)HttpStatusCode.NotFound);
                 var obj = JsonConvert.DeserializeObject<object>(json!);
                 return Utilities.Ok(ConstantSupplier.PAYSLIP_FETCH, obj);

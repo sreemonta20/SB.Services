@@ -110,11 +110,11 @@ namespace SBERP.HumanResources.Helper
         {
             log.LogError(string.Format(ConstantSupplier.LOG_API_EXCEPTION,
                 apiName, JsonConvert.SerializeObject(ex.Message, Formatting.Indented)));
-            log.LogError(JsonConvert.SerializeObject(ex, Formatting.Indented));
+            log.LogError(ex.ToString());
             return new DataResponse
             {
                 Success = false,
-                Message = ex.Message,
+                Message = ConstantSupplier.UNEXPECTED_ERROR_MSG, // ex.Message can name tables, servers and users
                 MessageType = Enum.EnumResponseType.Error,
                 ResponseCode = (int)HttpStatusCode.InternalServerError,
                 Result = null

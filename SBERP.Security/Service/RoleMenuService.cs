@@ -313,11 +313,9 @@ namespace SBERP.Security.Service
                         foreach (var oAppUserRoleMenu in oAppUserRoleMenuList)
                         {
                             oAppUserRoleMenu.IsActive = false;
-                            //_context.Entry(oAppUserRoleMenu).State = EntityState.Modified;
                             _context.SaveChangesAsync();
                         }
                         oExistAppUserRole.IsActive = false;
-                        //_context.Entry(oExistAppUserRole).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                         await oTrasaction.CommitAsync();
                     }
@@ -362,17 +360,6 @@ namespace SBERP.Security.Service
                     _dbmanager.CreateParameter("@SortColumnDirection", paramRequest.SortColumnDirection, DbType.String)
                 };
 
-                //DataTable oDataTable = await _dbmanager.GetDataTableAsync(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
-
-                //if (Utilities.IsNotNull(oDataTable) && oDataTable.Rows.Count > 0)
-                //{
-                //    oAppUserMenuList = Utilities.ConvertDataTable<AppUserMenu>(oDataTable);
-
-                //    PagingResult<AppUserMenu>? oAppUserMenuResult = Utilities.GetPagingResult(oAppUserMenuList, paramRequest.PageNumber, paramRequest.PageSize);
-                //    _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, LogSafe.Serialize(oAppUserMenuResult, Formatting.Indented)));
-                //    return oAppUserMenuResult;
-                //}
-
                 object dbResult = await _dbmanager.GetScalarValueAsync(ConstantSupplier.GETALL_USER_MENU_PAGING_SEARCH_SP_NAME, CommandType.StoredProcedure, parameters.ToArray());
                 if (Utilities.IsNotNull(dbResult))
                 {
@@ -380,7 +367,6 @@ namespace SBERP.Security.Service
 
                     // Deserialize the JSON string into PagingResult<AppUserMenu>
                     PagingResult<AppUserMenuResponse>? oAppUserMenuResult = JsonConvert.DeserializeObject<PagingResult<AppUserMenuResponse>>(resultJStr);
-                    //_securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, correctedJsonString));
                     _securityLogService.LogInfo(String.Format(ConstantSupplier.SERVICE_GETALL_USER_MENU_PAGING_SEARCH_RES_MSG, LogSafe.Serialize(oAppUserMenuResult, Formatting.Indented)));
                     return oAppUserMenuResult;
                 }
@@ -492,12 +478,6 @@ namespace SBERP.Security.Service
                         }
                         else
                         {
-                            #region EF
-                            //await _context.AppUserMenus.AddAsync(oAppUserMenu);
-                            //await _context.SaveChangesAsync();
-                            //await oTrasaction.CommitAsync();
-                            //request.Id = Convert.ToString(oAppUserMenu.Id);
-                            #endregion
 
                             #region ADO.NET
                             List<IDbDataParameter> parameters = new()
@@ -516,7 +496,6 @@ namespace SBERP.Security.Service
                                 _dbmanager.CreateParameter("@Icon", oAppUserMenu.Icon, DbType.String),
                                 _dbmanager.CreateParameter("@Remark", oAppUserMenu.Remark, DbType.String),
                                 _dbmanager.CreateParameter("@ParentId", (object?)parentId ?? DBNull.Value, DbType.Guid),
-                                //_dbmanager.CreateParameter("@DropdownIcon", oAppUserMenu.DropdownIcon, DbType.String),
                                 _dbmanager.CreateParameter(
                                     "@DropdownIcon",
                                     string.IsNullOrWhiteSpace(request.DropdownIcon) ? DBNull.Value : request.DropdownIcon,
@@ -556,26 +535,6 @@ namespace SBERP.Security.Service
                         }
                         else
                         {
-                            #region EF
-                            //oExistAppUserMenu.Name = request.Name;
-                            //oExistAppUserMenu.IsHeader = request.IsHeader;
-                            //oExistAppUserMenu.IsModule = request.IsModule;
-                            //oExistAppUserMenu.IsComponent = request.IsComponent;
-                            //oExistAppUserMenu.CssClass = request.CssClass;
-                            //oExistAppUserMenu.RouteLink = request.RouteLink;
-                            //oExistAppUserMenu.RouteLinkClass = request.RouteLinkClass;
-                            //oExistAppUserMenu.Icon = request.Icon;
-                            //oExistAppUserMenu.Remark = request.Remark;
-                            //oExistAppUserMenu.ParentId = new Guid(request.ParentId);
-                            //oExistAppUserMenu.DropdownIcon = request.DropdownIcon;
-                            //oExistAppUserMenu.SerialNo = request.SerialNo;
-                            //oExistAppUserMenu.UpdatedBy = request.CreateUpdateBy;
-                            //oExistAppUserMenu.UpdatedDate = DateTime.UtcNow;
-                            //oExistAppUserMenu.IsActive = request.IsActive;
-
-                            //await _context.SaveChangesAsync();
-                            //await oTrasaction.CommitAsync();
-                            #endregion
 
                             #region ADO.NET
                             List<IDbDataParameter> parameters = new()
@@ -594,7 +553,6 @@ namespace SBERP.Security.Service
                                 _dbmanager.CreateParameter("@Icon", request.Icon, DbType.String),
                                 _dbmanager.CreateParameter("@Remark", request.Remark, DbType.String),
                                 _dbmanager.CreateParameter("@ParentId", (object?)parentId ?? DBNull.Value, DbType.Guid),
-                                //_dbmanager.CreateParameter("@DropdownIcon", request.DropdownIcon, DbType.String),
                                 _dbmanager.CreateParameter(
                                     "@DropdownIcon",
                                     string.IsNullOrWhiteSpace(request.DropdownIcon) ? DBNull.Value : request.DropdownIcon,
@@ -706,40 +664,11 @@ namespace SBERP.Security.Service
             using IDbContextTransaction oTrasaction = _context.Database.BeginTransaction();
             try
             {
-                //AppUserMenu? oExistAppUserMenu = await _context.AppUserMenus.FindAsync(new Guid(menuId));
                 AppUserMenu? oExistAppUserMenu = await _context.AppUserMenus.FirstOrDefaultAsync(um => um.Id == new Guid(menuId));
                 if (Utilities.IsNotNull(oExistAppUserMenu))
                 {
                     if (oExistAppUserMenu.IsActive.Equals(true))
                     {
-                        #region EF
-                        //IEnumerable<AppUserRoleMenu> oAppUserRoleMenuList = from obj in _context?.AppUserRoleMenus
-                        //                                                    where obj.AppUserMenuId == oExistAppUserMenu.Id && obj.IsActive == oExistAppUserMenu.IsActive
-                        //                                                    orderby obj.CreatedDate descending
-                        //                                                    select obj;
-                        //if (!oAppUserRoleMenuList.Any())
-                        //{
-                        //    if (_appSettings.IsUserDelate)
-                        //    {
-                        //        _context?.AppUserMenus.Remove(oExistAppUserMenu);
-                        //        await _context?.SaveChangesAsync();
-                        //        await oTrasaction.CommitAsync();
-                        //    }
-                        //    else
-                        //    {
-                        //        oExistAppUserMenu.IsActive = false;
-                        //        await _context.SaveChangesAsync();
-                        //        await oTrasaction.CommitAsync();
-                        //    }
-                        //    oDataResponse = new DataResponse { Success = true, Message = _appSettings.IsUserDelate? ConstantSupplier.DELETE_APP_USER_MENU_REMOVED_SUCCESS : ConstantSupplier.DELETE_APP_USER_MENU_INACTIVATED_SUCCESS, MessageType = Enum.EnumResponseType.Success, ResponseCode = (int)HttpStatusCode.OK, Result = menuId };
-                        //}
-                        //else
-                        //{
-                        //    oDataResponse = new DataResponse { Success = false, Message = ConstantSupplier.DELETE_APP_USER_MENU_BUT_EXIST_ROLE_MENU, MessageType = Enum.EnumResponseType.Error, ResponseCode = (int)HttpStatusCode.BadRequest, Result = null };
-                        //    _securityLogService.LogError(string.Format(ConstantSupplier.SERVICE_DELETE_APP_USER_MENU_RES_MSG, LogSafe.Serialize(oDataResponse, Formatting.Indented)));
-                        //    return oDataResponse;
-                        //}
-                        #endregion
 
                         #region ADO.NET
                         List<IDbDataParameter> parameters = new()

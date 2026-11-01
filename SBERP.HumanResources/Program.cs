@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.DataProtection;
 #region Program.cs
 
-// .NET 10 / Swashbuckle 10.x — same pattern as SBERP.Security.
 
 using Asp.Versioning;
 using Azure.Identity;
@@ -15,6 +14,7 @@ using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Persistence;
 using SBERP.HumanResources.Service;
 using SBERP.HumanResources.Messaging;
+using SBERP.Shared.Authorization;
 using SBERP.Shared.Extensions;
 using SBERP.Shared.Storage;
 using Serilog;
@@ -26,6 +26,7 @@ using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(o => o.AddServerHeader = false);
 
 // 1. Configuration
 // WebApplication.CreateBuilder already loads, lowest to highest priority: appsettings.json,
@@ -72,23 +73,11 @@ var services = builder.Services;
 services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
 var appSettings = configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
 
-// 3.2 DbContext — points at HumanResourcesDB (SQL Server for now, but switchable via AppSettings.AppDB and DI) [Register Database]
-//var hrConnection = configuration.GetSection("ConnectionStrings")["HRDatabase"];
-//if (string.IsNullOrWhiteSpace(hrConnection))
-//    throw new InvalidOperationException(
-//        "ConnectionStrings:HRDatabase missing in appsettings.json");
 
-//services.AddDbContext<HumanResourcesDBContext>(options =>
-//                options.UseSqlServer(hrConnection));
-// 3.2 Register Database
 Utilities.RegisterDatabase(services, appSettings);
 
 
-// 3.3 CORS
-//var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>()
-//    ?? new[] { "https://localhost:4200", "http://localhost:4200" };
-var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>()
-    ?? new[] { "http://localhost:5201", "https://localhost:5200", "http://localhost:5201", "https://localhost:4200", "http://localhost:4200", };
+var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? ["https://localhost:4200", "http://localhost:4200"];
 
 services.AddCors(o =>
 {
@@ -99,14 +88,6 @@ services.AddCors(o =>
          .WithExposedHeaders("X-Pagination", "Token-Expired"));
 });
 
-// 3.4 Controllers + JSON
-//services.AddControllers()
-//    .AddJsonOptions(o =>
-//        o.JsonSerializerOptions.DefaultIgnoreCondition =
-//            JsonIgnoreCondition.WhenWritingNull)
-//    .AddNewtonsoftJson(o =>
-//        o.SerializerSettings.ContractResolver =
-//            new DefaultContractResolver());
 
 services.AddControllers()
     .AddJsonOptions(o =>{
@@ -177,6 +158,8 @@ services.AddSwaggerGen(c =>
 
 // 3.7 JWT via SBERP.Shared — same Key/Issuer/Audience as Security
 services.AddSharedJwtAuthentication(builder.Configuration);
+// menu rights on every controller action (deny by default)
+services.AddScreenPermissions(configuration);
 
 // 3.8 Redis (token blacklist + future caching)
 services.AddStackExchangeRedisCache(o =>
@@ -276,6 +259,8 @@ var app = builder.Build();
 
 try
 {
+    app.UseApiExceptionHandler(JsonNamingPolicy.CamelCase);
+
     if (app.Environment.IsDevelopment())
     {
         app.UseDeveloperExceptionPage();
@@ -299,6 +284,7 @@ try
     app.UseStaticFiles();
     app.UseRouting();
     app.UseCors(ConstantSupplier.CORSS_POLICY_NAME);
+    app.UseSecurityHeaders();
     app.UseAuthentication();
     app.UseTokenBlacklist();
     app.UseAuthorization();
@@ -310,26 +296,5 @@ finally
 {
     Log.CloseAndFlush();
 }
-
-//static void RegisterDatabase(IServiceCollection services, AppSettings? appSettings)
-//{
-//    var cs = appSettings?.ConnectionStrings;
-//    switch (appSettings?.AppDB)
-//    {
-//        case ConstantSupplier.SQLSERVER:
-//            services.AddDbContext<HumanResourcesDBContext>(options =>
-//                options.UseSqlServer(cs?.HRSqlConnectionString));
-//            services.AddTransient<IDbConnection>(_ =>
-//                new SqlConnection(cs?.HRSqlConnectionString));
-//            break;
-
-//        default:
-//            services.AddDbContext<HumanResourcesDBContext>(options =>
-//                options.UseSqlServer(cs?.HRDefaultConnectionString));
-//            services.AddTransient<IDbConnection>(_ =>
-//                new SqlConnection(cs?.HRDefaultConnectionString));
-//            break;
-//    }
-//}
 
 #endregion

@@ -11,43 +11,6 @@ using System.Net;
 
 namespace SBERP.HumanResources.Service
 {
-    /// <summary>ADO helper for the separation workflow SPs — JSON scalar reads
-    /// plus the RowsAffected/Message reader for the transactional SPs.</summary>
-    internal static class SeparationAdo
-    {
-        public static async Task<string?> ScalarSpAsync(HumanResourcesDBContext ctx, string sp, params (string name, object? value)[] ps)
-        {
-            var conn = ctx.Database.GetDbConnection();
-            if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = ps.Length == 0 ? $"EXEC dbo.{sp}"
-                : $"EXEC dbo.{sp} " + string.Join(", ", ps.Select((p, i) => $"{p.name}=@p{i}"));
-            for (int i = 0; i < ps.Length; i++) AddParam(cmd, $"@p{i}", ps[i].value);
-            return (await cmd.ExecuteScalarAsync()) as string;
-        }
-
-        public static async Task<(int rows, string msg)> StatusSpAsync(HumanResourcesDBContext ctx, string sp, params (string name, object? value)[] ps)
-        {
-            var conn = ctx.Database.GetDbConnection();
-            if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = $"EXEC dbo.{sp} " + string.Join(", ", ps.Select((p, i) => $"{p.name}=@p{i}"));
-            for (int i = 0; i < ps.Length; i++) AddParam(cmd, $"@p{i}", ps[i].value);
-            using var reader = await cmd.ExecuteReaderAsync();
-            int rows = 0; string msg = ConstantSupplier.FAILED_MSG;
-            if (await reader.ReadAsync())
-            {
-                rows = reader.GetInt32(reader.GetOrdinal("RowsAffected"));
-                msg = reader.GetString(reader.GetOrdinal("Message"));
-            }
-            await reader.CloseAsync();
-            return (rows, msg);
-        }
-
-        public static void AddParam(DbCommand cmd, string name, object? value)
-        { var p = cmd.CreateParameter(); p.ParameterName = name; p.Value = value ?? DBNull.Value; cmd.Parameters.Add(p); }
-    }
-
     public class SeparationService : ISeparationService
     {
         private readonly HumanResourcesDBContext _ctx;
@@ -65,7 +28,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(id, out var g)) return Utilities.Warn("Invalid separation id");
-                var json = await SeparationAdo.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_SEPARATION_DETAIL, ("@Id", g));
+                var json = await AdoHelper.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_SEPARATION_DETAIL, ("@Id", g));
                 if (string.IsNullOrWhiteSpace(json)) return Utilities.Warn("Separation not found", code: (int)HttpStatusCode.NotFound);
                 var obj = JsonConvert.DeserializeObject<object>(json!);
                 return Utilities.Ok(ConstantSupplier.SEPARATION_FETCH, obj);
@@ -142,7 +105,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(request.Id, out var id)) return Utilities.Warn("Invalid separation id");
-                var (rows, msg) = await SeparationAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_SEPARATION_STATUS,
+                var (rows, msg) = await AdoHelper.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_SEPARATION_STATUS,
                     ("@Id", id), ("@StatusId", request.StatusId), ("@UpdatedBy", request.CreateUpdateBy));
                 return rows > 0 ? Utilities.Ok(msg, null) : Utilities.Warn(msg);
             }
@@ -154,7 +117,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(request.Id, out var id)) return Utilities.Warn("Invalid separation id");
-                var (rows, msg) = await SeparationAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_APPROVE_SEPARATION,
+                var (rows, msg) = await AdoHelper.StatusSpAsync(_ctx, ConstantSupplier.SP_APPROVE_SEPARATION,
                     ("@Id", id), ("@LastWorkingDate", request.LastWorkingDate), ("@ApprovedBy", request.CreateUpdateBy));
                 return rows > 0 ? Utilities.Ok(msg, null) : Utilities.Warn(msg);
             }
@@ -166,7 +129,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(request.Id, out var id)) return Utilities.Warn("Invalid separation id");
-                var (rows, msg) = await SeparationAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_SETTLE_SEPARATION,
+                var (rows, msg) = await AdoHelper.StatusSpAsync(_ctx, ConstantSupplier.SP_SETTLE_SEPARATION,
                     ("@Id", id), ("@SettlementRemarks", request.SettlementRemarks),
                     ("@IsRehireEligible", request.IsRehireEligible), ("@SettledBy", request.CreateUpdateBy));
                 return rows > 0 ? Utilities.Ok(msg, null) : Utilities.Warn(msg);
@@ -179,7 +142,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(request.Id, out var id)) return Utilities.Warn("Invalid clearance id");
-                var (rows, msg) = await SeparationAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_CLEARANCE_STATUS,
+                var (rows, msg) = await AdoHelper.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_CLEARANCE_STATUS,
                     ("@Id", id), ("@ClearanceStatusId", request.ClearanceStatusId),
                     ("@Remarks", request.Remarks), ("@DuesAmount", request.DuesAmount), ("@ClearedBy", request.CreateUpdateBy));
                 return rows > 0 ? Utilities.Ok(msg, null) : Utilities.Warn(msg);

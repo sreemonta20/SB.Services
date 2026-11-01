@@ -8,6 +8,7 @@ using SBERP.Security.Helper;
 using SBERP.Security.Models.Request;
 using SBERP.Security.Models.Response;
 using SBERP.Security.Service;
+using SBERP.Shared.Authorization;
 using SBERP.Shared.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -91,6 +92,7 @@ namespace SBERP.Security.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_USER_PROFILE_MENU_ROUTE_NAME)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [AuthenticatedOnly] // the caller's own menu, by the token's user id
         public async Task<object> GetAppUserProfileMenuAsync()
         {
             _securityLogService.LogInfo(ConstantSupplier.APP_USER_PROFILE_MENU_STARTED_INFO_MSG);

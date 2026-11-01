@@ -31,7 +31,7 @@ namespace SBERP.HumanResources.Service
                 if (!Guid.TryParse(request.EmployeeId, out var empId)) return Utilities.Warn("Invalid employee id");
                 if (!Guid.TryParse(request.LeaveTypeId, out var typeId)) return Utilities.Warn("Invalid leave type id");
 
-                var (rows, msg) = await LeaveAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_APPLY_LEAVE,
+                var (rows, msg) = await AdoHelper.StatusSpAsync(_ctx, ConstantSupplier.SP_APPLY_LEAVE,
                     ("@EmployeeId", empId), ("@LeaveTypeId", typeId),
                     ("@FromDate", request.FromDate), ("@ToDate", request.ToDate),
                     ("@IsHalfDay", request.IsHalfDay),
@@ -47,7 +47,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(request.Id, out var id)) return Utilities.Warn("Invalid application id");
-                var (rows, msg) = await LeaveAdo.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_LEAVE_APPLICATION_STATUS,
+                var (rows, msg) = await AdoHelper.StatusSpAsync(_ctx, ConstantSupplier.SP_SET_LEAVE_APPLICATION_STATUS,
                     ("@Id", id), ("@StatusId", request.StatusId),
                     ("@ApproverId", Guid.TryParse(request.ApproverId, out var ap) ? ap : (object?)null),
                     ("@ApproverRemarks", request.ApproverRemarks), ("@UpdatedBy", request.CreateUpdateBy));
@@ -61,7 +61,7 @@ namespace SBERP.HumanResources.Service
             try
             {
                 if (!Guid.TryParse(employeeId, out var g)) return Utilities.Warn("Invalid employee id");
-                var json = await LeaveAdo.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_EMPLOYEE_LEAVE_BALANCES,
+                var json = await AdoHelper.ScalarSpAsync(_ctx, ConstantSupplier.SP_GET_EMPLOYEE_LEAVE_BALANCES,
                     ("@EmployeeId", g), ("@Year", year));
                 var items = string.IsNullOrWhiteSpace(json)
                     ? new List<LeaveBalanceResponse>()

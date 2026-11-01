@@ -9,6 +9,7 @@ using SBERP.HumanResources.Helper;
 using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Service;
+using SBERP.Shared.Authorization;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
@@ -47,6 +48,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.BiometricRegistrations)]
     public class BiometricRegistrationController : ControllerBase
     {
         private readonly IBiometricRegistrationService _service;
@@ -57,6 +59,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.REGISTER_MOBILE_BIOMETRIC_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [AuthenticatedOnly]
         public async Task<object> RegisterMobileBiometricAsync([FromBody] MobileBiometricRegistrationRequest request)
         {
             try { return await _service.RegisterMobileAsync(request, UserId); }
@@ -65,6 +68,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.VERIFY_BIOMETRIC_REGISTRATION_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [AuthenticatedOnly]
         public async Task<object> VerifyBiometricRegistrationAsync([FromBody] VerifyBiometricRegistrationRequest request)
         {
             try { return await _service.VerifyRegistrationAsync(request, UserId); }
@@ -72,6 +76,7 @@ namespace SBERP.HumanResources.Controllers.v1
         }
 
         [HttpGet, Route(ConstantSupplier.GET_MY_BIOMETRIC_REGISTRATION_ROUTE)]
+        [AuthenticatedOnly]
         public async Task<object> GetMyBiometricRegistrationAsync()
         {
             try { return await _service.GetMyRegistrationAsync(UserId); }
@@ -102,6 +107,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.REVOKE_BIOMETRIC_REGISTRATION_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.BiometricRegistrations, Action = ScreenAction.Delete)]
         public async Task<object> RevokeBiometricRegistrationAsync([FromBody] RevokeBiometricRegistrationRequest request)
         {
             try { return await _service.RevokeRegistrationAsync(request); }
@@ -119,6 +125,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Punches)]
     public class AttendancePunchController : ControllerBase
     {
         private readonly IAttendancePunchService _service;
@@ -170,6 +177,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.REPROCESS_ATTENDANCE_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Punches, Action = ScreenAction.Update)]
         public async Task<object> ReprocessAttendanceAsync([FromBody] ReprocessAttendanceRequest request)
         {
             try { return await _service.ReprocessAsync(request); }
@@ -182,6 +190,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Devices)]
     public class AttendanceDeviceController : ControllerBase
     {
         private readonly IAttendanceDeviceService _service;
@@ -190,6 +199,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpGet, Route(ConstantSupplier.GET_ALL_ATTENDANCE_DEVICES_PAGING_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Devices, Screens.BiometricRegistrations)]
         public async Task<object> GetAllAttendanceDevicesPagingWithSearchAsync([FromQuery] string param)
         {
             try
@@ -223,6 +233,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Zones)]
     public class AttendanceZoneController : ControllerBase
     {
         private readonly IAttendanceZoneService _service;

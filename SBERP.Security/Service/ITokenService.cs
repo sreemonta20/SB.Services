@@ -10,9 +10,7 @@ namespace SBERP.Security.Service
     /// </summary>
     public interface ITokenService
     {
-        //Token? GeneretateJWT(User? user);
         
-        //ClaimsPrincipal GetPrincipalFromExpiredToken(string? token);
         string GenerateJwtToken(ClaimRequest oClaimRequest);
         string GenerateRefreshToken();
         string HashToken(string token);

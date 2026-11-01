@@ -8,6 +8,7 @@ using SBERP.HumanResources.Helper;
 using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Service;
+using SBERP.Shared.Authorization;
 using System.Net;
 
 namespace SBERP.HumanResources.Controllers.v1
@@ -17,6 +18,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.AppraisalCycles)]
     public class AppraisalCycleController : ControllerBase
     {
         private readonly IAppraisalCycleService _service;
@@ -38,6 +40,7 @@ namespace SBERP.HumanResources.Controllers.v1
         }
 
         [HttpGet, Route(ConstantSupplier.GET_CYCLES_LOOKUP_ROUTE)]
+        [AuthenticatedOnly]
         public async Task<object> GetAppraisalCyclesLookupAsync()
         {
             try { return await _service.GetAppraisalCyclesLookupAsync(); }
@@ -61,6 +64,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.SET_CYCLE_STATUS_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.AppraisalCycles, Action = ScreenAction.Update)]
         public async Task<object> SetAppraisalCycleStatusAsync([FromBody] CycleActionRequest request)
         {
             try { return await _service.SetAppraisalCycleStatusAsync(request); }
@@ -69,6 +73,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.INITIATE_REVIEWS_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.AppraisalCycles, Action = ScreenAction.Update)]
         public async Task<object> InitiateReviewsAsync([FromBody] InitiateReviewsRequest request)
         {
             try { return await _service.InitiateReviewsAsync(request); }
@@ -81,6 +86,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Competencies)]
     public class CompetencyController : ControllerBase
     {
         private readonly ICompetencyService _service;
@@ -102,6 +108,7 @@ namespace SBERP.HumanResources.Controllers.v1
         }
 
         [HttpGet, Route(ConstantSupplier.GET_COMPETENCIES_LOOKUP_ROUTE)]
+        [AuthenticatedOnly]
         public async Task<object> GetCompetenciesLookupAsync()
         {
             try { return await _service.GetCompetenciesLookupAsync(); }
@@ -129,6 +136,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Goals)]
     public class GoalController : ControllerBase
     {
         private readonly IGoalService _service;
@@ -159,6 +167,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.UPDATE_GOAL_PROGRESS_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Goals, Action = ScreenAction.Update)]
         public async Task<object> UpdateGoalProgressAsync([FromBody] GoalProgressRequest request)
         {
             try { return await _service.UpdateGoalProgressAsync(request); }
@@ -178,6 +187,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Reviews)]
     public class ReviewController : ControllerBase
     {
         private readonly IReviewService _service;
@@ -207,6 +217,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.SAVE_REVIEW_RATINGS_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Reviews, Action = ScreenAction.Update)]
         public async Task<object> SaveReviewRatingsAsync([FromBody] SaveReviewRatingsRequest request)
         {
             try { return await _service.SaveReviewRatingsAsync(request); }
@@ -215,6 +226,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost, Route(ConstantSupplier.SET_REVIEW_STATUS_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Reviews, Action = ScreenAction.Update)]
         public async Task<object> SetReviewStatusAsync([FromBody] ReviewActionRequest request)
         {
             try { return await _service.SetReviewStatusAsync(request); }

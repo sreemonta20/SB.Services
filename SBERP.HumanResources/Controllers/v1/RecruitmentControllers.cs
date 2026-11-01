@@ -9,6 +9,7 @@ using SBERP.HumanResources.Models.Configuration;
 using SBERP.HumanResources.Models.Request;
 using SBERP.HumanResources.Models.Response;
 using SBERP.HumanResources.Service;
+using SBERP.Shared.Authorization;
 using System.Net;
 
 namespace SBERP.HumanResources.Controllers.v1
@@ -18,6 +19,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Position)]
     public class PositionController : ControllerBase
     {
         private readonly IPositionService _service;
@@ -42,6 +44,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpGet]
         [Route("getAllPositions")]
+        [AuthenticatedOnly]
         public async Task<object> GetAllPositionsAsync()
         {
             try { return await _service.GetAllPositionsAsync(); }
@@ -73,6 +76,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [HttpPost]
         [Route(ConstantSupplier.SET_POSITION_FILL_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Position, Action = ScreenAction.Update)]
         public async Task<object> SetPositionFillAsync([FromBody] PositionFillRequest request)
         {
             try { return await _service.SetFillAsync(request); }
@@ -82,6 +86,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [HttpPost]
         [Route(ConstantSupplier.SET_POSITION_STATUS_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Position, Action = ScreenAction.Update)]
         public async Task<object> SetPositionStatusAsync([FromBody] PositionStatusRequest request)
         {
             try { return await _service.SetStatusAsync(request); }
@@ -102,6 +107,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Requisition)]
     public class RequisitionController : ControllerBase
     {
         private readonly IRequisitionService _service;
@@ -111,6 +117,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_REQUISITIONS_PAGING_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Requisition, Screens.JobPosting)]
         public async Task<object> GetAllRequisitionsPagingWithSearchAsync([FromQuery] string param)
         {
             try
@@ -143,6 +150,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost]
         [Route(ConstantSupplier.SUBMIT_REQUISITION_ROUTE)]
+        [RequireScreen(Screens.Requisition, Action = ScreenAction.Update)]
         public async Task<object> SubmitRequisitionAsync([FromBody] RequisitionActionRequest request)
         {
             try { return await _service.SubmitRequisitionAsync(request); }
@@ -151,6 +159,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost]
         [Route(ConstantSupplier.APPROVE_REQUISITION_ROUTE)]
+        [RequireScreen(Screens.Requisition, Action = ScreenAction.Update)]
         public async Task<object> ApproveRequisitionAsync([FromBody] RequisitionActionRequest request)
         {
             try { return await _service.ApproveRequisitionAsync(request); }
@@ -159,6 +168,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost]
         [Route(ConstantSupplier.REJECT_REQUISITION_ROUTE)]
+        [RequireScreen(Screens.Requisition, Action = ScreenAction.Update)]
         public async Task<object> RejectRequisitionAsync([FromBody] RequisitionActionRequest request)
         {
             try { return await _service.RejectRequisitionAsync(request); }
@@ -171,6 +181,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.JobPosting)]
     public class JobPostingController : ControllerBase
     {
         private readonly IJobPostingService _service;
@@ -180,6 +191,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [HttpGet]
         [Route(ConstantSupplier.GET_ALL_JOBPOSTINGS_PAGING_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.JobPosting, Screens.Pipeline)]
         public async Task<object> GetAllJobPostingsPagingWithSearchAsync([FromQuery] string param)
         {
             try
@@ -212,6 +224,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost]
         [Route(ConstantSupplier.PUBLISH_JOBPOSTING_ROUTE)]
+        [RequireScreen(Screens.JobPosting, Action = ScreenAction.Update)]
         public async Task<object> PublishJobPostingAsync([FromQuery] string id, [FromQuery] string? user)
         {
             try { return await _service.PublishJobPostingAsync(id, user); }
@@ -220,6 +233,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost]
         [Route(ConstantSupplier.CLOSE_JOBPOSTING_ROUTE)]
+        [RequireScreen(Screens.JobPosting, Action = ScreenAction.Update)]
         public async Task<object> CloseJobPostingAsync([FromQuery] string id, [FromQuery] string? user)
         {
             try { return await _service.CloseJobPostingAsync(id, user); }
@@ -228,6 +242,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpGet]
         [Route(ConstantSupplier.GET_APPLICATIONS_BY_POSTING_ROUTE)]
+        [RequireScreen(Screens.JobPosting, Screens.Pipeline)]
         public async Task<object> GetApplicationsByPostingAsync([FromQuery] string id)
         {
             try { return await _service.GetApplicationsByPostingAsync(id); }
@@ -240,6 +255,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Pipeline)]
     public class CandidateController : ControllerBase
     {
         private readonly ICandidateService _service;
@@ -265,6 +281,7 @@ namespace SBERP.HumanResources.Controllers.v1
         [HttpPost]
         [Route(ConstantSupplier.SAVE_CANDIDATE_APPLICATION_ROUTE)]
         [ServiceFilter(typeof(ValidateModelAttribute))]
+        [RequireScreen(Screens.Pipeline, Action = ScreenAction.Create)]
         public async Task<object> ApplyToPostingAsync([FromBody] CandidateApplicationRequest request)
         {
             try { return await _service.ApplyToPostingAsync(request); }
@@ -273,6 +290,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost]
         [Route(ConstantSupplier.MOVE_APPLICATION_STAGE_ROUTE)]
+        [RequireScreen(Screens.Pipeline, Action = ScreenAction.Update)]
         public async Task<object> MoveApplicationStageAsync([FromBody] MoveStageRequest request)
         {
             try { return await _service.MoveApplicationStageAsync(request); }
@@ -285,6 +303,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Pipeline)]
     public class InterviewController : ControllerBase
     {
         private readonly IInterviewService _service;
@@ -314,6 +333,7 @@ namespace SBERP.HumanResources.Controllers.v1
     [Route(ConstantSupplier.CTRLER_ROUTE_PATH_NAME_VERSION_ONE)]
     [ApiController]
     [EnableCors(ConstantSupplier.CORSS_POLICY_NAME)]
+    [RequireScreen(Screens.Pipeline)]
     public class JobOfferController : ControllerBase
     {
         private readonly IJobOfferService _service;
@@ -339,6 +359,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost]
         [Route(ConstantSupplier.ISSUE_OFFER_ROUTE)]
+        [RequireScreen(Screens.Pipeline, Action = ScreenAction.Update)]
         public async Task<object> IssueOfferAsync([FromBody] OfferActionRequest request)
         {
             try { return await _service.IssueOfferAsync(request); }
@@ -347,6 +368,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost]
         [Route(ConstantSupplier.ACCEPT_OFFER_ROUTE)]
+        [RequireScreen(Screens.Pipeline, Action = ScreenAction.Update)]
         public async Task<object> AcceptOfferAsync([FromBody] OfferActionRequest request)
         {
             try { return await _service.AcceptOfferAsync(request); }
@@ -355,6 +377,7 @@ namespace SBERP.HumanResources.Controllers.v1
 
         [HttpPost]
         [Route(ConstantSupplier.DECLINE_OFFER_ROUTE)]
+        [RequireScreen(Screens.Pipeline, Action = ScreenAction.Update)]
         public async Task<object> DeclineOfferAsync([FromBody] OfferActionRequest request)
         {
             try { return await _service.DeclineOfferAsync(request); }
